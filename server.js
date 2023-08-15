@@ -11,7 +11,7 @@ app.use('/fonts', express.static(path.join(__dirname, 'fonts')));
 app.use('/icons', express.static(path.join(__dirname, 'icons')));
 app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use('/js', express.static(path.join(__dirname, 'js')));
-app.use('/video', express.static(path.join(__dirname, 'video')));
+app.use('/videos', express.static(path.join(__dirname, 'videos')));
 app.use('/robots.txt', express.static(path.join(__filename, 'robots.txt')));
 
 // '/' route
