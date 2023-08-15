@@ -19,7 +19,7 @@ function screenshotToFavicon() {
 
 setInterval(() => { if (!video.paused) screenshotToFavicon(); }, 100);
 
-video.onclick = () => (video.muted = false, console.log("clicked the video"));
+video.onclick = () => (video.muted = false);
 
 unmuteButton.addEventListener("click", () => {
     video.muted = false;
