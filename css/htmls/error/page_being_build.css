@@ -1,0 +1,66 @@
+@import '../../presets/variables.css';
+@import '../../presets/fonts.css';
+@import '../../presets/body.css';
+
+
+.centered-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.text-1 {
+    font-size: calc(1vw + 4vh);
+
+    text-align: center;
+
+    font-family: Montserrat;
+    font-weight: 900;
+    color: var(--text);
+}
+
+.text-2 {
+    font-size: calc(1vw + 2vh);
+
+    text-align: center;
+
+    font-family: Montserrat;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.text-3 {
+    font-style: italic;
+
+    font-size: calc(1vw + 2vh);
+
+    text-align: center;
+
+    font-family: Montserrat;
+    font-weight: 400;
+    color: var(--text);
+}
+
+.home_icon {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+
+    margin: 0 auto;
+
+    max-width: 30%;
+    height: auto;
+
+    transition: all 0.5s;
+}
+
+.home_icon:hover {
+    background-color: var(--secondary);
+    border-radius: 2vh;
+}
+
+.home_icon:active {
+    transition: none;
+    background-color: var(--accent);
+}

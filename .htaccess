@@ -1,0 +1,35 @@
+DirectoryIndex /html/index.html
+
+ErrorDocument 403 /html/errors/error_403.html
+ErrorDocument 404 /html/errors/error_404.html
+
+RewriteEngine On
+
+# '/' route
+RewriteRule ^$ /html/index.html [L]
+
+# '/temp' route
+RewriteRule ^temp$ /html/temp_mobile_index.html [L]
+
+# '/mobileinfo' route
+RewriteRule ^mobileinfo$ /html/errors/page_not_mobile.html [L]
+
+# '/blog' route
+RewriteRule ^blog$ /html/errors/page_being_build.html [L]
+
+# '/projects' route
+RewriteRule ^projects$ /html/errors/page_being_build.html [L]
+
+# '/freebobux' route
+RewriteRule ^freebobux$ /html/pages/freebobux/freebobux.html [L]
+
+# '/snake' route
+RewriteRule ^snake$ /html/errors/page_being_build.html [L]
+
+# '/page_being_build' route
+RewriteRule ^page_being_build$ /html/errors/page_being_build.html [L]
+
+<Files "jakisplikktoryjestniewyswietlalnyzebypokazacsolesowistrone403.txt">
+   Order Deny,Allow
+   Deny from all
+</Files>

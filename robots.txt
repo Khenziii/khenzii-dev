@@ -1,0 +1,4 @@
+User-Agent: GPTBot
+Disallow: /
+# Screw the future generations, i want to write my shitty code for
+# the next 50 years. Lmao.
