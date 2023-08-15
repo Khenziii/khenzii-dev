@@ -1,4 +1,2 @@
-## Some info idk
-The master branch is running on https://khenzii.dev/
-
-Ima prolly finish writing the README later, idk
+## TO-DO list:
+1. Finish writing the README.md (lol)
