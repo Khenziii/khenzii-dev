@@ -95,5 +95,5 @@ app.use((err, req, res, next) => {
 
 
 app.listen(port, () => {
-    console.log(`app waiting for nginx packets here: http://localhost:${port} 🫡`);
+    console.log(`app waiting for nginx redirects here: http://localhost:${port} 🫡`);
 });
