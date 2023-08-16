@@ -1,6 +1,7 @@
 const express = require('express');
 const crypto = require('crypto');
 const exec = require('child_process').exec;
+require('dotenv').config();
 
 const app = express();
 const port = 3001;
@@ -33,7 +34,7 @@ app.post('/webhook', (req, res) => {
     const hmac = crypto.createHmac('sha256', webhookSecret); // calculate our own hmac
     const calculatedSignature = 'sha256=' + hmac.update(payload).digest('hex'); // update our hmac with the payload, digest it as hex and then concat 'sha256=' to the start of it.
 
-    if (crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(calculatedSignature))) { // 
+    if (crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(calculatedSignature))) { // verify that the signatures match
         const branch = req.body.ref.split('/').pop(); // get the branch name (eg. ref="refs/head/dev" .split returns ["refs", "head", "dev"] .pop gets the last index "dev")
 
         if (branch === 'master') {
