@@ -2,14 +2,6 @@ const express = require('express');
 const crypto = require('crypto');
 const exec = require('child_process').exec;
 
-const https = require('https');
-const fs = require('fs');
-
-const options = {
-    key: fs.readFileSync('/etc/letsencrypt/live/khenzii.dev/privkey.pem'),
-    cert: fs.readFileSync('/etc/letsencrypt/live/khenzii.dev/fullchain.pem')
-};
-
 const app = express();
 const port = 3001;
 
@@ -71,6 +63,6 @@ app.post('/webhook', (req, res) => {
     }
 });
 
-https.createServer(options, function (req, res) {
-    console.log(`Server listening at localhost:${port}/webhook 🫡`);
-}).listen(port);
+app.listen(port, () => {
+    console.log(`app listening here: http://localhost:${port} 🫡`);
+});
