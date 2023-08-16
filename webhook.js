@@ -41,7 +41,7 @@ app.post('/webhook', (req, res) => {
             executeCommands([
                 'git pull origin master', // Pull the repository
                 'npm install', // install npm packages
-                'pm2 restart' // restart node processes
+                'pm2 restart all' // restart all node processes
             ]).then(() => {
                 console.log('Repository pulled, packages installed (if any new), node.js processes restarted.');
                 res.status(200).send('Everything went gut :thumbs_up:. Thanks for the delivery :)');
