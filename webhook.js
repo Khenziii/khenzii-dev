@@ -1,14 +1,16 @@
 const express = require('express');
 const crypto = require('crypto');
 const exec = require('child_process').exec;
-require('dotenv').config();
+const path = require('path');
 
 const app = express();
 const port = 3001;
 
-const webhookSecret = process.env.webhook_secret;
-
 app.use(express.json());
+
+
+require('dotenv').config({ path: path.resolve(__dirname, 'secrets.env') });
+const webhookSecret = process.env.webhook_secret;
 
 
 function executeCommands(commands) {
