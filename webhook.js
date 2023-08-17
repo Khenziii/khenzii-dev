@@ -23,11 +23,12 @@ function executeCommands(commands) {
                 }
     
                 else {
-                    console.log('Everything ran fine, commands output:', stdout);
-                    resolve();
+                    console.log('Command ran fine, output:', stdout);
                 }
             });   
         }
+        
+        resolve();
     });
 }
 
