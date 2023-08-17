@@ -15,18 +15,19 @@ const webhookSecret = process.env.webhook_secret;
 
 function executeCommands(commands) {
     return new Promise((resolve, reject) => {
-        const command = commands.join(' && '); // if ya didn't know that, array.join() func takes a string and seperates every element of the list with it.
-        exec(command, (error, stdout, stderr) => {
-            if (error) {
-                console.error('Some commands didnt ran well :P :', error);
-                reject(error);
-            }
-
-            else {
-                console.log('Everything ran fine, commands output:', stdout);
-                resolve();
-            }
-        });
+        for(let i=0; i < commands.length; i++){
+            exec(commands[i], (error, stdout, stderr) => {
+                if (error) {
+                    console.error(`Error while executing commands. Command: ${commands[i]}. Index of the command: ${i}. Error: ${error}.`);
+                    reject(error);
+                }
+    
+                else {
+                    console.log('Everything ran fine, commands output:', stdout);
+                    resolve();
+                }
+            });   
+        }
     });
 }
 
