@@ -3,30 +3,13 @@
 @import '../../presets/body.css';
 
 
-.index_icons_container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-around;
-
-    position: relative;
-    left: 50%;
-    top: 3vh;
-    transform: translateX(-50%);
-
-    max-width: 80%;
-    height: auto;
-
-    gap: 1%;
-}
-
 .icons_lines {
-    max-width: 75%;
+    max-width: 80%;
     height: auto;
 }
 
 .icons {
-    max-width: 75%;
+    max-width: 80%;
     height: auto;
 
     transition: all 0.5s;
@@ -53,15 +36,6 @@
     margin-top: 5%;
 }
 
-.pfp {
-    max-width: 20%;
-    height: auto;
-    margin-bottom: 2vh;
-
-    background: repeating-linear-gradient(135deg, transparent, transparent 5vh, var(--primary), var(--secondary));
-    border-radius: 1.5vh;
-}
-
 .pfp_text {
     margin-top: 0;
     margin-bottom: 0;
@@ -71,36 +45,6 @@
     font-family: Montserrat;
 
     font-weight: 900;
-}
-
-.pfp_sub-text {
-    max-width: 60%;
-    margin: 0;
-    margin-top: 2vh;
-    color: var(--text);
-    text-align: center;
-    font-size: 2rem;
-    font-family: Montserrat;
-}
-
-.button-blog {
-    margin-top: 2vh;
-
-    scale: 1.5;
-    width: 15%;
-
-    background-color: transparent;
-
-    color: var(--text);
-
-    text-align: center;
-    display: inline-block;
-    padding: 15px 40px;
-    border: 1px solid #fff;
-    cursor: pointer;
-    letter-spacing: 2px;
-    position: relative;
-    overflow: hidden;
 }
 
 .button-blog:before {
@@ -120,26 +64,6 @@
     right: 105%;
 }
 
-.button-projects {
-    margin-top: 2vh;
-
-    scale: 1.5;
-    width: 15%;
-
-    background-color: transparent;
-
-    color: var(--text);
-
-    text-align: center;
-    display: inline-block;
-    padding: 15px 40px;
-    border: 1px solid #fff;
-    cursor: pointer;
-    letter-spacing: 2px;
-    position: relative;
-    overflow: hidden;
-}
-
 .button-projects:before {
     content: "";
     position: absolute;
@@ -152,7 +76,211 @@
     transition: all .3s;
     opacity: 0.3;
 }
-
+    
 .button-projects:hover:before {
     right: 105%;
+}
+
+@media (max-width: 1200px) {
+    .index_icons_container {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: center;
+    
+        position: relative;
+        top: 3vh;
+    
+        max-width: 80%;
+        height: auto;
+
+        flex-wrap: wrap;
+        margin: 0 auto;
+    }
+
+    .icons_parents {
+        max-width: 20%;
+
+        display: flex;
+
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .icons_middle_line {
+        display: none;
+    }
+    
+    .pfp {
+        max-width: 40%;
+        height: auto;
+        margin-bottom: 2vh;
+        margin-top: 2vh;
+    
+        background: repeating-linear-gradient(135deg, transparent, transparent 5vh, var(--primary), var(--secondary));
+        border-radius: 1.5vh;
+    }
+    
+    .pfp_sub-text {
+        max-width: 60%;
+        margin: 0;
+        color: var(--text);
+        text-align: center;
+        font-size: 1.25rem;
+        font-family: Montserrat;
+    }
+    
+    .button-blog {
+        margin-top: 3vh;
+        margin-bottom: 2.5vh;
+    
+        scale: 1.5;
+        width: 30%;
+
+        background-color: transparent;
+    
+        color: var(--text);
+        font-size: 65%;
+    
+        text-align: center;
+        display: inline-block;
+        padding: 15px 40px;
+        border: 1px solid #fff;
+        cursor: pointer;
+        letter-spacing: 2px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .button-projects {
+        margin-top: 3vh;
+    
+        scale: 1.5;
+        width: 40%;
+
+        
+        background-color: transparent;
+    
+        color: var(--text);
+        font-size: 65%;
+    
+        text-align: center;
+        display: inline-block;
+        padding: 15px 40px;
+        border: 1px solid #fff;
+        cursor: pointer;
+        letter-spacing: 2px;
+        position: relative;
+        overflow: hidden;
+    }
+}
+
+@media (max-height: 900px) {
+    .pfp {
+        display: none;
+    }
+
+    .pfp_text {
+        margin-top: 4vh;
+    }
+
+    .button-blog {
+        margin-top: 4vh;
+    }
+}
+
+@media (min-width: 1201px) {
+    .index_icons_container {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-around;
+    
+        position: relative;
+        left: 50%;
+        top: 3vh;
+        transform: translateX(-50%);
+    
+        max-width: 80%;
+        height: auto;
+    
+        gap: 1%;
+    }
+    
+    .icons_middle_line {
+        max-width: 75%;
+        height: auto;
+    }
+    
+    .pfp {
+        max-width: 20%;
+        height: auto;
+        margin-bottom: 2vh;
+    
+        background: repeating-linear-gradient(135deg, transparent, transparent 5vh, var(--primary), var(--secondary));
+        border-radius: 1.5vh;
+    }
+    
+    .pfp_sub-text {
+        max-width: 60%;
+        margin: 0;
+        margin-top: 2vh;
+        color: var(--text);
+        text-align: center;
+        font-size: 2rem;
+        font-family: Montserrat;
+    }
+    
+    .button-blog {
+        margin-top: 2vh;
+    
+        scale: 1.5;
+        width: 15%;
+    
+        background-color: transparent;
+    
+        color: var(--text);
+    
+        text-align: center;
+        display: inline-block;
+        padding: 15px 40px;
+        border: 1px solid #fff;
+        cursor: pointer;
+        letter-spacing: 2px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .button-blog:before {
+        content: "";
+        position: absolute;
+        height: 340%;
+        width: 30%;
+        background: #fff;
+        right: -27.5%;
+        top: -70%;
+        transform: rotate(37deg) translateY(-20%);
+        transition: all .3s;
+        opacity: 0.3;
+    }
+    
+    .button-projects {
+        margin-top: 2vh;
+    
+        scale: 1.5;
+        width: 15%;
+    
+        background-color: transparent;
+    
+        color: var(--text);
+    
+        text-align: center;
+        display: inline-block;
+        padding: 15px 40px;
+        border: 1px solid #fff;
+        cursor: pointer;
+        letter-spacing: 2px;
+        position: relative;
+        overflow: hidden;
+    }
 }
