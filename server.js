@@ -37,14 +37,16 @@ app.use('/js', express.static(path.join(__dirname, 'js')));
 app.use('/videos', express.static(path.join(__dirname, 'videos')));
 app.use('/robots.txt', express.static(path.join(__dirname, 'robots.txt')));
 
+app.set('trust proxy', true);
+
 app.use(function (req, res, next) {
-    var ClientIP = req.headers["x-real-ip"];
+    ClientIP = req.headers['x-forwarded-for']
     if (ClientIP) {
         req.ip = ClientIP;
     } else {
         req.ip = "<empty_string>"
     }
-
+    
     next();
 });
 
@@ -52,7 +54,7 @@ app.use(function (req, res, next) {
 // '/' route
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'html', 'index.html'));
-    consoleInfo(`${req.ip} requested the '/' route`)
+    consoleInfo(`${req.ClientIP} requested the '/' route`)
 });
 
 // '/temp' route
