@@ -42,9 +42,9 @@ app.set('trust proxy', true);
 app.use(function (req, res, next) {
     ClientIP = req.headers['x-forwarded-for']
     if (ClientIP) {
-        req.ip = ClientIP;
+        req.ClientIP = ClientIP;
     } else {
-        req.ip = "<empty_string>"
+        req.ClientIP = "<empty_string>"
     }
     
     next();
@@ -54,19 +54,19 @@ app.use(function (req, res, next) {
 // '/' route
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'html', 'index.html'));
-    consoleInfo(`${req.ip} requested the '/' route`)
+    consoleInfo(`${req.ClientIP} requested the '/' route`)
 });
 
 // '/temp' route
 app.get('/temp', (req, res) => {
     res.sendFile(path.join(__dirname, 'html', 'temp_mobile_index.html'));
-    consoleInfo(`${req.ip} requested the '/temp' route`)
+    consoleInfo(`${req.ClientIP} requested the '/temp' route`)
 });
 
 // '/mobileinfo' route
 app.get('/mobileinfo', (req, res) => {
     res.sendFile(path.join(__dirname, 'html', 'errors', 'page_not_mobile.html'));
-    consoleInfo(`${req.ip} requested the '/mobileinfo' route`)
+    consoleInfo(`${req.ClientIP} requested the '/mobileinfo' route`)
 });
 
 // '/blog' route
@@ -76,7 +76,7 @@ app.get('/blog', (req, res) => {
     // still being build so the route shows the `this page is still
     // being build` html
     res.sendFile(path.join(__dirname, 'html', 'errors', 'page_being_build.html'));
-    consoleInfo(`${req.ip} requested the '/blog' route`)
+    consoleInfo(`${req.ClientIP} requested the '/blog' route`)
 });
 
 // '/projects' route
@@ -86,13 +86,13 @@ app.get('/projects', (req, res) => {
     // is still being build so the route shows the `this page is
     // still being build` html
     res.sendFile(path.join(__dirname, 'html', 'errors', 'page_being_build.html'));
-    consoleInfo(`${req.ip} requested the '/projects' route`)
+    consoleInfo(`${req.ClientIP} requested the '/projects' route`)
 });
 
 // '/freebobux' route
 app.get('/freebobux', (req, res) => {
     res.sendFile(path.join(__dirname, 'html', 'pages', 'freebobux', 'freebobux.html'));
-    consoleInfo(`${req.ip} requested the '/freebobux' route :D`)
+    consoleInfo(`${req.ClientIP} requested the '/freebobux' route :D`)
 });
 
 // '/snake' route
@@ -102,7 +102,7 @@ app.get('/snake', (req, res) => {
     // is still being build so the route shows the `this page is
     // still being build` html
     res.sendFile(path.join(__dirname, 'html', 'errors', 'page_being_build.html'));
-    consoleInfo(`${req.ip} requested the '/snake' route`)
+    consoleInfo(`${req.ClientIP} requested the '/snake' route`)
 });
 
 // '/page_being_build' route
@@ -115,7 +115,7 @@ app.get('/page_being_build', (req, res) => {
     // they are being worked on because it gives the user more info
     // redirecting can be confusing)
     res.sendFile(path.join(__dirname, 'html', 'errors', 'page_being_build.html'));
-    consoleInfo(`${req.ip} requested the '/page_being_build' route`)
+    consoleInfo(`${req.ClientIP} requested the '/page_being_build' route`)
 });
 
 // Place routes above this comment!!!
@@ -123,13 +123,13 @@ app.get('/page_being_build', (req, res) => {
 // 404 error
 app.use((req, res, next) => {
     res.status(404).sendFile(path.join(__dirname, 'html', 'errors', 'error_404.html'));
-    consoleInfo(`${req.ip} got the 404 error`)
+    consoleInfo(`${req.ClientIP} got the 404 error`)
 });
 
 // Default error handler
 app.use((err, req, res, next) => {
     res.status(500).send('Bruh, something went wrong :P Check console for more Details. Sorry.');
-    consoleInfo(`ClientIP: ${req.ip}. Some internal server error ocurred :/. Here is the error: ${err.stack}`)
+    consoleInfo(`ClientIP: ${req.ClientIP}. Some internal server error ocurred :/. Here is the error: ${err.stack}`)
 });
 
 // Place errors above this comment!
