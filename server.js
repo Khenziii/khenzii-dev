@@ -4,6 +4,30 @@ const path = require('path');
 const app = express();
 const port = 3000;
 
+function getMilliseconds(hours){ // returns the milliseconds that there are in certain amount of hours
+    return 1000 * 60 * 60 * hours; 
+}
+
+function addZero(value) { // adds zero's to the start of values if possible (eg. input: 7 output: 07)
+    return value.toString().padStart(2, '0');
+}
+
+function consoleInfo(message) {
+    var timeInMilliseconds = getMilliseconds(2);
+
+    var currentDate = new Date();
+    var currentPolishTime = new Date(currentDate.getTime() + timeInMilliseconds);
+
+    var localYear = currentPolishTime.getFullYear();
+    var localMonth = addZero(currentPolishTime.getMonth()+1); // months start from the index 0, so we are adding 1
+    var localDay = addZero(currentPolishTime.getDate());
+    var localHours = addZero(currentPolishTime.getHours());
+    var localMinutes = addZero(currentPolishTime.getMinutes());
+    var localSeconds = addZero(currentPolishTime.getSeconds());
+
+    console.log(`${localDay}/${localMonth}/${localYear.toString().slice(-2)} - ${localHours}:${localMinutes}:${localSeconds} > ${message}`)
+}
+
 app.use('/html', express.static(path.join(__dirname, 'html')));
 app.use('/css', express.static(path.join(__dirname, 'css')));
 app.use('/fonts', express.static(path.join(__dirname, 'fonts')));
@@ -17,48 +41,19 @@ app.use('/robots.txt', express.static(path.join(__dirname, 'robots.txt')));
 // '/' route
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'html', 'index.html'));
-    var currentDate = new Date();
-
-    var localYear = currentDate.getFullYear();
-    var localMonth = currentDate.getMonth();
-    var localDay = currentDate.getDate()
-    var localHours = currentDate.getHours();
-    var localMinutes = currentDate.getMinutes();
-    var localSeconds = currentDate.getSeconds();
-
-    console.log(localDay + "/" + localMonth + "/" + localYear.toString().slice(-2) + " - " + localHours + ":" + localMinutes + ":" + localSeconds + ": some client got '/' route")
+    consoleInfo("some user requested the '/' route")
 });
 
 // '/temp' route
 app.get('/temp', (req, res) => {
     res.sendFile(path.join(__dirname, 'html', 'temp_mobile_index.html'));
-
-    var currentDate = new Date();
-
-    var localYear = currentDate.getFullYear();
-    var localMonth = currentDate.getMonth();
-    var localDay = currentDate.getDate()
-    var localHours = currentDate.getHours();
-    var localMinutes = currentDate.getMinutes();
-    var localSeconds = currentDate.getSeconds();
-
-    console.log(localDay + "/" + localMonth + "/" + localYear.toString().slice(-2) + " - " + localHours + ":" + localMinutes + ":" + localSeconds + ": some client got '/temp' route")
+    consoleInfo("some user requested the '/temp' route")
 });
 
 // '/mobileinfo' route
 app.get('/mobileinfo', (req, res) => {
     res.sendFile(path.join(__dirname, 'html', 'errors', 'page_not_mobile.html'));
-
-    var currentDate = new Date();
-
-    var localYear = currentDate.getFullYear();
-    var localMonth = currentDate.getMonth();
-    var localDay = currentDate.getDate()
-    var localHours = currentDate.getHours();
-    var localMinutes = currentDate.getMinutes();
-    var localSeconds = currentDate.getSeconds();
-
-    console.log(localDay + "/" + localMonth + "/" + localYear.toString().slice(-2) + " - " + localHours + ":" + localMinutes + ":" + localSeconds + ": some client got '/mobileinfo' route")
+    consoleInfo("some user requested the '/mobileinfo' route")
 });
 
 // '/blog' route
@@ -68,17 +63,7 @@ app.get('/blog', (req, res) => {
     // still being build so the route shows the "this page is still
     // being build" html
     res.sendFile(path.join(__dirname, 'html', 'errors', 'page_being_build.html'));
-
-    var currentDate = new Date();
-
-    var localYear = currentDate.getFullYear();
-    var localMonth = currentDate.getMonth();
-    var localDay = currentDate.getDate()
-    var localHours = currentDate.getHours();
-    var localMinutes = currentDate.getMinutes();
-    var localSeconds = currentDate.getSeconds();
-
-    console.log(localDay + "/" + localMonth + "/" + localYear.toString().slice(-2) + " - " + localHours + ":" + localMinutes + ":" + localSeconds + ": some client got '/blog' route")
+    consoleInfo("some user requested the '/blog' route")
 });
 
 // '/projects' route
@@ -88,33 +73,13 @@ app.get('/projects', (req, res) => {
     // is still being build so the route shows the "this page is
     // still being build" html
     res.sendFile(path.join(__dirname, 'html', 'errors', 'page_being_build.html'));
-
-    var currentDate = new Date();
-
-    var localYear = currentDate.getFullYear();
-    var localMonth = currentDate.getMonth();
-    var localDay = currentDate.getDate()
-    var localHours = currentDate.getHours();
-    var localMinutes = currentDate.getMinutes();
-    var localSeconds = currentDate.getSeconds();
-
-    console.log(localDay + "/" + localMonth + "/" + localYear.toString().slice(-2) + " - " + localHours + ":" + localMinutes + ":" + localSeconds + ": some client got '/projects' route")
+    consoleInfo("some user requested the '/projects' route")
 });
 
 // '/freebobux' route
 app.get('/freebobux', (req, res) => {
     res.sendFile(path.join(__dirname, 'html', 'pages', 'freebobux', 'freebobux.html'));
-
-    var currentDate = new Date();
-
-    var localYear = currentDate.getFullYear();
-    var localMonth = currentDate.getMonth();
-    var localDay = currentDate.getDate()
-    var localHours = currentDate.getHours();
-    var localMinutes = currentDate.getMinutes();
-    var localSeconds = currentDate.getSeconds();
-
-    console.log(localDay + "/" + localMonth + "/" + localYear.toString().slice(-2) + " - " + localHours + ":" + localMinutes + ":" + localSeconds + ": some client got '/freebobux' route :D")
+    consoleInfo("some user requested the '/freebobux' route :D")
 });
 
 // '/snake' route
@@ -124,17 +89,7 @@ app.get('/snake', (req, res) => {
     // is still being build so the route shows the "this page is
     // still being build" html
     res.sendFile(path.join(__dirname, 'html', 'errors', 'page_being_build.html'));
-
-    var currentDate = new Date();
-
-    var localYear = currentDate.getFullYear();
-    var localMonth = currentDate.getMonth();
-    var localDay = currentDate.getDate()
-    var localHours = currentDate.getHours();
-    var localMinutes = currentDate.getMinutes();
-    var localSeconds = currentDate.getSeconds();
-
-    console.log(localDay + "/" + localMonth + "/" + localYear.toString().slice(-2) + " - " + localHours + ":" + localMinutes + ":" + localSeconds + ": some client got '/snake' route")
+    consoleInfo("some user requested the '/snake' route")
 });
 
 // '/page_being_build' route
@@ -147,17 +102,7 @@ app.get('/page_being_build', (req, res) => {
     // they are being worked on because it gives the user more info
     // redirecting can be confusing)
     res.sendFile(path.join(__dirname, 'html', 'errors', 'page_being_build.html'));
-
-    var currentDate = new Date();
-
-    var localYear = currentDate.getFullYear();
-    var localMonth = currentDate.getMonth();
-    var localDay = currentDate.getDate()
-    var localHours = currentDate.getHours();
-    var localMinutes = currentDate.getMinutes();
-    var localSeconds = currentDate.getSeconds();
-
-    console.log(localDay + "/" + localMonth + "/" + localYear.toString().slice(-2) + " - " + localHours + ":" + localMinutes + ":" + localSeconds + ": some client got '/page_being_build' route")
+    consoleInfo("some user requested the '/page_being_build' route")
 });
 
 // Place routes above this comment!!!
@@ -165,34 +110,13 @@ app.get('/page_being_build', (req, res) => {
 // 404 error
 app.use((req, res, next) => {
     res.status(404).sendFile(path.join(__dirname, 'html', 'errors', 'error_404.html'));
-
-    var currentDate = new Date();
-
-    var localYear = currentDate.getFullYear();
-    var localMonth = currentDate.getMonth();
-    var localDay = currentDate.getDate()
-    var localHours = currentDate.getHours();
-    var localMinutes = currentDate.getMinutes();
-    var localSeconds = currentDate.getSeconds();
-
-    console.log(localDay + "/" + localMonth + "/" + localYear.toString().slice(-2) + " - " + localHours + ":" + localMinutes + ":" + localSeconds + ": some client tried to get a page that doesn't exist")
+    consoleInfo("some user got the 404 error")
 });
 
 // Default error handler
 app.use((err, req, res, next) => {
-    console.error(err.stack);
     res.status(500).send('Bruh, something went wrong :P Check console for more Details. Sorry.');
-    
-    var currentDate = new Date();
-
-    var localYear = currentDate.getFullYear();
-    var localMonth = currentDate.getMonth();
-    var localDay = currentDate.getDate()
-    var localHours = currentDate.getHours();
-    var localMinutes = currentDate.getMinutes();
-    var localSeconds = currentDate.getSeconds();
-
-    console.error(localDay + "/" + localMonth + "/" + localYear.toString().slice(-2) + " - " + localHours + ":" + localMinutes + ":" + localSeconds + ": some internal server error happened :/")
+    consoleInfo(`some internal server error ocurred :/. Here is the error: ${err.stack}`)
 });
 
 // Place errors above this comment!
