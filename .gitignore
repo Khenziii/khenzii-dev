@@ -2,3 +2,4 @@ jakisplikktoryjestniewyswietlalnyzebypokazacsolesowistrone403.txt
 node_modules/
 secrets.env
 nginx_config_symlink
+test.js
