@@ -54,7 +54,7 @@ app.use(function (req, res, next) {
 // '/' route
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'html', 'index.html'));
-    consoleInfo(`${req.ClientIP} requested the '/' route`)
+    consoleInfo(`${req.ip} requested the '/' route`)
 });
 
 // '/temp' route
