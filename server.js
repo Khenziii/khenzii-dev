@@ -38,7 +38,7 @@ app.use('/videos', express.static(path.join(__dirname, 'videos')));
 app.use('/robots.txt', express.static(path.join(__dirname, 'robots.txt')));
 
 app.use(function (req, res, next) {
-    var ClientIP = req.headers["client-ip"];
+    var ClientIP = req.headers["x-real-ip"];
     if (ClientIP) {
         req.ip = ClientIP;
     } else {
