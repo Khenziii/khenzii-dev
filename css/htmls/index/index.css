@@ -132,7 +132,7 @@
     
     .button-blog {
         margin-top: 3vh;
-        margin-bottom: 2.5vh;
+        margin-bottom: 3vh;
     
         scale: 1.5;
         width: 30%;
@@ -173,6 +173,10 @@
         position: relative;
         overflow: hidden;
     }
+
+    .pfp_text {
+        margin-bottom: 2vh;
+    }
 }
 
 @media (max-height: 900px) {
@@ -181,11 +185,7 @@
     }
 
     .pfp_text {
-        margin-top: 4vh;
-    }
-
-    .button-blog {
-        margin-top: 4vh;
+        margin: 4vh;
     }
 }
 
