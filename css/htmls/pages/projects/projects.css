@@ -1,0 +1,70 @@
+@import '../../../presets/variables.css';
+@import '../../../presets/fonts.css';
+@import '../../../presets/body.css';
+
+.container {
+    display: grid;
+    place-items: center;
+}
+
+.home_container {
+    margin-top: 5vh;
+}
+
+.home_icon { 
+    width: 7.5vw;
+    height: auto;
+
+    transition: all 0.5s;
+}
+
+.home_icon:hover {
+    background-color: var(--secondary);
+    border-radius: 2vh;
+}
+
+.home_icon:active {
+    transition: none;
+    background-color: var(--accent);
+}
+
+.main-text {
+    margin-top: 5vh;
+    margin-bottom: 0;
+
+    text-align: center;
+    font-size: 2vw;
+    color: var(--text);
+    font-family: Montserrat;
+    font-weight: 900;
+}
+
+.line {
+    width: 30vw;
+    color: var(--secondary);
+}
+
+.sub-text {
+    color: var(--text);
+    text-align: center;
+    font-family: Montserrat;
+    font-size: 1vw;
+    max-width: 30vw;
+
+    margin: 0;
+
+}
+
+.list {
+    color: var(--text);
+    text-align: center;
+    font-family: Montserrat;
+    font-size: 2vw; 
+    margin: 0;
+
+    list-style: none;
+}
+
+.project {
+
+}
