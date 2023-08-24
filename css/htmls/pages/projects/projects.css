@@ -63,31 +63,6 @@
    width: 10vw; 
 }
 
-@keyframes fadeAndMove {
-  0% {
-    opacity: 0;
-    transform: translateY(-1vh);
-  }
-
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-
-@keyframes reverseFadeAndMove {
-  0% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  100% {
-    opacity: 0;
-    transform: translateY(-1vh);
-  }
-}
-
 .icons_text {
     color: var(--text);
     text-align: center;
@@ -95,6 +70,9 @@
     font-size: 1vw;
 
     opacity: 0;
+    transform: translateY(-1vh);
+
+    transition: opacity 1s ease-in-out, transform 1s ease-in-out;
 }
 
 .icons_text-none {
@@ -102,11 +80,8 @@
 }
 
 .icons:hover + .icons_text {
-    animation: fadeAndMove 1s ease-in-out forwards;
-}
-
-.icons_text:not(:hover) {
-    animation: reverseFadeAndMove 1s ease-in-out forwards;
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .project {
