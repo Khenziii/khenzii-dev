@@ -55,14 +55,58 @@
 
 }
 
-.list {
+.icons_container {
+    display: flex;
+}
+
+.icons {
+   width: 10vw; 
+}
+
+@keyframes fadeAndMove {
+  0% {
+    opacity: 0;
+    transform: translateY(-1vh);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+@keyframes reverseFadeAndMove {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-1vh);
+  }
+}
+
+.icons_text {
     color: var(--text);
     text-align: center;
     font-family: Montserrat;
-    font-size: 2vw; 
-    margin: 0;
+    font-size: 1vw;
 
-    list-style: none;
+    opacity: 0;
+}
+
+.icons_text-none {
+    display: none;
+}
+
+.icons:hover + .icons_text {
+    animation: fadeAndMove 1s ease-in-out forwards;
+}
+
+.icons_text:not(:hover) {
+    animation: reverseFadeAndMove 1s ease-in-out forwards;
 }
 
 .project {
