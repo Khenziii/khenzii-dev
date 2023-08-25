@@ -1,4 +1,5 @@
 body {
     background-color: var(--background);
     margin: 0;
+    overflow: hidden;
 }

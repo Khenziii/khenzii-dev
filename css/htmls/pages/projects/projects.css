@@ -8,7 +8,7 @@
 }
 
 .home_container {
-    margin-top: 5vh;
+    margin-top: 2.5vh;
 }
 
 .home_icon { 
@@ -29,7 +29,7 @@
 }
 
 .main-text {
-    margin-top: 5vh;
+    margin-top: 2.5vh;
     margin-bottom: 0;
 
     text-align: center;
@@ -52,15 +52,23 @@
     max-width: 30vw;
 
     margin: 0;
-
+    margin-bottom: 2.5vh;
 }
 
 .icons_container {
-    display: flex;
+    width: 50vw;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
 }
 
 .icons {
-   width: 10vw; 
+    width: 5vw;
+    height: auto;
+
+    transition: all 1s;
+
+    display: block;
+    margin: auto;
 }
 
 .icons_text {
@@ -71,19 +79,33 @@
 
     opacity: 0;
     transform: translateY(-1vh);
+    cursor: default;
 
     transition: opacity 1s ease-in-out, transform 1s ease-in-out;
 }
 
-.icons_text-none {
-    display: none;
+.icons:hover {
+    width: 7.5vw;
 }
 
-.icons:hover + .icons_text {
+.icons:hover + .icons_text { 
     opacity: 1;
     transform: translateY(0);
 }
 
-.project {
+.down_arrow {
+    margin-top: -2.5vh;
+    width: 5vw;
 
+    transition: all 0.5s;
+}
+
+.down_arrow:hover {
+    border-radius: 2vh;
+    background-color: var(--secondary);
+}
+
+.down_arrow:active {
+    transition: none;
+    background-color: var(--accent);
 }
