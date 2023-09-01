@@ -1,8 +1,19 @@
 const express = require('express');
 const path = require('path');
+const { Pool } = require('pg');
+require('dotenv').config({ path: path.resolve(__dirname, 'secrets.env') });
 
 const app = express();
 const port = 3000;
+
+const database_user_password = process.env.database_user_password;
+const pool = new Pool({
+    user: 'khenzii',
+    host: 'localhost',
+    database: 'blog_production',
+    password: database_user_password,
+    port: 5432, // Default PostgreSQL port
+});
 
 function getMilliseconds(hours){ // returns the milliseconds that there are in certain amount of hours
     return 1000 * 60 * 60 * hours; 
@@ -56,6 +67,31 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'html', 'index.html'));
     consoleInfo(`${req.ClientIP} requested the '/' route`)
 });
+
+
+app.get('/blog/:username', async (req, res) => {
+    const { username } = req.params;
+  
+    try {
+        const query = 'SELECT * FROM blog WHERE username = $1';
+        const result = await pool.query(query, [username]);
+  
+        if (result.rows.length === 0) {
+            res.status(404).sendFile(path.join(__dirname, 'html', 'errors', 'error_404.html'));
+            consoleInfo(`${req.ClientIP} got the 404 error. Route: /blog/${username}`)
+            return
+        }
+  
+        const user = result.rows[0];
+        res.json(user);
+    } 
+    
+    catch (error) {
+        res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Check console for more Details. Sorry.');
+        consoleInfo(`${req.ClientIP} got a 500 error. Something probably broke or wasn't working correctly from the start. Route: /blog/${username}`)
+    }
+});
+
 
 // '/temp' route
 app.get('/temp', (req, res) => {
@@ -128,7 +164,7 @@ app.use((req, res, next) => {
 
 // Default error handler
 app.use((err, req, res, next) => {
-    res.status(500).send('Bruh, something went wrong :P Check console for more Details. Sorry.');
+    res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Check console for more Details. Sorry.');
     consoleInfo(`ClientIP: ${req.ClientIP}. Some internal server error ocurred :/. Here is the error: ${err.stack}`)
 });
 

@@ -1,0 +1,61 @@
+@import '../../../presets/variables.css';
+@import '../../../presets/fonts.css';
+@import '../../../presets/body.css';
+
+/*margin: 2vh (delete me later (i'm trying to make consistent gaps between the elements :> (if you're seeing this in the production, i'm an idiot))) */
+
+.centered_container {
+    display: grid;
+    place-items: center;
+
+    height: auto;
+}
+
+.home_icon {
+    margin-top: 2vh;
+
+    width: 10vw;
+    height: auto;
+
+    transition: all 0.5s;
+}
+
+.home_icon:hover {
+    background-color: var(--secondary);
+    border-radius: 2vh;
+}
+
+.home_icon:active {
+    transition: none;
+    background-color: var(--accent);
+}
+
+.line {
+    width: 30vw;
+    color: var(--secondary);
+}
+
+.input_username {
+    width: 20vw;
+    font-size: ;
+}
+
+.username_text {
+
+}
+
+.input_email {
+    
+}
+
+.email_text {
+
+}
+
+.input_password {
+
+}
+
+.password_text {
+
+}
