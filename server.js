@@ -15,8 +15,8 @@ const pool = new Pool({
     port: 5432, // Default PostgreSQL port
 });
 
-function getMilliseconds(hours){ // returns the milliseconds that there are in certain amount of hours
-    return 1000 * 60 * 60 * hours; 
+function getMilliseconds(hours) { // returns the milliseconds that there are in certain amount of hours
+    return 1000 * 60 * 60 * hours;
 }
 
 function addZero(value) { // adds zero's to the start of values if possible (eg. input: 7 output: 07)
@@ -30,13 +30,27 @@ function consoleInfo(message) {
     var currentPolishTime = new Date(currentDate.getTime() + timeInMilliseconds);
 
     var localYear = currentPolishTime.getFullYear();
-    var localMonth = addZero(currentPolishTime.getMonth()+1); // months start from the index 0, so we are adding 1
+    var localMonth = addZero(currentPolishTime.getMonth() + 1); // months start from the index 0, so we are adding 1
     var localDay = addZero(currentPolishTime.getDate());
     var localHours = addZero(currentPolishTime.getHours());
     var localMinutes = addZero(currentPolishTime.getMinutes());
     var localSeconds = addZero(currentPolishTime.getSeconds());
 
     console.log(`${localDay}/${localMonth}/${localYear.toString().slice(-2)} - ${localHours}:${localMinutes}:${localSeconds} > ${message}`)
+}
+
+function checkIfStringContainsIllegalChar(string, legalChars) {
+    for (let i = 0; i < string.length; i++) {
+        if (legalChars.indexOf(string[i]) === -1) {
+            return true; // Found an illegal character
+        }
+    }
+    return false; // All characters are legal
+}
+
+function checkIfEmailCorrect(email) {
+    const some_regex_that_i_wrote_while_being_drunk = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    return some_regex_that_i_wrote_while_being_drunk.test(email)
 }
 
 app.use('/html', express.static(path.join(__dirname, 'html')));
@@ -57,9 +71,11 @@ app.use(function (req, res, next) {
     } else {
         req.ClientIP = "<empty_string>"
     }
-    
+
     next();
 });
+
+app.use(express.json());
 
 
 // '/' route
@@ -67,31 +83,6 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'html', 'index.html'));
     consoleInfo(`${req.ClientIP} requested the '/' route`)
 });
-
-
-app.get('/blog/:username', async (req, res) => {
-    const { username } = req.params;
-  
-    try {
-        const query = 'SELECT * FROM blog WHERE username = $1';
-        const result = await pool.query(query, [username]);
-  
-        if (result.rows.length === 0) {
-            res.status(404).sendFile(path.join(__dirname, 'html', 'errors', 'error_404.html'));
-            consoleInfo(`${req.ClientIP} got the 404 error. Route: /blog/${username}`)
-            return
-        }
-  
-        const user = result.rows[0];
-        res.json(user);
-    } 
-    
-    catch (error) {
-        res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Check console for more Details. Sorry.');
-        consoleInfo(`${req.ClientIP} got a 500 error. Something probably broke or wasn't working correctly from the start. Route: /blog/${username}`)
-    }
-});
-
 
 // '/temp' route
 app.get('/temp', (req, res) => {
@@ -107,12 +98,105 @@ app.get('/mobileinfo', (req, res) => {
 
 // '/blog' route
 app.get('/blog', (req, res) => {
-    // res.sendFile(path.join(__dirname, 'html', 'pages', 'blog', 'blog.html'));
-    // uncomment the above line later, right now the /blog page is
-    // still being build so the route shows the `this page is still
-    // being build` html
-    res.sendFile(path.join(__dirname, 'html', 'errors', 'page_being_build.html'));
+    res.sendFile(path.join(__dirname, 'html', 'pages', 'blog', 'blog.html'));
     consoleInfo(`${req.ClientIP} requested the '/blog' route`)
+});
+
+// '/blog/login' route
+app.get('/blog/login', (req, res) => {
+    res.sendFile(path.join(__dirname, 'html', 'pages', 'blog', 'login.html'));
+    consoleInfo(`${req.ClientIP} requested the '/blog/login' route`)
+});
+
+// '/blog/register' route
+app.get('/blog/register', (req, res) => {
+    res.sendFile(path.join(__dirname, 'html', 'pages', 'blog', 'register.html'));
+    consoleInfo(`${req.ClientIP} requested the '/blog/register' route`)
+});
+
+app.post('/blog/register/post', (req, res) => {
+    // Retrieve data from the request body
+    const { username, email, password } = req.body;
+
+    const legal_chars = ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'z', 'x', 'c', 'v', 'b', 'n', 'm',
+        'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Z', 'X', 'C', 'V', 'B', 'N', 'M',
+        '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '@', '.', '-']
+
+    const containsIllegalUsername = checkIfStringContainsIllegalChar(username, legal_chars);
+    const containsIllegalEmail = checkIfStringContainsIllegalChar(email, legal_chars);
+    const EmailSyntaxCorrect = checkIfEmailCorrect(email)
+
+    var valid = true
+    var reason = ""
+
+    if (username.length > 255) {
+        var valid = false
+        var reason = "the username can't be longer than 255 chars :/"
+        consoleInfo(`${req.ClientIP} tried to register a account that had a username longer than 255 chars`)
+    } else if (username.length < 4) {
+        var valid = false
+        var reason = "the username can't be shorter than 4 chars :P"
+        consoleInfo(`${req.ClientIP} tried to register a account that had a username shorter than 4 chars`)
+    } else if (containsIllegalUsername == true) {
+        var valid = false
+        var reason = 'the username contains some banned char/s (if you want me to add char/s, <a href="https://khenzii.dev/">contact me</a>)'
+        consoleInfo(`${req.ClientIP} tried to register a account that username's contained a char/chars not in legal_chars`)
+    }
+
+    else if (password.length < 5) {
+        var valid = false
+        var reason = "the password can't be shorter than 5 chars :/"
+        consoleInfo(`${req.ClientIP} tried to register a account that had a password shorter than 5 chars`)
+    }
+
+    else if (email.length < 5) {
+        var valid = false
+        var reason = "lmao, nice email, buddy."
+        consoleInfo(`${req.ClientIP} tried to register a account that had a email shorter than 5 chars`)
+    } else if (containsIllegalEmail == true) {
+        var valid = false
+        var reason = 'the email contains some banned char/s (if you want me to add char/s, <a href="https://khenzii.dev/">contact me</a>)'
+        consoleInfo(`${req.ClientIP} tried to register a account that email's contained a char/chars not in legal_chars`)
+    } else if (EmailSyntaxCorrect == false) {
+        var valid = false
+        var reason = "make sure to enter the correct email :)"
+        consoleInfo(`${req.ClientIP} tried to register a account with an incorrect email`)
+    }
+
+
+    if(valid == false){
+        res.status(200).send(reason)
+        return
+    } else{
+        consoleInfo(`${req.ClientIP} entered valid info while registering`)
+        res.status(200).send("all gut!")
+    }
+
+    // do some stuff here (such as write the account to the db) after everything passes
+});
+
+// user profiles in /blog
+app.get('/blog/:username', async (req, res) => {
+    const { username } = req.params;
+
+    try {
+        const query = 'SELECT * FROM blog WHERE username = $1';
+        const result = await pool.query(query, [username]);
+
+        if (result.rows.length === 0) {
+            res.status(404).sendFile(path.join(__dirname, 'html', 'errors', 'error_404.html'));
+            consoleInfo(`${req.ClientIP} got the 404 error. Route: /blog/${username}`)
+            return
+        }
+
+        const user = result.rows[0];
+        res.json(user);
+    }
+
+    catch (error) {
+        res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Check console for more Details. Sorry.');
+        consoleInfo(`${req.ClientIP} got a 500 error. Something probably broke or wasn't working correctly from the start. Route: /blog/${username}`)
+    }
 });
 
 // '/projects' route
@@ -177,5 +261,5 @@ app.use((err, req, res, next) => {
 
 
 app.listen(port, () => {
-    console.log(`app waiting for nginx redirects here: http://localhost:${port} 🫡`);
+    console.log(`server waiting for nginx redirects here: http://localhost:${port} 🫡`);
 });

@@ -69,5 +69,5 @@ app.post('/webhook', (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log(`app listening here: http://localhost:${port} 🫡`);
+    console.log(`webhook waiting for nginx redirects here: http://localhost:${port} 🫡`);
 });
