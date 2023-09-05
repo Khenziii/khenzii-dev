@@ -2,7 +2,6 @@
 @import '../../../presets/fonts.css';
 @import '../../../presets/body.css';
 
-/*margin: 2vh; margin-between-buttons: 10vh; (delete me later (i'm trying to make consistent gaps between the elements :> (if you're seeing this in the production, i'm an idiot))) */
 
 .centered_container {
     display: grid;

@@ -1,0 +1,19 @@
+@import '../../../presets/variables.css';
+@import '../../../presets/fonts.css';
+@import '../../../presets/body.css';
+
+.username {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+
+    width: 30vw;
+    height: 6vh;
+
+    color: var(--text);
+    text-align: center;
+    font-size: 2vh;
+    font-family: Montserrat;
+
+    font-weight: 900;
+}

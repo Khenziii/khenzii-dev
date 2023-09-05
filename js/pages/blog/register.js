@@ -1,6 +1,6 @@
 info_paragraph = document.getElementById("info_text");
 
-function check_if_correct() {
+async function check_if_correct() {
     const email_input = document.querySelector(".input_email");
     const username_input = document.querySelector(".input_username");
     const password_input = document.querySelector(".input_password");

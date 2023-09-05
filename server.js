@@ -1,3 +1,5 @@
+const { error, table } = require('console');
+const { configDotenv } = require('dotenv');
 const express = require('express');
 const path = require('path');
 const { Pool } = require('pg');
@@ -8,9 +10,9 @@ const port = 3000;
 
 const database_user_password = process.env.database_user_password;
 const pool = new Pool({
-    user: 'khenzii',
+    user: 'admin',
     host: 'localhost',
-    database: 'blog_production',
+    database: 'blog',
     password: database_user_password,
     port: 5432, // Default PostgreSQL port
 });
@@ -19,7 +21,7 @@ function getMilliseconds(hours) { // returns the milliseconds that there are in 
     return 1000 * 60 * 60 * hours;
 }
 
-function addZero(value) { // adds zero's to the start of values if possible (eg. input: 7 output: 07)
+function addZero(value) { // adds zero to the start of values if possible (eg. input: 7 output: 07)
     return value.toString().padStart(2, '0');
 }
 
@@ -52,6 +54,13 @@ function checkIfEmailCorrect(email) {
     const some_regex_that_i_wrote_while_being_drunk = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     return some_regex_that_i_wrote_while_being_drunk.test(email)
 }
+
+async function register_account(username, email, password) {
+    const command = `INSERT INTO "user" (username, email, password) VALUES (\$1, \$2, \$3);`
+    const values = [username, email, password];
+    await pool.query(command, values);
+}
+
 
 app.use('/html', express.static(path.join(__dirname, 'html')));
 app.use('/css', express.static(path.join(__dirname, 'css')));
@@ -114,7 +123,8 @@ app.get('/blog/register', (req, res) => {
     consoleInfo(`${req.ClientIP} requested the '/blog/register' route`)
 });
 
-app.post('/blog/register/post', (req, res) => {
+// registeration thing
+app.post('/blog/register/post', async (req, res) => {    
     // Retrieve data from the request body
     const { username, email, password } = req.body;
 
@@ -167,36 +177,91 @@ app.post('/blog/register/post', (req, res) => {
     if(valid == false){
         res.status(200).send(reason)
         return
-    } else{
-        consoleInfo(`${req.ClientIP} entered valid info while registering`)
-        res.status(200).send("all gut!")
     }
 
-    // do some stuff here (such as write the account to the db) after everything passes
+
+    consoleInfo(`${req.ClientIP} entered valid info while registering`)
+
+    try {
+        await register_account(username, email, password)
+        res.status(200).send(`your account should be ready <a href="/blog/user/${username}">here</a> (in a moment :>)`)
+    } catch(error) {
+        consoleInfo(`something went wrong while registering the account. Here is the error: ${error}`)
+        res.status(500)
+    }
 });
 
-// user profiles in /blog
-app.get('/blog/:username', async (req, res) => {
+// retrieve stuff in the database that is connected to a column and table (for example: if you pass the <username>, <table> here, you will get back every result that matches the query)
+app.post('/blog/get_info', async (req, res) => {
+    var result
+
+    try {
+        // Retrieve data from the request body
+        consoleInfo(`${req.ClientIP} is using the database`)
+
+        const table = req.body[0];
+        const column = req.body[1];
+        const what = req.body[2];
+        const something = req.body[3];
+
+        const NotValidTables = []; // Add tables that you don't want the client to get here later
+        const NotValidColumns = ['*', 'password', 'email']; // Add columns that you don't want the client to get here
+        const NotValidWords = ['DROP']
+
+        blacklisted_words = !NotValidWords.includes(table.toUpperCase()) && !NotValidWords.includes(column.toUpperCase()) && !NotValidWords.includes(what.toUpperCase()) && !NotValidWords.includes(something.toUpperCase())
+        // just to make sure..
+
+        if (!NotValidTables.includes(table) && !NotValidColumns.includes(column) && !blacklisted_words) {
+            const query = `SELECT ${column} FROM ${table} WHERE ${what} = \$1;`
+            var result = await pool.query(query, [something]);
+        } else {
+            consoleInfo(`${req.ClientIP} requested a table / column that is on the black-list, or has modified the deafult client's side javascript to make it contain the 'DROP' command. you might want to look into that.`)
+            res.status(400).send('IPs noted, Hitman: sent. Please stop playing around with the site <3');
+            return
+        }
+
+        if (result.rows.length === 0) {
+            consoleInfo("the requested thing was empty :/")
+            res.status(404).send("empty :(")
+            return
+        }
+
+        console.log(result.rows)
+        res.status(200).send(result.rows)
+    } catch (error) {
+        res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Check console for more Details. Sorry.');
+        consoleInfo(`${req.ClientIP} got a 500 error (while communicating with the back-end). Error: ${error}`)
+    }
+});
+
+// user profiles in /blog/user (/blog/user/<username>)
+app.get('/blog/user/:username', async (req, res) => {
     const { username } = req.params;
 
     try {
-        const query = 'SELECT * FROM blog WHERE username = $1';
+        const query = `SELECT * FROM "user" WHERE username = \$1;`
         const result = await pool.query(query, [username]);
 
         if (result.rows.length === 0) {
             res.status(404).sendFile(path.join(__dirname, 'html', 'errors', 'error_404.html'));
-            consoleInfo(`${req.ClientIP} got the 404 error. Route: /blog/${username}`)
+            consoleInfo(`${req.ClientIP} got the 404 error. Route: '/blog/user/${username}'`)
             return
         }
 
         const user = result.rows[0];
-        res.json(user);
+        res.sendFile(path.join(__dirname, 'html', 'pages', 'blog', 'profile.html'));
     }
 
     catch (error) {
         res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Check console for more Details. Sorry.');
-        consoleInfo(`${req.ClientIP} got a 500 error. Something probably broke or wasn't working correctly from the start. Route: /blog/${username}`)
+        consoleInfo(`${req.ClientIP} got a 500 error. Route: '/blog/user/${username}'. Error: ${error}`)
     }
+});
+
+// redirect from /blog/user
+app.get('/blog/user', async (req, res) => {
+    consoleInfo(`${req.ClientIP} tried to get the '/blog/user' route, sending him to '/blog'`)
+    res.redirect('/blog');
 });
 
 // '/projects' route
