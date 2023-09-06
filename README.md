@@ -27,6 +27,7 @@ Please, read this carefully before spending your time creating cool stuff: The w
 
 - **/blog** - the /blog route is a really big project (at least for a hobbyist without a team like me). It will be something like twitter, but with extra features. I want to finish this thing before getting into anything else because /blog would allow me to document everything new that I will be writing in the future.
 - **rate limits** - right now the routes don't have any rate-limits (and that's VERY bad), ima add some later.
+- **email verification** - a email can be linked with 3 accounts at a single time - but we're not verifying if the emails really belong to the user. This means that people could potentially create 3 accounts with a email and then someone that would like to use this email won't be able to. To fix this i will only be counting verified emails to the accounts number.
 - **/blog webarchive** - i think that i will spend A LOT of time on the /blog route, so it will be nice to have the whole history backedup on the webarchive. I have heard that they have an open API, ima check it out later.
 - **/projects** - the /projects route will showcase my projects and previous experience with programming.
 - **adding some cool effect to the index page** - i have came up with a cool replacement for the lame gradient that we have now.

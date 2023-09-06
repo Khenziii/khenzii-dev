@@ -1,9 +1,13 @@
+const { FLIPPED_ALIAS_KEYS } = require('@babel/types');
 const { error, table } = require('console');
 const { configDotenv } = require('dotenv');
 const express = require('express');
 const path = require('path');
 const { Pool } = require('pg');
 require('dotenv').config({ path: path.resolve(__dirname, 'secrets.env') });
+const bcrypt = require('bcryptjs');
+const { rawListeners } = require('process');
+
 
 const app = express();
 const port = 3000;
@@ -55,10 +59,55 @@ function checkIfEmailCorrect(email) {
     return some_regex_that_i_wrote_while_being_drunk.test(email)
 }
 
+async function checkIfUsernameTaken(username) {
+    const query = `SELECT id FROM "user" WHERE username = \$1;`
+    var result = await pool.query(query, [username]);
+
+    if(result.rowCount > 0) {
+        return true
+    }
+
+    return false
+}
+
+async function hash(some_string, saltRounds) {
+    // more salt rounds = more secure, but takes longer to hash (12 = 2/3 hashes per second)
+    return bcrypt.hash(some_string, saltRounds)
+}
+
 async function register_account(username, email, password) {
-    const command = `INSERT INTO "user" (username, email, password) VALUES (\$1, \$2, \$3);`
-    const values = [username, email, password];
-    await pool.query(command, values);
+    try {
+        const command = `INSERT INTO "user" (username, email, password) VALUES (\$1, \$2, \$3);`
+        const values = [username, email, await hash(password, 12)];
+        await pool.query(command, values);
+    } catch (error) {
+        consoleInfo(`Something went wrong while writing the user's info to the database, here is the error: ${error}.`)
+    }
+}
+
+async function checkIfPasswordsMatch(password, password_hash) {
+    bcrypt.compare(password, password_hash)
+  .then(res => {
+    if (res) {
+      // Passwords match
+      console.log('Password is valid!');
+    } else {
+      // Passwords don't match
+      console.log('Password is invalid!');
+    }
+  })
+  .catch(err => console.error(err.message));
+}
+
+async function checkHowMuchEmailIsInTheDatabase(email) {
+    try {
+        const query = `SELECT username FROM "user" WHERE email = \$1;`
+        var result = await pool.query(query, [email]);
+
+        return result.rowCount;
+    } catch (error) {
+        consoleInfo(`Something went wrong while checking how much users use a email, here is the error: ${error}.`)
+    }
 }
 
 
@@ -135,13 +184,21 @@ app.post('/blog/register/post', async (req, res) => {
     const containsIllegalUsername = checkIfStringContainsIllegalChar(username, legal_chars);
     const containsIllegalEmail = checkIfStringContainsIllegalChar(email, legal_chars);
     const EmailSyntaxCorrect = checkIfEmailCorrect(email)
+    const usernameAlreadyRegistered = await checkIfUsernameTaken(username)
+
+    var EmailHasTooMuchAccounts = false
+    const EmailsAssociatedWithEmail = await checkHowMuchEmailIsInTheDatabase(email)
+    if (EmailsAssociatedWithEmail > 2) {
+        var EmailHasTooMuchAccounts = true
+    }
+
 
     var valid = true
     var reason = ""
 
-    if (username.length > 255) {
+    if (username.length > 20) {
         var valid = false
-        var reason = "the username can't be longer than 255 chars :/"
+        var reason = "the username can't be longer than 20 chars :/"
         consoleInfo(`${req.ClientIP} tried to register a account that had a username longer than 255 chars`)
     } else if (username.length < 4) {
         var valid = false
@@ -151,6 +208,10 @@ app.post('/blog/register/post', async (req, res) => {
         var valid = false
         var reason = 'the username contains some banned char/s (if you want me to add char/s, <a href="https://khenzii.dev/">contact me</a>)'
         consoleInfo(`${req.ClientIP} tried to register a account that username's contained a char/chars not in legal_chars`)
+    } else if (usernameAlreadyRegistered == true) {
+        var valid = false
+        var reason = 'the username is already taken ;/'
+        consoleInfo(`${req.ClientIP} tried to register a account that username's was already taken`)
     }
 
     else if (password.length < 5) {
@@ -171,6 +232,10 @@ app.post('/blog/register/post', async (req, res) => {
         var valid = false
         var reason = "make sure to enter the correct email :)"
         consoleInfo(`${req.ClientIP} tried to register a account with an incorrect email`)
+    } else if (EmailHasTooMuchAccounts == true) {
+        var valid = false
+        var reason = "Too many accounts (3) use this email. Sorry!"
+        consoleInfo(`${req.ClientIP} tried to register a account with an over-used email`)
     }
 
 
@@ -186,7 +251,7 @@ app.post('/blog/register/post', async (req, res) => {
         await register_account(username, email, password)
         res.status(200).send(`your account should be ready <a href="/blog/user/${username}">here</a> (in a moment :>)`)
     } catch(error) {
-        consoleInfo(`something went wrong while registering the account. Here is the error: ${error}`)
+        consoleInfo(`something went wrong while registering the account. Here is the error: ${error}.`)
         res.status(500)
     }
 });
@@ -197,8 +262,6 @@ app.post('/blog/get_info', async (req, res) => {
 
     try {
         // Retrieve data from the request body
-        consoleInfo(`${req.ClientIP} is using the database`)
-
         const table = req.body[0];
         const column = req.body[1];
         const what = req.body[2];
@@ -208,7 +271,7 @@ app.post('/blog/get_info', async (req, res) => {
         const NotValidColumns = ['*', 'password', 'email']; // Add columns that you don't want the client to get here
         const NotValidWords = ['DROP']
 
-        blacklisted_words = !NotValidWords.includes(table.toUpperCase()) && !NotValidWords.includes(column.toUpperCase()) && !NotValidWords.includes(what.toUpperCase()) && !NotValidWords.includes(something.toUpperCase())
+        blacklisted_words = NotValidWords.includes(table.toUpperCase()) && NotValidWords.includes(column.toUpperCase()) && NotValidWords.includes(what.toUpperCase()) && NotValidWords.includes(something.toUpperCase())
         // just to make sure..
 
         if (!NotValidTables.includes(table) && !NotValidColumns.includes(column) && !blacklisted_words) {
@@ -226,17 +289,18 @@ app.post('/blog/get_info', async (req, res) => {
             return
         }
 
-        console.log(result.rows)
         res.status(200).send(result.rows)
     } catch (error) {
         res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Check console for more Details. Sorry.');
-        consoleInfo(`${req.ClientIP} got a 500 error (while communicating with the back-end). Error: ${error}`)
+        consoleInfo(`${req.ClientIP} got a 500 error (while communicating with the back-end). Error: ${error}.`)
     }
 });
 
 // user profiles in /blog/user (/blog/user/<username>)
 app.get('/blog/user/:username', async (req, res) => {
     const { username } = req.params;
+
+    consoleInfo(`${req.ClientIP} requested '/blog/user/${username}'.`)
 
     try {
         const query = `SELECT * FROM "user" WHERE username = \$1;`
