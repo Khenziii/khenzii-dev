@@ -86,17 +86,16 @@ async function register_account(username, email, password) {
 }
 
 async function checkIfPasswordsMatch(password, password_hash) {
-    bcrypt.compare(password, password_hash)
-  .then(res => {
-    if (res) {
-      // Passwords match
-      console.log('Password is valid!');
-    } else {
-      // Passwords don't match
-      console.log('Password is invalid!');
-    }
-  })
-  .catch(err => console.error(err.message));
+    bcrypt.compare(password, password_hash).then(res => {
+        if (res) {
+            return true
+        }
+        
+        return false
+    }).catch(error => {
+        consoleInfo(`Something went wrong while checking if user's password matches, here is the error: ${error}`)
+        return false
+    });
 }
 
 async function checkHowMuchEmailIsInTheDatabase(email) {
@@ -258,8 +257,6 @@ app.post('/blog/register/post', async (req, res) => {
 
 // retrieve stuff in the database that is connected to a column and table (for example: if you pass the <username>, <table> here, you will get back every result that matches the query)
 app.post('/blog/get_info', async (req, res) => {
-    var result
-
     try {
         // Retrieve data from the request body
         const table = req.body[0];
