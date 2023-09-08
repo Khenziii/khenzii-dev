@@ -7,6 +7,9 @@ const { Pool } = require('pg');
 require('dotenv').config({ path: path.resolve(__dirname, 'secrets.env') });
 const bcrypt = require('bcryptjs');
 const { rawListeners } = require('process');
+const jwt = require('jsonwebtoken');
+const { expressjwt: expressJwt } = require('express-jwt');
+const cookieParser = require('cookie-parser');
 
 
 const app = express();
@@ -20,6 +23,18 @@ const pool = new Pool({
     password: database_user_password,
     port: 5432, // Default PostgreSQL port
 });
+
+app.use(cookieParser());
+const jwt_password = process.env.jwt_password;
+const authMiddleware = expressJwt({
+    secret: jwt_password,
+    algorithms: ['HS256'],
+    getToken: function (req) {
+        const token = req.cookies && req.cookies.jwt_access_cookie;
+        return token || null;
+    }
+});
+
 
 function getMilliseconds(hours) { // returns the milliseconds that there are in certain amount of hours
     return 1000 * 60 * 60 * hours;
@@ -63,7 +78,7 @@ async function checkIfUsernameTaken(username) {
     const query = `SELECT id FROM "user" WHERE username = \$1;`
     var result = await pool.query(query, [username]);
 
-    if(result.rowCount > 0) {
+    if (result.rowCount > 0) {
         return true
     }
 
@@ -86,15 +101,17 @@ async function register_account(username, email, password) {
 }
 
 async function checkIfPasswordsMatch(password, password_hash) {
-    bcrypt.compare(password, password_hash).then(res => {
-        if (res) {
-            return true
-        }
-        
-        return false
-    }).catch(error => {
-        consoleInfo(`Something went wrong while checking if user's password matches, here is the error: ${error}`)
-        return false
+    return new Promise((resolve, reject) => {
+        bcrypt.compare(password, password_hash).then(res => {
+            if (res) {
+                resolve(true);
+            } else {
+                resolve(false);
+            }
+        }).catch(error => {
+            console.error(`Something went wrong while checking if user's password matches, here is the error: ${error}`);
+            reject(error);
+        });
     });
 }
 
@@ -104,6 +121,24 @@ async function checkHowMuchEmailIsInTheDatabase(email) {
         var result = await pool.query(query, [email]);
 
         return result.rowCount;
+    } catch (error) {
+        consoleInfo(`Something went wrong while checking how much users use a email, here is the error: ${error}.`)
+    }
+}
+
+async function getHashedPassword(username) {
+    try {
+        const query = `SELECT password FROM "user" WHERE username = \$1;`
+        var result = await pool.query(query, [username]);
+
+        if (result.rows.length > 0) {
+            const hashedPassword = result.rows[0].password;
+
+            return hashedPassword;
+        } else {
+            consoleInfo(`${req.ClientIP} tried to log on a account that doesn't exist (usename: ${username}).`)
+            return null;
+        }
     } catch (error) {
         consoleInfo(`Something went wrong while checking how much users use a email, here is the error: ${error}.`)
     }
@@ -159,10 +194,43 @@ app.get('/blog', (req, res) => {
     consoleInfo(`${req.ClientIP} requested the '/blog' route`)
 });
 
+// '/blog/settings'
+app.get('/blog/settings', authMiddleware, (req, res) => {
+    res.sendFile(path.join(__dirname, 'html', 'pages', 'blog', 'settings.html'));
+    consoleInfo(`${req.ClientIP} requested the '/blog/settings' route, username "${req.user}".`)
+});
+
 // '/blog/login' route
 app.get('/blog/login', (req, res) => {
     res.sendFile(path.join(__dirname, 'html', 'pages', 'blog', 'login.html'));
     consoleInfo(`${req.ClientIP} requested the '/blog/login' route`)
+});
+
+// login end-point
+app.post('/blog/login/post', async (req, res) => {
+    const { username, password } = req.body;
+
+    var password_hash = await getHashedPassword(username)
+
+    if (password_hash == null) {
+        res.status(200).send(`This username doesn't exist yet! You can register it <a href="/blog/register/">here</a> :)`)
+        return
+    }
+
+    var authenticated = await checkIfPasswordsMatch(password, password_hash)
+    if (authenticated == true) {
+        consoleInfo(`${req.ClientIP} has successfully logged in! (as "${username}").`)
+
+        // Generate a JWT token
+        const token = jwt.sign({username}, jwt_password, { expiresIn: '7d' });
+
+        // Send the token back to the client
+        res.cookie('jwt_access_cookie', token, { httpOnly: true, maxAge: 1000 * 60 * 60 * 24 * 7, secure: true, sameSite: "strict"}); // 7 days expiration
+        res.status(200).send(`Successfully logged in! Checkout your page <a href="/blog/user/${username}">here</a> :D`);
+    } else {
+        consoleInfo(`${req.ClientIP} has failed to authenticate (tried to as "${username}").`)
+        res.status(200).send(`Wrong password! :/`)
+    }
 });
 
 // '/blog/register' route
@@ -172,13 +240,13 @@ app.get('/blog/register', (req, res) => {
 });
 
 // registeration thing
-app.post('/blog/register/post', async (req, res) => {    
+app.post('/blog/register/post', async (req, res) => {
     // Retrieve data from the request body
     const { username, email, password } = req.body;
 
     const legal_chars = ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'z', 'x', 'c', 'v', 'b', 'n', 'm',
         'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Z', 'X', 'C', 'V', 'B', 'N', 'M',
-        '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '@', '.', '-']
+        '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '@', '.', '-', '_']
 
     const containsIllegalUsername = checkIfStringContainsIllegalChar(username, legal_chars);
     const containsIllegalEmail = checkIfStringContainsIllegalChar(email, legal_chars);
@@ -205,7 +273,7 @@ app.post('/blog/register/post', async (req, res) => {
         consoleInfo(`${req.ClientIP} tried to register a account that had a username shorter than 4 chars`)
     } else if (containsIllegalUsername == true) {
         var valid = false
-        var reason = 'the username contains some banned char/s (if you want me to add char/s, <a href="https://khenzii.dev/">contact me</a>)'
+        var reason = 'the username contains some banned char/s (if you want me to add char/s, <a href="/">contact me</a>)'
         consoleInfo(`${req.ClientIP} tried to register a account that username's contained a char/chars not in legal_chars`)
     } else if (usernameAlreadyRegistered == true) {
         var valid = false
@@ -238,7 +306,7 @@ app.post('/blog/register/post', async (req, res) => {
     }
 
 
-    if(valid == false){
+    if (valid == false) {
         res.status(200).send(reason)
         return
     }
@@ -249,7 +317,7 @@ app.post('/blog/register/post', async (req, res) => {
     try {
         await register_account(username, email, password)
         res.status(200).send(`your account should be ready <a href="/blog/user/${username}">here</a> (in a moment :>)`)
-    } catch(error) {
+    } catch (error) {
         consoleInfo(`something went wrong while registering the account. Here is the error: ${error}.`)
         res.status(500)
     }
@@ -375,7 +443,7 @@ app.use((req, res, next) => {
 // Default error handler
 app.use((err, req, res, next) => {
     res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Check console for more Details. Sorry.');
-    consoleInfo(`ClientIP: ${req.ClientIP}. Some internal server error ocurred :/. Here is the error: ${err.stack}`)
+    consoleInfo(`${req.ClientIP}. Some internal server error ocurred :/. Here is the error: ${err.stack}`)
 });
 
 // Place errors above this comment!

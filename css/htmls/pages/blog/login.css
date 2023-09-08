@@ -36,61 +36,9 @@
     color: var(--secondary);
 }
 
-
-.input_email {
+.input_username {
     margin-top: 3vh;
 
-    width: 20vw;
-    height: 3vh;
-
-    background-color: var(--secondary);
-    color: var(--text);
-
-    text-align: center;
-
-    font-size: 2rem;
-    font-family: Montserrat;
-
-    border: none;
-    border-radius: 1vh;
-
-    transition: all 0.5s;
-}
-
-.email_text {
-    margin-top: 2vh;
-    margin-bottom: 2vh;
-
-    width: 30vw;
-    height: 6vh;
-
-    color: var(--text);
-    text-align: center;
-    font-size: 2vh;
-    font-family: Montserrat;
-
-    font-weight: 900;
-
-    opacity: 0;
-
-    transition: all 0.5s;
-    cursor: default;
-}
-
-.input_email:focus {
-    width: 30vw;
-    height: 5vh;
-    outline-offset: 0.5vh;
-    outline: 0.5vh solid var(--primary);
-}
-
-.input_email:focus+.email_text {
-    opacity: 1;
-    cursor: text;
-}
-
-
-.input_username {
     width: 20vw;
     height: 3vh;
 
@@ -192,7 +140,7 @@
 }
 
 
-.register_button {
+.login_button {
     margin-top: 3vh;
 
     scale: 2;
@@ -212,7 +160,7 @@
     overflow: hidden;
 }
 
-.register_button:before {
+.login_button:before {
     content: "";
     position: absolute;
     height: 340%;
@@ -225,7 +173,7 @@
     opacity: 0.3;
 }
 
-.register_button:hover:before {
+.login_button:hover:before {
     right: 105%;
 }
 
