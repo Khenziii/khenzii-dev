@@ -1,5 +1,13 @@
 const username_paragraph = document.querySelector(".username");
-const username = window.location.href.split("/").pop()
+
+if(window.location.href.endsWith('/')) {
+    var username = window.location.href.split("/")[window.location.href.split("/").length - 2]
+} else {
+    var username = window.location.href.split("/")[window.location.href.split("/").length - 1]
+}
+
+username_paragraph.textContent = username;
+
 
 async function getValuesFromServer(table, column, where_something, where_value){
     return fetch('/blog/get_info', {
@@ -20,10 +28,6 @@ async function getValuesFromServer(table, column, where_something, where_value){
         return `something went wrong.. :( ${error}`
     });
 }
-
-
-username_paragraph.textContent = username;
-
 
 getValuesFromServer("user", "id", "username", `${username}`).then(data => {
     

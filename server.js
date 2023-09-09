@@ -35,7 +35,6 @@ const authMiddleware = expressJwt({
     }
 });
 
-
 function getMilliseconds(hours) { // returns the milliseconds that there are in certain amount of hours
     return 1000 * 60 * 60 * hours;
 }
@@ -197,7 +196,7 @@ app.get('/blog', (req, res) => {
 // '/blog/settings'
 app.get('/blog/settings', authMiddleware, (req, res) => {
     res.sendFile(path.join(__dirname, 'html', 'pages', 'blog', 'settings.html'));
-    consoleInfo(`${req.ClientIP} requested the '/blog/settings' route, username "${req.user}".`)
+    consoleInfo(`${req.ClientIP} requested the '/blog/settings' route, username "${req.auth.username}".`)
 });
 
 // '/blog/login' route
@@ -316,6 +315,12 @@ app.post('/blog/register/post', async (req, res) => {
 
     try {
         await register_account(username, email, password)
+
+        // Generate a JWT token
+        const token = jwt.sign({username}, jwt_password, { expiresIn: '7d' });
+        // Send the token back to the client
+        res.cookie('jwt_access_cookie', token, { httpOnly: true, maxAge: 1000 * 60 * 60 * 24 * 7, secure: true, sameSite: "strict"}); // 7 days expiration
+        
         res.status(200).send(`your account should be ready <a href="/blog/user/${username}">here</a> (in a moment :>)`)
     } catch (error) {
         consoleInfo(`something went wrong while registering the account. Here is the error: ${error}.`)
@@ -441,9 +446,14 @@ app.use((req, res, next) => {
 });
 
 // Default error handler
-app.use((err, req, res, next) => {
-    res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Check console for more Details. Sorry.');
-    consoleInfo(`${req.ClientIP}. Some internal server error ocurred :/. Here is the error: ${err.stack}`)
+app.use(function (error, req, res, next) {
+    if(error.name === "UnauthorizedError") {
+        res.redirect("/blog/login");
+        consoleInfo(`${req.ClientIP} tried to access confidential stuff, such as '/blog/settings', without the correct authentication :/`)
+    } else {
+        res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Check console for more Details. Sorry.');
+        consoleInfo(`${req.ClientIP} some internal server error ocurred :/. Here is the error: ${error.stack}`)
+    }
 });
 
 // Place errors above this comment!
