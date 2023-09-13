@@ -116,9 +116,6 @@
         height: auto;
         margin-bottom: 2vh;
         margin-top: 2vh;
-    
-        background: repeating-linear-gradient(135deg, transparent, transparent 5vh, var(--primary), var(--secondary));
-        border-radius: 1.5vh;
     }
     
     .pfp_sub-text {
@@ -216,9 +213,6 @@
         max-width: 20%;
         height: auto;
         margin-bottom: 2vh;
-    
-        background: repeating-linear-gradient(135deg, transparent, transparent 5vh, var(--primary), var(--secondary));
-        border-radius: 1.5vh;
     }
     
     .pfp_sub-text {
