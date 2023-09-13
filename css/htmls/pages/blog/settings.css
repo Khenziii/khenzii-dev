@@ -1,3 +1,10 @@
 @import '../../../presets/variables.css';
 @import '../../../presets/fonts.css';
 @import '../../../presets/body.css';
+
+.centered_container {
+    display: grid;
+    place-items: center;
+
+    height: auto;
+}
