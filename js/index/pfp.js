@@ -1,3 +1,9 @@
+// Ignore this file
+// I have written it for a feature, and the feature turned out to be shit - so i have completely got rid of it, lol.
+// I didn't delete it from the repo, because i have spend a late evening coding this thing and i just couldn't force myself to get rid of it.
+// You can view the archive of the feature here: https://web.archive.org/web/20230913184113/https%3A%2F%2Fkhenzii.dev%2F
+// ~Khenzii, 13/09/2023
+
 const stuff_list = ["Python", "JavaScript", "CSS", "HTML", "C#", "Unity", "Bash", "C++", "Java", "Flutter", "Kotlin", "Swift"]
 var pfp_element = document.getElementById("pfp")
 
