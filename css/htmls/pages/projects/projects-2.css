@@ -2,6 +2,27 @@
 @import '../../../presets/fonts.css';
 @import '../../../presets/body.css';
 
+.arrow_container {
+    margin-top: 2.5vh;
+}
+
+.arrow_icon { 
+    width: 7.5vw;
+    height: auto;
+
+    transition: all 0.5s;
+}
+
+.arrow_icon:hover {
+    background-color: var(--secondary);
+    border-radius: 2vh;
+}
+
+.arrow_icon:active {
+    transition: none;
+    background-color: var(--accent);
+}
+
 .transition-container {
     display: grid;
     place-items: center;
@@ -12,27 +33,6 @@
 
 .html.is_animating .transition-container {
     opacity: 0;
-}
-
-.home_container {
-    margin-top: 2.5vh;
-}
-
-.home_icon { 
-    width: 7.5vw;
-    height: auto;
-
-    transition: all 0.5s;
-}
-
-.home_icon:hover {
-    background-color: var(--secondary);
-    border-radius: 2vh;
-}
-
-.home_icon:active {
-    transition: none;
-    background-color: var(--accent);
 }
 
 .main-text {

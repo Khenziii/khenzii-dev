@@ -1,0 +1,7 @@
+{
+    "optimization": {
+        "minify": {
+            "/js/pages/projects/swup_import.js": false
+        }
+    }
+}
