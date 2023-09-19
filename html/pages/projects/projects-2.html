@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Khenzii :)</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="../../../css/htmls/pages/projects/projects.css" rel="stylesheet">
+
+        <script src="/dist/swup_import.js"></script>
+
+        <script src="/js/utils/mobileinfo.js"></script> <!---delete this thing once mobile is supported :)--->
+        <script>showPage("/mobileinfo");</script> <!---delete this line too! =)--->
+    </head>
+
+    <body>
+        <main class="transition-push" id="swup">
+            <script defer src="../../../js/pages/projects/github_cards.js"></script>
+            <link rel="stylesheet" href="../../../css/htmls/pages/projects/github_card.css">
+            <!---putting this stuff here because we need it to reload :)--->
+
+            <a class="arrow_container" href="/projects" data-swup-animation="top">
+                <img class="arrow_icon" src="/icons/pages/projects/arrow_up.png">
+            </a>
+
+            <p class="main-text">
+                khenz-tiktokbot
+            </p>
+
+            <hr class="line">
+            
+            <p class="sub-text">
+                The first project that i wanted to include on the list is my tiktokbot :) 
+                <br> 
+                <br> 
+                I have created it in <strong>2023 (have been coding it from June to July)</strong> and i put a lot of effort (trust me, a lot) into making the code as readable as possible =) Overall i'm really proud of that project and i'm really happy about how it turned out. You can checkout the repo below :>
+            </p>
+
+            <section class="github-repo-card" id="github-repo-card" data-user="Khenziii" data-repo_name="khenz-tiktokbot"></section>
+
+            <p class="sub-text" style="margin-top: 2.5vh;">
+                Sad funfact: I actually had to delete the original repo that contained tiktokbot's code, because i needed to clean up LFS storage - I lost 60 contributions because of this incident :< (that's why my activity graph between late May and early July is so empty! (no, i wasn't outside touching grass)) 
+            </p>
+
+            <a href="/projects-end" data-swup-animation="bottom">
+                <img id="down_arrow" class="down_arrow" style="margin-top: 2vh;" src="../../../icons/pages/projects/arrow_down.png" alt="arrow_down">
+            </a>
+        </main>
+    </body>
+</html>

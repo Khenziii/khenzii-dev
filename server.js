@@ -35,6 +35,7 @@ app.use('/icons', express.static(path.join(__dirname, 'icons')));
 app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use('/js', express.static(path.join(__dirname, 'js')));
 app.use('/videos', express.static(path.join(__dirname, 'videos')));
+app.use('/dist', express.static(path.join(__dirname, 'dist')));
 app.use('/robots.txt', express.static(path.join(__dirname, 'robots.txt')));
 
 app.set('trust proxy', true);
@@ -81,12 +82,20 @@ app.get('/blog', (req, res) => {
 
 // '/projects' route
 app.get('/projects', (req, res) => {
-    // res.sendFile(path.join(__dirname, 'html', 'pages', 'projects', 'projects.html'));
-    // uncomment the above line later, right now the /projects page 
-    // is still being build so the route shows the `this page is
-    // still being build` html
-    res.sendFile(path.join(__dirname, 'html', 'errors', 'page_being_build.html'));
+    res.sendFile(path.join(__dirname, 'html', 'pages', 'projects', 'projects.html'));
     consoleInfo(`${req.ClientIP} requested the '/projects' route`)
+});
+
+// '/projects-2' route
+app.get('/projects-2', (req, res) => {
+    res.sendFile(path.join(__dirname, 'html', 'pages', 'projects', 'projects-2.html'));
+    consoleInfo(`${req.ClientIP} requested the '/projects-2' route`)
+});
+
+// '/projects-3' route
+app.get('/projects-end', (req, res) => {
+    res.sendFile(path.join(__dirname, 'html', 'pages', 'projects', 'projects-end.html'));
+    consoleInfo(`${req.ClientIP} requested the '/projects-end' route`)
 });
 
 // '/freebobux' route
