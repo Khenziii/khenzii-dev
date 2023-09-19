@@ -104,12 +104,14 @@ html.is-animating.to-top .transition-push {
 
     margin: 0;
     margin-bottom: 2.5vh;
+    
+    transition: all 0.5s;
 }
 
 .icons_container {
     width: 50vw;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(6, 1fr);
 }
 
 .icons {

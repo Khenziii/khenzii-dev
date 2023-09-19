@@ -93,9 +93,9 @@ app.get('/projects-2', (req, res) => {
 });
 
 // '/projects-3' route
-app.get('/projects-3', (req, res) => {
-    res.sendFile(path.join(__dirname, 'html', 'pages', 'projects', 'projects-3.html'));
-    consoleInfo(`${req.ClientIP} requested the '/projects-3' route`)
+app.get('/projects-end', (req, res) => {
+    res.sendFile(path.join(__dirname, 'html', 'pages', 'projects', 'projects-end.html'));
+    consoleInfo(`${req.ClientIP} requested the '/projects-end' route`)
 });
 
 // '/freebobux' route
