@@ -1,2 +1,9 @@
 import Swup from 'swup';
-const swup = new Swup();
+import SwupScriptsPlugin from '@swup/scripts-plugin';
+
+const swup = new Swup({
+    plugins: [new SwupScriptsPlugin({
+        head: true,
+        body: true
+    })]
+});

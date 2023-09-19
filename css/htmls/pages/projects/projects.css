@@ -2,16 +2,46 @@
 @import '../../../presets/fonts.css';
 @import '../../../presets/body.css';
 
-.transition-container {
+.transition-push {
     display: grid;
     place-items: center;
 
-    opacity: 1;
-    transition: 500ms;
+    transform: translateY(0);
+    transition: all 1500ms;
 }
 
-.html.is_animating .transition-container {
+html.is-leaving .transition-push {
+    transform: translateY(-100%);
+}
+
+html.is-rendering .transition-push {
+    opacity: 1;
+}
+
+html.is-animating .transition-push {
     opacity: 0;
+}
+
+
+.arrow_container {
+    margin-top: 2.5vh;
+}
+
+.arrow_icon { 
+    width: 7.5vw;
+    height: auto;
+
+    transition: all 0.5s;
+}
+
+.arrow_icon:hover {
+    background-color: var(--secondary);
+    border-radius: 2vh;
+}
+
+.arrow_icon:active {
+    transition: none;
+    background-color: var(--accent);
 }
 
 .home_container {
