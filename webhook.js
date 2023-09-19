@@ -44,7 +44,7 @@ app.post('/webhook', (req, res) => {
         if (branch === 'master') {
             // Only trigger actions for the 'master' branch
             executeCommands([
-                'git pull origin master', // Pull the repository
+                'git pull origin master --no-edit', // Pull the repository
                 'npm install', // install npm packages
                 'pm2 restart all' // restart all node processes
             ]).then(() => {
