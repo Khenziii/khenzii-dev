@@ -6,16 +6,16 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="../../../css/htmls/pages/projects/projects.css" rel="stylesheet">
 
-
-        <!--<script src="/dist/swup_import.js"></script> uncomment this line later, and delete the stuff under me (you'll have to install the new plugin, and bundle the script)-->
-        <script type="module" src="../../../js/pages/projects/swup_import_temp.js"></script>
-
+        <script src="/dist/swup_import.js"></script>
         <script defer src="../../../js/pages/projects/hide_arrow_on_icon_hover.js"></script>
+
+        <script src="/js/utils/mobileinfo.js"></script> <!---delete this thing once mobile is supported :)--->
+        <script>showPage("/mobileinfo");</script> <!---delete this line too! =)--->
     </head>
 
     <body>
         <main class="transition-push" id="swup">
-            <a class="home_container" href="/" data-swup-animation="bottom" data-swup-animation="top">
+            <a class="home_container" href="/">
                 <img class="home_icon" src="../../../icons/often_used/home.png">
             </a>
 

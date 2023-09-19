@@ -10,6 +10,7 @@
     transition: all 1500ms;
 }
 
+
 html.is-leaving.to-bottom .transition-push {
     transform: translateY(-100%);
 }
