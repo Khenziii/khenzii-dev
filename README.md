@@ -30,8 +30,6 @@ Please, read this carefully before spending your time creating cool stuff: The w
 - **email verification** - a email can be linked with 3 accounts at a single time - but we're not verifying if the emails really belong to the user. This means that people could potentially create 3 accounts with a email and then someone that would like to use this email won't be able to. To fix this i will only be counting verified emails to the accounts number.
 - **/blog webarchive** - i think that i will spend A LOT of time on the /blog route, so it will be nice to have the whole history backedup on the webarchive. I have heard that they have an open API, ima check it out later.
 - **/blog links** - profile links / connections and stuff.
-- **/projects** - the /projects route will showcase my projects and previous experience with programming.
-- **adding some cool effect to the index page** - i have came up with a cool replacement for the lame gradient that we have now.
 - **SEO** - adding alt tags to the images and meta tags to heads will be a pretty good thing to do.
 - **Website design** - some basic changes, like using a constant margin between elements, etc. I don't have time for it now, but i'm for sure going to do it after the previous points.
 - **/snake** - I was thinking about creating a route in which users could train an AI model using client's side JavaScript.

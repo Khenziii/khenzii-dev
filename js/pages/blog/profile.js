@@ -9,13 +9,13 @@ if(window.location.href.endsWith('/')) {
 username_paragraph.textContent = username;
 
 
-async function getValuesFromServer(table, column, where_something, where_value){
-    return fetch('/blog/get_info', {
+async function getValuesFromServer(username){
+    return fetch('/blog/api/get_user', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify([`"${table}"`, `${column}`, `${where_something}`, `${where_value}`])
+        body: JSON.stringify([username])
         // retrieve stuff using this syntax: SELECT <second_index> FROM <first_index> WHERE <third_index> = <fourth_index>; (screw indexing from 0, lol)
     }).then(response => {
         if (response.ok) {
@@ -29,6 +29,6 @@ async function getValuesFromServer(table, column, where_something, where_value){
     });
 }
 
-getValuesFromServer("user", "id", "username", `${username}`).then(data => {
-    
+getValuesFromServer(username).then(data => {
+    console.log(data)
 });

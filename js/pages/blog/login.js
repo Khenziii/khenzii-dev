@@ -12,7 +12,7 @@ async function tryToLogin() {
         password: password_input_value
     };
 
-    return fetch('/blog/login/post', {
+    return fetch('/blog/api/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

@@ -15,7 +15,7 @@ async function check_if_correct() {
         password: password_input_value
     };
 
-    return fetch('/blog/register/post', {
+    return fetch('/blog/api/register', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
