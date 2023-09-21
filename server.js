@@ -52,6 +52,7 @@ const pool = new Pool({
 
 app.use(cookieParser());
 const jwt_password = process.env.jwt_password;
+// use this middleware for routes that REQUIRE verifictation
 const authMiddleware = expressJwt({
     secret: jwt_password,
     algorithms: ['HS256'],
@@ -60,6 +61,31 @@ const authMiddleware = expressJwt({
         return token || null;
     }
 });
+
+// use this middleware for routes that check if user is verified
+const checkAuthMiddleware = (req, res, next) => {
+    try {
+        const token = req.cookies && req.cookies.jwt_access_cookie;
+        if (!token) {
+            req.isAuthenticated = false;
+            next();
+            return;
+        }
+
+        jwt.verify(token, jwt_password, { algorithms: ['HS256'] }, (err, decoded) => {
+            if (err) {
+                req.isAuthenticated = false;
+            } else {
+                req.isAuthenticated = true;
+                req.auth = decoded;
+            }
+            next();
+        });
+    } catch (err) {
+        req.isAuthenticated = false;
+        next();
+    }
+};
 
 
 // blog stuff here (some functions)
@@ -267,13 +293,25 @@ app.get('/blog/settings', authMiddleware, (req, res) => {
 });
 
 // '/blog/login' route
-app.get('/blog/login', (req, res) => {
+app.get('/blog/login', checkAuthMiddleware, (req, res) => {
+    if(req.isAuthenticated) {
+        res.redirect(`/blog/user/${req.auth.username}`)
+        consoleInfo(`${req.ClientIP} tried to access the login page while being logged in, username: ${req.auth.username}`)
+        return
+    }
+
     res.sendFile(path.join(__dirname, 'html', 'pages', 'blog', 'login.html'));
     consoleInfo(`${req.ClientIP} requested the '/blog/login' route`)
 });
 
 // '/blog/register' route
-app.get('/blog/register', (req, res) => {
+app.get('/blog/register', checkAuthMiddleware, (req, res) => {
+    if(req.isAuthenticated) {
+        res.redirect(`/blog/user/${req.auth.username}`)
+        consoleInfo(`${req.ClientIP} tried to access the register page while being logged in, username: ${req.auth.username}`)
+        return
+    }
+
     res.sendFile(path.join(__dirname, 'html', 'pages', 'blog', 'register.html'));
     consoleInfo(`${req.ClientIP} requested the '/blog/register' route`)
 });
@@ -433,7 +471,7 @@ app.post('/blog/api/register', async (req, res) => {
 });
 
 // retrieve stuff about user
-app.post('/blog/api/get_user', async (req, res) => {
+app.post('/blog/api/get_user', checkAuthMiddleware, async (req, res) => {
     try {
         // Retrieve data from the request body
         const username = req.body[0];
@@ -490,6 +528,16 @@ app.post('/blog/api/get_user', async (req, res) => {
             categories = "404"
         }
         data.categories = categories;
+
+        if (req.isAuthenticated) {
+            if (req.auth.username == username) {
+                data.logged_in = true
+            } else {
+                data.logged_in = false
+            }
+        } else {
+            data.logged_in = false
+        }
 
         res.status(200).send(data)
     } catch (error) {
