@@ -1,22 +1,22 @@
 const username_paragraph = document.querySelector(".username");
 const pfp_image = document.getElementById("pfp");
 const bio_paragraph = document.getElementById("bio");
-
-if(window.location.href.endsWith('/')) {
-    var username = window.location.href.split("/")[window.location.href.split("/").length - 2]
-} else {
-    var username = window.location.href.split("/")[window.location.href.split("/").length - 1]
-}
-
-username_paragraph.textContent = username;
-
 const categories_element = document.getElementById("categories");
+const createCategoryPopout = document.getElementById("create_category");
+const closeCreateCategoryPopout = document.getElementById("create_category_close");
+const categoryTitleInput = document.getElementById("category_title_input");
+const categoryDescriptionInput = document.getElementById("category_description_input");
+
+
+function showCreateCategoryPopout() {
+    createCategoryPopout.style.display = "flex";
+}
 
 function createTheCategoryAddButton() {
     const content_container = document.getElementById(`content_container`);
 
     const button = `
-    <button class="category_create_button" id="category_create_button">
+    <button class="category_create_button" id="category_create_button" onclick="showCreateCategoryPopout()">
         <img src="../../../icons/pages/blog/create.png" alt="create button" class="category_create_button_image">
     </button>
     `
@@ -25,11 +25,11 @@ function createTheCategoryAddButton() {
 }
 
 // HTML elements here
-function createCategory(title, description, id, empty, logged_in){
+function createCategory(title, description, id, empty, logged_in) {
     var category = ""
 
-    if(empty) {
-        if(logged_in) {
+    if (empty) {
+        if (logged_in) {
             createTheCategoryAddButton()
 
             var category = `
@@ -85,7 +85,7 @@ function createPost(text_value, posts_id) {
 }
 
 
-async function getValuesFromServer(username){
+async function getValuesFromServer(username) {
     return fetch('/blog/api/get_user', {
         method: 'POST',
         headers: {
@@ -104,6 +104,20 @@ async function getValuesFromServer(username){
     });
 }
 
+closeCreateCategoryPopout.onclick = function () {
+    createCategoryPopout.style.display = "none";
+}
+
+if (window.location.href.endsWith('/')) {
+    var username = window.location.href.split("/")[window.location.href.split("/").length - 2]
+} else {
+    var username = window.location.href.split("/")[window.location.href.split("/").length - 1]
+}
+
+username_paragraph.textContent = username;
+document.title = `${username} | khenzii.dev/blog`;
+
+
 console.log(username)
 getValuesFromServer(username).then(data => {
     console.log(data)
@@ -117,7 +131,7 @@ getValuesFromServer(username).then(data => {
     pfp_image.src = data.image;
     bio_paragraph.textContent = data.bio_and_links.text_value;
 
-    if(data.categories == "404") {
+    if (data.categories == "404") {
         createCategory("", "", "", true, data.logged_in)
     } else {
         // create categories from the db here
