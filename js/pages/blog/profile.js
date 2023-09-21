@@ -2,14 +2,23 @@ const username_paragraph = document.querySelector(".username");
 const pfp_image = document.getElementById("pfp");
 const bio_paragraph = document.getElementById("bio");
 const categories_element = document.getElementById("categories");
+const shadowEffect = document.getElementById("shadowEffect");
 const createCategoryPopout = document.getElementById("create_category");
 const closeCreateCategoryPopout = document.getElementById("create_category_close");
 const categoryTitleInput = document.getElementById("category_title_input");
 const categoryDescriptionInput = document.getElementById("category_description_input");
 
+function shadowEffectStart() {
+    shadowEffect.style.display = "block";
+}
+
+function shadowEffectEnd() {
+    shadowEffect.style.display = "none";
+}
 
 function showCreateCategoryPopout() {
     createCategoryPopout.style.display = "flex";
+    shadowEffectStart()
 }
 
 function createTheCategoryAddButton() {
@@ -106,6 +115,7 @@ async function getValuesFromServer(username) {
 
 closeCreateCategoryPopout.onclick = function () {
     createCategoryPopout.style.display = "none";
+    shadowEffectEnd()
 }
 
 if (window.location.href.endsWith('/')) {

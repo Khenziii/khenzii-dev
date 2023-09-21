@@ -2,6 +2,19 @@
 @import '../../../presets/fonts.css';
 @import '../../../presets/body.css';
 
+.shadow_effect {
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+
+    background-color: #000000;
+    opacity: 0.8;
+
+    display: none;
+    z-index: 2;
+}
+
 .container {
     width: fit-content;
     height: fit-content;
@@ -241,7 +254,7 @@ ima implement links later
     width: 20vw;
     
     position: fixed;
-    z-index: 1;
+    z-index: 3;
 
     display: none; /*we'll later set it to flex using JS*/
     flex-direction: column;
