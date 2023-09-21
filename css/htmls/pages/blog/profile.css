@@ -10,30 +10,54 @@
     top: 10vh;
     left: 50%;
     transform: translateX(-50%);
-
+    
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+}
+
+.search_container_parent {
+    position: relative;
+    top: -5vh;
+    transform: translateY(-50%);
 }
 
 .search_container {
     position: relative;
-    width: 5vw;
+
+    width: 80%;
     height: 2vh;
 }
 
 .search_input {
-    padding-left: 30px;
+    padding-left: 5%;
     height: 100%;
-    width: 100%;
+    width: 95%;
 }
 
 .search_input_icon_image {
     position: absolute;
-    left: 5px;
+    left: 1%;
     top: 50%;
     transform: translateY(-35%); /*-35% just looks better, okay? lol (seriously tho, if you know why -50% looks so off - send me a DM)*/
     width: 20px;
     height: 20px;
+}
+
+.search_text {
+    color: var(--text);
+
+    text-align: center;
+
+    font-size: 1.5vh;
+    font-family: Montserrat;
+    font-weight: 600;
+
+    padding: 0;
+    width: 100%;
+}
+
+.profile_container_parent {
+    display: flex;
 }
 
 /*
@@ -67,7 +91,7 @@ i'll probably put some stuff here later
 .bio {
     color: var(--text);
 
-    font-size: 1vh;
+    font-size: 1.5vh;
     font-family: Montserrat;
     font-weight: 700;
 
@@ -110,13 +134,33 @@ i'll probably put some stuff here later
 .category_title {
     color: var(--text);
 
-    font-size: 1.5vh;
+    font-size: 0.9vw;
     font-family: Montserrat;
     font-weight: 600;
 
     word-wrap: break-word;
 
     cursor: pointer;
+}
+
+.description_text {
+    color: var(--text);
+
+    font-size: 0.8vw;
+    font-family: Montserrat;
+    font-weight: 500;
+
+    word-wrap: break-word;
+}
+
+.post_line {
+    margin: 1vh;
+    margin-left: 0;
+    margin-right: 0;
+    
+    width: 80%;
+
+    color: var(--secondary);
 }
 
 .posts {
@@ -134,9 +178,9 @@ i'll probably put some stuff here later
 .post_text {
     color: var(--text);
 
-    font-size: 1.5vh;
+    font-size: 0.8vw;
     font-family: Montserrat;
-    font-weight: 600;
+    font-weight: 500;
 
     word-wrap: break-word;
 }
