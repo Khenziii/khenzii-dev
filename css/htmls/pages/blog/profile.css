@@ -2,18 +2,141 @@
 @import '../../../presets/fonts.css';
 @import '../../../presets/body.css';
 
-.username {
-    position: absolute;
+.container {
+    width: fit-content;
+    height: fit-content;
+
+    position: relative;
+    top: 10vh;
     left: 50%;
     transform: translateX(-50%);
 
-    width: 30vw;
-    height: 6vh;
+    display: flex;
+    flex-direction: row;
+}
 
+.search_container {
+    position: relative;
+    width: 5vw;
+    height: 2vh;
+}
+
+.search_input {
+    padding-left: 30px;
+    height: 100%;
+    width: 100%;
+}
+
+.search_input_icon_image {
+    position: absolute;
+    left: 5px;
+    top: 50%;
+    transform: translateY(-35%); /*-35% just looks better, okay? lol (seriously tho, if you know why -50% looks so off - send me a DM)*/
+    width: 20px;
+    height: 20px;
+}
+
+/*
+i'll probably put some stuff here later
+.profile_container {
+    
+}
+*/
+
+.pfp {
+    width: 10vw;
+    height: auto;
+
+    border-width: 2px;
+    border-radius: 50%;
+    border-style: solid;
+    overflow: hidden;
+    border-color: var(--text);
+}
+
+.username {
     color: var(--text);
+
     text-align: center;
+
     font-size: 2vh;
     font-family: Montserrat;
-
     font-weight: 900;
+}
+
+.bio {
+    color: var(--text);
+
+    font-size: 1vh;
+    font-family: Montserrat;
+    font-weight: 700;
+
+    max-width: 10vw;
+    height: auto;
+    word-wrap: break-word;
+}
+
+/*
+ima implement links later
+.links {
+    
+}
+*/
+
+.line {
+    margin: 2vw;
+    color: var(--secondary);
+}
+
+/*
+i'll probably put some stuff here later
+.content_container {
+
+}
+*/
+
+.categories {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+
+    width: 20vw;
+
+    display: flex;
+    flex-direction: column;
+    gap: 1vh;
+}
+
+.category_title {
+    color: var(--text);
+
+    font-size: 1.5vh;
+    font-family: Montserrat;
+    font-weight: 600;
+
+    word-wrap: break-word;
+
+    cursor: pointer;
+}
+
+.posts {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+/*
+.post {
+
+}
+*/
+
+.post_text {
+    color: var(--text);
+
+    font-size: 1.5vh;
+    font-family: Montserrat;
+    font-weight: 600;
+
+    word-wrap: break-word;
 }

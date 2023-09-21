@@ -1,4 +1,5 @@
 const username_paragraph = document.querySelector(".username");
+const pfp_image = document.getElementById("pfp");
 
 if(window.location.href.endsWith('/')) {
     var username = window.location.href.split("/")[window.location.href.split("/").length - 2]
@@ -31,4 +32,9 @@ async function getValuesFromServer(username){
 
 getValuesFromServer(username).then(data => {
     console.log(data)
+    console.log(data.image)
+    console.log(data.user_id)
+    console.log(data.bio_and_links)
+
+    pfp_image.src = data.image;
 });

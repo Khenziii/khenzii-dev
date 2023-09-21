@@ -453,7 +453,7 @@ app.post('/blog/api/get_user', async (req, res) => {
         var query = `SELECT "default" FROM "profile_picture" WHERE user_id = \$1;`
         var result = await pool.query(query, [user_id]);
 
-        const default_setting = result.rows[0]
+        const default_setting = result.rows[0].default
 
         var image = ""
 
@@ -464,7 +464,9 @@ app.post('/blog/api/get_user', async (req, res) => {
             var query = `SELECT id FROM "profile_picture" WHERE user_id = \$1;`
             var result = await pool.query(query, [user_id]);
 
-            var image = `/images/blog/${result}.png`
+            var name =  result.rows[0].id
+
+            var image = `/images/blog/${name}.png`
         }
 
         data.image = image
