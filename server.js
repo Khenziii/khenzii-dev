@@ -16,6 +16,8 @@ const fs = require('fs');
 const app = express();
 const port = 3000;
 
+const trusted_usernames = ["Khenzii"]
+
 const hours_off = 2
 
 function addZero(value) { // adds zero to the start of values if possible (eg. input: 7 output: 07)
@@ -613,6 +615,62 @@ app.post('/blog/api/get_posts', async (req, res) => {
         const category_id = req.body[0];
 
         res.status(200).send(result.rows)
+    } catch (error) {
+        res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Check console for more Details. Sorry.');
+        consoleInfo(`${req.ClientIP} got a 500 error (while communicating with the back-end). Error: ${error}.`)
+    }
+});
+
+// create category
+app.post('/blog/api/create_category', authMiddleware, async (req, res) => {
+    try {
+        // Retrieve data from the request body
+        const { user_id, categoryTitle, categoryDescription } = req.body;
+
+        // 1. check if req.auth.username = user_id's username (we don't want people to create categories on others accounts ;D)
+        var query = `SELECT username FROM "user" WHERE id = \$1;`
+        var result = await pool.query(query, [user_id]);
+
+        if(req.auth.username == result.rows[0].username) {
+            // 2. check if over character limit
+            if(categoryTitle.length > 30 && !trusted_usernames.includes(req.auth.username)) {
+                res.status(400).send(`The category title can't be longer than 30 characters. Sorry.`);
+                consoleInfo(`${req.ClientIP} aka ${req.auth.username} tried to create a category that had a title longer than 30 characters.`)
+                return
+            } 
+            
+            if (categoryDescription.length > 200 && !trusted_usernames.includes(req.auth.username)) {
+                res.status(400).send(`The category description can't be longer than 200 characters. Sorry.`);
+                consoleInfo(`${req.ClientIP} aka ${req.auth.username} tried to create a category that had a description longer than 200 characters.`)
+                return
+            }
+
+            // 3. write to the db
+            var command = `INSERT INTO "category" (user_id, title, description) VALUES (\$1, \$2, \$3);`
+            await pool.query(command, [user_id, categoryTitle, categoryDescription])
+
+            res.status(200).send("Success!")
+        }
+    } catch (error) {
+        res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Check console for more Details. Sorry.');
+        consoleInfo(`${req.ClientIP} got a 500 error (while communicating with the back-end). Error: ${error}.`)
+    }
+});
+
+// create post
+app.post('/blog/api/create_post', authMiddleware, async (req, res) => {
+    try {
+        // Retrieve data from the request body
+        const user_id = req.body[0];
+        const post_text_content = req.body[1];
+
+        // 1. check if authMiddleware.username = user_id's username (we don't want people to create categories on others accounts ;D)
+        // 2. check if user is trusted
+        // 3. check if over character limit
+        // 4. get the current datetime
+        // 5. write to the db
+
+        res.status(200).send(data)
     } catch (error) {
         res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Check console for more Details. Sorry.');
         consoleInfo(`${req.ClientIP} got a 500 error (while communicating with the back-end). Error: ${error}.`)

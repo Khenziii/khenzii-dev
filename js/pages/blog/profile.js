@@ -2,12 +2,50 @@ const username_paragraph = document.querySelector(".username");
 const pfp_image = document.getElementById("pfp");
 const bio_paragraph = document.getElementById("bio");
 const joined_at_paragraph = document.getElementById("joined_at");
+const user_id_paragraph = document.getElementById("user_id");
 const categories_element = document.getElementById("categories");
 const shadowEffect = document.getElementById("shadowEffect");
 const createCategoryPopout = document.getElementById("create_category");
 const closeCreateCategoryPopout = document.getElementById("create_category_close");
 const categoryTitleInput = document.getElementById("category_title_input");
 const categoryDescriptionInput = document.getElementById("category_description_input");
+
+
+function categoryCreateInfo(text) {
+    const info_text = `
+    <p class="create_category_info_text">${text}</p>
+    `
+
+    return createCategoryPopout.insertAdjacentHTML('beforeend', info_text)
+}
+
+async function createCategory() {
+    const categoryTitleInputValue = categoryTitleInput.value;
+    const categoryDescriptionInputValue = categoryDescriptionInput.value;
+
+    const data = {
+        categoryTitle: categoryTitleInputValue,
+        categoryDescription: categoryDescriptionInputValue,
+        user_id: user_id
+    };
+
+    return fetch('/blog/api/create_category', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    }).then(response => {
+        if (response.ok) {
+            categoryCreateInfo(response.text());
+        } else {
+            throw new Error('Something went wrong. Sorry :/');
+        }
+    }).catch(error => {
+        // Handle any error that occurred during the request
+        categoryCreateInfo(error);
+    });
+}
 
 function shadowEffectStart() {
     shadowEffect.style.display = "block";
@@ -35,7 +73,7 @@ function createTheCategoryAddButton() {
 }
 
 // HTML elements here
-function createCategory(title, description, id, empty, logged_in) {
+function createHTMLCategory(title, description, id, empty, logged_in) {
     var category = ""
 
     if (empty) {
@@ -128,8 +166,8 @@ if (window.location.href.endsWith('/')) {
 username_paragraph.textContent = username;
 document.title = `${username} | khenzii.dev/blog`;
 
+var user_id = ""
 
-console.log(username)
 getValuesFromServer(username).then(data => {
     console.log(data)
     console.log(data.image)
@@ -142,10 +180,14 @@ getValuesFromServer(username).then(data => {
     pfp_image.src = data.image;
     bio_paragraph.textContent = data.bio_and_links.text_value;
     joined_at_paragraph.textContent = `joined at: ${data.joined_at}`;
+    user_id_paragraph.textContent = `id: ${data.user_id}`;
+    user_id = data.user_id
 
     if (data.categories == "404") {
-        createCategory("", "", "", true, data.logged_in)
+        createHTMLCategory("", "", "", true, data.logged_in)
     } else {
         // create categories from the db here
+        createHTMLCategory("", "", "", true, data.logged_in)
+        // get rid of the thing above later and implement the needed stuff
     }
 });

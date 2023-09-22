@@ -130,6 +130,18 @@ i'll probably put some stuff here later
     word-wrap: break-word;
 }
 
+.user_id {
+    color: var(--text);
+
+    font-size: 1vh;
+    font-family: Montserrat;
+    font-weight: 500;
+
+    max-width: 10vw;
+    height: auto;
+    word-wrap: break-word;
+}
+
 /*
 ima implement links later
 .links {
@@ -338,4 +350,18 @@ ima implement links later
 .create_category_create_button_image:hover {
     background-color: var(--secondary);
     border-radius: 2vh;
+}
+
+.create_category_info_text {
+    color: var(--text);
+
+    text-align: center;
+
+    font-size: 0.8vw;
+    font-family: Montserrat;
+    font-weight: 500;
+
+    word-wrap: break-word;
+
+    margin: 2vh;
 }
