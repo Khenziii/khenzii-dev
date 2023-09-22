@@ -48,6 +48,35 @@ function consoleInfo(message) {
     console.log(`${localDate.localDay}/${localDate.localMonth}/${localDate.localYear} - ${localDate.localHours}:${localDate.localMinutes}:${localDate.localSeconds} > ${message}`)
 }
 
+function daysSince(getDateFunction, then_string) {
+    // the past date will always be in this format: <days>/<months>/<year> - <hours>:<minutes>:<seconds>
+    const dateComponents = then_string.split(' - ')[0].split('/');
+    const timeComponents = then_string.split(' - ')[1].split(':');
+
+    const thenDate = new Date(
+        parseInt(dateComponents[2]), // year
+        parseInt(dateComponents[1]), // month
+        parseInt(dateComponents[0]), // day
+        parseInt(timeComponents[0]), // hours
+        parseInt(timeComponents[1]), // minutes
+        parseInt(timeComponents[2])  // seconds
+    );
+
+    currentDate = new Date(
+        getDateFunction.localYear,   // year
+        getDateFunction.localMonth,  // month
+        getDateFunction.localDay,    // day
+        getDateFunction.localHours,  // hours
+        getDateFunction.localMinutes,// minutes
+        getDateFunction.localSeconds // seconds
+    )
+
+    var millisecondsSince = currentDate - thenDate;
+    var daysSince = Math.floor(millisecondsSince / (1000 * 60 * 60 * 24));
+
+    return daysSince;
+}
+
 
 const database_user_password = process.env.database_user_password;
 const pool = new Pool({
@@ -500,8 +529,8 @@ app.post('/blog/api/get_user', checkAuthMiddleware, async (req, res) => {
         data.user_id = user_id;
         const joined_at = result.rows[0].joined_at
 
-        var daysPassed = "implement this later"
-        var joined_at_with_days = `${joined_at}; ${daysPassed} days ago`
+        var daysPassed = daysSince(getDate(2), joined_at)
+        var joined_at_with_days = `${joined_at}; ${daysPassed} day/s ago`
 
         data.joined_at = joined_at_with_days;
 
