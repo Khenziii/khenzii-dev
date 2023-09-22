@@ -9,6 +9,9 @@ const createCategoryPopout = document.getElementById("create_category");
 const closeCreateCategoryPopout = document.getElementById("create_category_close");
 const categoryTitleInput = document.getElementById("category_title_input");
 const categoryDescriptionInput = document.getElementById("category_description_input");
+const createPostPopout = document.getElementById("create_post");
+const closeCreatePostPopout = document.getElementById("create_post_close");
+const postInput = document.getElementById("post_input");
 
 
 function categoryCreateInfo(text) {
@@ -17,6 +20,29 @@ function categoryCreateInfo(text) {
     `
 
     return createCategoryPopout.insertAdjacentHTML('beforeend', info_text)
+}
+
+async function createCategory() {
+    const categoryTitleInputValue = categoryTitleInput.value;
+    const categoryDescriptionInputValue = categoryDescriptionInput.value;
+
+    const data = {
+        categoryTitle: categoryTitleInputValue,
+        categoryDescription: categoryDescriptionInputValue,
+        user_id: user_id
+    };
+
+    const response = await fetch('/blog/api/create_category', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    });
+    
+    var text = await response.text();
+
+    categoryCreateInfo(text)
 }
 
 async function createCategory() {
@@ -55,6 +81,11 @@ function showCreateCategoryPopout() {
     shadowEffectStart()
 }
 
+function showCreatePostPopout() {
+    createPostPopout.style.display = "flex";
+    shadowEffectStart()
+}
+
 function createTheCategoryAddButton() {
     const content_container = document.getElementById(`content_container`);
 
@@ -86,25 +117,53 @@ function createHTMLCategory(title, description, id, empty, logged_in) {
             `
         }
     } else {
-        var category = `
-        <li class="category">
-            <details>
-                <summary class="category_title">
-                    ${title}
-                </summary>
+        if(logged_in) {
+            var category = `
+            <li class="category">
+                <details>
+                    <summary class="category_title">
+                        ${title}
+                    </summary>
 
-                <p class="description_text">
-                    ${description}
-                </p>
+                    <p class="description_text">
+                        ${description}
+                    </p>
 
-                <hr class="post_line">
+                    <center>
+                        <button class="post_create_button" id="post_create_button" onclick="showCreatePostPopout()">
+                            <img src="../../../icons/pages/blog/create.png" alt="create button" class="post_create_button_image">
+                        </button>
+                    </center>
 
-                <ul class="posts" id="${id}_posts">
+                    <hr class="post_line">
+
+                    <ul class="posts" id="${id}_posts">
                 
-                </ul>
-            </details>
-        </li>
-        `
+                    </ul>
+                </details>
+            </li>
+            `
+        } else {
+            var category = `
+            <li class="category">
+                <details>
+                    <summary class="category_title">
+                        ${title}
+                    </summary>
+
+                    <p class="description_text">
+                        ${description}
+                    </p>
+
+                    <hr class="post_line">
+
+                    <ul class="posts" id="${id}_posts">
+                
+                    </ul>
+                </details>
+            </li>
+            `
+        }
     }
 
     return categories_element.insertAdjacentHTML('beforeend', category);
@@ -145,6 +204,11 @@ async function getValuesFromServer(username) {
 
 closeCreateCategoryPopout.onclick = function () {
     createCategoryPopout.style.display = "none";
+    shadowEffectEnd()
+}
+
+closeCreatePostPopout.onclick = function () {
+    createPostPopout.style.display = "none";
     shadowEffectEnd()
 }
 
