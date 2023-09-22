@@ -32,7 +32,14 @@ function getDate(hours_off) {
     var localMinutes = addZero(currentTime.getUTCMinutes());
     var localSeconds = addZero(currentTime.getUTCSeconds());
 
-    return new Date(Date.UTC(localYear, localMonth, localDay, localHours, localMinutes, localSeconds));
+    return {
+        localYear: localYear,
+        localMonth: localMonth,
+        localDay: localDay,
+        localHours: localHours,
+        localMinutes: localMinutes,
+        localSeconds: localSeconds
+    };
 }
 
 function consoleInfo(message) {
@@ -493,8 +500,7 @@ app.post('/blog/api/get_user', checkAuthMiddleware, async (req, res) => {
         data.user_id = user_id;
         const joined_at = result.rows[0].joined_at
 
-        var currentDate = getDate(2);
-        var daysPassed = daysSince(currentDate, '22/09/2023 - 15:31:32');
+        var daysPassed = "implement this later"
         var joined_at_with_days = `${joined_at}; ${daysPassed} days ago`
 
         data.joined_at = joined_at_with_days;
