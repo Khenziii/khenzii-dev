@@ -16,28 +16,29 @@ const fs = require('fs');
 const app = express();
 const port = 3000;
 
-function getMilliseconds(hours) { // returns the milliseconds that there are in certain amount of hours
-    return 1000 * 60 * 60 * hours;
-}
+const hours_off = 2
 
 function addZero(value) { // adds zero to the start of values if possible (eg. input: 7 output: 07)
     return value.toString().padStart(2, '0');
 }
 
+function getDate(hours_off) {
+    var currentTime = new Date();
+
+    var localYear = addZero(currentTime.getUTCFullYear());
+    var localMonth = addZero(currentTime.getUTCMonth() + 1); // months start from the index 0, so we are adding 1
+    var localDay = addZero(currentTime.getUTCDate());
+    var localHours = addZero(currentTime.getUTCHours() + hours_off);
+    var localMinutes = addZero(currentTime.getUTCMinutes());
+    var localSeconds = addZero(currentTime.getUTCSeconds());
+
+    return new Date(Date.UTC(localYear, localMonth, localDay, localHours, localMinutes, localSeconds));
+}
+
 function consoleInfo(message) {
-    var timeInMilliseconds = getMilliseconds(2);
+    var localDate = getDate(hours_off)
 
-    var currentDate = new Date();
-    var currentPolishTime = new Date(currentDate.getTime() + timeInMilliseconds);
-
-    var localYear = currentPolishTime.getFullYear();
-    var localMonth = addZero(currentPolishTime.getMonth() + 1); // months start from the index 0, so we are adding 1
-    var localDay = addZero(currentPolishTime.getDate());
-    var localHours = addZero(currentPolishTime.getHours());
-    var localMinutes = addZero(currentPolishTime.getMinutes());
-    var localSeconds = addZero(currentPolishTime.getSeconds());
-
-    console.log(`${localDay}/${localMonth}/${localYear.toString().slice(-2)} - ${localHours}:${localMinutes}:${localSeconds} > ${message}`)
+    console.log(`${localDate.localDay}/${localDate.localMonth}/${localDate.localYear} - ${localDate.localHours}:${localDate.localMinutes}:${localDate.localSeconds} > ${message}`)
 }
 
 
@@ -140,9 +141,13 @@ async function checkIfUsernameTaken(username) {
 
 async function register_account(username, email, password) {
     try {
-        // first lets input all of the needed stuff into the user table
-        var command = `INSERT INTO "user" (username, email, password) VALUES (\$1, \$2, \$3);`
-        var values = [username, email, await hash(password, 12)];
+        // get the current date
+        var localDate = getDate(hours_off)
+        var joined_at = `${localDate.localDay}/${localDate.localMonth}/${localDate.localYear} - ${localDate.localHours}:${localDate.localMinutes}:${localDate.localSeconds}`
+
+        // input all of the needed stuff into the user table
+        var command = `INSERT INTO "user" (username, email, password, joined_at) VALUES (\$1, \$2, \$3, \$4);`
+        var values = [username, email, await hash(password, 12), joined_at];
         await pool.query(command, values);
 
         // then lets create some place holders
@@ -481,11 +486,18 @@ app.post('/blog/api/get_user', checkAuthMiddleware, async (req, res) => {
 
         // run the SQL queries
         // first one is for user_id
-        var query = `SELECT id FROM "user" WHERE username = \$1;`
+        var query = `SELECT id, joined_at FROM "user" WHERE username = \$1;`
         var result = await pool.query(query, [username]);
 
         const user_id = result.rows[0].id
         data.user_id = user_id;
+        const joined_at = result.rows[0].joined_at
+
+        var currentDate = getDate(2);
+        var daysPassed = daysSince(currentDate, '22/09/2023 - 15:31:32');
+        var joined_at_with_days = `${joined_at}; ${daysPassed} days ago`
+
+        data.joined_at = joined_at_with_days;
 
         // the second one for user's profile picture
         var query = `SELECT "default" FROM "profile_picture" WHERE user_id = \$1;`
@@ -599,5 +611,6 @@ app.use(function (error, req, res, next) {
 
 
 app.listen(port, () => {
-    console.log(`server waiting for nginx redirects here: http://localhost:${port} 🫡`);
+    console.log(`[i] logs are using the UTC+${hours_off} timezone`)
+    console.log(`[i] server waiting for nginx redirects here: http://localhost:${port} 🫡`);
 });

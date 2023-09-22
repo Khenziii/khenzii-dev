@@ -118,6 +118,18 @@ i'll probably put some stuff here later
     word-wrap: break-word;
 }
 
+.joined_at {
+    color: var(--text);
+
+    font-size: 1vh;
+    font-family: Montserrat;
+    font-weight: 500;
+
+    max-width: 10vw;
+    height: auto;
+    word-wrap: break-word;
+}
+
 /*
 ima implement links later
 .links {

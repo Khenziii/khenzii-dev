@@ -1,6 +1,7 @@
 const username_paragraph = document.querySelector(".username");
 const pfp_image = document.getElementById("pfp");
 const bio_paragraph = document.getElementById("bio");
+const joined_at_paragraph = document.getElementById("joined_at");
 const categories_element = document.getElementById("categories");
 const shadowEffect = document.getElementById("shadowEffect");
 const createCategoryPopout = document.getElementById("create_category");
@@ -140,6 +141,7 @@ getValuesFromServer(username).then(data => {
     // asign stuff
     pfp_image.src = data.image;
     bio_paragraph.textContent = data.bio_and_links.text_value;
+    joined_at_paragraph.textContent = `joined at: ${data.joined_at}`;
 
     if (data.categories == "404") {
         createCategory("", "", "", true, data.logged_in)
