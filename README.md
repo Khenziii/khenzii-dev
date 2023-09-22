@@ -26,6 +26,7 @@ Please, read this carefully before spending your time creating cool stuff: The w
 ## TO-DO list:
 
 - **/blog** - the /blog route is a really big project (at least for a hobbyist without a team like me). It will be something like twitter, but with extra features. I want to finish this thing before getting into anything else because /blog would allow me to document everything new that I will be writing in the future.
+- **the search for console.logs()** - after writing the /blog route, i think that i'm going to go through client-side scripts and find some of the console.log's that i forgot to get rid of while programming.
 - **license info** - even though that this GitHub repo (with LICENSE file) is mentioned on the website as it's source-code, people could still argue that they didn't visit the /projects-end route and didn't saw the repo (thus didn't knew about the CC-BY-SA 4.0 license). That's why i think that i'm going to put meta tags indicating the license and a "license" footer on the index page.
 - **rate limits** - right now the routes don't have any rate-limits (and that's VERY bad), ima add some later.
 - **email verification** - a email can be linked with 3 accounts at a single time - but we're not verifying if the emails really belong to the user. This means that people could potentially create 3 accounts with a email and then someone that would like to use this email won't be able to. To fix this i will only be counting verified emails to the accounts number.

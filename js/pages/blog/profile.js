@@ -29,22 +29,17 @@ async function createCategory() {
         user_id: user_id
     };
 
-    return fetch('/blog/api/create_category', {
+    const response = await fetch('/blog/api/create_category', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(data)
-    }).then(response => {
-        if (response.ok) {
-            categoryCreateInfo(response.text());
-        } else {
-            throw new Error('Something went wrong. Sorry :/');
-        }
-    }).catch(error => {
-        // Handle any error that occurred during the request
-        categoryCreateInfo(error);
     });
+    
+    var text = await response.text();
+
+    categoryCreateInfo(text)
 }
 
 function shadowEffectStart() {
@@ -78,8 +73,6 @@ function createHTMLCategory(title, description, id, empty, logged_in) {
 
     if (empty) {
         if (logged_in) {
-            createTheCategoryAddButton()
-
             var category = `
             <p class="info_text">
                 No categories yet! <br> Go ahead, create one =)
@@ -93,8 +86,6 @@ function createHTMLCategory(title, description, id, empty, logged_in) {
             `
         }
     } else {
-        createTheCategoryAddButton()
-
         var category = `
         <li class="category">
             <details>
@@ -183,11 +174,19 @@ getValuesFromServer(username).then(data => {
     user_id_paragraph.textContent = `id: ${data.user_id}`;
     user_id = data.user_id
 
+    if(data.logged_in) {
+        createTheCategoryAddButton()
+    }
+
     if (data.categories == "404") {
         createHTMLCategory("", "", "", true, data.logged_in)
     } else {
-        // create categories from the db here
-        createHTMLCategory("", "", "", true, data.logged_in)
-        // get rid of the thing above later and implement the needed stuff
+        for(let i = 0; i < data.categories.length; i++) { // loop through all of the categories
+            console.log(data.categories[i].title)
+            console.log(data.categories[i].description)
+            console.log(data.categories[i].id)
+
+            createHTMLCategory(data.categories[i].title, data.categories[i].description, data.categories[i].id, false, data.logged_in)
+        }
     }
 });

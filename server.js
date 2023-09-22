@@ -650,6 +650,7 @@ app.post('/blog/api/create_category', authMiddleware, async (req, res) => {
             await pool.query(command, [user_id, categoryTitle, categoryDescription])
 
             res.status(200).send("Success!")
+            console.log("send the message")
         }
     } catch (error) {
         res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Check console for more Details. Sorry.');
@@ -700,10 +701,10 @@ app.use(function (error, req, res, next) {
 
 // DONT PUT ROUTES HERE!!!
 // if you will put a ordinary route here or some other stuff then
-// the error pages would stop working and everything would frick up
+// the error pages would stop working
 
 
 app.listen(port, () => {
-    console.log(`[i] logs are using the UTC+${hours_off} timezone`)
+    console.log(`[i] logs are using the UTC+${hours_off} timezone, you can change this setting by modifying the hours_off variable inside of server.js.`)
     console.log(`[i] server waiting for nginx redirects here: http://localhost:${port} 🫡`);
 });
