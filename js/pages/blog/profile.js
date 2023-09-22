@@ -22,27 +22,12 @@ function categoryCreateInfo(text) {
     return createCategoryPopout.insertAdjacentHTML('beforeend', info_text)
 }
 
-async function createCategory() {
-    const categoryTitleInputValue = categoryTitleInput.value;
-    const categoryDescriptionInputValue = categoryDescriptionInput.value;
+function postCreateInfo(text) {
+    const info_text = `
+    <p class="create_post_info_text">${text}</p>
+    `
 
-    const data = {
-        categoryTitle: categoryTitleInputValue,
-        categoryDescription: categoryDescriptionInputValue,
-        user_id: user_id
-    };
-
-    const response = await fetch('/blog/api/create_category', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-    });
-    
-    var text = await response.text();
-
-    categoryCreateInfo(text)
+    return createPostPopout.insertAdjacentHTML('beforeend', info_text)
 }
 
 async function createCategory() {
@@ -66,6 +51,30 @@ async function createCategory() {
     var text = await response.text();
 
     categoryCreateInfo(text)
+}
+
+async function createPost() {
+    const postTextContentValue = postInput.value
+
+    console.log("delete me later!")
+    console.log(createPostPopout.style.data_category_id)
+
+    const data = {
+        category_id: createPostPopout.style.data_category_id,
+        text_value: postTextContentValue
+    };
+
+    const response = await fetch('/blog/api/create_post', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    });
+    
+    var text = await response.text();
+
+    postCreateInfo(text)
 }
 
 function shadowEffectStart() {
@@ -81,8 +90,9 @@ function showCreateCategoryPopout() {
     shadowEffectStart()
 }
 
-function showCreatePostPopout() {
+function showCreatePostPopout(category_id) {
     createPostPopout.style.display = "flex";
+    createPostPopout.style.data_category_id = category_id; // we store the category id here (we can later access it while sending the API request)
     shadowEffectStart()
 }
 
@@ -130,7 +140,7 @@ function createHTMLCategory(title, description, id, empty, logged_in) {
                     </p>
 
                     <center>
-                        <button class="post_create_button" id="post_create_button" onclick="showCreatePostPopout()">
+                        <button class="post_create_button" id="post_create_button" onclick="showCreatePostPopout(${id})">
                             <img src="../../../icons/pages/blog/create.png" alt="create button" class="post_create_button_image">
                         </button>
                     </center>
@@ -169,8 +179,8 @@ function createHTMLCategory(title, description, id, empty, logged_in) {
     return categories_element.insertAdjacentHTML('beforeend', category);
 }
 
-function createPost(text_value, posts_id) {
-    const posts_element = document.getElementById(`${posts_id}_posts`);
+function createHTMLPost(text_value, category_id) {
+    const posts_element = document.getElementById(`${category_id}_posts`);
     const post = `
     <div class="post">
         <p class="post_text">

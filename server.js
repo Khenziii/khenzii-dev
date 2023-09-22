@@ -664,6 +664,7 @@ app.post('/blog/api/create_post', authMiddleware, async (req, res) => {
         const { category_id, text_value } = req.body;
 
         // 1. check if authMiddleware.username = user_id's username (we don't want people to create posts on others accounts ;D)
+        // get the user_id using category_id
         var query = `SELECT user_id FROM "category" WHERE id = \$1;`
         var result = await pool.query(query, [category_id]);
 
@@ -692,41 +693,7 @@ app.post('/blog/api/create_post', authMiddleware, async (req, res) => {
             res.status(200).send("Success!")
         }
     } catch (error) {
-        res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Check console for more Details. Sorry.');
-        consoleInfo(`${req.ClientIP} got a 500 error (while communicating with the back-end). Error: ${error}.`)
-    }
-
-    try {
-        // Retrieve data from the request body
-        const { user_id, categoryTitle, categoryDescription } = req.body;
-
-        // 1. check if req.auth.username = user_id's username (we don't want people to create categories on others accounts ;D)
-        var query = `SELECT username FROM "user" WHERE id = \$1;`
-        var result = await pool.query(query, [user_id]);
-
-        if(req.auth.username == result.rows[0].username) {
-            // 2. check if over character limit
-            if(categoryTitle.length > 30 && !trusted_usernames.includes(req.auth.username)) {
-                res.status(400).send(`The category title can't be longer than 30 characters. Sorry.`);
-                consoleInfo(`${req.ClientIP} aka ${req.auth.username} tried to create a category that had a title longer than 30 characters.`)
-                return
-            } 
-            
-            if (categoryDescription.length > 200 && !trusted_usernames.includes(req.auth.username)) {
-                res.status(400).send(`The category description can't be longer than 200 characters. Sorry.`);
-                consoleInfo(`${req.ClientIP} aka ${req.auth.username} tried to create a category that had a description longer than 200 characters.`)
-                return
-            }
-
-            // 3. write to the db
-            var command = `INSERT INTO "category" (user_id, title, description) VALUES (\$1, \$2, \$3);`
-            await pool.query(command, [user_id, categoryTitle, categoryDescription])
-
-            res.status(200).send("Success!")
-            console.log("send the message")
-        }
-    } catch (error) {
-        res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Check console for more Details. Sorry.');
+        res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Sorry.');
         consoleInfo(`${req.ClientIP} got a 500 error (while communicating with the back-end). Error: ${error}.`)
     }
 });
