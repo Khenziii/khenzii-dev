@@ -142,6 +142,34 @@ i'll probably put some stuff here later
     word-wrap: break-word;
 }
 
+.settings_button {
+    background: transparent;
+    border: transparent;
+
+    cursor: pointer;
+
+    width: 40%;
+    height: auto;
+
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.settings_button_image {
+    background-color: transparent;
+    border: transparent;
+    transition: all 500ms;
+
+    width: 100%;
+    height: 100%;
+}
+
+.settings_button_image:hover {
+    background-color: var(--secondary);
+    border-radius: 2vh;
+}
+
 /*
 ima implement links later
 .links {

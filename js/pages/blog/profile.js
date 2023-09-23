@@ -1,8 +1,10 @@
-const username_paragraph = document.querySelector(".username");
+const profile_container = document.getElementById("profile_container")
+const username_paragraph = document.getElementById("username")
 const pfp_image = document.getElementById("pfp");
 const bio_paragraph = document.getElementById("bio");
 const joined_at_paragraph = document.getElementById("joined_at");
 const user_id_paragraph = document.getElementById("user_id");
+const content_container = document.getElementById(`content_container`);
 const categories_element = document.getElementById("categories");
 const shadowEffect = document.getElementById("shadowEffect");
 const createCategoryPopout = document.getElementById("create_category");
@@ -169,8 +171,6 @@ function showCreatePostPopout(category_id) {
 }
 
 function createTheCategoryAddButton() {
-    const content_container = document.getElementById(`content_container`);
-
     const button = `
     <button class="category_create_button" id="category_create_button" onclick="showCreateCategoryPopout()">
         <img src="../../../icons/pages/blog/create.png" alt="create button" class="category_create_button_image">
@@ -180,7 +180,16 @@ function createTheCategoryAddButton() {
     return content_container.insertAdjacentHTML('afterbegin', button)
 }
 
-// HTML elements here
+function createTheSettingsButton() {
+    const button = `
+    <button class="settings_button" id="settings_button" onclick="redirectTo('/blog/settings', event)">
+        <img src="../../../icons/pages/blog/settings.png" alt="settings button" class="settings_button_image">
+    </button>
+    `
+
+    return profile_container.insertAdjacentHTML('beforeend', button)
+}
+
 function createHTMLCategory(title, description, id, empty, logged_in) {
     var category = ""
 
@@ -347,6 +356,7 @@ getValuesFromServer(username).then(data => {
 
     if(data.logged_in) {
         createTheCategoryAddButton()
+        createTheSettingsButton()
     }
 
     if (data.categories == "404") {

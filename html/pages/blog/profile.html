@@ -9,6 +9,7 @@
         <meta name="keywords" content="blog, personal website">
 
         <script defer src="../../../js/pages/blog/profile.js"></script>
+        <script defer src="../../../js/utils/buttons.js"></script>
     </head>
 
     <body>
@@ -56,10 +57,10 @@
             </div>
 
             <div class="profile_container_parent">
-                <div class="profile_container">
+                <div class="profile_container" id="profile_container">
                     <img id="pfp" class="pfp">
     
-                    <p class="username">
+                    <p class="username" id="username">
                         If you're not seeing the username, turn on JS.
                     </p>
         
@@ -68,7 +69,7 @@
                     </p>
 
                     <p class="joined_at" id="joined_at">
-                        :<
+                        :&lt;
                     </p>
 
                     <p class="user_id" id="user_id">

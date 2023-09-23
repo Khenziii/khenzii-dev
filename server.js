@@ -628,18 +628,12 @@ app.post('/blog/api/get_posts', async (req, res) => {
         // get the higher number
         const higher = lower + number_of_posts_to_get // eg 12 (7 + 5)
 
-        console.log(lower)
-        console.log(higher)
-        console.log("delete us later")
-
         var query = `SELECT * FROM "post" WHERE category_id = \$1 AND index_in_category BETWEEN ${lower} AND ${higher} ORDER BY id DESC LIMIT ${number_of_posts_to_get};`
         // get <number_of_posts_to_get> posts from a certain category where index_in_category
         // is between <lower> and <higher> while also returning it in the by newest order :3
         var result = await pool.query(query, [category_id]);
 
         result.number_of_posts_to_get = number_of_posts_to_get
-
-        console.log(result)
 
         res.status(200).send(result)
     } catch (error) {
@@ -717,7 +711,6 @@ app.post('/blog/api/create_post', authMiddleware, async (req, res) => {
             var result = await pool.query(query, [category_id]);
 
             var index_in_category = result.rowCount + 1
-            console.log(index_in_category)
 
             // 5. write to the db
             var command = `INSERT INTO "post" (category_id, text_value, created_at, index_in_category) VALUES (\$1, \$2, \$3, \$4);`
