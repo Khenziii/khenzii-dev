@@ -105,6 +105,7 @@ const authMiddleware = expressJwt({
 const checkAuthMiddleware = (req, res, next) => {
     try {
         const token = req.cookies && req.cookies.jwt_access_cookie;
+
         if (!token) {
             req.isAuthenticated = false;
             next();
@@ -325,8 +326,9 @@ app.get('/page_being_build', (req, res) => {
 
 // '/blog' route
 app.get('/blog', (req, res) => {
-    res.sendFile(path.join(__dirname, 'html', 'pages', 'blog', 'blog.html'));
-    consoleInfo(`${req.ClientIP} requested the '/blog' route`)
+    // res.sendFile(path.join(__dirname, 'html', 'pages', 'blog', 'blog.html'));
+    // consoleInfo(`${req.ClientIP} requested the '/blog' route`)
+    res.redirect(`/page_being_build`)
 });
 
 // '/blog/settings'
@@ -523,7 +525,7 @@ app.post('/blog/api/get_user', checkAuthMiddleware, async (req, res) => {
         var data = {}
 
         // run the SQL queries
-        // first one is for user_id
+        // the first one is for user_id and joined_at
         var query = `SELECT id, joined_at FROM "user" WHERE username = \$1;`
         var result = await pool.query(query, [username]);
 
@@ -558,7 +560,7 @@ app.post('/blog/api/get_user', checkAuthMiddleware, async (req, res) => {
 
         data.image = image
 
-        // the third one for user's bio
+        // the third one for user's bio and links
         var query = `SELECT text_value, links FROM "bio" WHERE user_id = \$1;`
         var result = await pool.query(query, [user_id]);
 
@@ -596,15 +598,55 @@ app.post('/blog/api/get_user', checkAuthMiddleware, async (req, res) => {
 });
 
 // retrieve stuff about user (this endpoint is being used by settings (it's not requesting useless stuff such as categories like get_user endpoint))
-app.post('/blog/api/get_user_settings', async (req, res) => {
+app.post('/blog/api/get_user_settings', authMiddleware, async (req, res) => {
     try {
-        // Retrieve data from the request body
-        const username = req.body[0];
+        // initialize the object that we will later return (it will contain all of the data)
+        var data = {}
+
+        username = req.auth.username
+        data.username = username
+
+        // run the SQL queries
+        // the first one is for user_id
+        var query = `SELECT id FROM "user" WHERE username = \$1;`
+        var result = await pool.query(query, [username]);
+
+        const user_id = result.rows[0].id
+        data.user_id = user_id;
+
+        // the second one for user's profile picture
+        var query = `SELECT "default" FROM "profile_picture" WHERE user_id = \$1;`
+        var result = await pool.query(query, [user_id]);
+
+        const default_setting = result.rows[0].default
+
+        var image = ""
+
+        if(default_setting == "true") {
+            var image = "/icons/pages/blog/pfp_placeholder.png"
+        } else {
+            // if user has a custom profile picture, get it's name
+            var query = `SELECT id FROM "profile_picture" WHERE user_id = \$1;`
+            var result = await pool.query(query, [user_id]);
+
+            var name =  result.rows[0].id
+
+            var image = `/images/blog/${name}.png`
+        }
+
+        data.image = image
+
+        // the third one for user's bio and links
+        var query = `SELECT text_value, links FROM "bio" WHERE user_id = \$1;`
+        var result = await pool.query(query, [user_id]);
+
+        const bio_and_links = result.rows[0]
+        data.bio_and_links = bio_and_links;
 
         res.status(200).send(data)
     } catch (error) {
         res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Check console for more Details. Sorry.');
-        consoleInfo(`${req.ClientIP} got a 500 error (while communicating with the back-end). Error: ${error}.`)
+        consoleInfo(`${req.ClientIP} got a 500 error (while communicating with the back-end). Error: ${error}. Route: "/blog/api/get_user_settings"`)
     }
 });
 
@@ -717,6 +759,62 @@ app.post('/blog/api/create_post', authMiddleware, async (req, res) => {
             await pool.query(command, [category_id, text_value, created_at, index_in_category])
 
             res.status(200).send("Success!")
+        }
+    } catch (error) {
+        res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Sorry.');
+        consoleInfo(`${req.ClientIP} got a 500 error (while communicating with the back-end). Error: ${error}.`)
+    }
+});
+
+// change profile picture
+app.post('/blog/api/change_pfp', authMiddleware, async (req, res) => {
+    try {
+        // Retrieve data from the request body
+        const { user_id, image } = req.body;
+
+        return 0
+    } catch (error) {
+        res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Sorry.');
+        consoleInfo(`${req.ClientIP} got a 500 error (while communicating with the back-end). Error: ${error}.`)
+    }
+});
+
+// change username
+app.post('/blog/api/change_username', authMiddleware, async (req, res) => {
+    try {
+        // woah, this is going to be hard
+
+        // Retrieve data from the request body
+        const { user_id, image } = req.body;
+
+        return 0
+    } catch (error) {
+        res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Sorry.');
+        consoleInfo(`${req.ClientIP} got a 500 error (while communicating with the back-end). Error: ${error}.`)
+    }
+});
+
+// change bio
+app.post('/blog/api/change_bio', authMiddleware, async (req, res) => {
+    try {
+        // Retrieve data from the request body
+        const { user_id, text_value } = req.body;
+
+        // 1. verify the user
+        // (by checking that req.auth.username == user id's username)
+
+        // get the username
+        var query = `SELECT username FROM "user" WHERE id = \$1;`
+        var result = await pool.query(query, [user_id]);
+
+        if(req.auth.username == result.rows[0].username) {
+            // 2. write to the database
+            var command = `UPDATE "bio" SET text_value = \$1 WHERE user_id = \$2`
+            await pool.query(command, [text_value, user_id]);
+
+            res.status(200).send("Success!")
+        } else {
+            res.status(403).send("Access denied!")
         }
     } catch (error) {
         res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Sorry.');
