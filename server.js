@@ -624,9 +624,9 @@ app.post('/blog/api/get_posts', async (req, res) => {
         console.log(higher)
         console.log("delete us later")
 
-        var query = `SELECT * FROM "post" WHERE category_id = \$1 AND index_in_category BETWEEN ${lower} AND ${higher} ORDER BY id DESC LIMIT ${number_of_posts_to_get};`
+        var query = `SELECT * FROM "post" WHERE category_id = \$1 AND index_in_category BETWEEN ${lower} AND ${higher} LIMIT ${number_of_posts_to_get};`
         // get <number_of_posts_to_get> posts from a certain category where index_in_category
-        // is between <lower> and <higher> while also returning them in the newest order ;D
+        // is between <lower> and <higher>
         var result = await pool.query(query, [category_id]);
 
         res.status(200).send(result.rows)

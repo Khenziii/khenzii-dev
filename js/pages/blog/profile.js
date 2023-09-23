@@ -17,6 +17,8 @@ const postInput = document.getElementById("post_input");
 var first_time = {}
 var how_much_times = {}
 
+var highest_id = -1
+
 function removeShowMoreButtonHTML(category_id) {
     const button_element = document.getElementById(`show_more_posts_button_${category_id}`)
 
@@ -264,7 +266,18 @@ function createHTMLPost(text_value, created_at, id, category_id) {
      </div>
     `
 
-    return posts_element.insertAdjacentHTML('beforeend', post)
+    console.log(highest_id)
+    console.log(id)
+    console.log("before if")
+    if(id > highest_id) {
+        highest_id = id
+
+        console.log(`putting to the top: ${text_value}`)
+
+        return posts_element.insertAdjacentHTML('afterbegin', post)
+    } else {
+        return posts_element.insertAdjacentHTML('beforeend', post)
+    }
 }
 
 
