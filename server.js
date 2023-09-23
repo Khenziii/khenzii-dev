@@ -612,7 +612,10 @@ app.post('/blog/api/get_user_settings', async (req, res) => {
 app.post('/blog/api/get_posts', async (req, res) => {
     try {
         // Retrieve data from the request body
-        const category_id = req.body[0];
+        const { category_id } = req.body;
+
+        var query = `SELECT * FROM "post" WHERE category_id = \$1 ORDER BY id DESC LIMIT 5;`
+        var result = await pool.query(query, [category_id]);
 
         res.status(200).send(result.rows)
     } catch (error) {
@@ -668,11 +671,9 @@ app.post('/blog/api/create_post', authMiddleware, async (req, res) => {
         var query = `SELECT user_id FROM "category" WHERE id = \$1;`
         var result = await pool.query(query, [category_id]);
 
+        // get the username using user_id
         var query = `SELECT username FROM "user" WHERE id = \$1;`
         var result = await pool.query(query, [result.rows[0].user_id]);
-
-        console.log("delete us later!")
-        console.log(result.rows[0].username)
 
         if(req.auth.username == result.rows[0].username) {
             // 2. check if over character limit
@@ -725,6 +726,6 @@ app.use(function (error, req, res, next) {
 
 
 app.listen(port, () => {
-    console.log(`[i] logs are using the UTC+${hours_off} timezone, you can change this setting by modifying the hours_off variable inside of server.js.`)
+    console.log(`[i] using the UTC+${hours_off} timezone, you can change this setting by modifying the hours_off variable inside of server.js.`)
     console.log(`[i] server waiting for nginx redirects here: http://localhost:${port} 🫡`);
 });

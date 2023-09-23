@@ -13,6 +13,53 @@ const createPostPopout = document.getElementById("create_post");
 const closeCreatePostPopout = document.getElementById("create_post_close");
 const postInput = document.getElementById("post_input");
 
+const first_time = {}
+const how_much_times = {}
+
+function removeShowMoreButton(category_id) {
+    console.log("write me later!! // removeShowMoreButton")
+}
+
+function createShowMoreButton(category_id) {
+    console.log("write me later!! // createShowMoreButton")
+}
+
+async function getPosts(category_id, clicked_button) {
+    if(first_time[category_id] == false && !clicked_button) {
+        console.log("got already, not getting!")
+        return
+    }
+
+    first_time[category_id] = false
+    console.log(first_time)
+    console.log("first time ^")
+
+    const data = {
+        category_id: category_id
+    };
+
+    const response = await fetch('/blog/api/get_posts', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    });
+    
+    var posts = await response.json();
+    console.log(posts)
+
+    removeShowMoreButton(category_id)
+
+    for(let i = 0; i < posts.length; i++) {
+        console.log(posts[i].text_value)
+        console.log(posts[i].created_at)
+
+        createHTMLPost(posts[i].text_value, posts[i].created_at, posts[i].id, category_id)
+    }
+
+    createShowMoreButton()
+}
 
 function categoryCreateInfo(text) {
     const info_text = `
@@ -55,9 +102,6 @@ async function createCategory() {
 
 async function createPost() {
     const postTextContentValue = postInput.value
-
-    console.log("delete me later!")
-    console.log(createPostPopout.style.data_category_id)
 
     const data = {
         category_id: createPostPopout.style.data_category_id,
@@ -131,7 +175,7 @@ function createHTMLCategory(title, description, id, empty, logged_in) {
             var category = `
             <li class="category">
                 <details>
-                    <summary class="category_title">
+                    <summary class="category_title" onclick="getPosts(${id}, false)">
                         ${title}
                     </summary>
 
@@ -157,7 +201,7 @@ function createHTMLCategory(title, description, id, empty, logged_in) {
             var category = `
             <li class="category">
                 <details>
-                    <summary class="category_title">
+                    <summary class="category_title" onclick="getPosts(${id}, false)">
                         ${title}
                     </summary>
 
@@ -179,7 +223,7 @@ function createHTMLCategory(title, description, id, empty, logged_in) {
     return categories_element.insertAdjacentHTML('beforeend', category);
 }
 
-function createHTMLPost(text_value, category_id) {
+function createHTMLPost(text_value, created_at, id, category_id) {
     const posts_element = document.getElementById(`${category_id}_posts`);
     const post = `
     <div class="post">
@@ -256,10 +300,6 @@ getValuesFromServer(username).then(data => {
         createHTMLCategory("", "", "", true, data.logged_in)
     } else {
         for(let i = 0; i < data.categories.length; i++) { // loop through all of the categories
-            console.log(data.categories[i].title)
-            console.log(data.categories[i].description)
-            console.log(data.categories[i].id)
-
             createHTMLCategory(data.categories[i].title, data.categories[i].description, data.categories[i].id, false, data.logged_in)
         }
     }
