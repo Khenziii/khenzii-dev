@@ -197,6 +197,18 @@ ima implement links later
     gap: 1vh;
 }
 
+/*
+.category {
+    
+}
+*/
+
+/*
+.category_details {
+    
+}
+*/
+
 .info_text {
     color: var(--text);
 
@@ -252,6 +264,45 @@ ima implement links later
 
 }
 */
+
+.post_info {
+    width: 100%;
+
+    display: flex;
+    flex-direction: row;
+}
+
+.post_created_at {
+    flex: 1;
+
+    text-align: left;
+
+    color: var(--text);
+
+    font-size: 1vh;
+    font-family: Montserrat;
+    font-weight: 500;
+
+    max-width: 10vw;
+    height: auto;
+    word-wrap: break-word;
+}
+
+.post_id {
+    flex: 1;
+
+    text-align: right;
+
+    color: var(--text);
+
+    font-size: 1vh;
+    font-family: Montserrat;
+    font-weight: 500;
+
+    max-width: 10vw;
+    height: auto;
+    word-wrap: break-word;
+}
 
 .post_text {
     color: var(--text);
@@ -464,6 +515,10 @@ ima implement links later
 
     height: 5vh;
     width: auto;
+
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .post_create_button_image {
@@ -478,4 +533,10 @@ ima implement links later
 .post_create_button_image:hover {
     background-color: var(--secondary);
     border-radius: 2vh;
+}
+
+.show_more_posts_button {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
 }

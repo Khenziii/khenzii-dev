@@ -17,8 +17,8 @@ const app = express();
 const port = 3000;
 
 const trusted_usernames = ["Khenzii"]
-
 const hours_off = 2
+const number_of_posts_to_get = 5
 
 function addZero(value) { // adds zero to the start of values if possible (eg. input: 7 output: 07)
     return value.toString().padStart(2, '0');
@@ -612,9 +612,21 @@ app.post('/blog/api/get_user_settings', async (req, res) => {
 app.post('/blog/api/get_posts', async (req, res) => {
     try {
         // Retrieve data from the request body
-        const { category_id } = req.body;
+        const { category_id, times } = req.body;
 
-        var query = `SELECT * FROM "post" WHERE category_id = \$1 ORDER BY id DESC LIMIT 5;`
+        // the times variables tells us how much times the user has already clicked the "show more" button
+        // we need it to return appropiate rows
+
+        const lower = number_of_posts_to_get * (times - 1) + 1
+        const higher = number_of_posts_to_get * times
+
+        console.log(lower)
+        console.log(higher)
+        console.log("delete us later")
+
+        var query = `SELECT * FROM "post" WHERE category_id = \$1 AND index_in_category BETWEEN ${lower} AND ${higher} ORDER BY id DESC LIMIT ${number_of_posts_to_get};`
+        // get <number_of_posts_to_get> posts from a certain category where index_in_category
+        // is between <lower> and <higher> while also returning them in the newest order ;D
         var result = await pool.query(query, [category_id]);
 
         res.status(200).send(result.rows)
@@ -683,13 +695,21 @@ app.post('/blog/api/create_post', authMiddleware, async (req, res) => {
                 return
             } 
 
-            // 4. get the current date and create created_at using it
+            // 4. get aditional variables
+            // get the current date and create created_at using it
             var localDate = getDate(hours_off)
             var created_at = `${localDate.localDay}/${localDate.localMonth}/${localDate.localYear} - ${localDate.localHours}:${localDate.localMinutes}:${localDate.localSeconds}`
+            
+            // get the amount of posts in a category
+            var query = `SELECT id FROM "post" WHERE category_id = \$1;`
+            var result = await pool.query(query, [category_id]);
+
+            var index_in_category = result.rowCount + 1
+            console.log(index_in_category)
 
             // 5. write to the db
-            var command = `INSERT INTO "post" (category_id, text_value, created_at) VALUES (\$1, \$2, \$3);`
-            await pool.query(command, [category_id, text_value, created_at])
+            var command = `INSERT INTO "post" (category_id, text_value, created_at, index_in_category) VALUES (\$1, \$2, \$3, \$4);`
+            await pool.query(command, [category_id, text_value, created_at, index_in_category])
 
             res.status(200).send("Success!")
         }
@@ -726,6 +746,11 @@ app.use(function (error, req, res, next) {
 
 
 app.listen(port, () => {
-    console.log(`[i] using the UTC+${hours_off} timezone, you can change this setting by modifying the hours_off variable inside of server.js.`)
+    console.log(`[i] current settings:`)
+    console.log(`[i] 1. using the UTC+${hours_off} timezone, you can change this setting by modifying the hours_off variable inside of server.js.`)
+    console.log(`[i] 2. trusted_usernames: ${trusted_usernames} (this usernames can post long posts and use HTML on /blog), you can change this setting by modifying the trusted_usernames variable inside of server.js.`)
+    console.log(`[i] 3. number_of_posts_to_get: ${number_of_posts_to_get} (this setting makes the /blog/api/get_posts endpoint return ${number_of_posts_to_get} posts), you can change this setting by modifying the number_of_posts_to_get variable inside of server.js.`)
+    console.log(`[i] end of settings! \n`)
+
     console.log(`[i] server waiting for nginx redirects here: http://localhost:${port} 🫡`);
 });

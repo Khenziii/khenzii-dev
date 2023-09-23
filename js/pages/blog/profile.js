@@ -13,15 +13,27 @@ const createPostPopout = document.getElementById("create_post");
 const closeCreatePostPopout = document.getElementById("create_post_close");
 const postInput = document.getElementById("post_input");
 
-const first_time = {}
-const how_much_times = {}
 
-function removeShowMoreButton(category_id) {
-    console.log("write me later!! // removeShowMoreButton")
+var first_time = {}
+var how_much_times = {}
+
+function removeShowMoreButtonHTML(category_id) {
+    const button_element = document.getElementById(`show_more_posts_button_${category_id}`)
+
+    if(button_element != null) {
+        button_element.remove(); // delete the element
+    }
 }
 
-function createShowMoreButton(category_id) {
-    console.log("write me later!! // createShowMoreButton")
+function createShowMoreButtonHTML(category_id) {
+    const posts_list_element = document.getElementById(`${category_id}_posts`);
+    const button = `
+    <button class="show_more_posts_button" id="show_more_posts_button_${category_id}" onclick="getPosts(${category_id}, true)">
+        fetch more posts!
+    </button>
+    `
+
+    return posts_list_element.insertAdjacentHTML('beforeend', button)
 }
 
 async function getPosts(category_id, clicked_button) {
@@ -34,8 +46,16 @@ async function getPosts(category_id, clicked_button) {
     console.log(first_time)
     console.log("first time ^")
 
+    if(how_much_times[category_id] == null) {
+        console.log("empty!")
+        how_much_times[category_id] = 1
+    }
+
+    console.log(how_much_times[category_id])
+
     const data = {
-        category_id: category_id
+        category_id: category_id,
+        times: how_much_times[category_id] // more info in server.js on line 617
     };
 
     const response = await fetch('/blog/api/get_posts', {
@@ -47,9 +67,10 @@ async function getPosts(category_id, clicked_button) {
     });
     
     var posts = await response.json();
+    how_much_times[category_id]++;
     console.log(posts)
 
-    removeShowMoreButton(category_id)
+    removeShowMoreButtonHTML(category_id)
 
     for(let i = 0; i < posts.length; i++) {
         console.log(posts[i].text_value)
@@ -58,7 +79,7 @@ async function getPosts(category_id, clicked_button) {
         createHTMLPost(posts[i].text_value, posts[i].created_at, posts[i].id, category_id)
     }
 
-    createShowMoreButton()
+    createShowMoreButtonHTML(category_id)
 }
 
 function categoryCreateInfo(text) {
@@ -174,7 +195,7 @@ function createHTMLCategory(title, description, id, empty, logged_in) {
         if(logged_in) {
             var category = `
             <li class="category">
-                <details>
+                <details class="category_details">
                     <summary class="category_title" onclick="getPosts(${id}, false)">
                         ${title}
                     </summary>
@@ -183,11 +204,9 @@ function createHTMLCategory(title, description, id, empty, logged_in) {
                         ${description}
                     </p>
 
-                    <center>
-                        <button class="post_create_button" id="post_create_button" onclick="showCreatePostPopout(${id})">
-                            <img src="../../../icons/pages/blog/create.png" alt="create button" class="post_create_button_image">
-                        </button>
-                    </center>
+                    <button class="post_create_button" id="post_create_button" onclick="showCreatePostPopout(${id})">
+                        <img src="../../../icons/pages/blog/create.png" alt="create button" class="post_create_button_image">
+                    </button>
 
                     <hr class="post_line">
 
@@ -200,7 +219,7 @@ function createHTMLCategory(title, description, id, empty, logged_in) {
         } else {
             var category = `
             <li class="category">
-                <details>
+                <details class="category_details">
                     <summary class="category_title" onclick="getPosts(${id}, false)">
                         ${title}
                     </summary>
@@ -227,9 +246,21 @@ function createHTMLPost(text_value, created_at, id, category_id) {
     const posts_element = document.getElementById(`${category_id}_posts`);
     const post = `
     <div class="post">
+        <div class="post_info">
+            <p class="post_created_at">
+                ${created_at}
+            </p>
+
+            <p class="post_id">
+                post id: ${id}
+            </p>
+        </div>
+
         <p class="post_text">
             ${text_value}
         </p>
+
+        <hr class="post_line">
      </div>
     `
 
