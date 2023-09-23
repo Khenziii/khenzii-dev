@@ -617,16 +617,24 @@ app.post('/blog/api/get_posts', async (req, res) => {
         // the times variables tells us how much times the user has already clicked the "show more" button
         // we need it to return appropiate rows
 
-        const lower = number_of_posts_to_get * (times - 1) + 1
-        const higher = number_of_posts_to_get * times
+        // firstly lets get the total amount of posts in a category
+        var query = `SELECT * FROM "post" WHERE category_id = \$1;`
+        var result = await pool.query(query, [category_id]);
+
+        const posts_in_the_category = result.rowCount; // eg 12
+
+        // get the lower number
+        const lower = posts_in_the_category - number_of_posts_to_get * times // eg 7 (12 - 5 * 1)
+        // get the higher number
+        const higher = lower + number_of_posts_to_get // eg 12 (7 + 5)
 
         console.log(lower)
         console.log(higher)
         console.log("delete us later")
 
-        var query = `SELECT * FROM "post" WHERE category_id = \$1 AND index_in_category BETWEEN ${lower} AND ${higher} LIMIT ${number_of_posts_to_get};`
+        var query = `SELECT * FROM "post" WHERE category_id = \$1 AND index_in_category BETWEEN ${lower} AND ${higher} ORDER BY id DESC LIMIT ${number_of_posts_to_get};`
         // get <number_of_posts_to_get> posts from a certain category where index_in_category
-        // is between <lower> and <higher>
+        // is between <lower> and <higher> while also returning it in the by newest order :3
         var result = await pool.query(query, [category_id]);
 
         res.status(200).send(result.rows)

@@ -78,7 +78,7 @@ async function getPosts(category_id, clicked_button) {
         console.log(posts[i].text_value)
         console.log(posts[i].created_at)
 
-        createHTMLPost(posts[i].text_value, posts[i].created_at, posts[i].id, category_id)
+        createHTMLPost(posts[i].text_value, posts[i].created_at, posts[i].id, category_id, posts[i].index_in_category)
     }
 
     createShowMoreButtonHTML(category_id)
@@ -244,10 +244,14 @@ function createHTMLCategory(title, description, id, empty, logged_in) {
     return categories_element.insertAdjacentHTML('beforeend', category);
 }
 
-function createHTMLPost(text_value, created_at, id, category_id) {
+function createHTMLPost(text_value, created_at, id, category_id, index_in_category) {
     const posts_element = document.getElementById(`${category_id}_posts`);
     const post = `
     <div class="post">
+        <p class="post_index_in_category">
+            post index in category: ${index_in_category}
+        </p>
+
         <div class="post_info">
             <p class="post_created_at">
                 ${created_at}
