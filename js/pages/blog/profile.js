@@ -67,8 +67,11 @@ async function getPosts(category_id, clicked_button) {
         },
         body: JSON.stringify(data)
     });
-    
-    var posts = await response.json();
+
+    const response_json = await response.json()
+
+    var posts = response_json["rows"];
+    var number_of_posts_to_get = response_json["number_of_posts_to_get"];
     how_much_times[category_id]++;
     console.log(posts)
 
@@ -81,7 +84,9 @@ async function getPosts(category_id, clicked_button) {
         createHTMLPost(posts[i].text_value, posts[i].created_at, posts[i].id, category_id, posts[i].index_in_category)
     }
 
-    createShowMoreButtonHTML(category_id)
+    if(posts.length == number_of_posts_to_get) {
+        createShowMoreButtonHTML(category_id)
+    }
 }
 
 function categoryCreateInfo(text) {

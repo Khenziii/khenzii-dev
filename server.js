@@ -637,7 +637,11 @@ app.post('/blog/api/get_posts', async (req, res) => {
         // is between <lower> and <higher> while also returning it in the by newest order :3
         var result = await pool.query(query, [category_id]);
 
-        res.status(200).send(result.rows)
+        result.number_of_posts_to_get = number_of_posts_to_get
+
+        console.log(result)
+
+        res.status(200).send(result)
     } catch (error) {
         res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Check console for more Details. Sorry.');
         consoleInfo(`${req.ClientIP} got a 500 error (while communicating with the back-end). Error: ${error}.`)
