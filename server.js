@@ -19,6 +19,9 @@ const port = 3000;
 const trusted_usernames = ["Khenzii"]
 const hours_off = 2
 const number_of_posts_to_get = 5
+const legal_chars = ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'z', 'x', 'c', 'v', 'b', 'n', 'm',
+    'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Z', 'X', 'C', 'V', 'B', 'N', 'M',
+    '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '@', '.', '-', '_']
 
 function addZero(value) { // adds zero to the start of values if possible (eg. input: 7 output: 07)
     return value.toString().padStart(2, '0');
@@ -89,12 +92,31 @@ const pool = new Pool({
     port: 5432, // Default PostgreSQL port
 });
 
+const isRevokedCallback = async (req, payload, done) => {
+    try {
+        const token = req.cookies && req.cookies.jwt_access_cookie; // get the token from cookie
+        var query = `SELECT * FROM "blacklisted_token" WHERE token = \$1;`
+        var result = await pool.query(query, [token]); // query the database
+
+        if (result.rowCount > 0) {
+            consoleInfo(`${req.ClientIP} tried to use a revoked token!!`)
+            return true
+        } else {
+            return false
+        }
+    } catch (error) {
+        consoleInfo(`something went wrong while checking if token is blacklisted, here is the error: ${error}`)
+        return false
+    }
+};
+
 app.use(cookieParser());
 const jwt_password = process.env.jwt_password;
 // use this middleware for routes that REQUIRE verifictation
 const authMiddleware = expressJwt({
     secret: jwt_password,
     algorithms: ['HS256'],
+    isRevoked: isRevokedCallback,
     getToken: function (req) {
         const token = req.cookies && req.cookies.jwt_access_cookie;
         return token || null;
@@ -102,11 +124,20 @@ const authMiddleware = expressJwt({
 });
 
 // use this middleware for routes that check if user is verified
-const checkAuthMiddleware = (req, res, next) => {
+const checkAuthMiddleware = async (req, res, next) => {
     try {
         const token = req.cookies && req.cookies.jwt_access_cookie;
 
+        // check if there is no token
         if (!token) {
+            req.isAuthenticated = false;
+            next();
+            return;
+        }
+
+        // Check if token is revoked (we can't be sure that client-side has deleted the cookie after changing username)
+        const isRevoked = await isRevokedCallback(req, jwt.decode(token));
+        if (isRevoked) {
             req.isAuthenticated = false;
             next();
             return;
@@ -339,7 +370,7 @@ app.get('/blog/settings', authMiddleware, (req, res) => {
 
 // '/blog/login' route
 app.get('/blog/login', checkAuthMiddleware, (req, res) => {
-    if(req.isAuthenticated) {
+    if (req.isAuthenticated) {
         res.redirect(`/blog/user/${req.auth.username}`)
         consoleInfo(`${req.ClientIP} tried to access the login page while being logged in, username: ${req.auth.username}`)
         return
@@ -351,7 +382,7 @@ app.get('/blog/login', checkAuthMiddleware, (req, res) => {
 
 // '/blog/register' route
 app.get('/blog/register', checkAuthMiddleware, (req, res) => {
-    if(req.isAuthenticated) {
+    if (req.isAuthenticated) {
         res.redirect(`/blog/user/${req.auth.username}`)
         consoleInfo(`${req.ClientIP} tried to access the register page while being logged in, username: ${req.auth.username}`)
         return
@@ -416,7 +447,7 @@ app.post('/blog/api/login', async (req, res) => {
         const token = jwt.sign({ username }, jwt_password, { expiresIn: '7d' });
 
         // Send the token back to the client
-        res.cookie('jwt_access_cookie', token, { httpOnly: true, maxAge: 1000 * 60 * 60 * 24 * 7, secure: true, sameSite: "strict" }); // 7 days expiration
+        res.cookie('jwt_access_cookie', token, { httpOnly: false, maxAge: 1000 * 60 * 60 * 24 * 7, secure: true, sameSite: "Strict" }); // 7 days expiration
         res.status(200).send(`Successfully logged in! Checkout your page <a href="/blog/user/${username}">here</a> :D`);
     } else {
         consoleInfo(`${req.ClientIP} has failed to authenticate (tried to as "${username}").`)
@@ -428,10 +459,6 @@ app.post('/blog/api/login', async (req, res) => {
 app.post('/blog/api/register', async (req, res) => {
     // Retrieve data from the request body
     const { username, email, password } = req.body;
-
-    const legal_chars = ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'z', 'x', 'c', 'v', 'b', 'n', 'm',
-        'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Z', 'X', 'C', 'V', 'B', 'N', 'M',
-        '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '@', '.', '-', '_']
 
     const containsIllegalUsername = checkIfStringContainsIllegalChar(username, legal_chars);
     const containsIllegalEmail = checkIfStringContainsIllegalChar(email, legal_chars);
@@ -491,7 +518,7 @@ app.post('/blog/api/register', async (req, res) => {
     }
 
 
-    if (valid == false) {
+    if (!valid) {
         res.status(200).send(reason)
         return
     }
@@ -505,7 +532,7 @@ app.post('/blog/api/register', async (req, res) => {
         // Generate a JWT token
         const token = jwt.sign({ username }, jwt_password, { expiresIn: '7d' });
         // Send the token back to the client
-        res.cookie('jwt_access_cookie', token, { httpOnly: true, maxAge: 1000 * 60 * 60 * 24 * 7, secure: true, sameSite: "strict" }); // 7 days expiration
+        res.cookie('jwt_access_cookie', token, { httpOnly: false, maxAge: 1000 * 60 * 60 * 24 * 7, secure: true, sameSite: "Strict" }); // 7 days expiration
 
         consoleInfo(`registered a new account with username: ${username}`)
         res.status(200).send(`your account should be ready <a href="/blog/user/${username}">here</a> (in a moment :>)`)
@@ -546,14 +573,14 @@ app.post('/blog/api/get_user', checkAuthMiddleware, async (req, res) => {
 
         var image = ""
 
-        if(default_setting == "true") {
+        if (default_setting == "true") {
             var image = "/icons/pages/blog/pfp_placeholder.png"
         } else {
             // if user has a custom profile picture, get it's name
             var query = `SELECT id FROM "profile_picture" WHERE user_id = \$1;`
             var result = await pool.query(query, [user_id]);
 
-            var name =  result.rows[0].id
+            var name = result.rows[0].id
 
             var image = `/images/blog/${name}.png`
         }
@@ -622,14 +649,14 @@ app.post('/blog/api/get_user_settings', authMiddleware, async (req, res) => {
 
         var image = ""
 
-        if(default_setting == "true") {
+        if (default_setting == "true") {
             var image = "/icons/pages/blog/pfp_placeholder.png"
         } else {
             // if user has a custom profile picture, get it's name
             var query = `SELECT id FROM "profile_picture" WHERE user_id = \$1;`
             var result = await pool.query(query, [user_id]);
 
-            var name =  result.rows[0].id
+            var name = result.rows[0].id
 
             var image = `/images/blog/${name}.png`
         }
@@ -694,14 +721,14 @@ app.post('/blog/api/create_category', authMiddleware, async (req, res) => {
         var query = `SELECT username FROM "user" WHERE id = \$1;`
         var result = await pool.query(query, [user_id]);
 
-        if(req.auth.username == result.rows[0].username) {
+        if (req.auth.username == result.rows[0].username) {
             // 2. check if over character limit
-            if(categoryTitle.length > 30 && !trusted_usernames.includes(req.auth.username)) {
+            if (categoryTitle.length > 30 && !trusted_usernames.includes(req.auth.username)) {
                 res.status(400).send(`The category title can't be longer than 30 characters. Sorry.`);
                 consoleInfo(`${req.ClientIP} aka ${req.auth.username} tried to create a category that had a title longer than 30 characters.`)
                 return
-            } 
-            
+            }
+
             if (categoryDescription.length > 200 && !trusted_usernames.includes(req.auth.username)) {
                 res.status(400).send(`The category description can't be longer than 200 characters. Sorry.`);
                 consoleInfo(`${req.ClientIP} aka ${req.auth.username} tried to create a category that had a description longer than 200 characters.`)
@@ -735,19 +762,19 @@ app.post('/blog/api/create_post', authMiddleware, async (req, res) => {
         var query = `SELECT username FROM "user" WHERE id = \$1;`
         var result = await pool.query(query, [result.rows[0].user_id]);
 
-        if(req.auth.username == result.rows[0].username) {
+        if (req.auth.username == result.rows[0].username) {
             // 2. check if over character limit
-            if(text_value.length > 1000 && !trusted_usernames.includes(req.auth.username)) {
+            if (text_value.length > 1000 && !trusted_usernames.includes(req.auth.username)) {
                 res.status(400).send(`The post content can't be longer than 1000 characters. Sorry.`);
                 consoleInfo(`${req.ClientIP} aka ${req.auth.username} tried to create a post that was longer than 1000 chars.`)
                 return
-            } 
+            }
 
             // 4. get aditional variables
             // get the current date and create created_at using it
             var localDate = getDate(hours_off)
             var created_at = `${localDate.localDay}/${localDate.localMonth}/${localDate.localYear} - ${localDate.localHours}:${localDate.localMinutes}:${localDate.localSeconds}`
-            
+
             // get the amount of posts in a category
             var query = `SELECT id FROM "post" WHERE category_id = \$1;`
             var result = await pool.query(query, [category_id]);
@@ -782,12 +809,62 @@ app.post('/blog/api/change_pfp', authMiddleware, async (req, res) => {
 // change username
 app.post('/blog/api/change_username', authMiddleware, async (req, res) => {
     try {
-        // woah, this is going to be hard
-
         // Retrieve data from the request body
-        const { user_id, image } = req.body;
+        const { user_id, text_value } = req.body;
 
-        return 0
+        // 1. check if the  user is authenticated
+        // get the username using user_id
+        var query = `SELECT username FROM "user" WHERE id = \$1;`
+        var result = await pool.query(query, [user_id]);
+
+        if (req.auth.username == result.rows[0].username) {
+            // 2. check if the username is okay :thumbsup:
+            const usernameAlreadyRegistered = await checkIfUsernameTaken(text_value)
+            const containsIllegalUsername = checkIfStringContainsIllegalChar(text_value, legal_chars);
+
+            var valid = true
+            var reason = ""
+
+            if (text_value.length > 20) {
+                var valid = false
+                var reason = "the username can't be longer than 20 chars :/"
+                consoleInfo(`${req.ClientIP} tried to change username to a username that was longer than 20 chars`)
+            } else if (text_value.length < 4) {
+                var valid = false
+                var reason = "the username can't be shorter than 4 chars :P"
+                consoleInfo(`${req.ClientIP} tried to change username to a shorter one than 4 chars`)
+            } else if (containsIllegalUsername) {
+                var valid = false
+                var reason = 'the username contains some banned char/s (if you want me to add char/s, <a href="/">contact me</a>)'
+                consoleInfo(`${req.ClientIP} tried to change username to a username that contained a char/chars not in legal_chars`)
+            } else if (usernameAlreadyRegistered) {
+                var valid = false
+                var reason = 'the username is already taken ;/'
+                consoleInfo(`${req.ClientIP} tried to change username to a username that already exists`)
+            }
+
+            if (!valid) {
+                res.status(200).send(reason)
+                return
+            }
+
+            // 3. change the username in the database
+            console.log(text_value)
+            console.log(user_id)
+            var command = `UPDATE "user" SET username = \$1 WHERE id = \$2`
+            await pool.query(command, [text_value, user_id]);
+
+            // 4. send the client a new auth token
+            // Generate a JWT token
+            const token = jwt.sign({ username }, jwt_password, { expiresIn: '7d' });
+            // Send the token back to the client
+            res.cookie('jwt_access_cookie', token, { httpOnly: false, maxAge: 1000 * 60 * 60 * 24 * 7, secure: true, sameSite: "Strict" }); // 7 days expiration
+
+            // 5. add the old token to the blacklist
+            var command = `INSERT INTO "blacklisted_token" (user_id, token) VALUES (\$1, \$2);`
+            await pool.query(command, [user_id, req.cookies.jwt_access_cookie]);
+            res.status(200).send("Success!")
+        }
     } catch (error) {
         res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Sorry.');
         consoleInfo(`${req.ClientIP} got a 500 error (while communicating with the back-end). Error: ${error}.`)
@@ -807,7 +884,7 @@ app.post('/blog/api/change_bio', authMiddleware, async (req, res) => {
         var query = `SELECT username FROM "user" WHERE id = \$1;`
         var result = await pool.query(query, [user_id]);
 
-        if(req.auth.username == result.rows[0].username) {
+        if (req.auth.username == result.rows[0].username) {
             // 2. write to the database
             var command = `UPDATE "bio" SET text_value = \$1 WHERE user_id = \$2`
             await pool.query(command, [text_value, user_id]);
