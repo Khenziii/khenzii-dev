@@ -112,6 +112,18 @@ async function changePfp() {
 }
 
 async function changeUsername() {
+    // change the name of the old cookie (to "<name>_old")
+    // Get the value of the old cookie
+    let oldCookieValue = document.cookie.split('; ').find(row => row.startsWith('jwt_access_cookie='))?.split('=')[1];
+
+    // set a new cookie with a old value
+    document.cookie = `jwt_access_cookie_old=${oldCookieValue}; expires=Thu, 01 Jan 2099 00:00:00 UTC; path=/`;
+
+    // Delete the old cookie
+    document.cookie = "jwt_access_cookie=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+    
+    console.log("renamed the cookie!")
+
     const editUsernameInputValue = usernameInput.value;
 
     const data = {
@@ -127,12 +139,12 @@ async function changeUsername() {
         body: JSON.stringify(data)
     });
     
-    var text = await response.text();
-
     // remove the old access token (don't even try getting rid of 
-    // this line, we're using a blacklist on the server side =))
-    document.cookie = "jwt_access_cookie=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    // this line, khenzii.dev is using a blacklist on the server side =))
+    document.cookie = "jwt_access_cookie_old=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     console.log("removed the cookie!")
+
+    var text = await response.text();
 
     HTMLusernameInfo(text)
 }

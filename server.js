@@ -94,7 +94,8 @@ const pool = new Pool({
 
 const isRevokedCallback = async (req, payload, done) => {
     try {
-        const token = req.cookies && req.cookies.jwt_access_cookie; // get the token from cookie
+        const token = (req.cookies && req.cookies.jwt_access_cookie) || req.cookies.jwt_access_cookie_old;
+        // get token from the old or new token
         var query = `SELECT * FROM "blacklisted_token" WHERE token = \$1;`
         var result = await pool.query(query, [token]); // query the database
 
@@ -118,7 +119,7 @@ const authMiddleware = expressJwt({
     algorithms: ['HS256'],
     isRevoked: isRevokedCallback,
     getToken: function (req) {
-        const token = req.cookies && req.cookies.jwt_access_cookie;
+        const token = (req.cookies && req.cookies.jwt_access_cookie) || req.cookies.jwt_access_cookie_old;
         return token || null;
     }
 });
@@ -126,7 +127,7 @@ const authMiddleware = expressJwt({
 // use this middleware for routes that check if user is verified
 const checkAuthMiddleware = async (req, res, next) => {
     try {
-        const token = req.cookies && req.cookies.jwt_access_cookie;
+        const token = (req.cookies && req.cookies.jwt_access_cookie) || req.cookies.jwt_access_cookie_old;
 
         // check if there is no token
         if (!token) {
@@ -849,20 +850,19 @@ app.post('/blog/api/change_username', authMiddleware, async (req, res) => {
             }
 
             // 3. change the username in the database
-            console.log(text_value)
-            console.log(user_id)
             var command = `UPDATE "user" SET username = \$1 WHERE id = \$2`
             await pool.query(command, [text_value, user_id]);
 
             // 4. send the client a new auth token
             // Generate a JWT token
-            const token = jwt.sign({ username }, jwt_password, { expiresIn: '7d' });
+            const token = jwt.sign({ text_value }, jwt_password, { expiresIn: '7d' });
+
             // Send the token back to the client
             res.cookie('jwt_access_cookie', token, { httpOnly: false, maxAge: 1000 * 60 * 60 * 24 * 7, secure: true, sameSite: "Strict" }); // 7 days expiration
 
             // 5. add the old token to the blacklist
             var command = `INSERT INTO "blacklisted_token" (user_id, token) VALUES (\$1, \$2);`
-            await pool.query(command, [user_id, req.cookies.jwt_access_cookie]);
+            await pool.query(command, [user_id, req.cookies.jwt_access_cookie_old]);
             res.status(200).send("Success!")
         }
     } catch (error) {
@@ -932,5 +932,5 @@ app.listen(port, () => {
     console.log(`[i] 3. number_of_posts_to_get: ${number_of_posts_to_get} (this setting makes the /blog/api/get_posts endpoint return ${number_of_posts_to_get} posts), you can change this setting by modifying the number_of_posts_to_get variable inside of server.js.`)
     console.log(`[i] end of settings! \n`)
 
-    console.log(`[i] server waiting for nginx redirects here: http://localhost:${port} 🫡`);
+    console.log(`[i] server waiting for nginx redirects here: http://localhost:${port} 🫡 \n \n \n`);
 });
