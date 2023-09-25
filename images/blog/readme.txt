@@ -1,0 +1,1 @@
+In this directory, custom user profile pictures are stored :)
