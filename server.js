@@ -445,7 +445,7 @@ app.post('/blog/api/login', async (req, res) => {
         consoleInfo(`${req.ClientIP} has successfully logged in! (as "${username}").`)
 
         // Generate a JWT token
-        const token = jwt.sign({ username }, jwt_password, { expiresIn: '7d' });
+        const token = jwt.sign({ username: username }, jwt_password, { expiresIn: '7d' });
 
         // Send the token back to the client
         res.cookie('jwt_access_cookie', token, { httpOnly: false, maxAge: 1000 * 60 * 60 * 24 * 7, secure: true, sameSite: "Strict" }); // 7 days expiration
@@ -531,7 +531,7 @@ app.post('/blog/api/register', async (req, res) => {
         await register_account(username, email, password)
 
         // Generate a JWT token
-        const token = jwt.sign({ username }, jwt_password, { expiresIn: '7d' });
+        const token = jwt.sign({ username: username }, jwt_password, { expiresIn: '7d' });
         // Send the token back to the client
         res.cookie('jwt_access_cookie', token, { httpOnly: false, maxAge: 1000 * 60 * 60 * 24 * 7, secure: true, sameSite: "Strict" }); // 7 days expiration
 
@@ -855,7 +855,7 @@ app.post('/blog/api/change_username', authMiddleware, async (req, res) => {
 
             // 4. send the client a new auth token
             // Generate a JWT token
-            const token = jwt.sign({ text_value }, jwt_password, { expiresIn: '7d' });
+            const token = jwt.sign({ username: text_value }, jwt_password, { expiresIn: '7d' });
 
             // Send the token back to the client
             res.cookie('jwt_access_cookie', token, { httpOnly: false, maxAge: 1000 * 60 * 60 * 24 * 7, secure: true, sameSite: "Strict" }); // 7 days expiration
