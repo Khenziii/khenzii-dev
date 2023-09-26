@@ -1,16 +1,18 @@
 const centered_container = document.getElementById("centered_container");
-const edit_pfp_popout = document.getElementById("edit_pfp")
-const edit_username_popout = document.getElementById("edit_username")
-const edit_bio_popout = document.getElementById("edit_bio")
+const edit_pfp_popout = document.getElementById("edit_pfp");
+const edit_username_popout = document.getElementById("edit_username");
+const edit_bio_popout = document.getElementById("edit_bio");
 const close_edit_pfp_popout = document.getElementById("edit_pfp_close");
 const close_edit_username_popout = document.getElementById("edit_username_close");
 const close_edit_bio_popout = document.getElementById("edit_bio_close");
 const pfp_image = document.getElementById("pfp");
 const username_paragraph = document.getElementById("username");
 const bio_paragraph = document.getElementById("bio");
-const shadowEffect = document.getElementById("shadowEffect")
-const usernameInput = document.getElementById("edit_username_input")
-const bioInput = document.getElementById("edit_bio_input")
+const shadowEffect = document.getElementById("shadowEffect");
+const usernameInput = document.getElementById("edit_username_input");
+const bioInput = document.getElementById("edit_bio_input");
+const edit_pfp_file_input = document.getElementById("edit_pfp_file_input");
+const edit_pfp_drop = document.getElementById("edit_pfp_drop");
 
 
 var user_id = ""
@@ -98,7 +100,7 @@ async function changePfp() {
         text_value: editBioInputValue
     };
 
-    const response = await fetch('/blog/api/create_category', {
+    const response = await fetch('/blog/api/change_pfp', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -194,6 +196,47 @@ close_edit_bio_popout.onclick = function () {
     edit_bio_popout.style.display = "none";
     shadowEffectEnd()
 }
+
+function changePreview(element) {
+    var file = element.files[0];
+    const image_HTML = `
+    <img class="pfp_preview" id="pfp_preview">
+    `
+
+    var image = document.getElementById("pfp_preview")
+    if(image != null) {
+        image.src = URL.createObjectURL(file);
+    } else {
+        edit_pfp_popout.insertAdjacentHTML('beforeend', image_HTML)
+        var image = document.getElementById("pfp_preview")
+        image.src = URL.createObjectURL(file);
+    }
+}
+
+edit_pfp_file_input.addEventListener('change', function() {
+    changePreview(edit_pfp_file_input)
+})
+
+function onDragEnter(e) {
+    e.stopPropagation();
+    e.preventDefault();
+}
+
+function onDragOver(e) {
+    e.stopPropagation();
+    e.preventDefault();
+}
+
+function onDrop(e) {
+    e.stopPropagation();
+    e.preventDefault();
+    edit_pfp_file_input.files = e.dataTransfer.files;
+    changePreview(edit_pfp_file_input)
+}
+
+edit_pfp_drop.addEventListener('dragenter', onDragEnter, false);
+edit_pfp_drop.addEventListener('dragover', onDragOver, false);
+edit_pfp_drop.addEventListener('drop', onDrop, false);
 
 getValuesFromServer().then(data => {
     console.log(data)

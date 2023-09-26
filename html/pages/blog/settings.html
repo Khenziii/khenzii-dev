@@ -19,11 +19,15 @@
             <span id="edit_pfp_close" class="edit_pfp_close">&times;</span>
 
             <p class="edit_pfp_text">
-                click the button and select a image :)
+                Select the image :)
             </p>
-            
-            <input type="file" id="edit_pfp_file_input" class="edit_pfp_file_input" accept=".png, .jpg, .jpeg, .jfif">
-            <input type="submit" value="Upload File">
+
+            <label for="edit_pfp_file_input" class="edit_pfp_drop" id="edit_pfp_drop">
+                <span>Drop the image here or click me!</span>
+                <input type="file" id="edit_pfp_file_input" class="edit_pfp_file_input" accept="image/*">
+            </label>
+
+            <input type="submit" value="lookin' fresh" class="pfp_change_button" onclick="changePfp()">
         </div>
 
         <div id="edit_username" class="edit_username">

@@ -800,6 +800,12 @@ app.post('/blog/api/change_pfp', authMiddleware, async (req, res) => {
         // Retrieve data from the request body
         const { user_id, image } = req.body;
 
+        // 1. verify the user
+
+        // 2. write to the db (deafult "false", user_id "<what_ever_user_id>")
+
+        // 3. save the image with appropiate filename
+
         return 0
     } catch (error) {
         res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Sorry.');
