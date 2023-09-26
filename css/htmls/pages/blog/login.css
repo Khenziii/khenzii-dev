@@ -1,0 +1,197 @@
+@import '../../../presets/variables.css';
+@import '../../../presets/fonts.css';
+@import '../../../presets/body.css';
+
+
+.centered_container {
+    display: grid;
+    place-items: center;
+
+    height: auto;
+}
+
+
+.home_icon {
+    margin: 2vh;
+
+    width: 10vw;
+    height: auto;
+
+    transition: all 0.5s;
+}
+
+.home_icon:hover {
+    background-color: var(--secondary);
+    border-radius: 2vh;
+}
+
+.home_icon:active {
+    transition: none;
+    background-color: var(--accent);
+}
+
+
+.line {
+    width: 30vw;
+    color: var(--secondary);
+}
+
+.input_username {
+    margin-top: 3vh;
+
+    width: 20vw;
+    height: 3vh;
+
+    background-color: var(--secondary);
+    color: var(--text);
+
+    text-align: center;
+
+    font-size: 2rem;
+    font-family: Montserrat;
+
+    border: none;
+    border-radius: 1vh;
+
+    transition: all 0.5s;
+}
+
+.username_text {
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+
+    width: 30vw;
+    height: 6vh;
+
+    color: var(--text);
+    text-align: center;
+    font-size: 2vh;
+    font-family: Montserrat;
+
+    font-weight: 900;
+
+    opacity: 0;
+
+    transition: all 0.5s;
+    cursor: default;
+}
+
+.input_username:focus {
+    width: 30vw;
+    height: 5vh;
+    outline-offset: 0.5vh;
+    outline: 0.5vh solid var(--primary);
+}
+
+.input_username:focus+.username_text {
+    opacity: 1;
+    cursor: text;
+}
+
+
+.input_password {
+    width: 20vw;
+    height: 3vh;
+
+    background-color: var(--secondary);
+    color: var(--text);
+
+    text-align: center;
+
+    font-size: 2rem;
+    font-family: Montserrat;
+
+    border: none;
+    border-radius: 1vh;
+
+    transition: all 0.5s;
+}
+
+.password_text {
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+
+    width: 30vw;
+    height: 6vh;
+
+    color: var(--text);
+    text-align: center;
+    font-size: 2vh;
+    font-family: Montserrat;
+
+    font-weight: 900;
+
+    opacity: 0;
+
+    transition: all 0.5s;
+    cursor: default;
+}
+
+.input_password:focus {
+    width: 30vw;
+    height: 5vh;
+    outline-offset: 0.5vh;
+    outline: 0.5vh solid var(--primary);
+}
+
+.input_password:focus+.password_text {
+    opacity: 1;
+    cursor: text;
+}
+
+
+.login_button {
+    margin-top: 3vh;
+
+    scale: 2;
+    width: 10vw;
+
+    background-color: transparent;
+
+    color: var(--text);
+    font-size: 65%;
+
+    text-align: center;
+    display: inline-block;
+    padding: 15px 40px;
+    border: 1px solid #fff;
+    cursor: pointer;
+    letter-spacing: 2px;
+    overflow: hidden;
+}
+
+.login_button:before {
+    content: "";
+    position: absolute;
+    height: 340%;
+    width: 30%;
+    background: #fff;
+    right: -27.5%;
+    top: -70%;
+    transform: rotate(37deg) translateY(-20%);
+    transition: all .3s;
+    opacity: 0.3;
+}
+
+.login_button:hover:before {
+    right: 105%;
+}
+
+.info_text {
+    margin-top: 4vh;
+
+    width: 30vw;
+    height: 6vh;
+
+    color: var(--text);
+    text-align: center;
+    font-size: 2vh;
+    font-family: Montserrat;
+
+    font-weight: 900;
+
+    opacity: 0;
+
+    transition: all 0.5s;
+    cursor: default;
+}

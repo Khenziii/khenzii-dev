@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>Khenzii :)</title>
+        <link rel="stylesheet" href="../../../css/htmls/pages/blog/settings.css">
+        <meta name="keywords" content="blog, personal website">
+
+        <script defer src="../../../js/pages/blog/settings.js"></script>
+        <script defer src="../../../js/utils/buttons.js"></script>
+    </head>
+
+    <body>
+        <div class="shadow_effect" id="shadowEffect"></div>
+
+        <div id="edit_pfp" class="edit_pfp">
+            <span id="edit_pfp_close" class="edit_pfp_close">&times;</span>
+
+            <p class="edit_pfp_text">
+                Select the image :)
+            </p>
+
+            <label for="edit_pfp_file_input" class="edit_pfp_drop" id="edit_pfp_drop">
+                <span>Drop the image here or click me!</span>
+                <input type="file" id="edit_pfp_file_input" class="edit_pfp_file_input" accept="image/*">
+            </label>
+
+            <input type="submit" value="lookin' fresh" class="pfp_change_button" onclick="changePfp()">
+        </div>
+
+        <div id="edit_username" class="edit_username">
+            <span id="edit_username_close" class="edit_username_close">&times;</span>
+
+            <p class="edit_username_text">
+                enter your new username below and click the button :D
+            </p>
+            <input type="text" id="edit_username_input" class="edit_username_input" placeholder="Jeff">
+
+            <button class="edit_username_done_button" onclick="changeUsername()">
+                Looks good!
+            </button>
+        </div>
+
+        <div id="edit_bio" class="edit_bio">
+            <span id="edit_bio_close" class="edit_bio_close">&times;</span>
+
+            <p class="edit_bio_text">
+                enter your new bio and click the button =)
+            </p>
+            <input type="text" id="edit_bio_input" class="edit_bio_input" placeholder="cats > dogs">
+
+            <button class="edit_bio_done_button" onclick="changeBio()">
+                yup, change it!
+            </button>
+        </div>
+
+        <div class="centered_container" id="centered_container">
+            <hr class="line">
+
+            <img id="pfp" class="pfp">
+
+            <button class="edit_button" onclick="showEditPfpPopout()">
+                <img src="../../../icons/pages/blog/edit.png" alt="edit pfp button" class="edit_button_image">
+            </button>
+
+            <p class="info_text">
+                change profile picture
+            </p>
+
+            <hr class="line">
+
+            <p class="username" id="username">
+
+            </p>
+
+            <button class="edit_button" onclick="showEditUsernamePopout()">
+                <img src="../../../icons/pages/blog/edit.png" alt="edit pfp button" class="edit_button_image">
+            </button>
+
+            <p class="info_text">
+                change username
+            </p>
+
+            <hr class="line">
+
+            <p class="bio" id="bio">
+                
+            </p>
+
+            <button class="edit_button" onclick="showEditBioPopout()">
+                <img src="../../../icons/pages/blog/edit.png" alt="edit pfp button" class="edit_button_image">
+            </button>
+
+            <p class="info_text">
+                change bio
+            </p>
+        </div>
+    </body>
+</html>

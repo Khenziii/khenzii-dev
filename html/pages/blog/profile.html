@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>Khenzii :)</title>
+        <link rel="stylesheet" href="../../../css/htmls/pages/blog/profile.css">
+        <meta name="keywords" content="blog, personal website">
+
+        <script defer src="../../../js/pages/blog/profile.js"></script>
+        <script defer src="../../../js/utils/buttons.js"></script>
+    </head>
+
+    <body>
+        <div class="shadow_effect" id="shadowEffect"></div>
+
+        <div id="create_category" class="create_category">
+            <span id="create_category_close" class="create_category_close">&times;</span>
+
+            <p class="create_category_title_text">
+                Category Title
+            </p>
+            <input type="text" id="category_title_input" class="create_category_title_input" placeholder="Title..">
+
+            <p class="create_category_description_text">Category Description</p>
+            <input type="text" id="category_description_input" class="create_category_description_input" placeholder="Description..">
+
+            <button class="create_category_create_button" onclick="createCategory()">
+                <img src="../../../icons/pages/blog/create.png" alt="create button" class="create_category_create_button_image">
+            </button>
+        </div>
+
+        <div id="create_post" class="create_post">
+            <span id="create_post_close" class="create_post_close">&times;</span>
+
+            <p class="create_post_text">
+                Post's text content
+            </p>
+            <input type="text" id="post_input" class="create_post_input" placeholder="Thinking about something? =)">
+            
+            <button class="create_post_create_button" onclick="createPost()">
+                <img src="../../../icons/pages/blog/create.png" alt="create button" class="create_post_create_button_image">
+            </button>
+        </div>
+
+        <main class="container">
+            <div class="search_container_parent">
+                <div class="search_container">
+                    <input type="text" placeholder="Search.." class="search_input"/>
+                    <img src="../../../icons/often_used/search.png" alt="search icon" class="search_input_icon_image">
+
+                    <p class="search_text">
+                        look for other users..
+                    </p>
+                </div>
+            </div>
+
+            <div class="profile_container_parent">
+                <div class="profile_container" id="profile_container">
+                    <img id="pfp" class="pfp">
+    
+                    <p class="username" id="username">
+                        If you're not seeing the username, turn on JS.
+                    </p>
+        
+                    <p class="bio" id="bio">
+                        If you're not seeing the correct username, please turn on JavaScript. If the username is correct, some error on the server side occured - not ya fault. Sorry.
+                    </p>
+
+                    <p class="joined_at" id="joined_at">
+                        :&lt;
+                    </p>
+
+                    <p class="user_id" id="user_id">
+                        :o
+                    </p>
+                </div>
+    
+                <hr class="line">
+    
+                <div class="content_container" id="content_container">
+                    <ul class="categories" id="categories">
+                        
+                    </ul>
+                </div>
+            </div>
+        </main>
+    </body>
+</html>
