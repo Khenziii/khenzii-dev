@@ -2,6 +2,11 @@
 @import '../../../presets/fonts.css';
 @import '../../../presets/body.css';
 
+body {
+    overflow: scroll;
+    overflow-x: hidden;
+}
+
 .shadow_effect {
     position: absolute;
 
@@ -299,7 +304,7 @@ ima implement links later
     display: flex;
     flex-direction: row;
 
-    
+
 }
 
 .post_created_at {
@@ -377,11 +382,12 @@ ima implement links later
 
     height: fit-content;
     width: 20vw;
-    
+
     position: fixed;
     z-index: 3;
 
-    display: none; /*we'll later set it to flex using JS*/
+    display: none;
+    /*we'll later set it to flex using JS*/
     flex-direction: column;
     align-items: center;
 }
@@ -480,11 +486,12 @@ ima implement links later
 
     height: fit-content;
     width: 20vw;
-    
+
     position: fixed;
     z-index: 3;
 
-    display: none; /*we'll later set it to flex using JS*/
+    display: none;
+    /*we'll later set it to flex using JS*/
     flex-direction: column;
     align-items: center;
 }
