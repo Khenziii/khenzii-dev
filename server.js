@@ -11,7 +11,7 @@ const jwt = require('jsonwebtoken');
 const { expressjwt: expressJwt } = require('express-jwt');
 const cookieParser = require('cookie-parser');
 const fs = require('fs');
-
+const multer = require('multer');
 
 const app = express();
 const port = 3000;
@@ -22,6 +22,9 @@ const number_of_posts_to_get = 5
 const legal_chars = ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'z', 'x', 'c', 'v', 'b', 'n', 'm',
     'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Z', 'X', 'C', 'V', 'B', 'N', 'M',
     '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '@', '.', '-', '_']
+
+const storage = multer.memoryStorage(); // Store the uploaded image in memory
+const upload = multer({ storage: storage });
 
 function addZero(value) { // adds zero to the start of values if possible (eg. input: 7 output: 07)
     return value.toString().padStart(2, '0');
@@ -741,6 +744,8 @@ app.post('/blog/api/create_category', authMiddleware, async (req, res) => {
             await pool.query(command, [user_id, categoryTitle, categoryDescription])
 
             res.status(200).send("Success!")
+        } else {
+            res.status(403).send("Access Denied!")
         }
     } catch (error) {
         res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Check console for more Details. Sorry.');
@@ -787,6 +792,8 @@ app.post('/blog/api/create_post', authMiddleware, async (req, res) => {
             await pool.query(command, [category_id, text_value, created_at, index_in_category])
 
             res.status(200).send("Success!")
+        } else {
+            res.status(403).send("Access Denied!")
         }
     } catch (error) {
         res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Sorry.');
@@ -795,18 +802,41 @@ app.post('/blog/api/create_post', authMiddleware, async (req, res) => {
 });
 
 // change profile picture
-app.post('/blog/api/change_pfp', authMiddleware, async (req, res) => {
+app.post('/blog/api/change_pfp', authMiddleware, upload.single('new_pfp'), async (req, res) => {
     try {
         // Retrieve data from the request body
-        const { user_id, image } = req.body;
+        const { user_id } = req.body;
+
+        if (!req.file) {
+            return res.status(400).send("No image selected! :P")
+        }
 
         // 1. verify the user
+        // get the username using user_id
+        var query = `SELECT username FROM "user" WHERE id = \$1;`
+        var result = await pool.query(query, [user_id]);
 
-        // 2. write to the db (deafult "false", user_id "<what_ever_user_id>")
+        // check if requestor's username = user_id username
+        if (req.auth.username == result.rows[0].username) {
+            // 2. get the profile pictures id
+            var query = `SELECT id FROM "profile_picture" WHERE user_id = \$1;`
+            var result = await pool.query(query, [user_id]);
 
-        // 3. save the image with appropiate filename
+            const image_id = result.rows[0].id
 
-        return 0
+            // 3. write to the db (deafult "false", user_id "<what_ever_user_id>")
+            var command = `UPDATE "profile_picture" SET "default" = \$1 WHERE user_id = \$2`
+            await pool.query(command, ["nah", user_id]);
+    
+            // 4. save the image with appropiate filename
+            const uploadedImage = req.file.buffer; // Image binary data
+            const uniqueFileName = `${image_id}.png`;
+            fs.writeFileSync(`images/blog/${uniqueFileName}`, uploadedImage);
+
+            res.status(200).send('Success!');
+        } else {
+            res.status(403).send("Access Denied!")
+        }
     } catch (error) {
         res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Sorry.');
         consoleInfo(`${req.ClientIP} got a 500 error (while communicating with the back-end). Error: ${error}.`)
@@ -870,6 +900,8 @@ app.post('/blog/api/change_username', authMiddleware, async (req, res) => {
             var command = `INSERT INTO "blacklisted_token" (user_id, token) VALUES (\$1, \$2);`
             await pool.query(command, [user_id, req.cookies.jwt_access_cookie_old]);
             res.status(200).send("Success!")
+        } else {
+            res.status(403).send("Access Denied!")
         }
     } catch (error) {
         res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Sorry.');

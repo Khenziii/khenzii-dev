@@ -93,19 +93,16 @@ async function getValuesFromServer() {
 }
 
 async function changePfp() {
-    const editBioInputValue = bioInput.value;
+    const editPfpValue = edit_pfp_file_input.files[0];
 
-    const data = {
-        user_id: user_id,
-        text_value: editBioInputValue
-    };
+    const formData = new FormData();
+    formData.append('user_id', user_id);
+    formData.append('new_pfp', editPfpValue);
 
     const response = await fetch('/blog/api/change_pfp', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
+        body: formData, // had to use formData instead of JSON.stringify
+        // because we're dealing with images
     });
     
     var text = await response.text();
