@@ -932,7 +932,13 @@ app.post('/blog/api/change_bio', authMiddleware, async (req, res) => {
         var result = await pool.query(query, [user_id]);
 
         if (req.auth.username == result.rows[0].username) {
-            // 2. write to the database
+            // 2. check stuff
+            if(text_value.length > 300) {
+                res.status(400).send("The bio can't be longer than 300 chars :P")
+                return
+            }
+
+            // 3. write to the database
             var command = `UPDATE "bio" SET text_value = \$1 WHERE user_id = \$2`
             await pool.query(command, [text_value, user_id]);
 
