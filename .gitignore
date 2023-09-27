@@ -8,11 +8,12 @@ secrets.env
 ### things that are not needed in the repo
 nginx_config_symlink
 test.js
+test.py
 .cache/
+env/
 # | blog profile pictures are in this directory
 # V there is no need for them to be in the repo :)
 images/blog/*.png
 images/blog/*.jpg
 images/blog/*.jpeg
 images/blog/*.jfif
-env/

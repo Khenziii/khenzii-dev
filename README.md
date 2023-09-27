@@ -30,7 +30,6 @@ Please, read this carefully before spending your time creating cool stuff: The w
 - **license info** - even though that this GitHub repo (with LICENSE file) is mentioned on the website as it's source-code, people could still argue that they didn't visit the /projects-end route and didn't saw the repo (thus didn't knew about the CC-BY-SA 4.0 license). That's why i think that i'm going to put meta tags indicating the license and a "license" footer on the index page.
 - **rate limits** - right now the routes don't have any rate-limits (and that's VERY bad), ima add some later.
 - **email verification** - a email can be linked with 3 accounts at a single time - but we're not verifying if the emails really belong to the user. This means that people could potentially create 3 accounts with a email and then someone that would like to use this email won't be able to. To fix this i will only be counting verified emails to the accounts number.
-- **archiver.py logs** - i'll make the logs better latter.
 - **/blog links** - profile links / connections and stuff.
 - **SEO** - adding alt tags to the images and meta tags to heads will be a pretty good thing to do.
 - **info, error, etc. - server logs** - tags like [i] indicating that a log is informational or [e] indicating that something went wrong will be useful.
