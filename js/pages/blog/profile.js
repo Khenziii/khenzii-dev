@@ -85,8 +85,9 @@ async function getPosts(category_id, clicked_button) {
 
         createHTMLPost(posts[i].text_value, posts[i].created_at, posts[i].id, category_id, posts[i].index_in_category)
     }
-
-    if(posts.length == number_of_posts_to_get) {
+    
+    // create the "fetch more!" button if we got back the right amount of posts to get and the last one wasn't first in the category
+    if(posts.length == number_of_posts_to_get && posts[posts.length - 1].index_in_category != 1) {
         createShowMoreButtonHTML(category_id)
     }
 }
