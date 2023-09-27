@@ -12,6 +12,8 @@ const { expressjwt: expressJwt } = require('express-jwt');
 const cookieParser = require('cookie-parser');
 const fs = require('fs');
 const multer = require('multer');
+const sanitizeHtml = require('sanitize-html');
+
 
 const app = express();
 const port = 3000;
@@ -25,6 +27,21 @@ const legal_chars = ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'a', 's',
 
 const storage = multer.memoryStorage(); // Store the uploaded image in memory
 const upload = multer({ storage: storage });
+
+function sanitizeHTML(HTML) {
+    const cleanHTML = sanitizeHtml(HTML, {
+        allowedTags: [
+            'img',
+            'video'
+        ],
+        allowedAttributes: {
+            'img': ['src', 'alt'],
+            'video': ['src', 'alt']
+        },
+    });
+
+    return cleanHTML
+}
 
 function addZero(value) { // adds zero to the start of values if possible (eg. input: 7 output: 07)
     return value.toString().padStart(2, '0');
@@ -748,9 +765,20 @@ app.post('/blog/api/create_category', authMiddleware, async (req, res) => {
                 return
             }
 
-            // 3. write to the db
+            // 3. sanitze the HTML
+            if(trusted_usernames.includes(req.auth.username)) {
+                // if user is trusted
+                var cleanCategoryTitle = categoryTitle;
+                var cleanCategoryDescription = categoryDescription;
+            } else {
+                // else
+                var cleanCategoryTitle = sanitizeHTML(categoryTitle);
+                var cleanCategoryDescription = sanitizeHTML(categoryDescription);
+            }
+
+            // 4. write to the db
             var command = `INSERT INTO "category" (user_id, title, description) VALUES (\$1, \$2, \$3);`
-            await pool.query(command, [user_id, categoryTitle, categoryDescription])
+            await pool.query(command, [user_id, cleanCategoryTitle, cleanCategoryDescription])
 
             res.status(200).send("Success!")
         } else {
@@ -796,9 +824,17 @@ app.post('/blog/api/create_post', authMiddleware, async (req, res) => {
 
             var index_in_category = result.rowCount + 1
 
+            if(trusted_usernames.includes(req.auth.username)) {
+                // if user is trusted
+                var cleanHTML = text_value;
+            } else {
+                // else
+                var cleanHTML = sanitizeHTML(text_value);
+            }
+
             // 5. write to the db
             var command = `INSERT INTO "post" (category_id, text_value, created_at, index_in_category) VALUES (\$1, \$2, \$3, \$4);`
-            await pool.query(command, [category_id, text_value, created_at, index_in_category])
+            await pool.query(command, [category_id, cleanHTML, created_at, index_in_category])
 
             res.status(200).send("Success!")
         } else {
@@ -836,7 +872,7 @@ app.post('/blog/api/change_pfp', authMiddleware, upload.single('new_pfp'), async
             // 3. write to the db (deafult "false", user_id "<what_ever_user_id>")
             var command = `UPDATE "profile_picture" SET "default" = \$1 WHERE user_id = \$2`
             await pool.query(command, ["nah", user_id]);
-    
+
             // 4. save the image with appropiate filename
             const uploadedImage = req.file.buffer; // Image binary data
             const uniqueFileName = `${image_id}.png`;
@@ -933,7 +969,7 @@ app.post('/blog/api/change_bio', authMiddleware, async (req, res) => {
 
         if (req.auth.username == result.rows[0].username) {
             // 2. check stuff
-            if(text_value.length > 300) {
+            if (text_value.length > 300) {
                 res.status(400).send("The bio can't be longer than 300 chars :P")
                 return
             }
