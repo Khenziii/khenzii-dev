@@ -8,7 +8,7 @@ def log(message: str):
     gmt_plus_2 = datetime.timezone(datetime.timedelta(hours=2))
     current_datetime = datetime.datetime.now(gmt_plus_2)
 
-    log_record = current_datetime.strftime(f"%d/%m/%y - %H:%M:%S > {message}")
+    log_record = current_datetime.strftime(f"%d/%m/%Y - %H:%M:%S > {message}")
     print(log_record)
 
 def save_page(url, user_agent):
@@ -16,10 +16,10 @@ def save_page(url, user_agent):
         wayback_machine = waybackpy.WaybackMachineSaveAPI(url, user_agent)
         wayback_machine.save()
 
-        log(f"[i] > successfully archived: {url}")
+        log(f"[i] successfully archived: {url}")
         return True
     except Exception as e:
-        log(f"[e] > something went wrong, here is the error: {e}.")
+        log(f"[e] something went wrong, here is the error: {e}.")
         return False
 
 
@@ -45,4 +45,4 @@ while(archving):
         i = 0
 
 
-log("[e] > something went wrong.. Stopped archiving.")
+log("[e] something went wrong.. Stopped archiving.")
