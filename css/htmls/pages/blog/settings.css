@@ -148,11 +148,24 @@
     margin: 2vh;
 }
 
-/*
 .edit_username_input {
+    width: 80%;
+    height: 2.5vh;
 
+    min-width: 7.5vw;
+    min-height: 1vh;
+
+    max-width: 90%;
+    max-height: none;
+
+    color: var(--text);
+    background-color: var(--background);
+    padding: 1vh;
+    border-radius: 1vh;
+    border: none;
+
+    text-align: center;
 }
-*/
 
 .edit_username_done_button {
     margin-top: 1vh;
@@ -200,11 +213,22 @@
     margin: 2vh;
 }
 
-/*
 .edit_bio_input {
+    width: 80%;
+    height: 2.5vh;
 
+    min-width: 7.5vw;
+    min-height: 1vh;
+
+    max-width: 90%;
+    max-height: none;
+
+    color: var(--text);
+    background-color: var(--background);
+    padding: 1vh;
+    border-radius: 1vh;
+    border: none;
 }
-*/
 
 .edit_bio_done_button {
     margin-top: 1vh;

@@ -32,7 +32,8 @@ function sanitizeHTML(HTML) {
     const cleanHTML = sanitizeHtml(HTML, {
         allowedTags: [
             'img',
-            'video'
+            'video',
+            'br'
         ],
         allowedAttributes: {
             'img': ['src', 'alt'],

@@ -72,7 +72,7 @@ function createTheGoBackButtonHTML(username) {
     `
 
     return centered_container.insertAdjacentHTML('afterbegin', button)
-} 
+}
 
 async function getValuesFromServer() {
     return fetch('/blog/api/get_user_settings', {
@@ -104,7 +104,7 @@ async function changePfp() {
         body: formData, // had to use formData instead of JSON.stringify
         // because we're dealing with images
     });
-    
+
     var text = await response.text();
 
     HTMLpfpInfo(text)
@@ -120,7 +120,7 @@ async function changeUsername() {
 
     // Delete the old cookie
     document.cookie = "jwt_access_cookie=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
-    
+
     console.log("renamed the cookie!")
 
     const editUsernameInputValue = usernameInput.value;
@@ -137,13 +137,25 @@ async function changeUsername() {
         },
         body: JSON.stringify(data)
     });
-    
-    // remove the old access token (don't even try getting rid of 
-    // this line, khenzii.dev is using a blacklist on the server side =))
-    document.cookie = "jwt_access_cookie_old=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    console.log("removed the cookie!")
 
     var text = await response.text();
+
+    if (text == "Success!") { // got a new cookie
+        // remove the old access token (don't even try getting rid of 
+        // this line, khenzii.dev is using a blacklist on the server side =))
+        document.cookie = "jwt_access_cookie_old=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        console.log("removed the cookie!")
+    } else { // didn't get a new cookie
+        // change the name of the new old cookie from <name>_old to <name>
+        // Get the value of the old cookie
+        let oldCookieValue = document.cookie.split('; ').find(row => row.startsWith('jwt_access_cookie_old='))?.split('=')[1];
+
+        // set a new cookie with a old value
+        document.cookie = `jwt_access_cookie=${oldCookieValue}; expires=Thu, 01 Jan 2099 00:00:00 UTC; path=/`;
+
+        // Delete the old cookie
+        document.cookie = "jwt_access_cookie_old=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+    }
 
     HTMLusernameInfo(text)
 }
@@ -163,7 +175,7 @@ async function changeBio() {
         },
         body: JSON.stringify(data)
     });
-    
+
     var text = await response.text();
 
     HTMLbioInfo(text)
@@ -177,7 +189,7 @@ function createTheGoBackButtonHTML(username) {
     `
 
     return centered_container.insertAdjacentHTML('afterbegin', button)
-} 
+}
 
 close_edit_pfp_popout.onclick = function () {
     edit_pfp_popout.style.display = "none";
@@ -201,7 +213,7 @@ function changePreview(element) {
     `
 
     var image = document.getElementById("pfp_preview")
-    if(image != null) {
+    if (image != null) {
         image.src = URL.createObjectURL(file);
     } else {
         edit_pfp_popout.insertAdjacentHTML('beforeend', image_HTML)
@@ -210,7 +222,7 @@ function changePreview(element) {
     }
 }
 
-edit_pfp_file_input.addEventListener('change', function() {
+edit_pfp_file_input.addEventListener('change', function () {
     changePreview(edit_pfp_file_input)
 })
 
