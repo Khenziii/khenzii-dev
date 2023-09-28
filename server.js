@@ -995,6 +995,50 @@ app.post('/blog/api/change_bio', authMiddleware, async (req, res) => {
     }
 });
 
+// change category index
+app.post('/blog/api/change_category_index', authMiddleware, async (req, res) => {
+    try {
+        // Retrieve data from the request body
+        const { user_id, first_category_index, second_category_index } = req.body;
+
+        // 1. verify the user
+        // (by checking that req.auth.username == user id's username)
+
+        // get the username
+        var query = `SELECT username FROM "user" WHERE id = \$1;`
+        var result = await pool.query(query, [user_id]);
+
+        if (req.auth.username == result.rows[0].username) {
+            // get first and second category id's
+            var query = `SELECT id FROM "category" WHERE user_id = \$1 AND index_in_user = \$2`
+            var result = await pool.query(query, [user_id, first_category_index]);
+
+            var first_category_id = result.rows[0].id
+
+            var query = `SELECT id FROM "category" WHERE user_id = \$1 AND index_in_user = \$2`
+            var result = await pool.query(query, [user_id, second_category_index]);
+
+            var second_category_id = result.rows[0].id
+
+            // 3. replace the first index with a second one and the second one with the first one
+            // replace the first category index_in_user with the second one
+            var command = `UPDATE "category" SET "index_in_user" = \$1 WHERE id = \$2`
+            await pool.query(command, [second_category_index, first_category_id]);
+
+            // replace the second category index_in_user with the first one
+            var command = `UPDATE "category" SET "index_in_user" = \$1 WHERE id = \$2`
+            await pool.query(command, [first_category_index, second_category_id]);
+
+            res.status(200).send("Success!")
+        } else {
+            res.status(403).send("Access denied!")
+        }
+    } catch (error) {
+        res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Sorry.');
+        consoleInfo(`${req.ClientIP} got a 500 error (while communicating with the back-end). Error: ${error}.`)
+    }
+});
+
 
 // 404 error
 app.use((req, res, next) => {

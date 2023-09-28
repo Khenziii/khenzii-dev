@@ -25,7 +25,7 @@ var highest_id_categories = -1
 function removeShowMoreButtonHTML(category_id) {
     const button_element = document.getElementById(`show_more_posts_button_${category_id}`)
 
-    if(button_element != null) {
+    if (button_element != null) {
         button_element.remove(); // delete the element
     }
 }
@@ -42,7 +42,7 @@ function createShowMoreButtonHTML(category_id) {
 }
 
 async function getPosts(category_id, clicked_button) {
-    if(first_time[category_id] == false && !clicked_button) {
+    if (first_time[category_id] == false && !clicked_button) {
         console.log("got already, not getting!")
         return
     }
@@ -51,7 +51,7 @@ async function getPosts(category_id, clicked_button) {
     console.log(first_time)
     console.log("first time ^")
 
-    if(how_much_times[category_id] == null) {
+    if (how_much_times[category_id] == null) {
         console.log("empty!")
         how_much_times[category_id] = 1
     }
@@ -80,15 +80,15 @@ async function getPosts(category_id, clicked_button) {
 
     removeShowMoreButtonHTML(category_id)
 
-    for(let i = 0; i < posts.length; i++) {
+    for (let i = 0; i < posts.length; i++) {
         console.log(posts[i].text_value)
         console.log(posts[i].created_at)
 
         createHTMLPost(posts[i].text_value, posts[i].created_at, posts[i].id, category_id, posts[i].index_in_category)
     }
-    
+
     // create the "fetch more!" button if we got back the right amount of posts to get and the last one wasn't first in the category
-    if(posts.length == number_of_posts_to_get && posts[posts.length - 1].index_in_category != 1) {
+    if (posts.length == number_of_posts_to_get && posts[posts.length - 1].index_in_category != 1) {
         createShowMoreButtonHTML(category_id)
     }
 }
@@ -126,7 +126,7 @@ async function createCategory() {
         },
         body: JSON.stringify(data)
     });
-    
+
     var text = await response.text();
 
     categoryCreateInfo(text)
@@ -147,7 +147,7 @@ async function createPost() {
         },
         body: JSON.stringify(data)
     });
-    
+
     var text = await response.text();
 
     postCreateInfo(text)
@@ -210,7 +210,7 @@ function createHTMLCategory(title, description, id, empty, logged_in) {
             `
         }
     } else {
-        if(logged_in) {
+        if (logged_in) {
             var category = `
             <li class="category">
                 <details class="category_details">
@@ -232,6 +232,8 @@ function createHTMLCategory(title, description, id, empty, logged_in) {
                 
                     </ul>
                 </details>
+
+                <img src="../../../icons/pages/blog/drag.png" class="category_drag" draggable=true>
             </li>
             `
         } else {
@@ -257,14 +259,12 @@ function createHTMLCategory(title, description, id, empty, logged_in) {
         }
     }
 
-    console.log(highest_id_categories)
-    console.log(id)
-    console.log("before if")
-    if(id > highest_id_categories) {
+
+    if (id > highest_id_categories) {
         highest_id_categories = id
 
         console.log(`putting to the top: ${title}`)
-        
+
         return categories_element.insertAdjacentHTML('afterbegin', category)
     } else {
         return categories_element.insertAdjacentHTML('beforeend', category)
@@ -300,7 +300,7 @@ function createHTMLPost(text_value, created_at, id, category_id, index_in_catego
     console.log(highest_id_posts)
     console.log(id)
     console.log("before if")
-    if(id > highest_id_posts) {
+    if (id > highest_id_posts) {
         highest_id_posts = id
 
         console.log(`putting to the top: ${text_value}`)
@@ -367,7 +367,7 @@ getValuesFromServer(username).then(data => {
     user_id_paragraph.textContent = `id: ${data.user_id}`;
     user_id = data.user_id
 
-    if(data.logged_in) {
+    if (data.logged_in) {
         createTheCategoryAddButton()
         createTheSettingsButton()
     }
@@ -377,8 +377,46 @@ getValuesFromServer(username).then(data => {
     } else {
         console.log(data.categories)
 
-        for(let i = 0; i < data.categories.length; i++) { // loop through all of the categories
+        for (let i = 0; i < data.categories.length; i++) { // loop through all of the categories
             createHTMLCategory(data.categories[i].title, data.categories[i].description, data.categories[i].id, false, data.logged_in)
+        }
+
+
+        let draggedElement = null;
+        let overElement = null
+
+        for(let i = 0; i < categories_element.children.length; i++) {
+            element = categories_element.children[i]
+            console.log(element)
+
+            element.addEventListener('dragstart', function (event) {
+                draggedElement = this;
+                draggedElement.classList.add('dragging');
+                console.log(draggedElement)
+            });
+
+            element.addEventListener('dragover', function (event) {
+                event.preventDefault();
+                overElement = this;
+            });
+
+            element.addEventListener('dragend', function (event) {
+                element.classList.remove('dragging');
+            });
+
+            element.addEventListener('drop', function (event) {
+                event.preventDefault();
+
+                // remove the dragging class
+                draggedElement.classList.remove('dragging')
+
+                // Switch places
+                let temp = document.createElement('div');
+                categories_element.insertBefore(temp, draggedElement);
+                categories_element.insertBefore(draggedElement, overElement);
+                categories_element.insertBefore(overElement, temp);
+                categories_element.removeChild(temp);
+            });
         }
     }
 });
