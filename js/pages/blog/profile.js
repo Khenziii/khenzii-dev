@@ -20,7 +20,6 @@ var first_time = {}
 var how_much_times = {}
 
 var highest_id_posts = -1
-var highest_id_categories = -1
 
 function removeShowMoreButtonHTML(category_id) {
     const button_element = document.getElementById(`show_more_posts_button_${category_id}`)
@@ -39,6 +38,28 @@ function createShowMoreButtonHTML(category_id) {
     `
 
     return posts_list_element.insertAdjacentHTML('beforeend', button)
+}
+
+async function change_category_index(first_index, second_index) {
+    console.log("ya good?")
+    
+    const data = {
+        user_id: user_id,
+        first_category_index: first_index,
+        second_category_index: second_index
+    };
+
+    const response = await fetch('/blog/api/change_category_index', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    });
+
+    var text = await response.text();
+
+    console.log(text)
 }
 
 async function getPosts(category_id, clicked_button) {
@@ -192,7 +213,7 @@ function createTheSettingsButton() {
     return profile_container.insertAdjacentHTML('beforeend', button)
 }
 
-function createHTMLCategory(title, description, id, empty, logged_in) {
+function createHTMLCategory(title, description, id, empty, logged_in, index_in_user) {
     var category = ""
 
     if (empty) {
@@ -212,7 +233,7 @@ function createHTMLCategory(title, description, id, empty, logged_in) {
     } else {
         if (logged_in) {
             var category = `
-            <li class="category">
+            <li class="category" data-id="${id}" data-index="${index_in_user}">
                 <details class="category_details">
                     <summary class="category_title" onclick="getPosts(${id}, false)">
                         ${title}
@@ -238,7 +259,7 @@ function createHTMLCategory(title, description, id, empty, logged_in) {
             `
         } else {
             var category = `
-            <li class="category">
+            <li class="category" data-id="${id}" data-index="${index_in_user}">
                 <details class="category_details">
                     <summary class="category_title" onclick="getPosts(${id}, false)">
                         ${title}
@@ -259,16 +280,7 @@ function createHTMLCategory(title, description, id, empty, logged_in) {
         }
     }
 
-
-    if (id > highest_id_categories) {
-        highest_id_categories = id
-
-        console.log(`putting to the top: ${title}`)
-
-        return categories_element.insertAdjacentHTML('afterbegin', category)
-    } else {
-        return categories_element.insertAdjacentHTML('beforeend', category)
-    }
+    return categories_element.insertAdjacentHTML('afterbegin', category)
 }
 
 function createHTMLPost(text_value, created_at, id, category_id, index_in_category) {
@@ -373,12 +385,19 @@ getValuesFromServer(username).then(data => {
     }
 
     if (data.categories == "404") {
-        createHTMLCategory("", "", "", true, data.logged_in)
+        createHTMLCategory("", "", "", true, data.logged_in, data.index_in_user)
     } else {
+        // sort the categories by index_in_user
+        data.categories.sort((a, b) => a.index_in_user - b.index_in_user);
+
         console.log(data.categories)
+        console.log("data.categories")
 
         for (let i = 0; i < data.categories.length; i++) { // loop through all of the categories
-            createHTMLCategory(data.categories[i].title, data.categories[i].description, data.categories[i].id, false, data.logged_in)
+            console.log(data.categories[i].index_in_user)
+            console.log(data.categories[i])
+            console.log("data categories above me!")
+            createHTMLCategory(data.categories[i].title, data.categories[i].description, data.categories[i].id, false, data.logged_in, data.categories[i].index_in_user)
         }
 
 
@@ -410,12 +429,32 @@ getValuesFromServer(username).then(data => {
                 // remove the dragging class
                 draggedElement.classList.remove('dragging')
 
-                // Switch places
+                /// Switch places
+                // create a placeholder
                 let temp = document.createElement('div');
+                // put the placeholder before dragged element
                 categories_element.insertBefore(temp, draggedElement);
+                // put the dragged element before target element 
                 categories_element.insertBefore(draggedElement, overElement);
+                // put the target element before the placeholder
                 categories_element.insertBefore(overElement, temp);
+                // get rid of the placeholder
                 categories_element.removeChild(temp);
+
+
+                console.log("overElement:")
+                console.log(overElement)
+                console.log("draggedElement:")
+                console.log(draggedElement)
+
+                console.log("id's")
+                const first_index = draggedElement.getAttribute("data-index")
+                const second_index = overElement.getAttribute("data-index")
+                console.log(first_index)
+                console.log(second_index)
+
+                
+                change_category_index(first_index, second_index)
             });
         }
     }
