@@ -626,7 +626,7 @@ app.post('/blog/api/get_user', checkAuthMiddleware, async (req, res) => {
         data.bio_and_links = bio_and_links;
 
         // the forth one for user's categories
-        var query = `SELECT title, description, id FROM "category" WHERE user_id = \$1;`
+        var query = `SELECT * FROM "category" WHERE user_id = \$1 ORDER BY id;`
         var result = await pool.query(query, [user_id]);
 
         var categories = ""
@@ -777,9 +777,15 @@ app.post('/blog/api/create_category', authMiddleware, async (req, res) => {
                 var cleanCategoryDescription = sanitizeHTML(categoryDescription);
             }
 
+            // get index_in_user
+            var query = `SELECT id FROM "category" WHERE user_id = \$1;`
+            var result = await pool.query(query, [user_id]);
+
+            var index_in_user = result.rowCount + 1
+
             // 4. write to the db
-            var command = `INSERT INTO "category" (user_id, title, description) VALUES (\$1, \$2, \$3);`
-            await pool.query(command, [user_id, cleanCategoryTitle, cleanCategoryDescription])
+            var command = `INSERT INTO "category" (user_id, title, description, index_in_user) VALUES (\$1, \$2, \$3, \$4);`
+            await pool.query(command, [user_id, cleanCategoryTitle, cleanCategoryDescription, index_in_user])
 
             res.status(200).send("Success!")
         } else {

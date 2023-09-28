@@ -19,7 +19,8 @@ const postInput = document.getElementById("post_input");
 var first_time = {}
 var how_much_times = {}
 
-var highest_id = -1
+var highest_id_posts = -1
+var highest_id_categories = -1
 
 function removeShowMoreButtonHTML(category_id) {
     const button_element = document.getElementById(`show_more_posts_button_${category_id}`)
@@ -256,7 +257,18 @@ function createHTMLCategory(title, description, id, empty, logged_in) {
         }
     }
 
-    return categories_element.insertAdjacentHTML('beforeend', category);
+    console.log(highest_id_categories)
+    console.log(id)
+    console.log("before if")
+    if(id > highest_id_categories) {
+        highest_id_categories = id
+
+        console.log(`putting to the top: ${title}`)
+        
+        return categories_element.insertAdjacentHTML('afterbegin', category)
+    } else {
+        return categories_element.insertAdjacentHTML('beforeend', category)
+    }
 }
 
 function createHTMLPost(text_value, created_at, id, category_id, index_in_category) {
@@ -285,11 +297,11 @@ function createHTMLPost(text_value, created_at, id, category_id, index_in_catego
      </div>
     `
 
-    console.log(highest_id)
+    console.log(highest_id_posts)
     console.log(id)
     console.log("before if")
-    if(id > highest_id) {
-        highest_id = id
+    if(id > highest_id_posts) {
+        highest_id_posts = id
 
         console.log(`putting to the top: ${text_value}`)
 
@@ -363,6 +375,8 @@ getValuesFromServer(username).then(data => {
     if (data.categories == "404") {
         createHTMLCategory("", "", "", true, data.logged_in)
     } else {
+        console.log(data.categories)
+
         for(let i = 0; i < data.categories.length; i++) { // loop through all of the categories
             createHTMLCategory(data.categories[i].title, data.categories[i].description, data.categories[i].id, false, data.logged_in)
         }
