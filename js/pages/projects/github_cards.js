@@ -40,14 +40,12 @@ function newCard(title, htmlUrl, desc, githubRepoCard, language, stars, forks) {
 }
 
 function fetchUserRepo(user, repo_name, githubRepoCard) {
-    console.log(`https://api.github.com/repos/${user}/${repo_name}`)
     fetch(`https://api.github.com/repos/${user}/${repo_name}`).then(res => res.json()).then(repo => {
         githubRepoCard.innerHTML = newCard(repo.full_name, repo.html_url, repo.description, githubRepoCard, repo.language, repo.stargazers_count, repo.forks)
     })
 }
 
-console.log(githubRepoCard)
-console.log(githubRepoCard.dataset)
+
 fetchUserRepo(githubRepoCard.dataset.user, githubRepoCard.dataset.repo_name, githubRepoCard)
 
 githubRepoCard.style.background = githubRepoCard.dataset.background ? githubRepoCard.dataset.background : '#171617'

@@ -1,1 +1,1 @@
-console.log("hello world!")
+// ima write the /blog route later

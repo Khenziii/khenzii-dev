@@ -79,20 +79,14 @@ async function change_category_index(first_index, second_index) {
 
 async function getPosts(category_id, clicked_button) {
     if (first_time[category_id] == false && !clicked_button) {
-        console.log("got already, not getting!")
         return
     }
 
     first_time[category_id] = false
-    console.log(first_time)
-    console.log("first time ^")
 
     if (how_much_times[category_id] == null) {
-        console.log("empty!")
         how_much_times[category_id] = 1
     }
-
-    console.log(how_much_times[category_id])
 
     const data = {
         category_id: category_id,
@@ -112,14 +106,10 @@ async function getPosts(category_id, clicked_button) {
     var posts = response_json["rows"];
     var number_of_posts_to_get = response_json["number_of_posts_to_get"];
     how_much_times[category_id]++;
-    console.log(posts)
 
     removeShowMoreButtonHTML(category_id)
 
     for (let i = 0; i < posts.length; i++) {
-        console.log(posts[i].text_value)
-        console.log(posts[i].created_at)
-
         createHTMLPost(posts[i].text_value, posts[i].created_at, posts[i].id, category_id, posts[i].index_in_category)
     }
 
@@ -350,13 +340,9 @@ function createHTMLPost(text_value, created_at, id, category_id, index_in_catego
      </div>
     `
 
-    console.log(highest_id_posts)
-    console.log(id)
-    console.log("before if")
+
     if (id > highest_id_posts) {
         highest_id_posts = id
-
-        console.log(`putting to the top: ${text_value}`)
 
         return posts_element.insertAdjacentHTML('afterbegin', post)
     } else {
@@ -412,13 +398,6 @@ document.title = `${username} | khenzii.dev/blog`;
 var user_id = ""
 
 getValuesFromServer(username).then(data => {
-    console.log(data)
-    console.log(data.image)
-    console.log(data.user_id)
-    console.log(data.bio_and_links)
-    console.log(data.categories)
-    console.log(data.logged_in)
-
     // asign stuff
     pfp_image.src = data.image;
     bio_paragraph.textContent = data.bio_and_links.text_value;
@@ -437,13 +416,7 @@ getValuesFromServer(username).then(data => {
         // sort the categories by index_in_user
         data.categories.sort((a, b) => a.index_in_user - b.index_in_user);
 
-        console.log(data.categories)
-        console.log("data.categories")
-
         for (let i = 0; i < data.categories.length; i++) { // loop through all of the categories
-            console.log(data.categories[i].index_in_user)
-            console.log(data.categories[i])
-            console.log("data categories above me!")
             createHTMLCategory(data.categories[i].title, data.categories[i].description, data.categories[i].id, false, data.logged_in, data.categories[i].index_in_user)
         }
 
@@ -453,12 +426,10 @@ getValuesFromServer(username).then(data => {
 
         for(let i = 0; i < categories_element.children.length; i++) {
             element = categories_element.children[i]
-            console.log(element)
 
             element.addEventListener('dragstart', function (event) {
                 draggedElement = this;
                 draggedElement.classList.add('dragging');
-                console.log(draggedElement)
             });
 
             element.addEventListener('dragover', function (event) {
@@ -468,7 +439,6 @@ getValuesFromServer(username).then(data => {
 
             element.addEventListener('dragend', function (event) {
                 draggedElement.classList.remove('dragging');
-                console.log("what?")
             });
 
             element.addEventListener('drop', function (event) {
@@ -490,17 +460,8 @@ getValuesFromServer(username).then(data => {
                 categories_element.removeChild(temp);
 
 
-                console.log("overElement:")
-                console.log(overElement)
-                console.log("draggedElement:")
-                console.log(draggedElement)
-
-                console.log("id's")
                 const first_index = draggedElement.getAttribute("data-index")
                 const second_index = overElement.getAttribute("data-index")
-                console.log(first_index)
-                console.log(second_index)
-
                 
                 change_category_index(first_index, second_index).then(data => {
                     // console.log(data) // handle the server response in anyway if you wish

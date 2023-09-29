@@ -153,8 +153,6 @@ async function changeUsername() {
     // Delete the old cookie
     document.cookie = "jwt_access_cookie=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
 
-    console.log("renamed the cookie!")
-
     const editUsernameInputValue = usernameInput.value;
 
     const data = {
@@ -176,7 +174,6 @@ async function changeUsername() {
         // remove the old access token (don't even try getting rid of 
         // this line, khenzii.dev is using a blacklist on the server side =))
         document.cookie = "jwt_access_cookie_old=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-        console.log("removed the cookie!")
     } else { // didn't get a new cookie
         // change the name of the new old cookie from <name>_old to <name>
         // Get the value of the old cookie
@@ -307,8 +304,6 @@ edit_pfp_drop.addEventListener('dragover', onDragOver, false);
 edit_pfp_drop.addEventListener('drop', onDrop, false);
 
 getValuesFromServer().then(data => {
-    console.log(data)
-
     // asign stuff
     pfp_image.src = data.image;
     bio_paragraph.textContent = data.bio_and_links.text_value;
