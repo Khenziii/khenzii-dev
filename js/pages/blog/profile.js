@@ -9,10 +9,12 @@ const categories_element = document.getElementById("categories");
 const shadowEffect = document.getElementById("shadowEffect");
 const createCategoryPopout = document.getElementById("create_category");
 const closeCreateCategoryPopout = document.getElementById("create_category_close");
+const createCategoryButton = document.getElementById("create_category_create_button");
 const categoryTitleInput = document.getElementById("category_title_input");
 const categoryDescriptionInput = document.getElementById("category_description_input");
 const createPostPopout = document.getElementById("create_post");
 const closeCreatePostPopout = document.getElementById("create_post_close");
+const createPostButton = document.getElementById("create_post_create_button");
 const postInput = document.getElementById("post_input");
 
 
@@ -20,6 +22,10 @@ var first_time = {}
 var how_much_times = {}
 
 var highest_id_posts = -1
+
+var reload = false
+var category_create_button_clickable = true
+var post_create_button_clickable = true
 
 function removeShowMoreButtonHTML(category_id) {
     const button_element = document.getElementById(`show_more_posts_button_${category_id}`)
@@ -41,7 +47,16 @@ function createShowMoreButtonHTML(category_id) {
 }
 
 async function change_category_index(first_index, second_index) {
-    console.log("ya good?")
+    // make the elements not draggable
+    // (they will become draggable again after
+    // finishing the first change)
+    var draggables = document.getElementsByClassName("category_drag");
+
+    // Iterate through the elements and make them non-draggable
+    for (let i = 0; i < draggables.length; i++) {
+        draggables[i].draggable = false;
+        draggables[i].classList.add("no")
+    }
     
     const data = {
         user_id: user_id,
@@ -57,9 +72,9 @@ async function change_category_index(first_index, second_index) {
         body: JSON.stringify(data)
     });
 
-    var text = await response.text();
-
-    console.log(text)
+    var text = await response.text()
+    reload = true
+    return text
 }
 
 async function getPosts(category_id, clicked_button) {
@@ -131,6 +146,16 @@ function postCreateInfo(text) {
 }
 
 async function createCategory() {
+    // make the create button not clickable
+    // (it will become clickable again after
+    // finishing the creation of the category)
+    if(category_create_button_clickable == false) {
+        return
+    }
+
+    createCategoryButton.classList.add("no");
+    category_create_button_clickable = false
+
     const categoryTitleInputValue = categoryTitleInput.value;
     const categoryDescriptionInputValue = categoryDescriptionInput.value;
 
@@ -149,11 +174,24 @@ async function createCategory() {
     });
 
     var text = await response.text();
-
+    createCategoryButton.classList.remove("no");
+    category_create_button_clickable = true
     categoryCreateInfo(text)
+
+    reload = true
 }
 
 async function createPost() {
+    // make the create button not clickable
+    // (it will become clickable again after
+    // finishing the creation of the post)
+    if(post_create_button_clickable == false) {
+        return
+    }
+
+    createPostButton.classList.add("no");
+    post_create_button_clickable = false
+
     const postTextContentValue = postInput.value
 
     const data = {
@@ -170,8 +208,11 @@ async function createPost() {
     });
 
     var text = await response.text();
-
+    postCategoryButton.classList.remove("no");
+    post_create_button_clickable = true
     postCreateInfo(text)
+
+    reload = true
 }
 
 function shadowEffectStart() {
@@ -346,11 +387,17 @@ async function getValuesFromServer(username) {
 closeCreateCategoryPopout.onclick = function () {
     createCategoryPopout.style.display = "none";
     shadowEffectEnd()
+    if(reload == true) {
+        location.reload();
+    }
 }
 
 closeCreatePostPopout.onclick = function () {
     createPostPopout.style.display = "none";
     shadowEffectEnd()
+    if(reload == true) {
+        location.reload();
+    }
 }
 
 if (window.location.href.endsWith('/')) {
@@ -420,7 +467,8 @@ getValuesFromServer(username).then(data => {
             });
 
             element.addEventListener('dragend', function (event) {
-                element.classList.remove('dragging');
+                draggedElement.classList.remove('dragging');
+                console.log("what?")
             });
 
             element.addEventListener('drop', function (event) {
@@ -454,7 +502,14 @@ getValuesFromServer(username).then(data => {
                 console.log(second_index)
 
                 
-                change_category_index(first_index, second_index)
+                change_category_index(first_index, second_index).then(data => {
+                    // console.log(data) // handle the server response in anyway if you wish
+                    // if response status code == 200 the data will be "Success!"
+
+                    if(reload == true) {
+                        location.reload();
+                    }
+                })
             });
         }
     }

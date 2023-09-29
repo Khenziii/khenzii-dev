@@ -236,23 +236,24 @@ ima implement links later
 }
 
 .category_details {
-    width: 100%;    
+    width: 100%;
 }
 
 .category_drag {
     z-index: 2;
-    
+
     height: 3vh;
     margin-left: -3vh;
 
-    cursor: move; /* fallback if grab cursor is unsupported */
+    cursor: move;
+    /* fallback if grab cursor is unsupported */
     cursor: grab;
     cursor: -moz-grab;
     cursor: -webkit-grab;
 }
 
 .dragging {
-    opacity: 0.5;
+    opacity: 0.3;
 }
 
 .info_text {
@@ -649,4 +650,9 @@ ima implement links later
     position: relative;
     left: 50%;
     transform: translateX(-50%);
+}
+
+.no {
+    opacity: 0.3;
+    cursor: not-allowed;
 }
