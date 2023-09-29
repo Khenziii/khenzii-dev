@@ -208,7 +208,7 @@ async function createPost() {
     });
 
     var text = await response.text();
-    postCategoryButton.classList.remove("no");
+    createPostButton.classList.remove("no");
     post_create_button_clickable = true
     postCreateInfo(text)
 
