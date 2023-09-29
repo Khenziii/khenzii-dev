@@ -19,8 +19,8 @@ At the moment, the website is using <a href="https://github.com/nginx/nginx">ngi
 Overtime, i plan to make <a href="https://khenzii.dev/">khenzii.dev</a> a place in which i would be able to easily showcase and talk about my projects - some of my projects will even live there! Right now, here are the avaible features:
 
 - **/freebobux** - have you ever REALLY wanted to rickroll someone, but didn't know how? If so, i really recommend you visiting <a href="https://khenzii.dev/freebobux">khenzii.dev/freebobux</a> :).
-- **/projects** - page showcasing my previous projects.
-- **/blog** - a twitter clone without budget.
+- **/projects** - page showcasing my previous projects (https://khenzii.dev/projects).
+- **/blog** - a twitter clone without budget (https://khenzii.dev/blog/register).
 
 ## Contributing | IMPORTANT!!!
 Please, read this carefully before spending your time creating cool stuff: The whole project is meant to be my portfolio, so i will sadly have to ignore PR's that add things that aren't already on the website :/. However, if you really want to help, you can always try to find some bugs, or even a typo in some text - i will be really happy to merge those PR's :).

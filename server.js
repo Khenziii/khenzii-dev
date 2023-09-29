@@ -182,13 +182,19 @@ const checkAuthMiddleware = async (req, res, next) => {
 
 
 // blog stuff here (some functions)
-function checkIfStringContainsIllegalChar(string, legalChars) {
-    for (let i = 0; i < string.length; i++) {
-        if (legalChars.indexOf(string[i]) === -1) {
-            return true; // Found an illegal character
+function checkIfStringContainsIllegalChar(string, legalChars, max_length) {
+    if(string.length < max_length) {
+        for (let i = 0; i < string.length; i++) {
+            if (legalChars.indexOf(string[i]) === -1) {
+                return true; // Found an illegal character
+            }
         }
+        return false; // All characters are legal
+    } else {
+        return true
+        // user tried to input a too long username,
+        // possible DoS attack (or just a too long username)
     }
-    return false; // All characters are legal
 }
 
 function checkIfEmailCorrect(email) {
@@ -491,8 +497,8 @@ app.post('/blog/api/register', async (req, res) => {
     // Retrieve data from the request body
     const { username, email, password } = req.body;
 
-    const containsIllegalUsername = checkIfStringContainsIllegalChar(username, legal_chars);
-    const containsIllegalEmail = checkIfStringContainsIllegalChar(email, legal_chars);
+    const containsIllegalUsername = checkIfStringContainsIllegalChar(username, legal_chars, max_length = 20);
+    const containsIllegalEmail = checkIfStringContainsIllegalChar(email, legal_chars, max_length = 20);
     const EmailSyntaxCorrect = checkIfEmailCorrect(email)
     const usernameAlreadyRegistered = await checkIfUsernameTaken(username)
 
@@ -909,7 +915,7 @@ app.post('/blog/api/change_username', authMiddleware, async (req, res) => {
         if (req.auth.username == result.rows[0].username) {
             // 2. check if the username is okay :thumbsup:
             const usernameAlreadyRegistered = await checkIfUsernameTaken(text_value)
-            const containsIllegalUsername = checkIfStringContainsIllegalChar(text_value, legal_chars);
+            const containsIllegalUsername = checkIfStringContainsIllegalChar(text_value, legal_chars, max_length = 20);
 
             var valid = true
             var reason = ""
