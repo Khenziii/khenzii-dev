@@ -2,8 +2,13 @@
 @import '../../../presets/fonts.css';
 @import '../../../presets/body.css';
 
+body {
+    overflow: scroll;
+    overflow-x: hidden;
+}
+
 .shadow_effect {
-    position: absolute;
+    position: fixed;
 
     width: 100%;
     height: 100%;
