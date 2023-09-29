@@ -10,12 +10,20 @@ const username_paragraph = document.getElementById("username");
 const bio_paragraph = document.getElementById("bio");
 const shadowEffect = document.getElementById("shadowEffect");
 const usernameInput = document.getElementById("edit_username_input");
+const changeUsernameButton = document.getElementById("username_change_button");
 const bioInput = document.getElementById("edit_bio_input");
+const changeBioButton = document.getElementById("bio_change_button");
 const edit_pfp_file_input = document.getElementById("edit_pfp_file_input");
 const edit_pfp_drop = document.getElementById("edit_pfp_drop");
+const changePfpButton = document.getElementById("pfp_change_button");
 
 
 var user_id = ""
+var reload = false
+
+var change_pfp_button_clickable = true
+var change_username_button_clickable = true
+var change_bio_button_clickable = true
 
 function HTMLpfpInfo(text) {
     const info_text = `
@@ -93,6 +101,16 @@ async function getValuesFromServer() {
 }
 
 async function changePfp() {
+    // make the change profile picture button not clickable
+    // (it will become clickable again after
+    // finishing the change of profile picture)
+    if(change_pfp_button_clickable == false) {
+        return
+    }
+
+    changePfpButton.classList.add("no");
+    change_pfp_button_clickable = false
+
     const editPfpValue = edit_pfp_file_input.files[0];
 
     const formData = new FormData();
@@ -107,10 +125,24 @@ async function changePfp() {
 
     var text = await response.text();
 
+    changePfpButton.classList.remove("no");
+    change_pfp_button_clickable = true
     HTMLpfpInfo(text)
+
+    reload = true
 }
 
 async function changeUsername() {
+    // make the change username button not clickable
+    // (it will become clickable again after
+    // finishing the change of username)
+    if(change_username_button_clickable == false) {
+        return
+    }
+
+    changeUsernameButton.classList.add("no");
+    change_username_button_clickable = false
+
     // change the name of the old cookie (to "<name>_old")
     // Get the value of the old cookie
     let oldCookieValue = document.cookie.split('; ').find(row => row.startsWith('jwt_access_cookie='))?.split('=')[1];
@@ -157,10 +189,24 @@ async function changeUsername() {
         document.cookie = "jwt_access_cookie_old=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
     }
 
+    changeUsernameButton.classList.remove("no");
+    change_username_button_clickable = true
     HTMLusernameInfo(text)
+
+    reload = true
 }
 
 async function changeBio() {
+    // make the change bio button not clickable
+    // (it will become clickable again after
+    // finishing the change of the bio)
+    if(change_bio_button_clickable == false) {
+        return
+    }
+
+    changeBioButton.classList.add("no");
+    change_bio_button_clickable = false
+
     const editBioInputValue = bioInput.value;
 
     const data = {
@@ -178,7 +224,11 @@ async function changeBio() {
 
     var text = await response.text();
 
+    changeBioButton.classList.remove("no");
+    change_bio_button_clickable = true
     HTMLbioInfo(text)
+
+    reload = true
 }
 
 function createTheGoBackButtonHTML(username) {
@@ -194,16 +244,25 @@ function createTheGoBackButtonHTML(username) {
 close_edit_pfp_popout.onclick = function () {
     edit_pfp_popout.style.display = "none";
     shadowEffectEnd()
+    if(reload == true) {
+        location.reload();
+    }
 }
 
 close_edit_username_popout.onclick = function () {
     edit_username_popout.style.display = "none";
     shadowEffectEnd()
+    if(reload == true) {
+        location.reload();
+    }
 }
 
 close_edit_bio_popout.onclick = function () {
     edit_bio_popout.style.display = "none";
     shadowEffectEnd()
+    if(reload == true) {
+        location.reload();
+    }
 }
 
 function changePreview(element) {

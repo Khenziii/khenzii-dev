@@ -348,3 +348,8 @@
 
     margin: 0;
 }
+
+.no {
+    opacity: 0.3;
+    cursor: not-allowed;
+}

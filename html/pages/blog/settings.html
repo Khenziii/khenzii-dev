@@ -30,7 +30,7 @@
                 <input type="file" id="edit_pfp_file_input" class="edit_pfp_file_input" accept="image/*">
             </label>
 
-            <input type="submit" value="lookin' fresh" class="pfp_change_button" onclick="changePfp()">
+            <input type="submit" value="lookin' fresh" class="pfp_change_button" id="pfp_change_button" onclick="changePfp()">
         </div>
 
         <div id="edit_username" class="edit_username">
@@ -41,7 +41,7 @@
             </p>
             <input id="edit_username_input" class="edit_username_input" placeholder="Jeff">
 
-            <button class="edit_username_done_button" onclick="changeUsername()">
+            <button class="edit_username_done_button" id="username_change_button" onclick="changeUsername()">
                 Looks good!
             </button>
         </div>
@@ -54,7 +54,7 @@
             </p>
             <textarea id="edit_bio_input" class="edit_bio_input" placeholder="cats > dogs"></textarea>
 
-            <button class="edit_bio_done_button" onclick="changeBio()">
+            <button class="edit_bio_done_button" id="bio_change_button" onclick="changeBio()">
                 yup, change it!
             </button>
         </div>

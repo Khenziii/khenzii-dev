@@ -1,5 +1,5 @@
-const profile_container = document.getElementById("profile_container")
-const username_paragraph = document.getElementById("username")
+const profile_container = document.getElementById("profile_container");
+const username_paragraph = document.getElementById("username");
 const pfp_image = document.getElementById("pfp");
 const bio_paragraph = document.getElementById("bio");
 const joined_at_paragraph = document.getElementById("joined_at");
