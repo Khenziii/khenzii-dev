@@ -386,10 +386,42 @@ closeCreatePostPopout.onclick = function () {
     }
 }
 
+var hash = null
+var hashable = false
+
 if (window.location.href.endsWith('/')) {
     var username = window.location.href.split("/")[window.location.href.split("/").length - 2]
 } else {
     var username = window.location.href.split("/")[window.location.href.split("/").length - 1]
+    var username = username.split("#")[0]
+    
+    // get the strings after username
+    var after_username = window.location.href.split(username)[1]
+    var hash = after_username.split("#")
+
+    console.log(hash)
+}
+
+if(!username) { // if didn't get the username correctly
+    // using the .replace() method here, because it's ALWAYS synchronus
+    window.location.replace("/")
+}
+
+if(hash) {
+    hash.splice(0, 1) // remove the first index
+    // (we don't need this: '' string)
+
+    for(let i = 0; i < hash.length; i++) {
+        let hash_int = Number(hash[i])
+        if(!hash_int) {
+            // if NaN, go to the page without incorrect hashtags
+            // (we only support # with indexes (no titles, etc.))
+            // using the .replace() method here, because it's ALWAYS syncrhonus
+            window.location.replace(`/blog/user/${username}`)
+        }
+    }
+
+    hashable = true
 }
 
 username_paragraph.textContent = username;
@@ -413,7 +445,7 @@ getValuesFromServer(username).then(data => {
     if (data.categories == "404") {
         createHTMLCategory("", "", "", true, data.logged_in, data.index_in_user)
     } else {
-        // sort the categories by index_in_user
+        // sort the categories by index_in_user (in reverse)
         data.categories.sort((a, b) => a.index_in_user - b.index_in_user);
 
         for (let i = 0; i < data.categories.length; i++) { // loop through all of the categories
@@ -426,6 +458,20 @@ getValuesFromServer(username).then(data => {
 
         for(let i = 0; i < categories_element.children.length; i++) {
             element = categories_element.children[i]
+
+            if(hashable) {
+                for(let j = 0; j < hash.length; j++) {
+                    if(hash[j] > data.categories.length || hash[j] < 1) {
+                        window.location.replace(`/blog/user/${username}`)
+                    }
+
+                    if(element.getAttribute("data-index") == hash[j]) {
+                        getPosts(element.getAttribute("data-id"), false)
+                        var details_element = categories_element.children[i].querySelector('.category_details');
+                        details_element.open = true
+                    }
+                }
+            }
 
             element.addEventListener('dragstart', function (event) {
                 draggedElement = this;
