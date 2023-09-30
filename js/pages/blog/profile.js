@@ -407,8 +407,6 @@ if (window.location.href.endsWith('/')) {
     // get the strings after username
     var after_username = window.location.href.split(username)[1]
     var hash = after_username.split("#")
-
-    console.log(hash)
 }
 
 if(!username) { // if didn't get the username correctly
