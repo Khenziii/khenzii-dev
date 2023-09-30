@@ -322,10 +322,6 @@ ima implement links later
 }
 
 .category_drag {
-    display: flex;
-    flex-direction: column;
-    align-self: center;
-
     z-index: 2;
 
     height: 2vh;
