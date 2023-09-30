@@ -470,11 +470,13 @@ getValuesFromServer(username).then(data => {
 
             if(hashable) {
                 for(let j = 0; j < hash.length; j++) {
-                    if(hash[j] > data.categories.length || hash[j] < 1) {
+                    // if incorrect hash, resend user to page without hash
+                    if((hash[j] > data.categories.length || hash[j] < 1) && hash[j] != -1) {
                         window.location.replace(`/blog/user/${username}`)
                     }
 
-                    if(element.getAttribute("data-index") == hash[j]) {
+                    // open if the hash match, or if hash -1
+                    if(element.getAttribute("data-index") == hash[j] || hash[j] == -1) {
                         getPosts(element.getAttribute("data-id"), false)
                         var details_element = categories_element.children[i].querySelector('.category_details');
                         details_element.open = true
