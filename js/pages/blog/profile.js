@@ -24,6 +24,7 @@ var how_much_times = {}
 var highest_id_posts = -1
 
 var reload = false
+var reload_category_to_open = null
 var category_create_button_clickable = true
 var post_create_button_clickable = true
 
@@ -202,7 +203,14 @@ async function createPost() {
     post_create_button_clickable = true
     postCreateInfo(text)
 
+    // set the reload to true and get
+    // category to open after reload
     reload = true
+
+    // get the element
+    const category_element = document.querySelector(`[data-id="${createPostPopout.style.data_category_id}"]`);
+    const category_index = category_element.getAttribute("data-index")
+    reload_category_to_open = category_index
 }
 
 function shadowEffectStart() {
@@ -382,6 +390,7 @@ closeCreatePostPopout.onclick = function () {
     createPostPopout.style.display = "none";
     shadowEffectEnd()
     if(reload == true) {
+        window.location.replace(`/blog/user/${username}#${reload_category_to_open}`)
         location.reload();
     }
 }
