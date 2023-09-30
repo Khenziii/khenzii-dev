@@ -232,6 +232,28 @@ function showCreatePostPopout(category_id) {
     shadowEffectStart()
 }
 
+function createTheLoginAndRegisterButtons() {
+    const line = `
+    <hr class="logged_or_not_line">
+    `
+
+    const login_button = `
+    <button class="login_button" id="login_button" onclick="redirectTo('/blog/login', event)">
+        Login
+    </button>
+    `
+
+    const register_button = `
+    <button class="register_button" id="register_button" onclick="redirectTo('/blog/register', event)">
+        Register
+    </button>
+    `
+
+    profile_container.insertAdjacentHTML('beforeend', line)
+    profile_container.insertAdjacentHTML('beforeend', login_button)
+    profile_container.insertAdjacentHTML('beforeend', register_button)
+}
+
 function createTheCategoryAddButton() {
     const button = `
     <button class="category_create_button" id="category_create_button" onclick="showCreateCategoryPopout()">
@@ -243,13 +265,17 @@ function createTheCategoryAddButton() {
 }
 
 function createTheSettingsButton() {
+    const line = `
+    <hr class="logged_or_not_line">
+    `
+
     const button = `
     <button class="settings_button" id="settings_button" onclick="redirectTo('/blog/settings', event)">
         <img src="../../../icons/pages/blog/settings.png" alt="settings button" class="settings_button_image">
     </button>
     `
-
-    return profile_container.insertAdjacentHTML('beforeend', button)
+    profile_container.insertAdjacentHTML('beforeend', line)
+    profile_container.insertAdjacentHTML('beforeend', button)
 }
 
 function createHTMLCategory(title, description, id, empty, logged_in, index_in_user) {
@@ -447,6 +473,8 @@ getValuesFromServer(username).then(data => {
     if (data.logged_in) {
         createTheCategoryAddButton()
         createTheSettingsButton()
+    } else {
+        createTheLoginAndRegisterButtons()
     }
 
     if (data.categories == "404") {

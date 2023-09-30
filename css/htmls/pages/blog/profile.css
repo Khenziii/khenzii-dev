@@ -83,12 +83,11 @@ body {
     display: flex;
 }
 
-/*
-i'll probably put some stuff here later
 .profile_container {
-    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
-*/
 
 .pfp {
     width: 10vw;
@@ -121,7 +120,16 @@ i'll probably put some stuff here later
     max-width: 10vw;
     height: auto;
     word-wrap: break-word;
+
+    margin-bottom: 0;
 }
+
+/*
+ima implement links later
+.links {
+    
+}
+*/
 
 .joined_at {
     color: var(--text);
@@ -133,9 +141,13 @@ i'll probably put some stuff here later
     max-width: 10vw;
     height: auto;
     word-wrap: break-word;
+
+    margin-top: 0;
 }
 
 .user_id {
+    margin-bottom: 0;
+
     color: var(--text);
 
     font-size: 1vh;
@@ -155,10 +167,6 @@ i'll probably put some stuff here later
 
     width: 40%;
     height: auto;
-
-    position: relative;
-    left: 50%;
-    transform: translateX(-50%);
 }
 
 .settings_button_image {
@@ -175,16 +183,87 @@ i'll probably put some stuff here later
     border-radius: 2vh;
 }
 
-/*
-ima implement links later
-.links {
-    
-}
-*/
-
 .line {
     margin: 2vw;
     color: var(--secondary);
+}
+
+.login_button {
+    scale: 1;
+    width: 10vw;
+
+    background-color: transparent;
+
+    color: var(--text);
+    font-size: 100%;
+
+    text-align: center;
+    display: inline-block;
+    padding: 15px 40px;
+    border: 1px solid #fff;
+    cursor: pointer;
+    letter-spacing: 2px;
+    overflow: hidden;
+}
+
+.login_button:before {
+    content: "";
+    position: absolute;
+    height: 340%;
+    width: 30%;
+    background: #fff;
+    right: -27.5%;
+    top: -70%;
+    transform: rotate(37deg) translateY(-20%);
+    transition: all .3s;
+    opacity: 0.3;
+}
+
+.login_button:hover:before {
+    right: 105%;
+}
+
+.logged_or_not_line {
+    margin: 2vh;
+    width: 80%;
+    color: var(--secondary);
+}
+
+.register_button {
+    margin-top: 1vh;
+
+    scale: 1;
+    width: 10vw;
+
+    background-color: transparent;
+
+    color: var(--text);
+    font-size: 100%;
+
+    text-align: center;
+    display: inline-block;
+    padding: 15px 40px;
+    border: 1px solid #fff;
+    cursor: pointer;
+    letter-spacing: 2px;
+    overflow: hidden;
+}
+
+.register_button:before {
+    content: "";
+    position: absolute;
+    height: 340%;
+    width: 30%;
+    background: #fff;
+    right: -27.5%;
+    top: -70%;
+    transform: rotate(37deg) translateY(-20%);
+    transition: all .3s;
+    opacity: 0.3;
+}
+
+.register_button:hover:before {
+    right: 105%;
 }
 
 .content_container {
@@ -202,6 +281,8 @@ ima implement links later
 
     width: 20%;
     height: auto;
+
+    margin-bottom: 2vh;
 }
 
 .category_create_button_image {
@@ -227,12 +308,13 @@ ima implement links later
 
     display: flex;
     flex-direction: column;
-    gap: 1vh;
+    gap: 2vh;
 }
 
 .category {
     display: flex;
     flex-direction: row;
+    min-height: 2vh;
 }
 
 .category_details {
@@ -240,9 +322,13 @@ ima implement links later
 }
 
 .category_drag {
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+
     z-index: 2;
 
-    height: 3vh;
+    height: 2vh;
     margin-left: -3vh;
 
     cursor: move;
