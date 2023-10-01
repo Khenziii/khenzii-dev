@@ -68,7 +68,7 @@ async function change_category_index(first_index, second_index) {
         draggables[i].draggable = false;
         draggables[i].classList.add("no")
     }
-    
+
     const data = {
         user_id: user_id,
         first_category_index: first_index,
@@ -85,7 +85,7 @@ async function change_category_index(first_index, second_index) {
 
     var text = await response.text()
 
-    if(response.status !== 429) {
+    if (response.status !== 429) {
         reload = true
     }
 
@@ -154,7 +154,7 @@ async function createCategory() {
     // make the create button not clickable
     // (it will become clickable again after
     // finishing the creation of the category)
-    if(category_create_button_clickable == false) {
+    if (category_create_button_clickable == false) {
         return
     }
 
@@ -190,7 +190,7 @@ async function createPost() {
     // make the create button not clickable
     // (it will become clickable again after
     // finishing the creation of the post)
-    if(post_create_button_clickable == false) {
+    if (post_create_button_clickable == false) {
         return
     }
 
@@ -363,6 +363,24 @@ function createHTMLCategory(title, description, id, empty, logged_in, index_in_u
 }
 
 function createHTMLPost(text_value, created_at, id, category_id, index_in_category) {
+    /// check if the post contains a image or video, if so, style them
+    // Define a regular expression to match <img> and <video> tags
+    const mediaRegex = /<img[^>]*>|<video[^>]*>/g;
+
+    // Replace <img> and <video> tags with modified versions
+    const modifiedText = text_value.replace(mediaRegex, (match) => {
+        // Check if the matched tag is an <img> or <video>
+        if (match.startsWith("<img")) {
+            // If it's an <img> tag, add the max-width and height styles
+            return match.replace(">", ' style="max-width: 100%; height: auto;" draggable="false" alt="sum image">');
+        } else if (match.startsWith("<video")) {
+            // If it's a <video> tag, add the max-width and height styles
+            return match.replace(">", ' style="max-width: 100%; height: auto;" draggable="false" alt="sum video" controls="true">');
+        }
+        return match;
+    });
+
+
     const posts_element = document.getElementById(`${category_id}_posts`);
     const post = `
     <div class="post">
@@ -381,7 +399,7 @@ function createHTMLPost(text_value, created_at, id, category_id, index_in_catego
         </div>
 
         <p class="post_text">
-            ${text_value}
+            ${modifiedText}
         </p>
 
         <hr class="post_line">
@@ -421,7 +439,7 @@ async function getValuesFromServer(username) {
 closeCreateCategoryPopout.onclick = function () {
     createCategoryPopout.style.display = "none";
     shadowEffectEnd()
-    if(reload == true) {
+    if (reload == true) {
         location.reload();
     }
 }
@@ -429,7 +447,7 @@ closeCreateCategoryPopout.onclick = function () {
 closeCreatePostPopout.onclick = function () {
     createPostPopout.style.display = "none";
     shadowEffectEnd()
-    if(reload == true) {
+    if (reload == true) {
         window.location.replace(`/blog/user/${username}#${reload_category_to_open}`)
         location.reload();
     }
@@ -438,7 +456,7 @@ closeCreatePostPopout.onclick = function () {
 closeInfoBox.onclick = function () {
     infoBox.style.display = "none";
     shadowEffectEnd()
-    if(reload == true) {
+    if (reload == true) {
         location.reload();
     }
 }
@@ -451,24 +469,24 @@ if (window.location.href.endsWith('/')) {
 } else {
     var username = window.location.href.split("/")[window.location.href.split("/").length - 1]
     var username = username.split("#")[0]
-    
+
     // get the strings after username
     var after_username = window.location.href.split(username)[1]
     var hash = after_username.split("#")
 }
 
-if(!username) { // if didn't get the username correctly
+if (!username) { // if didn't get the username correctly
     // using the .replace() method here, because it's ALWAYS synchronus
     window.location.replace("/")
 }
 
-if(hash) {
+if (hash) {
     hash.splice(0, 1) // remove the first index
     // (we don't need this: '' string)
 
-    for(let i = 0; i < hash.length; i++) {
+    for (let i = 0; i < hash.length; i++) {
         let hash_int = Number(hash[i])
-        if(!hash_int) {
+        if (!hash_int) {
             // if NaN, go to the page without incorrect hashtags
             // (we only support # with indexes (no titles, etc.))
             // using the .replace() method here, because it's ALWAYS syncrhonus
@@ -485,7 +503,7 @@ document.title = `${username} | khenzii.dev/blog`;
 var user_id = ""
 
 getValuesFromServer(username).then(data => {
-    if(data == "something went wrong.. :( Error: Something went wrong") {
+    if (data == "something went wrong.. :( Error: Something went wrong") {
         infoBoxShow("You got rate limited! The get_user API endpoint responds 80 times / minute.")
         return
     }
@@ -518,18 +536,18 @@ getValuesFromServer(username).then(data => {
         let draggedElement = null;
         let overElement = null
 
-        for(let i = 0; i < categories_element.children.length; i++) {
+        for (let i = 0; i < categories_element.children.length; i++) {
             element = categories_element.children[i]
 
-            if(hashable) {
-                for(let j = 0; j < hash.length; j++) {
+            if (hashable) {
+                for (let j = 0; j < hash.length; j++) {
                     // if incorrect hash, resend user to page without hash
-                    if((hash[j] > data.categories.length || hash[j] < 1) && hash[j] != -1) {
+                    if ((hash[j] > data.categories.length || hash[j] < 1) && hash[j] != -1) {
                         window.location.replace(`/blog/user/${username}`)
                     }
 
                     // open if the hash match, or if hash -1
-                    if(element.getAttribute("data-index") == hash[j] || hash[j] == -1) {
+                    if (element.getAttribute("data-index") == hash[j] || hash[j] == -1) {
                         getPosts(element.getAttribute("data-id"), false)
                         var details_element = categories_element.children[i].querySelector('.category_details');
                         details_element.open = true
@@ -572,9 +590,9 @@ getValuesFromServer(username).then(data => {
 
                 const first_index = draggedElement.getAttribute("data-index")
                 const second_index = overElement.getAttribute("data-index")
-                
+
                 change_category_index(first_index, second_index).then(data => {
-                    if(reload == true) {
+                    if (reload == true) {
                         location.reload();
                     } else {
                         infoBoxShow(data)
