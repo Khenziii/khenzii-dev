@@ -22,11 +22,7 @@ async function check_if_correct() {
         },
         body: JSON.stringify(data)
     }).then(response => {
-        if (response.ok) {
-            return response.text();
-        } else {
-            throw new Error('Something went wrong');
-        }
+        return response.text();
     }).catch(error => {
         // Handle any error that occurred during the request
         return error

@@ -16,6 +16,9 @@ const changeBioButton = document.getElementById("bio_change_button");
 const edit_pfp_file_input = document.getElementById("edit_pfp_file_input");
 const edit_pfp_drop = document.getElementById("edit_pfp_drop");
 const changePfpButton = document.getElementById("pfp_change_button");
+const infoBox = document.getElementById("info_box");
+const closeInfoBox = document.getElementById("info_box_close");
+const infoBoxText = document.getElementById("info_box_text");
 
 
 var user_id = ""
@@ -24,6 +27,13 @@ var reload = false
 var change_pfp_button_clickable = true
 var change_username_button_clickable = true
 var change_bio_button_clickable = true
+
+function infoBoxShow(text) {
+    infoBox.style.display = "flex";
+    shadowEffectStart()
+
+    infoBoxText.textContent = text;
+}
 
 function HTMLpfpInfo(text) {
     const info_text = `
@@ -262,6 +272,14 @@ close_edit_bio_popout.onclick = function () {
     }
 }
 
+closeInfoBox.onclick = function () {
+    infoBox.style.display = "none";
+    shadowEffectEnd()
+    if(reload == true) {
+        location.reload();
+    }
+}
+
 function changePreview(element) {
     var file = element.files[0];
     const image_HTML = `
@@ -304,6 +322,11 @@ edit_pfp_drop.addEventListener('dragover', onDragOver, false);
 edit_pfp_drop.addEventListener('drop', onDrop, false);
 
 getValuesFromServer().then(data => {
+    if(data == "something went wrong.. :( Error: Something went wrong") {
+        infoBoxShow("You got rate limited! The get_user_settings API endpoint responds 80 times / minute.")
+        return
+    }
+
     // asign stuff
     pfp_image.src = data.image;
     bio_paragraph.textContent = data.bio_and_links.text_value;

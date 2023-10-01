@@ -16,6 +16,9 @@ const createPostPopout = document.getElementById("create_post");
 const closeCreatePostPopout = document.getElementById("create_post_close");
 const createPostButton = document.getElementById("create_post_create_button");
 const postInput = document.getElementById("post_input");
+const infoBox = document.getElementById("info_box");
+const closeInfoBox = document.getElementById("info_box_close");
+const infoBoxText = document.getElementById("info_box_text");
 
 
 var first_time = {}
@@ -27,6 +30,13 @@ var reload = false
 var reload_category_to_open = null
 var category_create_button_clickable = true
 var post_create_button_clickable = true
+
+function infoBoxShow(text) {
+    infoBox.style.display = "flex";
+    shadowEffectStart()
+
+    infoBoxText.textContent = text;
+}
 
 function removeShowMoreButtonHTML(category_id) {
     const button_element = document.getElementById(`show_more_posts_button_${category_id}`)
@@ -74,7 +84,11 @@ async function change_category_index(first_index, second_index) {
     });
 
     var text = await response.text()
-    reload = true
+
+    if(response.status !== 429) {
+        reload = true
+    }
+
     return text
 }
 
@@ -421,6 +435,14 @@ closeCreatePostPopout.onclick = function () {
     }
 }
 
+closeInfoBox.onclick = function () {
+    infoBox.style.display = "none";
+    shadowEffectEnd()
+    if(reload == true) {
+        location.reload();
+    }
+}
+
 var hash = null
 var hashable = false
 
@@ -463,6 +485,11 @@ document.title = `${username} | khenzii.dev/blog`;
 var user_id = ""
 
 getValuesFromServer(username).then(data => {
+    if(data == "something went wrong.. :( Error: Something went wrong") {
+        infoBoxShow("You got rate limited! The get_user API endpoint responds 80 times / minute.")
+        return
+    }
+
     // asign stuff
     pfp_image.src = data.image;
     bio_paragraph.textContent = data.bio_and_links.text_value;
@@ -547,11 +574,11 @@ getValuesFromServer(username).then(data => {
                 const second_index = overElement.getAttribute("data-index")
                 
                 change_category_index(first_index, second_index).then(data => {
-                    // console.log(data) // handle the server response in anyway if you wish
-                    // if response status code == 200 the data will be "Success!"
-
                     if(reload == true) {
                         location.reload();
+                    } else {
+                        infoBoxShow(data)
+                        reload = true
                     }
                 })
             });

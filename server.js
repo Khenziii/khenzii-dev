@@ -13,6 +13,7 @@ const cookieParser = require('cookie-parser');
 const fs = require('fs');
 const multer = require('multer');
 const sanitizeHtml = require('sanitize-html');
+const rateLimit = require('express-rate-limit');
 
 
 const app = express();
@@ -24,6 +25,67 @@ const number_of_posts_to_get = 5
 const legal_chars = ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'z', 'x', 'c', 'v', 'b', 'n', 'm',
     'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Z', 'X', 'C', 'V', 'B', 'N', 'M',
     '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '@', '.', '-', '_']
+
+
+// allow one IP to access 120 pages / minute
+const limit_pages = rateLimit({
+    validate: {
+        // we trust our beloved nginx :)
+        trustProxy: false
+    },
+
+    windowMs: 1000 * 60, // 1 minute
+    max: 120, // Max number of requests per IP
+    message: 'Too many requests from this IP, please try again later. You can access 2 pages / second.',
+});
+
+// allow one IP to get 80 responses from the API / minute
+const limit_api = rateLimit({
+    validate: {
+        // we trust our beloved nginx :)
+        trustProxy: false
+    },
+
+    windowMs: 1000 * 60, // 1 minute
+    max: 80, // Max number of requests per IP
+    message: 'Too many requests from this IP, please try again later. You can get stuff from the API 80 times / minute.',
+});
+
+// allow one IP to change stuff 20 times / minute
+const limit_change = rateLimit({
+    validate: {
+        // we trust our beloved nginx :)
+        trustProxy: false
+    },
+
+    windowMs: 1000 * 60, // 1 minute
+    max: 20, // Max number of requests per IP
+    message: 'Too many requests from this IP, please try again later. You can change your stuff 20 times / minute.',
+});
+
+// allow one IP to create stuff 10 times / minute
+const limit_create = rateLimit({
+    validate: {
+        // we trust our beloved nginx :)
+        trustProxy: false
+    },
+
+    windowMs: 1000 * 60, // 1 minute
+    max: 10, // Max number of requests per IP
+    message: 'Too many requests from this IP, please try again later. You can create stuff 10 times / minute.',
+});
+
+// allow one IP to do stuff with the accounts 5 times / minute
+const limit_account = rateLimit({
+    validate: {
+        // we trust our beloved nginx :)
+        trustProxy: false
+    },
+
+    windowMs: 1000 * 60, // 1 minute
+    max: 5, // Max number of requests per IP
+    message: 'Too many requests from this IP, please try again later. You can do stuff with accounts 5 times / minute.',
+});
 
 const storage = multer.memoryStorage(); // Store the uploaded image in memory
 const upload = multer({ storage: storage });
@@ -183,7 +245,7 @@ const checkAuthMiddleware = async (req, res, next) => {
 
 // blog stuff here (some functions)
 function checkIfStringContainsIllegalChar(string, legalChars, max_length) {
-    if(string.length < max_length) {
+    if (string.length < max_length) {
         for (let i = 0; i < string.length; i++) {
             if (legalChars.indexOf(string[i]) === -1) {
                 return true; // Found an illegal character
@@ -311,12 +373,17 @@ app.use('/robots.txt', express.static(path.join(__dirname, 'robots.txt')));
 app.set('trust proxy', true);
 
 app.use(function (req, res, next) {
-    ClientIP = req.headers['x-forwarded-for']
-    if (ClientIP) {
-        req.ClientIP = ClientIP;
+    var forwarded = req.headers['x-forwarded-for']
+    var ips = []
+
+    if(forwarded) {
+        ips = forwarded.split(', ')
     } else {
-        req.ClientIP = "<empty_string>"
+        ips = []
     }
+
+    // get the last IP (always real one, obtained by nginx itself)
+    req.ClientIP = ips[ips.length - 1];
 
     next();
 });
@@ -325,49 +392,49 @@ app.use(express.json());
 
 
 // '/' route
-app.get('/', (req, res) => {
+app.get('/', limit_pages, (req, res) => {
     res.sendFile(path.join(__dirname, 'html', 'index.html'));
     consoleInfo(`${req.ClientIP} requested the '/' route`)
 });
 
 // '/temp' route
-app.get('/temp', (req, res) => {
+app.get('/temp', limit_pages, (req, res) => {
     res.sendFile(path.join(__dirname, 'html', 'temp_mobile_index.html'));
     consoleInfo(`${req.ClientIP} requested the '/temp' route`)
 });
 
 // '/mobileinfo' route
-app.get('/mobileinfo', (req, res) => {
+app.get('/mobileinfo', limit_pages, (req, res) => {
     res.sendFile(path.join(__dirname, 'html', 'errors', 'page_not_mobile.html'));
     consoleInfo(`${req.ClientIP} requested the '/mobileinfo' route`)
 });
 
 // '/projects' route
-app.get('/projects', (req, res) => {
+app.get('/projects', limit_pages, (req, res) => {
     res.sendFile(path.join(__dirname, 'html', 'pages', 'projects', 'projects.html'));
     consoleInfo(`${req.ClientIP} requested the '/projects' route`)
 });
 
 // '/projects-2' route
-app.get('/projects-2', (req, res) => {
+app.get('/projects-2', limit_pages, (req, res) => {
     res.sendFile(path.join(__dirname, 'html', 'pages', 'projects', 'projects-2.html'));
     consoleInfo(`${req.ClientIP} requested the '/projects-2' route`)
 });
 
 // '/projects-3' route
-app.get('/projects-end', (req, res) => {
+app.get('/projects-end', limit_pages, (req, res) => {
     res.sendFile(path.join(__dirname, 'html', 'pages', 'projects', 'projects-end.html'));
     consoleInfo(`${req.ClientIP} requested the '/projects-end' route`)
 });
 
 // '/freebobux' route
-app.get('/freebobux', (req, res) => {
+app.get('/freebobux', limit_pages, (req, res) => {
     res.sendFile(path.join(__dirname, 'html', 'pages', 'freebobux', 'freebobux.html'));
     consoleInfo(`${req.ClientIP} requested the '/freebobux' route :D`)
 });
 
 // '/snake' route
-app.get('/snake', (req, res) => {
+app.get('/snake', limit_pages, (req, res) => {
     // res.sendFile(path.join(__dirname, 'html', 'pages', 'snake', 'snake.html'));
     // uncomment the above line later, right now the /snake page
     // is still being build so the route shows the `this page is
@@ -377,7 +444,7 @@ app.get('/snake', (req, res) => {
 });
 
 // '/page_being_build' route
-app.get('/page_being_build', (req, res) => {
+app.get('/page_being_build', limit_pages, (req, res) => {
     // if you are lazy, instead of showing the user the html file
     // using this line of code:
     // res.sendFile(path.join(__dirname, 'html', 'errors', 'page_being_build.html'));
@@ -393,20 +460,20 @@ app.get('/page_being_build', (req, res) => {
 // blog stuff below
 
 // '/blog' route
-app.get('/blog', (req, res) => {
+app.get('/blog', limit_pages, (req, res) => {
     // res.sendFile(path.join(__dirname, 'html', 'pages', 'blog', 'blog.html'));
     // consoleInfo(`${req.ClientIP} requested the '/blog' route`)
     res.redirect(`/page_being_build`)
 });
 
 // '/blog/settings'
-app.get('/blog/settings', authMiddleware, (req, res) => {
+app.get('/blog/settings', authMiddleware, limit_pages, (req, res) => {
     res.sendFile(path.join(__dirname, 'html', 'pages', 'blog', 'settings.html'));
     consoleInfo(`${req.ClientIP} requested the '/blog/settings' route, username "${req.auth.username}".`)
 });
 
 // '/blog/login' route
-app.get('/blog/login', checkAuthMiddleware, (req, res) => {
+app.get('/blog/login', checkAuthMiddleware, limit_pages, (req, res) => {
     if (req.isAuthenticated) {
         res.redirect(`/blog/user/${req.auth.username}`)
         consoleInfo(`${req.ClientIP} tried to access the login page while being logged in, username: ${req.auth.username}`)
@@ -418,7 +485,7 @@ app.get('/blog/login', checkAuthMiddleware, (req, res) => {
 });
 
 // '/blog/register' route
-app.get('/blog/register', checkAuthMiddleware, (req, res) => {
+app.get('/blog/register', checkAuthMiddleware, limit_pages, (req, res) => {
     if (req.isAuthenticated) {
         res.redirect(`/blog/user/${req.auth.username}`)
         consoleInfo(`${req.ClientIP} tried to access the register page while being logged in, username: ${req.auth.username}`)
@@ -430,13 +497,13 @@ app.get('/blog/register', checkAuthMiddleware, (req, res) => {
 });
 
 // redirect from /blog/user
-app.get('/blog/user', async (req, res) => {
+app.get('/blog/user', limit_pages, (req, res) => {
     consoleInfo(`${req.ClientIP} tried to get the '/blog/user' route, sending him to '/blog'`)
     res.redirect('/blog');
 });
 
 // user profiles in /blog/user (/blog/user/<username>)
-app.get('/blog/user/:username', async (req, res) => {
+app.get('/blog/user/:username', limit_pages, async (req, res) => {
     const { username } = req.params;
 
     consoleInfo(`${req.ClientIP} requested '/blog/user/${username}'.`)
@@ -466,7 +533,7 @@ app.get('/blog/user/:username', async (req, res) => {
 // API endpoints below!! :)
 
 // login end-point
-app.post('/blog/api/login', async (req, res) => {
+app.post('/blog/api/login', limit_account, async (req, res) => {
     const { username, password } = req.body;
 
     var password_hash = await getHashedPassword(username)
@@ -493,7 +560,7 @@ app.post('/blog/api/login', async (req, res) => {
 });
 
 // registeration end-point
-app.post('/blog/api/register', async (req, res) => {
+app.post('/blog/api/register', limit_account, async (req, res) => {
     // Retrieve data from the request body
     const { username, email, password } = req.body;
 
@@ -580,7 +647,7 @@ app.post('/blog/api/register', async (req, res) => {
 });
 
 // retrieve stuff about user
-app.post('/blog/api/get_user', checkAuthMiddleware, async (req, res) => {
+app.post('/blog/api/get_user', checkAuthMiddleware, limit_api, async (req, res) => {
     try {
         // Retrieve data from the request body
         const username = req.body[0];
@@ -662,7 +729,7 @@ app.post('/blog/api/get_user', checkAuthMiddleware, async (req, res) => {
 });
 
 // retrieve stuff about user (this endpoint is being used by settings (it's not requesting useless stuff such as categories like get_user endpoint))
-app.post('/blog/api/get_user_settings', authMiddleware, async (req, res) => {
+app.post('/blog/api/get_user_settings', authMiddleware, limit_api,  async (req, res) => {
     try {
         // initialize the object that we will later return (it will contain all of the data)
         var data = {}
@@ -715,7 +782,7 @@ app.post('/blog/api/get_user_settings', authMiddleware, async (req, res) => {
 });
 
 // retrieve user's posts
-app.post('/blog/api/get_posts', async (req, res) => {
+app.post('/blog/api/get_posts', limit_api,  async (req, res) => {
     try {
         // Retrieve data from the request body
         const { category_id, times } = req.body;
@@ -749,7 +816,7 @@ app.post('/blog/api/get_posts', async (req, res) => {
 });
 
 // create category
-app.post('/blog/api/create_category', authMiddleware, async (req, res) => {
+app.post('/blog/api/create_category', authMiddleware, limit_create, async (req, res) => {
     try {
         // Retrieve data from the request body
         const { user_id, categoryTitle, categoryDescription } = req.body;
@@ -773,7 +840,7 @@ app.post('/blog/api/create_category', authMiddleware, async (req, res) => {
             }
 
             // 3. sanitze the HTML
-            if(trusted_usernames.includes(req.auth.username)) {
+            if (trusted_usernames.includes(req.auth.username)) {
                 // if user is trusted
                 var cleanCategoryTitle = categoryTitle;
                 var cleanCategoryDescription = categoryDescription;
@@ -804,7 +871,7 @@ app.post('/blog/api/create_category', authMiddleware, async (req, res) => {
 });
 
 // create post
-app.post('/blog/api/create_post', authMiddleware, async (req, res) => {
+app.post('/blog/api/create_post', authMiddleware, limit_create, async (req, res) => {
     try {
         // Retrieve data from the request body
         const { category_id, text_value } = req.body;
@@ -837,7 +904,7 @@ app.post('/blog/api/create_post', authMiddleware, async (req, res) => {
 
             var index_in_category = result.rowCount + 1
 
-            if(trusted_usernames.includes(req.auth.username)) {
+            if (trusted_usernames.includes(req.auth.username)) {
                 // if user is trusted
                 var cleanHTML = text_value;
             } else {
@@ -860,7 +927,7 @@ app.post('/blog/api/create_post', authMiddleware, async (req, res) => {
 });
 
 // change profile picture
-app.post('/blog/api/change_pfp', authMiddleware, upload.single('new_pfp'), async (req, res) => {
+app.post('/blog/api/change_pfp', authMiddleware, upload.single('new_pfp'), limit_change, async (req, res) => {
     try {
         // Retrieve data from the request body
         const { user_id } = req.body;
@@ -902,7 +969,7 @@ app.post('/blog/api/change_pfp', authMiddleware, upload.single('new_pfp'), async
 });
 
 // change username
-app.post('/blog/api/change_username', authMiddleware, async (req, res) => {
+app.post('/blog/api/change_username', authMiddleware, limit_change, async (req, res) => {
     try {
         // Retrieve data from the request body
         const { user_id, text_value } = req.body;
@@ -968,7 +1035,7 @@ app.post('/blog/api/change_username', authMiddleware, async (req, res) => {
 });
 
 // change bio
-app.post('/blog/api/change_bio', authMiddleware, async (req, res) => {
+app.post('/blog/api/change_bio', authMiddleware, limit_change, async (req, res) => {
     try {
         // Retrieve data from the request body
         const { user_id, text_value } = req.body;
@@ -1002,7 +1069,7 @@ app.post('/blog/api/change_bio', authMiddleware, async (req, res) => {
 });
 
 // change category index
-app.post('/blog/api/change_category_index', authMiddleware, async (req, res) => {
+app.post('/blog/api/change_category_index', authMiddleware, limit_change,  async (req, res) => {
     try {
         // Retrieve data from the request body
         const { user_id, first_category_index, second_category_index } = req.body;

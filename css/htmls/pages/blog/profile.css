@@ -465,6 +465,48 @@ ima implement links later
     word-wrap: break-word;
 }
 
+.info_box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    background-color: var(--background_less);
+    border-radius: 2vh;
+
+    padding: 1vh;
+
+    height: fit-content;
+    width: 20vw;
+
+    position: fixed;
+    z-index: 3;
+
+    display: none;
+    /*we'll later set it to flex using JS*/
+    flex-direction: column;
+    align-items: center;
+}
+
+.info_box_close {
+    color: var(--text);
+    cursor: pointer;
+}
+
+.info_box_text {
+    color: var(--text);
+
+    text-align: center;
+
+    font-size: 0.8vw;
+    font-family: Montserrat;
+    font-weight: 500;
+
+    word-wrap: break-word;
+
+    margin: 2vh;
+}
+
 .create_category {
     position: absolute;
     top: 50%;
