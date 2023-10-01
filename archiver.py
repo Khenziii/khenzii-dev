@@ -3,12 +3,12 @@ import waybackpy
 import datetime
 
 
-def log(message: str):
+def log(message: str, prefix: str = 'i'):
     # Create a timezone for GMT+2 (GMT+2 - Warsaw)
     gmt_plus_2 = datetime.timezone(datetime.timedelta(hours=2))
     current_datetime = datetime.datetime.now(gmt_plus_2)
 
-    log_record = current_datetime.strftime(f"%d/%m/%Y - %H:%M:%S > {message}")
+    log_record = current_datetime.strftime(f"[{prefix}] %d/%m/%Y - %H:%M:%S > {message}")
     print(log_record)
 
 def save_page(url, user_agent):
@@ -16,10 +16,10 @@ def save_page(url, user_agent):
         wayback_machine = waybackpy.WaybackMachineSaveAPI(url, user_agent)
         wayback_machine.save()
 
-        log(f"[i] successfully archived: {url}")
+        log(message = f"successfully archived: {url}")
         return True
     except Exception as e:
-        log(f"[e] something went wrong, here is the error: {e}.")
+        log(message = f"something went wrong, here is the error: {e}.", prefix="e")
         return False
 
 
@@ -32,6 +32,9 @@ user_agent = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 F
 
 i = 0
 archving = True # set this to False if something will go wrong
+
+log(message = f"starting archiving!")
+
 while(archving):
     archving = save_page(list_of_stuff_to_archive[i], user_agent=user_agent)
 
@@ -45,4 +48,4 @@ while(archving):
         i = 0
 
 
-log("[e] something went wrong.. Stopped archiving.")
+log(message = f"something went wrong.. Stopped archiving.", prefix="e")
