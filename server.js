@@ -130,10 +130,10 @@ function getDate(hours_off) {
     };
 }
 
-function consoleInfo(message) {
+function consoleInfo(prefix, message) {
     var localDate = getDate(hours_off)
 
-    console.log(`${localDate.localDay}/${localDate.localMonth}/${localDate.localYear} - ${localDate.localHours}:${localDate.localMinutes}:${localDate.localSeconds} > ${message}`)
+    console.log(`[${prefix}] ${localDate.localDay}/${localDate.localMonth}/${localDate.localYear} - ${localDate.localHours}:${localDate.localMinutes}:${localDate.localSeconds} > ${message}`)
 }
 
 function daysSince(getDateFunction, then_string) {
@@ -183,13 +183,13 @@ const isRevokedCallback = async (req, payload, done) => {
         var result = await pool.query(query, [token]); // query the database
 
         if (result.rowCount > 0) {
-            consoleInfo(`${req.ClientIP} tried to use a revoked token!!`)
+            consoleInfo('W', `${req.ClientIP} tried to use a revoked token!!`)
             return true
         } else {
             return false
         }
     } catch (error) {
-        consoleInfo(`something went wrong while checking if token is blacklisted, here is the error: ${error}`)
+        consoleInfo('E', `something went wrong while checking if token is blacklisted, here is the error: ${error}`)
         return false
     }
 };
@@ -245,7 +245,7 @@ const checkAuthMiddleware = async (req, res, next) => {
 
 // blog stuff here (some functions)
 function checkIfStringContainsIllegalChar(string, legalChars, max_length) {
-    if (string.length < max_length) {
+    if (string.length <= max_length) {
         for (let i = 0; i < string.length; i++) {
             if (legalChars.indexOf(string[i]) === -1) {
                 return true; // Found an illegal character
@@ -278,7 +278,7 @@ async function checkIfPasswordsMatch(password, password_hash) {
                 resolve(false);
             }
         }).catch(error => {
-            console.error(`Something went wrong while checking if user's password matches, here is the error: ${error}`);
+            consoleInfo('E', `Something went wrong while checking if user's password matches, here is the error: ${error}`);
             reject(error);
         });
     });
@@ -326,7 +326,7 @@ async function register_account(username, email, password) {
         var command = `INSERT INTO "profile_picture" (user_id, "default") VALUES (\$1, \$2);`
         await pool.query(command, [user_id, "true"])
     } catch (error) {
-        consoleInfo(`Something went wrong while writing the user's info to the database, here is the error: ${error}. Username: ${username}.`)
+        consoleInfo('E', `Something went wrong while writing the user's info to the database, here is the error: ${error}. Username: ${username}.`)
     }
 }
 
@@ -337,7 +337,7 @@ async function checkHowMuchEmailIsInTheDatabase(email) {
 
         return result.rowCount;
     } catch (error) {
-        consoleInfo(`Something went wrong while checking how much users use a email, here is the error: ${error}.`)
+        consoleInfo('E', `Something went wrong while checking how much users use a email, here is the error: ${error}.`)
     }
 }
 
@@ -351,11 +351,11 @@ async function getHashedPassword(username) {
 
             return hashedPassword;
         } else {
-            consoleInfo(`${req.ClientIP} tried to log on a account that doesn't exist (usename: ${username}).`)
+            consoleInfo('i', `${req.ClientIP} tried to log on a account that doesn't exist (usename: ${username}).`)
             return null;
         }
     } catch (error) {
-        consoleInfo(`Something went wrong while checking how much users use a email, here is the error: ${error}.`)
+        consoleInfo('E', `Something went wrong while getting a hashed password, here is the error: ${error}.`)
     }
 }
 
@@ -394,43 +394,43 @@ app.use(express.json());
 // '/' route
 app.get('/', limit_pages, (req, res) => {
     res.sendFile(path.join(__dirname, 'html', 'index.html'));
-    consoleInfo(`${req.ClientIP} requested the '/' route`)
+    consoleInfo('i', `${req.ClientIP} requested the '/' route`)
 });
 
 // '/temp' route
 app.get('/temp', limit_pages, (req, res) => {
     res.sendFile(path.join(__dirname, 'html', 'temp_mobile_index.html'));
-    consoleInfo(`${req.ClientIP} requested the '/temp' route`)
+    consoleInfo('i', `${req.ClientIP} requested the '/temp' route`)
 });
 
 // '/mobileinfo' route
 app.get('/mobileinfo', limit_pages, (req, res) => {
     res.sendFile(path.join(__dirname, 'html', 'errors', 'page_not_mobile.html'));
-    consoleInfo(`${req.ClientIP} requested the '/mobileinfo' route`)
+    consoleInfo('i', `${req.ClientIP} requested the '/mobileinfo' route`)
 });
 
 // '/projects' route
 app.get('/projects', limit_pages, (req, res) => {
     res.sendFile(path.join(__dirname, 'html', 'pages', 'projects', 'projects.html'));
-    consoleInfo(`${req.ClientIP} requested the '/projects' route`)
+    consoleInfo('i', `${req.ClientIP} requested the '/projects' route`)
 });
 
 // '/projects-2' route
 app.get('/projects-2', limit_pages, (req, res) => {
     res.sendFile(path.join(__dirname, 'html', 'pages', 'projects', 'projects-2.html'));
-    consoleInfo(`${req.ClientIP} requested the '/projects-2' route`)
+    consoleInfo('i', `${req.ClientIP} requested the '/projects-2' route`)
 });
 
 // '/projects-3' route
 app.get('/projects-end', limit_pages, (req, res) => {
     res.sendFile(path.join(__dirname, 'html', 'pages', 'projects', 'projects-end.html'));
-    consoleInfo(`${req.ClientIP} requested the '/projects-end' route`)
+    consoleInfo('i', `${req.ClientIP} requested the '/projects-end' route`)
 });
 
 // '/freebobux' route
 app.get('/freebobux', limit_pages, (req, res) => {
     res.sendFile(path.join(__dirname, 'html', 'pages', 'freebobux', 'freebobux.html'));
-    consoleInfo(`${req.ClientIP} requested the '/freebobux' route :D`)
+    consoleInfo('i', `${req.ClientIP} requested the '/freebobux' route :D`)
 });
 
 // '/snake' route
@@ -440,7 +440,7 @@ app.get('/snake', limit_pages, (req, res) => {
     // is still being build so the route shows the `this page is
     // still being build` html
     res.sendFile(path.join(__dirname, 'html', 'errors', 'page_being_build.html'));
-    consoleInfo(`${req.ClientIP} requested the '/snake' route`)
+    consoleInfo('i', `${req.ClientIP} requested the '/snake' route`)
 });
 
 // '/page_being_build' route
@@ -453,7 +453,7 @@ app.get('/page_being_build', limit_pages, (req, res) => {
     // they are being worked on because it gives the user more info
     // redirecting can be confusing)
     res.sendFile(path.join(__dirname, 'html', 'errors', 'page_being_build.html'));
-    consoleInfo(`${req.ClientIP} requested the '/page_being_build' route`)
+    consoleInfo('i', `${req.ClientIP} requested the '/page_being_build' route`)
 });
 
 
@@ -462,43 +462,43 @@ app.get('/page_being_build', limit_pages, (req, res) => {
 // '/blog' route
 app.get('/blog', limit_pages, (req, res) => {
     // res.sendFile(path.join(__dirname, 'html', 'pages', 'blog', 'blog.html'));
-    // consoleInfo(`${req.ClientIP} requested the '/blog' route`)
+    // consoleInfo('i', `${req.ClientIP} requested the '/blog' route`)
     res.redirect(`/page_being_build`)
 });
 
 // '/blog/settings'
 app.get('/blog/settings', authMiddleware, limit_pages, (req, res) => {
     res.sendFile(path.join(__dirname, 'html', 'pages', 'blog', 'settings.html'));
-    consoleInfo(`${req.ClientIP} requested the '/blog/settings' route, username "${req.auth.username}".`)
+    consoleInfo('i', `${req.ClientIP} requested the '/blog/settings' route, username "${req.auth.username}".`)
 });
 
 // '/blog/login' route
 app.get('/blog/login', checkAuthMiddleware, limit_pages, (req, res) => {
     if (req.isAuthenticated) {
         res.redirect(`/blog/user/${req.auth.username}`)
-        consoleInfo(`${req.ClientIP} tried to access the login page while being logged in, username: ${req.auth.username}`)
+        consoleInfo('i', `${req.ClientIP} tried to access the login page while being logged in, username: ${req.auth.username}`)
         return
     }
 
     res.sendFile(path.join(__dirname, 'html', 'pages', 'blog', 'login.html'));
-    consoleInfo(`${req.ClientIP} requested the '/blog/login' route`)
+    consoleInfo('i', `${req.ClientIP} requested the '/blog/login' route`)
 });
 
 // '/blog/register' route
 app.get('/blog/register', checkAuthMiddleware, limit_pages, (req, res) => {
     if (req.isAuthenticated) {
         res.redirect(`/blog/user/${req.auth.username}`)
-        consoleInfo(`${req.ClientIP} tried to access the register page while being logged in, username: ${req.auth.username}`)
+        consoleInfo('i', `${req.ClientIP} tried to access the register page while being logged in, username: ${req.auth.username}`)
         return
     }
 
     res.sendFile(path.join(__dirname, 'html', 'pages', 'blog', 'register.html'));
-    consoleInfo(`${req.ClientIP} requested the '/blog/register' route`)
+    consoleInfo('i', `${req.ClientIP} requested the '/blog/register' route`)
 });
 
 // redirect from /blog/user
 app.get('/blog/user', limit_pages, (req, res) => {
-    consoleInfo(`${req.ClientIP} tried to get the '/blog/user' route, sending him to '/blog'`)
+    consoleInfo('i', `${req.ClientIP} tried to get the '/blog/user' route, sending him to '/blog'`)
     res.redirect('/blog');
 });
 
@@ -506,7 +506,7 @@ app.get('/blog/user', limit_pages, (req, res) => {
 app.get('/blog/user/:username', limit_pages, async (req, res) => {
     const { username } = req.params;
 
-    consoleInfo(`${req.ClientIP} requested '/blog/user/${username}'.`)
+    consoleInfo('i', `${req.ClientIP} requested '/blog/user/${username}'.`)
 
     try {
         const query = `SELECT * FROM "user" WHERE username = \$1;`
@@ -514,7 +514,7 @@ app.get('/blog/user/:username', limit_pages, async (req, res) => {
 
         if (result.rows.length === 0) {
             res.status(404).sendFile(path.join(__dirname, 'html', 'errors', 'error_404.html'));
-            consoleInfo(`${req.ClientIP} got the 404 error. Route: '/blog/user/${username}'`)
+            consoleInfo('i', `${req.ClientIP} got the 404 error. Route: '/blog/user/${username}'`)
             return
         }
 
@@ -524,7 +524,7 @@ app.get('/blog/user/:username', limit_pages, async (req, res) => {
 
     catch (error) {
         res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Check console for more Details. Sorry.');
-        consoleInfo(`${req.ClientIP} got a 500 error. Route: '/blog/user/${username}'. Error: ${error}`)
+        consoleInfo('e', `${req.ClientIP} got a 500 error. Route: '/blog/user/${username}'. Error: ${error}`)
     }
 });
 
@@ -545,7 +545,7 @@ app.post('/blog/api/login', limit_account, async (req, res) => {
 
     var authenticated = await checkIfPasswordsMatch(password, password_hash)
     if (authenticated == true) {
-        consoleInfo(`${req.ClientIP} has successfully logged in! (as "${username}").`)
+        consoleInfo('i', `${req.ClientIP} has successfully logged in! (as "${username}").`)
 
         // Generate a JWT token
         const token = jwt.sign({ username: username }, jwt_password, { expiresIn: '7d' });
@@ -554,7 +554,7 @@ app.post('/blog/api/login', limit_account, async (req, res) => {
         res.cookie('jwt_access_cookie', token, { httpOnly: false, maxAge: 1000 * 60 * 60 * 24 * 7, secure: true, sameSite: "Strict" }); // 7 days expiration
         res.status(200).send(`Successfully logged in! Checkout your page <a href="/blog/user/${username}">here</a> :D`);
     } else {
-        consoleInfo(`${req.ClientIP} has failed to authenticate (tried to as "${username}").`)
+        consoleInfo('i', `${req.ClientIP} has failed to authenticate (tried to as "${username}").`)
         res.status(200).send(`Wrong password! :/`)
     }
 });
@@ -565,7 +565,8 @@ app.post('/blog/api/register', limit_account, async (req, res) => {
     const { username, email, password } = req.body;
 
     const containsIllegalUsername = checkIfStringContainsIllegalChar(username, legal_chars, max_length = 20);
-    const containsIllegalEmail = checkIfStringContainsIllegalChar(email, legal_chars, max_length = 20);
+    // i doubt that anyone uses a email longer than 75 chars
+    const containsIllegalEmail = checkIfStringContainsIllegalChar(email, legal_chars, max_length = 75); 
     const EmailSyntaxCorrect = checkIfEmailCorrect(email)
     const usernameAlreadyRegistered = await checkIfUsernameTaken(username)
 
@@ -582,43 +583,43 @@ app.post('/blog/api/register', limit_account, async (req, res) => {
     if (username.length > 20) {
         var valid = false
         var reason = "the username can't be longer than 20 chars :/"
-        consoleInfo(`${req.ClientIP} tried to register a account that had a username longer than 20 chars`)
+        consoleInfo('i', `${req.ClientIP} tried to register a account that had a username longer than 20 chars`)
     } else if (username.length < 4) {
         var valid = false
         var reason = "the username can't be shorter than 4 chars :P"
-        consoleInfo(`${req.ClientIP} tried to register a account that had a username shorter than 4 chars`)
+        consoleInfo('i', `${req.ClientIP} tried to register a account that had a username shorter than 4 chars`)
     } else if (containsIllegalUsername == true) {
         var valid = false
         var reason = 'the username contains some banned char/s (if you want me to add char/s, <a href="/">contact me</a>)'
-        consoleInfo(`${req.ClientIP} tried to register a account that username's contained a char/chars not in legal_chars`)
+        consoleInfo('i', `${req.ClientIP} tried to register a account that username's contained a char/chars not in legal_chars`)
     } else if (usernameAlreadyRegistered == true) {
         var valid = false
         var reason = 'the username is already taken ;/'
-        consoleInfo(`${req.ClientIP} tried to register a account that username's was already taken`)
+        consoleInfo('i', `${req.ClientIP} tried to register a account that username's was already taken`)
     }
 
     else if (password.length < 5) {
         var valid = false
         var reason = "the password can't be shorter than 5 chars :/"
-        consoleInfo(`${req.ClientIP} tried to register a account that had a password shorter than 5 chars`)
+        consoleInfo('i', `${req.ClientIP} tried to register a account that had a password shorter than 5 chars`)
     }
 
     else if (email.length < 5) {
         var valid = false
         var reason = "lmao, nice email, buddy."
-        consoleInfo(`${req.ClientIP} tried to register a account that had a email shorter than 5 chars`)
+        consoleInfo('i', `${req.ClientIP} tried to register a account that had a email shorter than 5 chars`)
     } else if (containsIllegalEmail == true) {
         var valid = false
         var reason = 'the email contains some banned char/s (if you want me to add char/s, <a href="https://khenzii.dev/">contact me</a>)'
-        consoleInfo(`${req.ClientIP} tried to register a account that email's contained a char/chars not in legal_chars`)
+        consoleInfo('i', `${req.ClientIP} tried to register a account that email's contained a char/chars not in legal_chars`)
     } else if (EmailSyntaxCorrect == false) {
         var valid = false
         var reason = "make sure to enter the correct email :)"
-        consoleInfo(`${req.ClientIP} tried to register a account with an incorrect email`)
+        consoleInfo('i', `${req.ClientIP} tried to register a account with an incorrect email`)
     } else if (EmailHasTooMuchAccounts == true) {
         var valid = false
         var reason = "Too many accounts (3) use this email. Sorry!"
-        consoleInfo(`${req.ClientIP} tried to register a account with an over-used email`)
+        consoleInfo('i', `${req.ClientIP} tried to register a account with an over-used email`)
     }
 
 
@@ -628,7 +629,7 @@ app.post('/blog/api/register', limit_account, async (req, res) => {
     }
 
 
-    consoleInfo(`${req.ClientIP} entered valid info while registering`)
+    consoleInfo('i', `${req.ClientIP} entered valid info while registering`)
 
     try {
         await register_account(username, email, password)
@@ -638,10 +639,10 @@ app.post('/blog/api/register', limit_account, async (req, res) => {
         // Send the token back to the client
         res.cookie('jwt_access_cookie', token, { httpOnly: false, maxAge: 1000 * 60 * 60 * 24 * 7, secure: true, sameSite: "Strict" }); // 7 days expiration
 
-        consoleInfo(`registered a new account with username: ${username}`)
+        consoleInfo('i', `registered a new account with username: ${username}`)
         res.status(200).send(`your account should be ready <a href="/blog/user/${username}">here</a> (in a moment :>)`)
     } catch (error) {
-        consoleInfo(`something went wrong while registering the account. Here is the error: ${error}.`)
+        consoleInfo('E', `something went wrong while registering the account. Here is the error: ${error}.`)
         res.status(500)
     }
 });
@@ -724,7 +725,7 @@ app.post('/blog/api/get_user', checkAuthMiddleware, limit_api, async (req, res) 
         res.status(200).send(data)
     } catch (error) {
         res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Check console for more Details. Sorry.');
-        consoleInfo(`${req.ClientIP} got a 500 error (while communicating with the back-end). Error: ${error}.`)
+        consoleInfo('e', `${req.ClientIP} got a 500 error (while communicating with the back-end). Error: ${error}.`)
     }
 });
 
@@ -777,7 +778,7 @@ app.post('/blog/api/get_user_settings', authMiddleware, limit_api,  async (req, 
         res.status(200).send(data)
     } catch (error) {
         res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Check console for more Details. Sorry.');
-        consoleInfo(`${req.ClientIP} got a 500 error (while communicating with the back-end). Error: ${error}. Route: "/blog/api/get_user_settings"`)
+        consoleInfo('e', `${req.ClientIP} got a 500 error (while communicating with the back-end). Error: ${error}. Route: "/blog/api/get_user_settings"`)
     }
 });
 
@@ -811,7 +812,7 @@ app.post('/blog/api/get_posts', limit_api,  async (req, res) => {
         res.status(200).send(result)
     } catch (error) {
         res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Check console for more Details. Sorry.');
-        consoleInfo(`${req.ClientIP} got a 500 error (while communicating with the back-end). Error: ${error}.`)
+        consoleInfo('e', `${req.ClientIP} got a 500 error (while communicating with the back-end). Error: ${error}.`)
     }
 });
 
@@ -829,13 +830,13 @@ app.post('/blog/api/create_category', authMiddleware, limit_create, async (req, 
             // 2. check if over character limit
             if (categoryTitle.length > 30 && !trusted_usernames.includes(req.auth.username)) {
                 res.status(400).send(`The category title can't be longer than 30 characters. Sorry.`);
-                consoleInfo(`${req.ClientIP} aka ${req.auth.username} tried to create a category that had a title longer than 30 characters.`)
+                consoleInfo('i', `${req.ClientIP} aka ${req.auth.username} tried to create a category that had a title longer than 30 characters.`)
                 return
             }
 
             if (categoryDescription.length > 200 && !trusted_usernames.includes(req.auth.username)) {
                 res.status(400).send(`The category description can't be longer than 200 characters. Sorry.`);
-                consoleInfo(`${req.ClientIP} aka ${req.auth.username} tried to create a category that had a description longer than 200 characters.`)
+                consoleInfo('i', `${req.ClientIP} aka ${req.auth.username} tried to create a category that had a description longer than 200 characters.`)
                 return
             }
 
@@ -866,7 +867,7 @@ app.post('/blog/api/create_category', authMiddleware, limit_create, async (req, 
         }
     } catch (error) {
         res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Check console for more Details. Sorry.');
-        consoleInfo(`${req.ClientIP} got a 500 error (while communicating with the back-end). Error: ${error}.`)
+        consoleInfo('e', `${req.ClientIP} got a 500 error (while communicating with the back-end). Error: ${error}.`)
     }
 });
 
@@ -889,7 +890,7 @@ app.post('/blog/api/create_post', authMiddleware, limit_create, async (req, res)
             // 2. check if over character limit
             if (text_value.length > 1000 && !trusted_usernames.includes(req.auth.username)) {
                 res.status(400).send(`The post content can't be longer than 1000 characters. Sorry.`);
-                consoleInfo(`${req.ClientIP} aka ${req.auth.username} tried to create a post that was longer than 1000 chars.`)
+                consoleInfo('i', `${req.ClientIP} aka ${req.auth.username} tried to create a post that was longer than 1000 chars.`)
                 return
             }
 
@@ -922,7 +923,7 @@ app.post('/blog/api/create_post', authMiddleware, limit_create, async (req, res)
         }
     } catch (error) {
         res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Sorry.');
-        consoleInfo(`${req.ClientIP} got a 500 error (while communicating with the back-end). Error: ${error}.`)
+        consoleInfo('e', `${req.ClientIP} got a 500 error (while communicating with the back-end). Error: ${error}.`)
     }
 });
 
@@ -964,7 +965,7 @@ app.post('/blog/api/change_pfp', authMiddleware, upload.single('new_pfp'), limit
         }
     } catch (error) {
         res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Sorry.');
-        consoleInfo(`${req.ClientIP} got a 500 error (while communicating with the back-end). Error: ${error}.`)
+        consoleInfo('e', `${req.ClientIP} got a 500 error (while communicating with the back-end). Error: ${error}.`)
     }
 });
 
@@ -990,19 +991,19 @@ app.post('/blog/api/change_username', authMiddleware, limit_change, async (req, 
             if (text_value.length > 20) {
                 var valid = false
                 var reason = "the username can't be longer than 20 chars :/"
-                consoleInfo(`${req.ClientIP} tried to change username to a username that was longer than 20 chars`)
+                consoleInfo('i', `${req.ClientIP} tried to change username to a username that was longer than 20 chars`)
             } else if (text_value.length < 4) {
                 var valid = false
                 var reason = "the username can't be shorter than 4 chars :P"
-                consoleInfo(`${req.ClientIP} tried to change username to a shorter one than 4 chars`)
+                consoleInfo('i', `${req.ClientIP} tried to change username to a shorter one than 4 chars`)
             } else if (containsIllegalUsername) {
                 var valid = false
                 var reason = 'the username contains some banned char/s (if you want me to add char/s, <a href="/">contact me</a>)'
-                consoleInfo(`${req.ClientIP} tried to change username to a username that contained a char/chars not in legal_chars`)
+                consoleInfo('i', `${req.ClientIP} tried to change username to a username that contained a char/chars not in legal_chars`)
             } else if (usernameAlreadyRegistered) {
                 var valid = false
                 var reason = 'the username is already taken ;/'
-                consoleInfo(`${req.ClientIP} tried to change username to a username that already exists`)
+                consoleInfo('i', `${req.ClientIP} tried to change username to a username that already exists`)
             }
 
             if (!valid) {
@@ -1030,7 +1031,7 @@ app.post('/blog/api/change_username', authMiddleware, limit_change, async (req, 
         }
     } catch (error) {
         res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Sorry.');
-        consoleInfo(`${req.ClientIP} got a 500 error (while communicating with the back-end). Error: ${error}.`)
+        consoleInfo('e', `${req.ClientIP} got a 500 error (while communicating with the back-end). Error: ${error}.`)
     }
 });
 
@@ -1064,7 +1065,7 @@ app.post('/blog/api/change_bio', authMiddleware, limit_change, async (req, res) 
         }
     } catch (error) {
         res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Sorry.');
-        consoleInfo(`${req.ClientIP} got a 500 error (while communicating with the back-end). Error: ${error}.`)
+        consoleInfo('e', `${req.ClientIP} got a 500 error (while communicating with the back-end). Error: ${error}.`)
     }
 });
 
@@ -1108,7 +1109,7 @@ app.post('/blog/api/change_category_index', authMiddleware, limit_change,  async
         }
     } catch (error) {
         res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Sorry.');
-        consoleInfo(`${req.ClientIP} got a 500 error (while communicating with the back-end). Error: ${error}.`)
+        consoleInfo('e', `${req.ClientIP} got a 500 error (while communicating with the back-end). Error: ${error}.`)
     }
 });
 
@@ -1116,17 +1117,17 @@ app.post('/blog/api/change_category_index', authMiddleware, limit_change,  async
 // 404 error
 app.use((req, res, next) => {
     res.status(404).sendFile(path.join(__dirname, 'html', 'errors', 'error_404.html'));
-    consoleInfo(`${req.ClientIP} got the 404 error`)
+    consoleInfo('e', `${req.ClientIP} got the 404 error`)
 });
 
 // Default error handler
 app.use(function (error, req, res, next) {
     if (error.name === "UnauthorizedError") {
         res.redirect("/blog/login");
-        consoleInfo(`${req.ClientIP} tried to access confidential stuff, such as '/blog/settings', without the correct authentication :/`)
+        consoleInfo('w', `${req.ClientIP} tried to do stuff while lacking authentication.`)
     } else {
         res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Check console for more Details. Sorry.');
-        consoleInfo(`${req.ClientIP} some internal server error ocurred :/. Here is the error: ${error.stack}`)
+        consoleInfo('E', `${req.ClientIP} some internal server error ocurred :/. Here is the error: ${error.stack}`)
     }
 });
 
@@ -1139,11 +1140,20 @@ app.use(function (error, req, res, next) {
 
 
 app.listen(port, () => {
-    console.log(`[i] current settings:`)
-    console.log(`[i] 1. using the UTC+${hours_off} timezone, you can change this setting by modifying the hours_off variable inside of server.js.`)
-    console.log(`[i] 2. trusted_usernames: ${trusted_usernames} (this usernames can post long posts and use HTML on /blog), you can change this setting by modifying the trusted_usernames variable inside of server.js.`)
-    console.log(`[i] 3. number_of_posts_to_get: ${number_of_posts_to_get} (this setting makes the /blog/api/get_posts endpoint return ${number_of_posts_to_get} posts), you can change this setting by modifying the number_of_posts_to_get variable inside of server.js.`)
-    console.log(`[i] end of settings! \n`)
+    consoleInfo(`i`, `Some info:`)
+    consoleInfo(`i`, `Logs are marked with these symbols: '[i]', '[w]', '[W]', '[e]', '[E]'`)
+    consoleInfo(`i`, `[i] - info`)
+    consoleInfo(`i`, `[w] - warning`)
+    consoleInfo(`i`, `[W] - severe warning`)
+    consoleInfo(`i`, `[e] - error`)
+    consoleInfo(`i`, `[E] - severe error`)
+    consoleInfo(`i`, `end of info! \n`)
 
-    console.log(`[i] server waiting for nginx redirects here: http://localhost:${port} 🫡 \n \n \n`);
+    consoleInfo(`i`, `current settings:`)
+    consoleInfo(`i`, `1. using the UTC+${hours_off} timezone, you can change this setting by modifying the hours_off variable inside of server.js.`)
+    consoleInfo(`i`, `2. trusted_usernames: ${trusted_usernames} (these usernames can post long posts and use HTML on /blog), you can change this setting by modifying the trusted_usernames variable inside of server.js.`)
+    consoleInfo(`i`, `3. number_of_posts_to_get: ${number_of_posts_to_get} (this setting makes the /blog/api/get_posts endpoint return ${number_of_posts_to_get} posts), you can change this setting by modifying the number_of_posts_to_get variable inside of server.js.`)
+    consoleInfo(`i`, `end of settings! \n`)
+
+    consoleInfo(`i`, `server waiting for nginx redirects here: http://localhost:${port} 🫡 \n \n \n`)
 });
