@@ -1050,8 +1050,9 @@ app.post('/blog/api/change_bio', authMiddleware, limit_change, async (req, res) 
 
         if (req.auth.username == result.rows[0].username) {
             // 2. check stuff
-            if (text_value.length > 300) {
+            if (text_value.length > 300 && !trusted_usernames.includes(req.auth.username)) {
                 res.status(400).send("The bio can't be longer than 300 chars :P")
+                consoleInfo('i', `${req.ClientIP} aka ${req.auth.username} tried to change their's bio to something longer than 200 characters.`)
                 return
             }
 
