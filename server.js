@@ -712,14 +712,13 @@ app.post('/blog/api/get_user', checkAuthMiddleware, limit_api, async (req, res) 
         }
         data.categories = categories;
 
+        data.logged_in_as_user = false // if user is owner of the username
+        data.logged_in = false // if user is completely not logged in (no cookie)
         if (req.isAuthenticated) {
+            data.logged_in = true
             if (req.auth.username == username) {
-                data.logged_in = true
-            } else {
-                data.logged_in = false
+                data.logged_in_as_user = true
             }
-        } else {
-            data.logged_in = false
         }
 
         res.status(200).send(data)

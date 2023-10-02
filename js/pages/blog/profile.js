@@ -515,21 +515,25 @@ getValuesFromServer(username).then(data => {
     user_id_paragraph.textContent = `id: ${data.user_id}`;
     user_id = data.user_id
 
-    if (data.logged_in) {
+    // logged_in_as_user is set to true, if user is the owner of current viewed page
+    if (data.logged_in_as_user) {
         createTheCategoryAddButton()
         createTheSettingsButton()
     } else {
-        createTheLoginAndRegisterButtons()
+        // logged_in is set to false, if the client is completely not logged in (no cookie)
+        if(!data.logged_in) {
+            createTheLoginAndRegisterButtons()
+        }
     }
 
     if (data.categories == "404") {
-        createHTMLCategory("", "", "", true, data.logged_in, data.index_in_user)
+        createHTMLCategory("", "", "", true, data.logged_in_as_user, data.index_in_user)
     } else {
         // sort the categories by index_in_user (in reverse)
         data.categories.sort((a, b) => a.index_in_user - b.index_in_user);
 
         for (let i = 0; i < data.categories.length; i++) { // loop through all of the categories
-            createHTMLCategory(data.categories[i].title, data.categories[i].description, data.categories[i].id, false, data.logged_in, data.categories[i].index_in_user)
+            createHTMLCategory(data.categories[i].title, data.categories[i].description, data.categories[i].id, false, data.logged_in_as_user, data.categories[i].index_in_user)
         }
 
 
