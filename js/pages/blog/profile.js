@@ -19,6 +19,18 @@ const postInput = document.getElementById("post_input");
 const infoBox = document.getElementById("info_box");
 const closeInfoBox = document.getElementById("info_box_close");
 const infoBoxText = document.getElementById("info_box_text");
+const showMoreBox = document.getElementById("more_box");
+const closeShowMoreBox = document.getElementById("more_box_close");
+const showMoreBoxButtonContainer = document.getElementById("more_button_container");
+const infoShowMoreBox = document.getElementById("more_box_info");
+const shareShowMoreBox = document.getElementById("more_box_share");
+const deleteShowMoreBox = document.getElementById("more_box_delete");
+const showInfoBox = document.getElementById("more_info_box");
+const showShareBox = document.getElementById("more_share_box");
+const showDeleteBox = document.getElementById("more_delete_box");
+const closeShowInfoBox = document.getElementById("more_info_box_close");
+const closeShowShareBox = document.getElementById("more_share_box_close");
+const closeShowDeleteBox = document.getElementById("more_delete_box_close");
 
 
 var first_time = {}
@@ -246,6 +258,126 @@ function showCreatePostPopout(category_id) {
     shadowEffectStart()
 }
 
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        console.log('Content copied to clipboard');
+    }, () => {
+        console.error('Failed to copy');
+    });
+}
+
+function showInfo() {
+    showInfoBox.style.display = "flex";
+}
+
+function showShare(url) {
+    // if the elements already exist, don't create stuff
+    const link_preview_element_old = document.getElementById('share_link_preview');
+    const copy_element_old = document.getElementById('copy_button');
+    if (link_preview_element_old || copy_element_old) {
+        // change stuff
+        if (link_preview_element_old) {
+            link_preview_element_old.textContent = url;
+        }
+
+        if (copy_element_old) {
+            copy_element_old.setAttribute("onclick", `copyToClipboard('${url}')`);
+        }
+
+        // show stuff
+        showShareBox.style.display = "flex";
+        return
+    }
+
+    // define stuff
+    const link_preview = `
+    <code class="share_link_preview" id="share_link_preview">
+        ${url}
+    </code>
+    `
+
+    const copy_button = `
+    <button class="copy_button" onclick="copyToClipboard('${url}')" id="copy_button">
+        <img src="../../../icons/pages/blog/copy.png" class="copy_button_image" alt="copy icon">
+    </button>
+    `
+
+    // create stuff
+    showShareBox.insertAdjacentHTML('beforeend', link_preview)
+    showShareBox.insertAdjacentHTML('beforeend', copy_button)
+
+    // show stuff
+    showShareBox.style.display = "flex";
+}
+
+function showDelete() {
+    showDeleteBox.style.display = "flex";
+}
+
+function showMore(logged_in_as_user, category_index) {
+    // if the elements already exist, don't create stuff
+    const info_button_element_old = document.getElementById('more_box_info');
+    const share_button_element_old = document.getElementById('more_box_share');
+    const delete_button_element_old = document.getElementById('more_box_share');
+    if (info_button_element_old || share_button_element_old || delete_button_element_old) {
+        // update the elements
+        if (info_button_element_old) {
+            // do stuff with the info element here (if you wish to)
+        }
+
+        if (share_button_element_old) {
+            // update the url (well, not in all cases, but you know what i mean)
+            share_button_element_old.setAttribute("onclick", `showShare('https://khenzii.dev/blog/user/${username}#${category_index}')`);
+        }
+
+        if (delete_button_element_old) {
+            // do stuff with the info element here (if you wish to)
+        }
+
+        // show and return
+        showMoreBox.style.display = "flex";
+        shadowEffectStart()
+        return
+    }
+
+
+    // define the buttons
+    const info_button = `
+    <button class="more_button_info" id="more_box_info" onclick="showInfo()">
+        <img src="../../../icons/pages/blog/info.png" alt="info button" class="more_button_info_image">
+    </button>
+    `
+
+    const share_button = `
+    <button class="more_button_share" id="more_box_share" onclick="showShare('https://khenzii.dev/blog/user/${username}#${category_index}')">
+        <img src="../../../icons/pages/blog/share.png" alt="share button" class="more_button_share_image">
+    </button>
+    `
+
+    const delete_button = `
+    <button class="more_button_delete" id="more_box_delete" onclick="showDelete()">
+        <img src="../../../icons/pages/blog/delete.png" alt="delete button" class="more_button_delete_image">
+    </button>
+    `
+
+    // create the elements
+    showMoreBoxButtonContainer.insertAdjacentHTML('beforeend', info_button)
+    showMoreBoxButtonContainer.insertAdjacentHTML('beforeend', share_button)
+    if (logged_in_as_user) {
+        showMoreBoxButtonContainer.insertAdjacentHTML('beforeend', delete_button)
+    } else {
+        // if not showing the third button, make the first two ones bigger
+        const info_button_element = document.getElementById("more_box_info");
+        const share_button_element = document.getElementById("more_box_share");
+
+        info_button_element.style.height = "7.5vh";
+        share_button_element.style.height = "7.5vh";
+    }
+
+    showMoreBox.style.display = "flex";
+    shadowEffectStart()
+}
+
 function createTheLoginAndRegisterButtons() {
     const line = `
     <hr class="logged_or_not_line">
@@ -292,11 +424,11 @@ function createTheSettingsButton() {
     profile_container.insertAdjacentHTML('beforeend', button)
 }
 
-function createHTMLCategory(title, description, id, empty, logged_in, index_in_user) {
+function createHTMLCategory(title, description, id, empty, logged_in_as_user, index_in_user) {
     var category = ""
 
     if (empty) {
-        if (logged_in) {
+        if (logged_in_as_user) {
             var category = `
             <p class="info_text">
                 No categories yet! <br> Go ahead, create one =)
@@ -310,7 +442,7 @@ function createHTMLCategory(title, description, id, empty, logged_in, index_in_u
             `
         }
     } else {
-        if (logged_in) {
+        if (logged_in_as_user) {
             var category = `
             <li class="category" data-id="${id}" data-index="${index_in_user}">
                 <details class="category_details">
@@ -334,6 +466,9 @@ function createHTMLCategory(title, description, id, empty, logged_in, index_in_u
                 </details>
 
                 <img src="../../../icons/pages/blog/drag.png" class="category_drag" draggable=true>
+                <button class="category_more" onclick="showMore(true, ${index_in_user})">
+                    <img src="../../../icons/pages/blog/more.png" class="category_more" draggable=false>
+                </button>
             </li>
             `
         } else {
@@ -354,6 +489,10 @@ function createHTMLCategory(title, description, id, empty, logged_in, index_in_u
                 
                     </ul>
                 </details>
+                
+                <button class="category_more" onclick="showMore(false, ${index_in_user})">
+                    <img src="../../../icons/pages/blog/more.png" class="category_more" draggable=false>
+                </button>
             </li>
             `
         }
@@ -461,6 +600,27 @@ closeInfoBox.onclick = function () {
     }
 }
 
+closeShowMoreBox.onclick = function () {
+    showMoreBox.style.display = "none";
+    shadowEffectEnd()
+    if (reload == true) {
+        location.reload();
+    }
+}
+
+closeShowInfoBox.onclick = function () {
+    showInfoBox.style.display = "none";
+}
+
+closeShowShareBox.onclick = function () {
+    showShareBox.style.display = "none";
+}
+
+closeShowDeleteBox.onclick = function () {
+    showDeleteBox.style.display = "none";
+}
+
+
 var hash = null
 var hashable = false
 
@@ -521,7 +681,7 @@ getValuesFromServer(username).then(data => {
         createTheSettingsButton()
     } else {
         // logged_in is set to false, if the client is completely not logged in (no cookie)
-        if(!data.logged_in) {
+        if (!data.logged_in) {
             createTheLoginAndRegisterButtons()
         }
     }

@@ -7,6 +7,14 @@ body {
     overflow-x: hidden;
 }
 
+code {
+    background-color: var(--background);
+    border-radius: 1vh;
+    font-family: Montserrat;
+    color: var(--secondary);
+    padding: 1vw;
+}
+
 .shadow_effect {
     position: fixed;
 
@@ -338,6 +346,20 @@ ima implement links later
     opacity: 0.3;
 }
 
+.category_more {
+    background-color: transparent;
+    height: 2vh;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.category_more_image {
+    z-index: 2;
+
+    height: 2vh;
+}
+
 .info_text {
     color: var(--text);
 
@@ -505,6 +527,207 @@ ima implement links later
     word-wrap: break-word;
 
     margin: 2vh;
+}
+
+.more_box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    background-color: var(--background_less);
+    border-radius: 2vh;
+
+    padding: 1vh;
+
+    height: fit-content;
+    width: 20vw;
+
+    position: fixed;
+    z-index: 3;
+
+    display: none;
+    /*we'll later set it to flex using JS*/
+    flex-direction: column;
+    align-items: center;
+}
+
+.more_box_close {
+    color: var(--text);
+    cursor: pointer;
+}
+
+.more_button_container {
+    margin-top: 2vh;
+    display: flex;
+    width: 80%;
+    justify-content: space-around;
+}
+
+.more_button_info {
+    background-color: transparent;
+    height: 5vh;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.more_button_info_image {
+    z-index: 2;
+    height: 100%;
+    transition: all 0.5s;
+}
+
+.more_button_info_image:hover {
+    border-radius: 1.5vh;
+    background-color: var(--secondary);
+}
+
+.more_button_share {
+    background-color: transparent;
+    height: 5vh;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.more_button_share_image {
+    z-index: 2;
+    height: 100%;
+    transition: all 0.5s;
+}
+
+.more_button_share_image:hover {
+    border-radius: 1.5vh;
+    background-color: var(--secondary);
+}
+
+.more_button_delete {
+    background-color: transparent;
+    height: 5vh;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.more_button_delete_image {
+    z-index: 2;
+    height: 100%;
+    transition: all 0.5s;
+}
+
+.more_button_delete_image:hover {
+    border-radius: 1.5vh;
+    background-color: var(--secondary);
+}
+
+.more_info_box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    background-color: var(--background_less);
+    border-radius: 2vh;
+
+    padding: 1vh;
+
+    min-height: 10vh;
+    width: 25vw;
+
+    position: fixed;
+    z-index: 4;
+
+    display: none;
+    /*we'll later set it to flex using JS*/
+    flex-direction: column;
+    align-items: center;
+}
+
+.more_info_box_close {
+    color: var(--text);
+    cursor: pointer;
+}
+
+.more_share_box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    background-color: var(--background_less);
+    border-radius: 2vh;
+
+    padding: 1vh;
+
+    min-height: 10vh;
+    width: 25vw;
+
+    position: fixed;
+    z-index: 4;
+
+    display: none;
+    /*we'll later set it to flex using JS*/
+    flex-direction: column;
+    align-items: center;
+}
+
+.more_share_box_close {
+    color: var(--text);
+    cursor: pointer;
+}
+
+.share_link_preview {
+    margin-top: 2vh;
+}
+
+.copy_button {
+    margin-top: 2vh;
+
+    background-color: transparent;
+    height: 5vh;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.copy_button_image {
+    z-index: 2;
+    height: 100%;
+    transition: all 0.5s;
+}
+
+.copy_button_image:hover {
+    border-radius: 1.5vh;
+    background-color: var(--secondary);
+}
+
+.more_delete_box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    background-color: var(--background_less);
+    border-radius: 2vh;
+
+    padding: 1vh;
+
+    min-height: 10vh;
+    width: 25vw;
+
+    position: fixed;
+    z-index: 4;
+
+    display: none;
+    /*we'll later set it to flex using JS*/
+    flex-direction: column;
+    align-items: center;
+}
+
+.more_delete_box_close {
+    color: var(--text);
+    cursor: pointer;
 }
 
 .create_category {
