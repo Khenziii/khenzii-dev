@@ -277,7 +277,6 @@ function copyToClipboard(text, parent_id) {
             `
 
             parent_element.insertAdjacentHTML('beforeend', info_text_share)
-            console.log(parent_element)
         }
     }, () => {
         var message = "Failed to copy to the clipboard! :(";
@@ -293,7 +292,6 @@ function copyToClipboard(text, parent_id) {
             </p>
             `
 
-            console.log(parent_element)
             parent_element.insertAdjacentHTML('beforeend', info_text_share)
         }
     });
@@ -301,16 +299,13 @@ function copyToClipboard(text, parent_id) {
 
 function showInfo(id, index_in_user) {
     // if the element already exist, don't create stuff
-    const category_info_list_element = document.getElementById('category_info_list');
-    if (category_info_list_element) {
-        // change stuff
-        if(category_info_list) {
-            category_info_list.children[0].textContent = `category id: ${id}`
-            category_info_list.children[1].textContent = `category index_in_user: ${index_in_user}`
-        }
+    const category_info_list_element_old = document.getElementById('category_info_list');
+    if (category_info_list_element_old) {
+        category_info_list_element_old.children[0].children[0].textContent = `id: ${id}`
+        category_info_list_element_old.children[1].children[0].textContent = `index_in_user: ${index_in_user}`
 
         // show stuff
-        showShareBox.style.display = "flex";
+        showInfoBox.style.display = "flex";
         return
     }
 
@@ -318,13 +313,13 @@ function showInfo(id, index_in_user) {
     const category_info_list = `
     <ul class="category_info_list" id="category_info_list">
 
-    <ul>
+    </ul>
     `
 
     const id_info = `
     <li>
         <p class="category_info_text">
-            ${id}
+            id: ${id}
         </p>
     </li>
     `
@@ -332,16 +327,16 @@ function showInfo(id, index_in_user) {
     const index_info = `
     <li>
         <p class="category_info_text">
-            ${index_in_user}
+            index_in_user: ${index_in_user}
         </p>
     </li>
     `
 
     // create stuff
     showInfoBox.insertAdjacentHTML('beforeend', category_info_list);
-    category_info_list = document.getElementById("category_info_list");
-    category_info_list.insertAdjacentHTML('beforeend', id_info);
-    category_info_list.insertAdjacentHTML('beforeend', index_info);
+    var category_info_list_element = document.getElementById("category_info_list");
+    category_info_list_element.insertAdjacentHTML('beforeend', id_info);
+    category_info_list_element.insertAdjacentHTML('beforeend', index_info);
 
     showInfoBox.style.display = "flex";
 }
@@ -420,7 +415,7 @@ function showMore(logged_in_as_user, category_id, category_index) {
 
     // define the buttons
     const info_button = `
-    <button class="more_button_info" id="more_box_info" onclick="showInfo()">
+    <button class="more_button_info" id="more_box_info" onclick="showInfo('${category_id}', '${category_index}')">
         <img src="../../../icons/pages/blog/info.png" alt="info button" class="more_button_info_image">
     </button>
     `

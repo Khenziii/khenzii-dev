@@ -649,6 +649,37 @@ ima implement links later
     cursor: pointer;
 }
 
+.category_info_list {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    width: 80%;
+    height: fit-content;
+
+    gap: 1vh;
+    list-style-type: none;
+    margin-top: 2vh;
+    padding: 0;
+}
+
+.category_info_text {
+    padding: 0;
+    margin: 0;
+
+    text-align: center;
+
+    color: var(--text);
+
+    font-size: 1.5vh;
+    font-family: Montserrat;
+    font-weight: 500;
+
+    max-width: 20vw;
+    height: auto;
+    word-wrap: break-word;
+}
+
 .more_share_box {
     position: absolute;
     top: 50%;
