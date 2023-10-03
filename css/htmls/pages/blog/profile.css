@@ -702,6 +702,20 @@ ima implement links later
     background-color: var(--secondary);
 }
 
+.info_text_share {
+    color: var(--text);
+
+    text-align: center;
+
+    font-size: 0.8vw;
+    font-family: Montserrat;
+    font-weight: 500;
+
+    word-wrap: break-word;
+
+    margin-top: 2vh;
+}
+
 .more_delete_box {
     position: absolute;
     top: 50%;

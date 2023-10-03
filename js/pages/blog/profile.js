@@ -22,9 +22,8 @@ const infoBoxText = document.getElementById("info_box_text");
 const showMoreBox = document.getElementById("more_box");
 const closeShowMoreBox = document.getElementById("more_box_close");
 const showMoreBoxButtonContainer = document.getElementById("more_button_container");
-const infoShowMoreBox = document.getElementById("more_box_info");
-const shareShowMoreBox = document.getElementById("more_box_share");
-const deleteShowMoreBox = document.getElementById("more_box_delete");
+// this line is useless, since infoShowMoreBox is not yet created here: const infoShowMoreBox = document.getElementById("more_box_info");
+// this line is useless, since deleteShowMoreBox is not yet created here: const deleteShowMoreBox = document.getElementById("more_box_delete");
 const showInfoBox = document.getElementById("more_info_box");
 const showShareBox = document.getElementById("more_share_box");
 const showDeleteBox = document.getElementById("more_delete_box");
@@ -258,11 +257,45 @@ function showCreatePostPopout(category_id) {
     shadowEffectStart()
 }
 
-function copyToClipboard(text) {
+function copyToClipboard(text, parent_id) {
+    const parent_element = document.getElementById(parent_id);
+
+    const info_text_share_element = document.getElementById("info_text_share");
+
     navigator.clipboard.writeText(text).then(() => {
-        console.log('Content copied to clipboard');
+        var message = "Copied to the clipboard!";
+
+        // if the element already exists
+        if(info_text_share_element) {
+            info_text_share_element.textContent = message;
+        } else {
+            // if not, create it
+            const info_text_share = `
+            <p class="info_text_share" id="info_text_share">
+                ${message}
+            </p>
+            `
+
+            parent_element.insertAdjacentHTML('beforeend', info_text_share)
+            console.log(parent_element)
+        }
     }, () => {
-        console.error('Failed to copy');
+        var message = "Failed to copy to the clipboard! :(";
+
+        // if the element already exists
+        if(info_text_share_element) {
+            info_text_share_element.textContent = message;
+        } else {
+            // if not, create it
+            const info_text_share = `
+            <p class="info_text_share" id="info_text_share">
+                ${message}
+            </p>
+            `
+
+            console.log(parent_element)
+            parent_element.insertAdjacentHTML('beforeend', info_text_share)
+        }
     });
 }
 
@@ -281,7 +314,7 @@ function showShare(url) {
         }
 
         if (copy_element_old) {
-            copy_element_old.setAttribute("onclick", `copyToClipboard('${url}')`);
+            copy_element_old.setAttribute("onclick", `copyToClipboard('${url}', 'more_share_box')`);
         }
 
         // show stuff
@@ -297,7 +330,7 @@ function showShare(url) {
     `
 
     const copy_button = `
-    <button class="copy_button" onclick="copyToClipboard('${url}')" id="copy_button">
+    <button class="copy_button" onclick="copyToClipboard('${url}', 'more_share_box')" id="copy_button">
         <img src="../../../icons/pages/blog/copy.png" class="copy_button_image" alt="copy icon">
     </button>
     `
@@ -613,6 +646,13 @@ closeShowInfoBox.onclick = function () {
 }
 
 closeShowShareBox.onclick = function () {
+    // remove the info text if it exists
+    // (we don't want it to show up again if the user will try to copy other url)
+    const info_text_share_element = document.getElementById("info_text_share");
+    if(info_text_share_element) {
+        info_text_share_element.remove();
+    }
+
     showShareBox.style.display = "none";
 }
 
