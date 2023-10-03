@@ -359,6 +359,22 @@ async function getHashedPassword(username) {
     }
 }
 
+// delete post from the database, and set the index_in_user of the last one if this one had it
+async function deletePost(post_id) {
+    return [503, 'Nothing happened. This thing is being worked on.. Should be avaible in a couple of days.'];
+}
+
+// delete every post using the deletePost function and then delete the category
+async function deleteCategory(category_id) {
+    return [503, 'Nothing happened. This thing is being worked on.. Should be avaible in a couple of days.'];
+}
+
+// delete every category using the deleteCategory function and then delete the user
+async function deleteUser(user_id) {
+    return [503, 'Nothing happened. This thing is being worked on.. Should be avaible in a couple of days.'];
+
+    // remember to add the user token to blacklisted tokens
+}
 
 app.use('/html', express.static(path.join(__dirname, 'html')));
 app.use('/css', express.static(path.join(__dirname, 'css')));
@@ -1104,6 +1120,84 @@ app.post('/blog/api/change_category_index', authMiddleware, limit_change,  async
             await pool.query(command, [first_category_index, second_category_id]);
 
             res.status(200).send("Success!")
+        } else {
+            res.status(403).send("Access denied!")
+        }
+    } catch (error) {
+        res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Sorry.');
+        consoleInfo('e', `${req.ClientIP} got a 500 error (while communicating with the back-end). Error: ${error}.`)
+    }
+});
+
+// delete post
+app.post('/blog/api/delete_post', authMiddleware, limit_change,  async (req, res) => {
+    try {
+        // Retrieve data from the request body
+        const { user_id, post_id } = req.body;
+
+        // 1. verify the user
+        // (by checking that req.auth.username == user id's username)
+
+        // get the username
+        var query = `SELECT username FROM "user" WHERE id = \$1;`
+        var result = await pool.query(query, [user_id]);
+
+        if (req.auth.username == result.rows[0].username) {
+            var message = await deletePost(post_id);
+
+            res.status(message[0]).send(message[1])
+        } else {
+            res.status(403).send("Access denied!")
+        }
+    } catch (error) {
+        res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Sorry.');
+        consoleInfo('e', `${req.ClientIP} got a 500 error (while communicating with the back-end). Error: ${error}.`)
+    }
+});
+
+// delete category
+app.post('/blog/api/delete_category', authMiddleware, limit_change,  async (req, res) => {
+    try {
+        // Retrieve data from the request body
+        const { user_id, category_id } = req.body;
+
+        // 1. verify the user
+        // (by checking that req.auth.username == user id's username)
+
+        // get the username
+        var query = `SELECT username FROM "user" WHERE id = \$1;`
+        var result = await pool.query(query, [user_id]);
+
+        if (req.auth.username == result.rows[0].username) {
+            var message = await deleteCategory(category_id);
+
+            res.status(message[0]).send(message[1])
+        } else {
+            res.status(403).send("Access denied!")
+        }
+    } catch (error) {
+        res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Sorry.');
+        consoleInfo('e', `${req.ClientIP} got a 500 error (while communicating with the back-end). Error: ${error}.`)
+    }
+});
+
+// delete user
+app.post('/blog/api/delete_user', authMiddleware, limit_change,  async (req, res) => {
+    try {
+        // Retrieve data from the request body
+        const { user_id } = req.body;
+
+        // 1. verify the user
+        // (by checking that req.auth.username == user id's username)
+
+        // get the username
+        var query = `SELECT username FROM "user" WHERE id = \$1;`
+        var result = await pool.query(query, [user_id]);
+
+        if (req.auth.username == result.rows[0].username) {
+            var message = await deleteUser(user_id);
+
+            res.status(message[0]).send(message[1])
         } else {
             res.status(403).send("Access denied!")
         }

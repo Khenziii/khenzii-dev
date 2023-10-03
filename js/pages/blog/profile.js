@@ -299,7 +299,50 @@ function copyToClipboard(text, parent_id) {
     });
 }
 
-function showInfo() {
+function showInfo(id, index_in_user) {
+    // if the element already exist, don't create stuff
+    const category_info_list_element = document.getElementById('category_info_list');
+    if (category_info_list_element) {
+        // change stuff
+        if(category_info_list) {
+            category_info_list.children[0].textContent = `category id: ${id}`
+            category_info_list.children[1].textContent = `category index_in_user: ${index_in_user}`
+        }
+
+        // show stuff
+        showShareBox.style.display = "flex";
+        return
+    }
+
+    // define stuff
+    const category_info_list = `
+    <ul class="category_info_list" id="category_info_list">
+
+    <ul>
+    `
+
+    const id_info = `
+    <li>
+        <p class="category_info_text">
+            ${id}
+        </p>
+    </li>
+    `
+
+    const index_info = `
+    <li>
+        <p class="category_info_text">
+            ${index_in_user}
+        </p>
+    </li>
+    `
+
+    // create stuff
+    showInfoBox.insertAdjacentHTML('beforeend', category_info_list);
+    category_info_list = document.getElementById("category_info_list");
+    category_info_list.insertAdjacentHTML('beforeend', id_info);
+    category_info_list.insertAdjacentHTML('beforeend', index_info);
+
     showInfoBox.style.display = "flex";
 }
 
@@ -347,7 +390,7 @@ function showDelete() {
     showDeleteBox.style.display = "flex";
 }
 
-function showMore(logged_in_as_user, category_index) {
+function showMore(logged_in_as_user, category_id, category_index) {
     // if the elements already exist, don't create stuff
     const info_button_element_old = document.getElementById('more_box_info');
     const share_button_element_old = document.getElementById('more_box_share');
@@ -355,7 +398,8 @@ function showMore(logged_in_as_user, category_index) {
     if (info_button_element_old || share_button_element_old || delete_button_element_old) {
         // update the elements
         if (info_button_element_old) {
-            // do stuff with the info element here (if you wish to)
+            // update the info (well, not in all cases, but you know what i mean)
+            info_button_element_old.setAttribute("onclick", `showInfo('${category_id}', '${category_index}')`);
         }
 
         if (share_button_element_old) {
@@ -499,7 +543,7 @@ function createHTMLCategory(title, description, id, empty, logged_in_as_user, in
                 </details>
 
                 <img src="../../../icons/pages/blog/drag.png" class="category_drag" draggable=true>
-                <button class="category_more" onclick="showMore(true, ${index_in_user})">
+                <button class="category_more" onclick="showMore(true, ${id}, ${index_in_user})">
                     <img src="../../../icons/pages/blog/more.png" class="category_more" draggable=false>
                 </button>
             </li>
@@ -523,7 +567,7 @@ function createHTMLCategory(title, description, id, empty, logged_in_as_user, in
                     </ul>
                 </details>
                 
-                <button class="category_more" onclick="showMore(false, ${index_in_user})">
+                <button class="category_more" onclick="showMore(false, ${id}, ${index_in_user})">
                     <img src="../../../icons/pages/blog/more.png" class="category_more" draggable=false>
                 </button>
             </li>
