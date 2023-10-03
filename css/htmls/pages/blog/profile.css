@@ -775,6 +775,88 @@ ima implement links later
     cursor: pointer;
 }
 
+.more_delete_box_info_text {
+    color: var(--text);
+
+    text-align: center;
+
+    font-size: 0.8vw;
+    font-family: Montserrat;
+    font-weight: 700;
+
+    word-wrap: break-word;
+
+    margin-top: 2vh;
+    margin-bottom: 0;
+}
+
+.more_delete_box_info_text_smaller {
+    color: var(--text);
+
+    text-align: center;
+
+    font-size: 0.6vw;
+    font-family: Montserrat;
+    font-weight: 500;
+
+    word-wrap: break-word;
+
+    margin-top: 1vh;
+    margin-bottom: 0;
+}
+
+.sure_input {
+    text-align: center;
+
+    margin-top: 2vh;
+    width: 40%;
+    height: 20%;
+
+    color: var(--text);
+    background-color: var(--background);
+    padding: 1vh;
+    border-radius: 1vh;
+    border: none;
+}
+
+.more_delete_box_info_text_under {
+    color: var(--text);
+
+    text-align: center;
+
+    font-size: 0.8vw;
+    font-family: Montserrat;
+    font-weight: 500;
+
+    word-wrap: break-word;
+
+    margin-top: 2vh;
+}
+
+.delete_button {
+    background: transparent;
+    border: transparent;
+
+    cursor: pointer;
+
+    height: 7vh;
+    width: auto;
+}
+
+.delete_button_image {
+    background-color: transparent;
+    border: transparent;
+    transition: all 500ms;
+
+    width: 100%;
+    height: 100%;
+}
+
+.delete_button_image:hover {
+    background-color: var(--warning);
+    border-radius: 2vh;
+}
+
 .create_category {
     position: absolute;
     top: 50%;

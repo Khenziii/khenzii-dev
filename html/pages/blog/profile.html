@@ -36,6 +36,24 @@
 
         <div id="more_delete_box" class="more_delete_box">
             <span id="more_delete_box_close" class="more_delete_box_close">&times;</span>
+
+            <p class="more_delete_box_info_text">
+                Are you sure that you want to delete the thing?
+            </p>
+
+            <p class="more_delete_box_info_text_smaller">
+                This action can't be undone.
+            </p>
+
+            <input class="sure_input" id="sure_input" placeholder="Y">
+
+            <p class="more_delete_box_info_text_under">
+                Type 'Y' if you're sure.
+            </p>
+
+            <button class="delete_button no" id="delete_button" onclick="Delete()">
+                <img src="../../../icons/pages/blog/delete.png" alt="delete button" class="delete_button_image">
+            </button>
         </div>
 
         <div id="info_box" class="info_box">

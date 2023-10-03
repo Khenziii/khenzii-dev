@@ -1,4 +1,5 @@
 :root {
+    /*dark theme*/
     --background: #171617;
     --background_less: #2A2A29;
     --primary: #9141ac;
@@ -6,10 +7,14 @@
     --text: #ebd4f1;
     --accent: #ffffff;
 
+    /*light theme*/
     --background_light: #ebd4f1;
     --background_less_light: #dcb9e8;
     --primary_light: #9141ac;
     --secondary_light: #fefbfe;
     --text_light: #171617;
     --accent_light: #b3b3b3;
+
+    /*other*/
+    --warning: #e74648;
 }

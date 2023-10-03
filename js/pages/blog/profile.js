@@ -30,6 +30,8 @@ const showDeleteBox = document.getElementById("more_delete_box");
 const closeShowInfoBox = document.getElementById("more_info_box_close");
 const closeShowShareBox = document.getElementById("more_share_box_close");
 const closeShowDeleteBox = document.getElementById("more_delete_box_close");
+const sureInput = document.getElementById("sure_input");
+const deleteButton = document.getElementById("delete_button");
 
 
 var first_time = {}
@@ -381,7 +383,31 @@ function showShare(url) {
     showShareBox.style.display = "flex";
 }
 
-function showDelete() {
+function deletePost() {
+    deleteButton.classList.add("no");
+
+    // send a request to the API to delete the category
+
+    // set the display of delete button to none
+    // edit the info paragraph and set it's display to block
+}
+
+function deleteCategory() {
+    deleteButton.classList.add("no");
+
+    // send a request to the API to delete the category
+
+    // set the display of delete button to none
+    // edit the info paragraph and set it's display to block
+}
+
+function showDelete(type, id) {
+    if(type === "post") {
+        deleteButton.setAttribute('onclick', `deletePost('${id}')`);
+    } else if(type === "category") {
+        deleteButton.setAttrbite('onclick', `deleteCategory('${id}')`)
+    }
+
     showDeleteBox.style.display = "flex";
 }
 
@@ -699,6 +725,17 @@ closeShowDeleteBox.onclick = function () {
     showDeleteBox.style.display = "none";
 }
 
+
+sureInput.addEventListener("input", function() {
+    var value = sureInput.value;
+    console.log(value)
+
+    if(value.toUpperCase() == "Y") {
+        deleteButton.classList.remove("no");
+    } else {
+        deleteButton.classList.add("no");
+    }
+});
 
 var hash = null
 var hashable = false
