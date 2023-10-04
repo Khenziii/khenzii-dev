@@ -565,7 +565,7 @@ function createHTMLCategory(title, description, id, empty, logged_in_as_user, in
 
                 <img src="../../../icons/pages/blog/drag.png" class="category_drag" draggable=true>
                 <button class="category_more" onclick="showMore(true, ${id}, ${index_in_user})">
-                    <img src="../../../icons/pages/blog/more.png" class="category_more" draggable=false>
+                    <img src="../../../icons/pages/blog/more.png" class="category_more_image" draggable=false>
                 </button>
             </li>
             `
@@ -589,7 +589,7 @@ function createHTMLCategory(title, description, id, empty, logged_in_as_user, in
                 </details>
                 
                 <button class="category_more" onclick="showMore(false, ${id}, ${index_in_user})">
-                    <img src="../../../icons/pages/blog/more.png" class="category_more" draggable=false>
+                    <img src="../../../icons/pages/blog/more.png" class="category_more_image" draggable=false>
                 </button>
             </li>
             `
@@ -621,19 +621,13 @@ function createHTMLPost(text_value, created_at, id, category_id, index_in_catego
     const posts_element = document.getElementById(`${category_id}_posts`);
     const post = `
     <div class="post">
-        <p class="post_index_in_category">
-            post index in category: ${index_in_category}
+        <p class="post_created_at">
+            ${created_at}
         </p>
 
-        <div class="post_info">
-            <p class="post_created_at">
-                ${created_at}
-            </p>
-
-            <p class="post_id">
-                post id: ${id}
-            </p>
-        </div>
+        <button class="post_more" onclick="showMore(true, ${id}, ${index_in_category})">
+            <img src="../../../icons/pages/blog/more.png" class="post_more_image" draggable=false>
+        </button>
 
         <p class="post_text">
             ${modifiedText}
