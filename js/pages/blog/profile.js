@@ -268,7 +268,7 @@ function copyToClipboard(text, parent_id) {
         var message = "Copied to the clipboard!";
 
         // if the element already exists
-        if(info_text_share_element) {
+        if (info_text_share_element) {
             info_text_share_element.textContent = message;
         } else {
             // if not, create it
@@ -284,7 +284,7 @@ function copyToClipboard(text, parent_id) {
         var message = "Failed to copy to the clipboard! :(";
 
         // if the element already exists
-        if(info_text_share_element) {
+        if (info_text_share_element) {
             info_text_share_element.textContent = message;
         } else {
             // if not, create it
@@ -299,12 +299,37 @@ function copyToClipboard(text, parent_id) {
     });
 }
 
-function showInfo(id, index_in_user) {
+function showInfo(info_dictionary) {
+    // expected argument is a string that we can convert into a dictionary, it contains 
+    // names and values of paragraphs, we create every single one of them
+    const info = JSON.parse(decodeURIComponent(info_dictionary));
+    console.log(info)
+
     // if the element already exist, don't create stuff
     const category_info_list_element_old = document.getElementById('category_info_list');
     if (category_info_list_element_old) {
-        category_info_list_element_old.children[0].children[0].textContent = `id: ${id}`
-        category_info_list_element_old.children[1].children[0].textContent = `index_in_user: ${index_in_user}`
+        let iteration = 0
+        for (const key in info) {
+            const value = info[key];
+
+            if(category_info_list_element_old.children[iteration]) {
+                // if the element exists, change the text content
+                category_info_list_element_old.children[iteration].children[0].textContent = `${key}: ${value}`
+            } else {
+                // if it doesn't create it
+                const paragraph = `
+                <li>
+                    <p class="category_info_text">
+                        ${key}: ${value}
+                    </p>
+                </li>
+                `
+
+                category_info_list_element_old.insertAdjacentHTML('beforeend', paragraph);
+            }
+
+            iteration++;
+        }
 
         // show stuff
         showInfoBox.style.display = "flex";
@@ -318,29 +343,11 @@ function showInfo(id, index_in_user) {
     </ul>
     `
 
-    const id_info = `
-    <li>
-        <p class="category_info_text">
-            id: ${id}
-        </p>
-    </li>
-    `
-
-    const index_info = `
-    <li>
-        <p class="category_info_text">
-            index_in_user: ${index_in_user}
-        </p>
-    </li>
-    `
-
     // create stuff
     showInfoBox.insertAdjacentHTML('beforeend', category_info_list);
-    var category_info_list_element = document.getElementById("category_info_list");
-    category_info_list_element.insertAdjacentHTML('beforeend', id_info);
-    category_info_list_element.insertAdjacentHTML('beforeend', index_info);
 
-    showInfoBox.style.display = "flex";
+    // create the info paragraphs
+    return showInfo(info_dictionary)
 }
 
 function showShare(url) {
@@ -402,16 +409,19 @@ function deleteCategory() {
 }
 
 function showDelete(type, id) {
-    if(type === "post") {
+    if (type === "post") {
         deleteButton.setAttribute('onclick', `deletePost('${id}')`);
-    } else if(type === "category") {
+    } else if (type === "category") {
         deleteButton.setAttrbite('onclick', `deleteCategory('${id}')`)
     }
 
     showDeleteBox.style.display = "flex";
 }
 
-function showMore(logged_in_as_user, category_id, category_index) {
+function showMore(logged_in_as_user, info_text) {
+    // get the categroy index from the dictionary for the share button
+    const category_index = JSON.parse(decodeURIComponent(info_text))["index in user"];
+
     // if the elements already exist, don't create stuff
     const info_button_element_old = document.getElementById('more_box_info');
     const share_button_element_old = document.getElementById('more_box_share');
@@ -420,7 +430,7 @@ function showMore(logged_in_as_user, category_id, category_index) {
         // update the elements
         if (info_button_element_old) {
             // update the info (well, not in all cases, but you know what i mean)
-            info_button_element_old.setAttribute("onclick", `showInfo('${category_id}', '${category_index}')`);
+            info_button_element_old.setAttribute("onclick", `showInfo('${info_text}')`);
         }
 
         if (share_button_element_old) {
@@ -441,7 +451,7 @@ function showMore(logged_in_as_user, category_id, category_index) {
 
     // define the buttons
     const info_button = `
-    <button class="more_button_info" id="more_box_info" onclick="showInfo('${category_id}', '${category_index}')">
+    <button class="more_button_info" id="more_box_info" onclick="showInfo('${info_text}')">
         <img src="../../../icons/pages/blog/info.png" alt="info button" class="more_button_info_image">
     </button>
     `
@@ -524,6 +534,10 @@ function createTheSettingsButton() {
 
 function createHTMLCategory(title, description, id, empty, logged_in_as_user, index_in_user) {
     var category = ""
+    const info = {
+        "category id": `${id}`,
+        "index in user": `${index_in_user}`
+    }
 
     if (empty) {
         if (logged_in_as_user) {
@@ -565,7 +579,7 @@ function createHTMLCategory(title, description, id, empty, logged_in_as_user, in
 
                 <div class="category_ui_container">
                     <img src="../../../icons/pages/blog/drag.png" class="category_drag" draggable=true>
-                    <button class="category_more" onclick="showMore(${logged_in_as_user}, ${id}, ${index_in_user})">
+                    <button class="category_more" onclick="showMore(${logged_in_as_user}, '${encodeURIComponent(JSON.stringify(info))}')">
                         <img src="../../../icons/pages/blog/more.png" class="category_more_image" draggable=false>
                     </button>
                 </div>
@@ -591,7 +605,7 @@ function createHTMLCategory(title, description, id, empty, logged_in_as_user, in
                 </details>
                 
                 <div class="category_ui_container">
-                    <button class="category_more" onclick="showMore(${logged_in_as_user}, ${id}, ${index_in_user})">
+                    <button class="category_more" onclick="showMore(${logged_in_as_user}, '${encodeURIComponent(JSON.stringify(info))}')">
                         <img src="../../../icons/pages/blog/more.png" class="category_more_image" draggable=false>
                     </button>
                 </div>
@@ -621,6 +635,10 @@ function createHTMLPost(text_value, created_at, id, category_id, index_in_catego
         return match;
     });
 
+    const info = {
+        "post id": `${id}`,
+        "index in category": `${index_in_category}`,
+    }
 
     const posts_element = document.getElementById(`${category_id}_posts`);
     const post = `
@@ -630,7 +648,7 @@ function createHTMLPost(text_value, created_at, id, category_id, index_in_catego
                 ${created_at}
             </p>
 
-            <button class="post_more" onclick="showMore(${logged_in_as_user}, ${id}, ${index_in_category})">
+            <button class="post_more" onclick="showMore(${logged_in_as_user}, '${encodeURIComponent(JSON.stringify(info))}')">
                 <img src="../../../icons/pages/blog/more.png" class="post_more_image" draggable=false>
             </button>
         </div>
@@ -714,7 +732,7 @@ closeShowShareBox.onclick = function () {
     // remove the info text if it exists
     // (we don't want it to show up again if the user will try to copy other url)
     const info_text_share_element = document.getElementById("info_text_share");
-    if(info_text_share_element) {
+    if (info_text_share_element) {
         info_text_share_element.remove();
     }
 
@@ -726,11 +744,10 @@ closeShowDeleteBox.onclick = function () {
 }
 
 
-sureInput.addEventListener("input", function() {
+sureInput.addEventListener("input", function () {
     var value = sureInput.value;
-    console.log(value)
 
-    if(value.toUpperCase() == "Y") {
+    if (value.toUpperCase() == "Y") {
         deleteButton.classList.remove("no");
     } else {
         deleteButton.classList.add("no");
