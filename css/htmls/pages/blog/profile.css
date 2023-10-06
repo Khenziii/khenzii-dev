@@ -329,11 +329,21 @@ ima implement links later
     width: 100%;
 }
 
+.category_ui_container {
+    display: flex;
+    width: 10%;
+    height: fit-content;
+
+    position: absolute;
+    left: 90%;
+
+    justify-content: end;
+}
+
 .category_drag {
     z-index: 2;
 
     height: 2vh;
-    margin-left: -3vh;
 
     cursor: move;
     /* fallback if grab cursor is unsupported */
@@ -375,6 +385,8 @@ ima implement links later
 .category_title {
     color: var(--text);
 
+    width: 80%;
+
     font-size: 0.9vw;
     font-family: Montserrat;
     font-weight: 600;
@@ -410,14 +422,22 @@ ima implement links later
     padding: 0;
 }
 
-/*
 .post {
-
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
 }
-*/
+
+.post_ui {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    height: 3vh;
+}
 
 .post_created_at {
-    flex: 0.5;
+    margin: 0;
 
     text-align: left;
 
@@ -426,19 +446,15 @@ ima implement links later
     font-size: 1vh;
     font-family: Montserrat;
     font-weight: 500;
-
-    max-width: 10vw;
-    height: auto;
     word-wrap: break-word;
 }
 
 .post_more {
-    flex: 1;
-
     background-color: transparent;
-    height: 2vh;
+    max-height: 100%;
     border: none;
     padding: 0;
+    height: 2vh;
     cursor: pointer;
 }
 
@@ -449,7 +465,8 @@ ima implement links later
 }
 
 .post_text {
-    flex: 1;
+    margin-top: 1vh;
+    margin-bottom: 1vh;
 
     color: var(--text);
 

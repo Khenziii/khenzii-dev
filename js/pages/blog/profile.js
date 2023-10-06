@@ -563,10 +563,12 @@ function createHTMLCategory(title, description, id, empty, logged_in_as_user, in
                     </ul>
                 </details>
 
-                <img src="../../../icons/pages/blog/drag.png" class="category_drag" draggable=true>
-                <button class="category_more" onclick="showMore(true, ${id}, ${index_in_user})">
-                    <img src="../../../icons/pages/blog/more.png" class="category_more_image" draggable=false>
-                </button>
+                <div class="category_ui_container">
+                    <img src="../../../icons/pages/blog/drag.png" class="category_drag" draggable=true>
+                    <button class="category_more" onclick="showMore(${logged_in_as_user}, ${id}, ${index_in_user})">
+                        <img src="../../../icons/pages/blog/more.png" class="category_more_image" draggable=false>
+                    </button>
+                </div>
             </li>
             `
         } else {
@@ -588,9 +590,11 @@ function createHTMLCategory(title, description, id, empty, logged_in_as_user, in
                     </ul>
                 </details>
                 
-                <button class="category_more" onclick="showMore(false, ${id}, ${index_in_user})">
-                    <img src="../../../icons/pages/blog/more.png" class="category_more_image" draggable=false>
-                </button>
+                <div class="category_ui_container">
+                    <button class="category_more" onclick="showMore(${logged_in_as_user}, ${id}, ${index_in_user})">
+                        <img src="../../../icons/pages/blog/more.png" class="category_more_image" draggable=false>
+                    </button>
+                </div>
             </li>
             `
         }
@@ -621,13 +625,15 @@ function createHTMLPost(text_value, created_at, id, category_id, index_in_catego
     const posts_element = document.getElementById(`${category_id}_posts`);
     const post = `
     <div class="post">
-        <p class="post_created_at">
-            ${created_at}
-        </p>
+        <div class="post_ui">
+            <p class="post_created_at">
+                ${created_at}
+            </p>
 
-        <button class="post_more" onclick="showMore(true, ${id}, ${index_in_category})">
-            <img src="../../../icons/pages/blog/more.png" class="post_more_image" draggable=false>
-        </button>
+            <button class="post_more" onclick="showMore(${logged_in_as_user}, ${id}, ${index_in_category})">
+                <img src="../../../icons/pages/blog/more.png" class="post_more_image" draggable=false>
+            </button>
+        </div>
 
         <p class="post_text">
             ${modifiedText}
@@ -771,6 +777,7 @@ username_paragraph.textContent = username;
 document.title = `${username} | khenzii.dev/blog`;
 
 var user_id = ""
+var logged_in_as_user = false
 
 getValuesFromServer(username).then(data => {
     if (data == "something went wrong.. :( Error: Something went wrong") {
@@ -787,6 +794,7 @@ getValuesFromServer(username).then(data => {
 
     // logged_in_as_user is set to true, if user is the owner of current viewed page
     if (data.logged_in_as_user) {
+        logged_in_as_user = true
         createTheCategoryAddButton()
         createTheSettingsButton()
     } else {
