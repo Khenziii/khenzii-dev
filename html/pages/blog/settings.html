@@ -67,7 +67,39 @@
             </button>
         </div>
 
+        <div id="more_delete_box" class="more_delete_box">
+            <span id="more_delete_box_close" class="more_delete_box_close">&times;</span>
+
+            <p class="more_delete_box_info_text" id="more_delete_box_info_text">
+                Are you sure that you want to delete the account?
+            </p>
+
+            <p class="more_delete_box_info_text_smaller">
+                This action can't be undone.
+            </p>
+
+            <input class="sure_input" id="sure_input" placeholder="Y">
+
+            <p class="more_delete_box_info_text_under">
+                Type 'Y' if you're sure.
+            </p>
+
+            <button class="delete_button_final no" id="delete_button" onclick="DeleteAccount()">
+                <img src="../../../icons/pages/blog/delete.png" alt="delete button" class="delete_button_final_image">
+            </button>
+
+            <p class="more_delete_box_final_info" id="more_delete_box_final_info">
+                heh?
+            </p>
+        </div>
+
         <div class="centered_container" id="centered_container">
+            <hr class="line">
+
+            <p class="section">
+                Customization zone :)
+            </p>
+
             <hr class="line">
 
             <img id="pfp" class="pfp">
@@ -106,6 +138,22 @@
 
             <p class="info_text">
                 change bio
+            </p>
+
+            <hr class="line">
+
+            <p class="section">
+                danger zone!!!
+            </p>
+
+            <hr class="line">
+
+            <button class="delete_button" id="delete_button" onclick="showDeleteAccountPopout()">
+                <img src="../../../icons/pages/blog/delete.png" alt="delete button" class="delete_button_image">
+            </button>
+
+            <p class="info_text" style="margin-bottom: 2vh;">
+                delete account :(
             </p>
         </div>
     </body>

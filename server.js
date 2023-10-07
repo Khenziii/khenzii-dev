@@ -384,7 +384,7 @@ async function deleteCategory(category_id) {
         var query = `SELECT id FROM "post" WHERE category_id = \$1`
         var result = await pool.query(query, [category_id])
 
-        for(let i = 0; i < result.rowCount; i++) {
+        for (let i = 0; i < result.rowCount; i++) {
             var post_id = result.rows[i].id
             await deletePost(post_id)
         }
@@ -395,15 +395,62 @@ async function deleteCategory(category_id) {
 
         return [200, 'Success!'];
     } catch (error) {
-        return [500, 'Something went wrong while removing the post from the database :/'];
+        return [500, 'Something went wrong while removing the category from the database :/'];
     }
 }
 
 // delete every category using the deleteCategory function and then delete the user
-async function deleteUser(user_id) {
-    return [503, 'Nothing happened. Deleting users is being worked on.. Should be avaible in a couple of days.'];
+async function deleteUser(user_id, access_cookie) {
+    try {
+        // remove user bio
+        var command = `DELETE FROM "bio" WHERE user_id = \$1;`
+        await pool.query(command, [user_id])
 
-    // remember to add the user token to blacklisted tokens
+        // remove user profile picture (if had one)
+        var query = `SELECT id, "default" FROM "profile_picture" WHERE user_id = \$1;`
+        var result = await pool.query(query, [user_id])
+
+        var went_wrong = false
+        if (result.rows[0].default != "true") {
+            const image_path = `./images/blog/${result.rows[0].id}.png`
+            fs.unlink(image_path, (err) => {
+                if(err){
+                    consoleInfo("E", `Something went wrong while trying to delete user's image. Here is the error: ${err}`)
+                    went_wrong = true
+                }
+            });
+        }
+
+        if(went_wrong) {
+            return [500, 'Something went wrong while removing your account :/'];
+        }
+
+        // clear the profile picture row from database
+        var command = `DELETE FROM "profile_picture" WHERE user_id = \$1;`
+        await pool.query(command, [user_id]);
+
+        // loop over every category and delete it
+        var query = `SELECT id FROM "category" WHERE user_id = \$1`
+        var result = await pool.query(query, [user_id])
+
+        for (let i = 0; i < result.rowCount; i++) {
+            var category_id = result.rows[i].id
+            await deleteCategory(category_id)
+        }
+
+        // add the user's token to blacklisted tokens
+        var command = `INSERT INTO "blacklisted_token" (user_id, token) VALUES (\$1, \$2);`
+        await pool.query(command, [user_id, access_cookie]);
+
+        // remove the user from the database
+        var command = `DELETE FROM "user" WHERE id = \$1`
+        await pool.query(command, [user_id])
+
+        return [200, 'Success!'];
+    } catch (error) {
+        consoleInfo("E", `Something went wrong while trying to remove a account, here is the error: ${error}`)
+        return [500, 'Something went wrong while removing your account :/'];
+    }
 }
 
 app.use('/html', express.static(path.join(__dirname, 'html')));
@@ -422,7 +469,7 @@ app.use(function (req, res, next) {
     var forwarded = req.headers['x-forwarded-for']
     var ips = []
 
-    if(forwarded) {
+    if (forwarded) {
         ips = forwarded.split(', ')
     } else {
         ips = []
@@ -612,7 +659,7 @@ app.post('/blog/api/register', limit_account, async (req, res) => {
 
     const containsIllegalUsername = checkIfStringContainsIllegalChar(username, legal_chars, max_length = 20);
     // i doubt that anyone uses a email longer than 75 chars
-    const containsIllegalEmail = checkIfStringContainsIllegalChar(email, legal_chars, max_length = 75); 
+    const containsIllegalEmail = checkIfStringContainsIllegalChar(email, legal_chars, max_length = 75);
     const EmailSyntaxCorrect = checkIfEmailCorrect(email)
     const usernameAlreadyRegistered = await checkIfUsernameTaken(username)
 
@@ -775,7 +822,7 @@ app.post('/blog/api/get_user', checkAuthMiddleware, limit_api, async (req, res) 
 });
 
 // retrieve stuff about user (this endpoint is being used by settings (it's not requesting useless stuff such as categories like get_user endpoint))
-app.post('/blog/api/get_user_settings', authMiddleware, limit_api,  async (req, res) => {
+app.post('/blog/api/get_user_settings', authMiddleware, limit_api, async (req, res) => {
     try {
         // initialize the object that we will later return (it will contain all of the data)
         var data = {}
@@ -828,7 +875,7 @@ app.post('/blog/api/get_user_settings', authMiddleware, limit_api,  async (req, 
 });
 
 // retrieve user's posts
-app.post('/blog/api/get_posts', limit_api,  async (req, res) => {
+app.post('/blog/api/get_posts', limit_api, async (req, res) => {
     try {
         // Retrieve data from the request body
         const { category_id, times } = req.body;
@@ -934,7 +981,7 @@ app.post('/blog/api/create_post', authMiddleware, limit_create, async (req, res)
             var query = `SELECT index_in_category FROM "post" WHERE category_id = \$1 ORDER BY id DESC;`
             var result = await pool.query(query, [category_id]);
 
-            if(result.rowCount > 0) {
+            if (result.rowCount > 0) {
                 var index_in_category = result.rows[0].index_in_category + 1
             } else {
                 var index_in_category = 1
@@ -1107,7 +1154,7 @@ app.post('/blog/api/change_bio', authMiddleware, limit_change, async (req, res) 
 });
 
 // change category index
-app.post('/blog/api/change_category_index', authMiddleware, limit_change,  async (req, res) => {
+app.post('/blog/api/change_category_index', authMiddleware, limit_change, async (req, res) => {
     try {
         // Retrieve data from the request body
         const { user_id, first_category_index, second_category_index } = req.body;
@@ -1151,7 +1198,7 @@ app.post('/blog/api/change_category_index', authMiddleware, limit_change,  async
 });
 
 // delete post
-app.post('/blog/api/delete_post', authMiddleware, limit_change,  async (req, res) => {
+app.post('/blog/api/delete_post', authMiddleware, limit_change, async (req, res) => {
     try {
         // Retrieve data from the request body
         const { post_id } = req.body;
@@ -1185,7 +1232,7 @@ app.post('/blog/api/delete_post', authMiddleware, limit_change,  async (req, res
 });
 
 // delete category
-app.post('/blog/api/delete_category', authMiddleware, limit_change,  async (req, res) => {
+app.post('/blog/api/delete_category', authMiddleware, limit_change, async (req, res) => {
     try {
         // Retrieve data from the request body
         const { category_id } = req.body;
@@ -1215,7 +1262,7 @@ app.post('/blog/api/delete_category', authMiddleware, limit_change,  async (req,
 });
 
 // delete user
-app.post('/blog/api/delete_user', authMiddleware, limit_change,  async (req, res) => {
+app.post('/blog/api/delete_user', authMiddleware, limit_change, async (req, res) => {
     try {
         // Retrieve data from the request body
         const { user_id } = req.body;
@@ -1228,7 +1275,11 @@ app.post('/blog/api/delete_user', authMiddleware, limit_change,  async (req, res
         var result = await pool.query(query, [user_id]);
 
         if (req.auth.username == result.rows[0].username) {
-            var message = await deleteUser(user_id);
+            if(req.cookies.jwt_access_cookie) {
+                var message = await deleteUser(user_id, req.cookies.jwt_access_cookie);
+            } else {
+                var message = await deleteUser(user_id, req.cookies.jwt_access_cookie_old);
+            }
 
             res.status(message[0]).send(message[1])
         } else {

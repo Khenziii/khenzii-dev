@@ -5,6 +5,7 @@ const edit_bio_popout = document.getElementById("edit_bio");
 const close_edit_pfp_popout = document.getElementById("edit_pfp_close");
 const close_edit_username_popout = document.getElementById("edit_username_close");
 const close_edit_bio_popout = document.getElementById("edit_bio_close");
+const close_account_delete_popout = document.getElementById("more_delete_box_close");
 const pfp_image = document.getElementById("pfp");
 const username_paragraph = document.getElementById("username");
 const bio_paragraph = document.getElementById("bio");
@@ -19,6 +20,11 @@ const changePfpButton = document.getElementById("pfp_change_button");
 const infoBox = document.getElementById("info_box");
 const closeInfoBox = document.getElementById("info_box_close");
 const infoBoxText = document.getElementById("info_box_text");
+const delete_box = document.getElementById("more_delete_box");
+const sureInput = document.getElementById("sure_input");
+const deleteButton = document.getElementById("delete_button");
+const deleteTextElement = document.getElementById("more_delete_box_info_text");
+const deleteTextInfoElement = document.getElementById("more_delete_box_final_info");
 
 
 var user_id = ""
@@ -27,6 +33,7 @@ var reload = false
 var change_pfp_button_clickable = true
 var change_username_button_clickable = true
 var change_bio_button_clickable = true
+var delete_account_button_clickable = false
 
 function infoBoxShow(text) {
     infoBox.style.display = "flex";
@@ -71,6 +78,12 @@ function showEditUsernamePopout() {
 
 function showEditBioPopout() {
     edit_bio_popout.style.display = "flex";
+    shadowEffectStart()
+}
+
+function showDeleteAccountPopout() {
+    sureInput.value = "";
+    delete_box.style.display = "flex";
     shadowEffectStart()
 }
 
@@ -238,6 +251,40 @@ async function changeBio() {
     reload = true
 }
 
+async function DeleteAccount() {
+    if(delete_account_button_clickable == false) {
+        return
+    }
+
+    changeBioButton.classList.add("no");
+    change_bio_button_clickable = false
+
+    const data = {
+        user_id: user_id
+    };
+
+    const response = await fetch('/blog/api/delete_user', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    });
+
+    var text = await response.text();
+
+    changeBioButton.classList.remove("no");
+    change_bio_button_clickable = true;
+    reload = true;
+
+    // set the display of delete button to none (or just remove it :))
+    deleteButton.remove();
+
+    // edit the info paragraph and set it's display to block
+    deleteTextInfoElement.textContent = text;
+    deleteTextInfoElement.style.display = "block";
+}
+
 function createTheGoBackButtonHTML(username) {
     const button = `
     <button class="back_to_profile_button" onclick="redirectTo('/blog/user/${username}', event)">
@@ -279,6 +326,26 @@ closeInfoBox.onclick = function () {
         location.reload();
     }
 }
+
+close_account_delete_popout.onclick = function () {
+    delete_box.style.display = "none";
+    shadowEffectEnd()
+    if(reload == true) {
+        location.reload();
+    }
+}
+
+sureInput.addEventListener("input", function () {
+    var value = sureInput.value;
+
+    if (value.toUpperCase() == "Y") {
+        deleteButton.classList.remove("no");
+        delete_account_button_clickable = true;
+    } else {
+        deleteButton.classList.add("no");
+        delete_account_button_clickable = false;
+    }
+});
 
 function changePreview(element) {
     var file = element.files[0];
