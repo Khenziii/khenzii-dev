@@ -32,6 +32,8 @@ const closeShowShareBox = document.getElementById("more_share_box_close");
 const closeShowDeleteBox = document.getElementById("more_delete_box_close");
 const sureInput = document.getElementById("sure_input");
 const deleteButton = document.getElementById("delete_button");
+const deleteTextElement = document.getElementById("more_delete_box_info_text");
+const deleteTextInfoElement = document.getElementById("more_delete_box_final_info");
 
 
 var first_time = {}
@@ -43,6 +45,7 @@ var reload = false
 var reload_category_to_open = null
 var category_create_button_clickable = true
 var post_create_button_clickable = true
+var delete_button_clickable = true
 
 function infoBoxShow(text) {
     infoBox.style.display = "flex";
@@ -113,12 +116,12 @@ async function getPosts(category_id, clicked_button) {
     first_time[category_id] = false
 
     if (how_much_times[category_id] == null) {
-        how_much_times[category_id] = 1
+        how_much_times[category_id] = 0
     }
 
     const data = {
         category_id: category_id,
-        times: how_much_times[category_id] // more info in server.js on line 617
+        times: how_much_times[category_id]
     };
 
     const response = await fetch('/blog/api/get_posts', {
@@ -136,6 +139,8 @@ async function getPosts(category_id, clicked_button) {
     how_much_times[category_id]++;
 
     removeShowMoreButtonHTML(category_id)
+
+    console.log(posts)
 
     for (let i = 0; i < posts.length; i++) {
         createHTMLPost(posts[i].text_value, posts[i].created_at, posts[i].id, category_id, posts[i].index_in_category)
@@ -303,7 +308,6 @@ function showInfo(info_dictionary) {
     // expected argument is a string that we can convert into a dictionary, it contains 
     // names and values of paragraphs, we create every single one of them
     const info = JSON.parse(decodeURIComponent(info_dictionary));
-    console.log(info)
 
     // if the element already exist, don't create stuff
     const category_info_list_element_old = document.getElementById('category_info_list');
@@ -390,17 +394,45 @@ function showShare(url) {
     showShareBox.style.display = "flex";
 }
 
-function deletePost() {
+async function deletepost(post_id) {
+    if(delete_button_clickable == false) {
+        return
+    }
+
     deleteButton.classList.add("no");
+    delete_button_clickable = true;
 
     // send a request to the API to delete the category
+    const data = {
+        post_id: post_id
+    };
 
-    // set the display of delete button to none
+    const response = await fetch('/blog/api/delete_post', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    });
+
+    var text = await response.text();
+    reload = true
+
+    // set the display of delete button to none (or just remove it :))
+    deleteButton.remove();
+
     // edit the info paragraph and set it's display to block
+    deleteTextInfoElement.textContent = text;
+    deleteTextInfoElement.style.display = "block";
 }
 
-function deleteCategory() {
+function deletecategory(category_id) {
+    if(delete_button_clickable == false) {
+        return
+    }
+
     deleteButton.classList.add("no");
+    delete_button_clickable = true;
 
     // send a request to the API to delete the category
 
@@ -409,23 +441,17 @@ function deleteCategory() {
 }
 
 function showDelete(type, id) {
-    if (type === "post") {
-        deleteButton.setAttribute('onclick', `deletePost('${id}')`);
-    } else if (type === "category") {
-        deleteButton.setAttrbite('onclick', `deleteCategory('${id}')`)
-    }
+    deleteTextElement.textContent = `Are you sure that you want to delete the ${type}?`;
+    deleteButton.setAttribute('onclick', `delete${type}('${id}')`);
 
     showDeleteBox.style.display = "flex";
 }
 
-function showMore(logged_in_as_user, info_text) {
-    // get the categroy index from the dictionary for the share button
-    const category_index = JSON.parse(decodeURIComponent(info_text))["index in user"];
-
+function showMore(logged_in_as_user, info_text, type) {
     // if the elements already exist, don't create stuff
     const info_button_element_old = document.getElementById('more_box_info');
     const share_button_element_old = document.getElementById('more_box_share');
-    const delete_button_element_old = document.getElementById('more_box_share');
+    const delete_button_element_old = document.getElementById('more_box_delete');
     if (info_button_element_old || share_button_element_old || delete_button_element_old) {
         // update the elements
         if (info_button_element_old) {
@@ -435,11 +461,27 @@ function showMore(logged_in_as_user, info_text) {
 
         if (share_button_element_old) {
             // update the url (well, not in all cases, but you know what i mean)
-            share_button_element_old.setAttribute("onclick", `showShare('https://khenzii.dev/blog/user/${username}#${category_index}')`);
+            if(type === "category") {
+                // get the categroy index from the dictionary for the share button
+                const category_index = JSON.parse(decodeURIComponent(info_text))["index in user"];
+
+                // if clicked show more on a category
+                share_button_element_old.setAttribute("onclick", `showShare('https://khenzii.dev/blog/user/${username}#${category_index}')`);
+            } else {
+                // if clicked show more on a post
+                share_button_element_old.setAttribute("onclick", `showShare('no support for post sharing yet!')`);
+            }
         }
 
         if (delete_button_element_old) {
-            // do stuff with the info element here (if you wish to)
+            // update the variables (well, not in all cases, but you know what i mean)
+            if(type === "category") {
+                const category_id = JSON.parse(decodeURIComponent(info_text))["category id"];
+                delete_button_element_old.setAttribute("onclick", `showDelete('${type}', '${category_id}')`)
+            } else {
+                const post_id = JSON.parse(decodeURIComponent(info_text))["post id"];
+                delete_button_element_old.setAttribute("onclick", `showDelete('${type}', '${post_id}')`)
+            }
         }
 
         // show and return
@@ -456,17 +498,44 @@ function showMore(logged_in_as_user, info_text) {
     </button>
     `
 
-    const share_button = `
-    <button class="more_button_share" id="more_box_share" onclick="showShare('https://khenzii.dev/blog/user/${username}#${category_index}')">
-        <img src="../../../icons/pages/blog/share.png" alt="share button" class="more_button_share_image">
-    </button>
-    `
+    var share_button = ""
 
-    const delete_button = `
-    <button class="more_button_delete" id="more_box_delete" onclick="showDelete()">
-        <img src="../../../icons/pages/blog/delete.png" alt="delete button" class="more_button_delete_image">
-    </button>
-    `
+    if(type === "category") {
+        // get the categroy index from the dictionary for the share button
+        const category_index = JSON.parse(decodeURIComponent(info_text))["index in user"];
+
+        var share_button = `
+        <button class="more_button_share" id="more_box_share" onclick="showShare('https://khenzii.dev/blog/user/${username}#${category_index}')">
+            <img src="../../../icons/pages/blog/share.png" alt="share button" class="more_button_share_image">
+        </button>
+        `
+    } else {
+        var share_button = `
+        <button class="more_button_share" id="more_box_share" onclick="showShare('no support for post sharing yet!')">
+            <img src="../../../icons/pages/blog/share.png" alt="share button" class="more_button_share_image">
+        </button>
+        `
+    }
+
+    var delete_button = ""
+
+    if(type === "category") {
+        const id = JSON.parse(decodeURIComponent(info_text))["category id"];
+        
+        var delete_button = `
+        <button class="more_button_delete" id="more_box_delete" onclick="showDelete('${type}', '${id}')">
+            <img src="../../../icons/pages/blog/delete.png" alt="delete button" class="more_button_delete_image">
+        </button>
+        `
+    } else {
+        const id = JSON.parse(decodeURIComponent(info_text))["post id"];
+
+        var delete_button = `
+        <button class="more_button_delete" id="more_box_delete" onclick="showDelete('${type}', '${id}')">
+            <img src="../../../icons/pages/blog/delete.png" alt="delete button" class="more_button_delete_image">
+        </button>
+        `
+    }
 
     // create the elements
     showMoreBoxButtonContainer.insertAdjacentHTML('beforeend', info_button)
@@ -579,7 +648,7 @@ function createHTMLCategory(title, description, id, empty, logged_in_as_user, in
 
                 <div class="category_ui_container">
                     <img src="../../../icons/pages/blog/drag.png" class="category_drag" draggable=true>
-                    <button class="category_more" onclick="showMore(${logged_in_as_user}, '${encodeURIComponent(JSON.stringify(info))}')">
+                    <button class="category_more" onclick="showMore(${logged_in_as_user}, '${encodeURIComponent(JSON.stringify(info))}', 'category')">
                         <img src="../../../icons/pages/blog/more.png" class="category_more_image" draggable=false>
                     </button>
                 </div>
@@ -605,7 +674,7 @@ function createHTMLCategory(title, description, id, empty, logged_in_as_user, in
                 </details>
                 
                 <div class="category_ui_container">
-                    <button class="category_more" onclick="showMore(${logged_in_as_user}, '${encodeURIComponent(JSON.stringify(info))}')">
+                    <button class="category_more" onclick="showMore(${logged_in_as_user}, '${encodeURIComponent(JSON.stringify(info))}', 'category')">
                         <img src="../../../icons/pages/blog/more.png" class="category_more_image" draggable=false>
                     </button>
                 </div>
@@ -648,7 +717,7 @@ function createHTMLPost(text_value, created_at, id, category_id, index_in_catego
                 ${created_at}
             </p>
 
-            <button class="post_more" onclick="showMore(${logged_in_as_user}, '${encodeURIComponent(JSON.stringify(info))}')">
+            <button class="post_more" onclick="showMore(${logged_in_as_user}, '${encodeURIComponent(JSON.stringify(info))}', 'post')">
                 <img src="../../../icons/pages/blog/more.png" class="post_more_image" draggable=false>
             </button>
         </div>

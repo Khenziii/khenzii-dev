@@ -359,19 +359,46 @@ async function getHashedPassword(username) {
     }
 }
 
-// delete post from the database, and set the index_in_user of the last one if this one had it
+// delete post from the database, and set the index_in_categroy of the last one if this one had it
 async function deletePost(post_id) {
-    return [503, 'Nothing happened. This thing is being worked on.. Should be avaible in a couple of days.'];
+    try {
+        // check if the post is the last one
+        // (on the client-side, we check if the post has the last index, 
+        // and if so, we don't show the fetch more button)
+        var query = `SELECT index_in_category, category_id FROM "post" WHERE id = \$1`
+        var result = await pool.query(query, [post_id])
+
+        if(result.rows[0].index_in_category == 1) {
+            // get the next last post's id
+            var query = `SELECT id FROM "post" WHERE category_id = \$1`
+            var result = await pool.query(query, [result.rows[0].category_id])
+            
+            // index 0 - the currently oldest one, index 1 - the currently second oldest one
+            const new_oldest_post_id = result.rows[1].id
+
+            // grant the next last post the index_in_category: 1
+            var command = `UPDATE "post" SET index_in_category = 1 WHERE id = \$1;`
+            await pool.query(command, [new_oldest_post_id])
+        }
+
+        // remove the post from the database
+        var command = `DELETE FROM "post" WHERE id = \$1`
+        await pool.query(command, [post_id])
+
+        return [200, 'Success!'];
+    } catch (error) {
+        return [500, 'Something went wrong while removing the post from the database :/'];
+    }
 }
 
 // delete every post using the deletePost function and then delete the category
 async function deleteCategory(category_id) {
-    return [503, 'Nothing happened. This thing is being worked on.. Should be avaible in a couple of days.'];
+    return [503, 'Nothing happened. Deleting categories is being worked on.. Should be avaible in a couple of days.'];
 }
 
 // delete every category using the deleteCategory function and then delete the user
 async function deleteUser(user_id) {
-    return [503, 'Nothing happened. This thing is being worked on.. Should be avaible in a couple of days.'];
+    return [503, 'Nothing happened. Deleting users is being worked on.. Should be avaible in a couple of days.'];
 
     // remember to add the user token to blacklisted tokens
 }
@@ -803,24 +830,10 @@ app.post('/blog/api/get_posts', limit_api,  async (req, res) => {
         // Retrieve data from the request body
         const { category_id, times } = req.body;
 
-        // the times variables tells us how much times the user has already clicked the "show more" button
-        // we need it to return appropiate rows
-
-        // firstly lets get the total amount of posts in a category
-        var query = `SELECT * FROM "post" WHERE category_id = \$1;`
-        var result = await pool.query(query, [category_id]);
-
-        const posts_in_the_category = result.rowCount; // eg 12
-
-        // get the lower number
-        const lower = posts_in_the_category - number_of_posts_to_get * times // eg 7 (12 - 5 * 1)
-        // get the higher number
-        const higher = lower + number_of_posts_to_get // eg 12 (7 + 5)
-
-        var query = `SELECT * FROM "post" WHERE category_id = \$1 AND index_in_category BETWEEN ${lower} AND ${higher} ORDER BY id DESC LIMIT ${number_of_posts_to_get};`
-        // get <number_of_posts_to_get> posts from a certain category where index_in_category
-        // is between <lower> and <higher> while also returning it in the by newest order :3
-        var result = await pool.query(query, [category_id]);
+        // get <number_of_posts_to_get> posts from the category, sorted by the 
+        // newest, with the offset of <number_of_posts_to_get> * <times>
+        var query = `SELECT * FROM "post" WHERE category_id = \$1 ORDER BY id DESC LIMIT ${number_of_posts_to_get} OFFSET \$2;`
+        var result = await pool.query(query, [category_id, number_of_posts_to_get * times])
 
         result.number_of_posts_to_get = number_of_posts_to_get
 
@@ -914,12 +927,17 @@ app.post('/blog/api/create_post', authMiddleware, limit_create, async (req, res)
             var localDate = getDate(hours_off)
             var created_at = `${localDate.localDay}/${localDate.localMonth}/${localDate.localYear} - ${localDate.localHours}:${localDate.localMinutes}:${localDate.localSeconds}`
 
-            // get the amount of posts in a category
-            var query = `SELECT id FROM "post" WHERE category_id = \$1;`
+            // get the next index in category
+            var query = `SELECT index_in_category FROM "post" WHERE category_id = \$1 ORDER BY id DESC;`
             var result = await pool.query(query, [category_id]);
 
-            var index_in_category = result.rowCount + 1
+            if(result.rowCount > 0) {
+                var index_in_category = result.rows[0].index_in_category + 1
+            } else {
+                var index_in_category = 1
+            }
 
+            // clean the HTML
             if (trusted_usernames.includes(req.auth.username)) {
                 // if user is trusted
                 var cleanHTML = text_value;
@@ -1133,14 +1151,22 @@ app.post('/blog/api/change_category_index', authMiddleware, limit_change,  async
 app.post('/blog/api/delete_post', authMiddleware, limit_change,  async (req, res) => {
     try {
         // Retrieve data from the request body
-        const { user_id, post_id } = req.body;
+        const { post_id } = req.body;
 
         // 1. verify the user
-        // (by checking that req.auth.username == user id's username)
+        // (by checking that req.auth.username == post's categories user id's username)
 
-        // get the username
-        var query = `SELECT username FROM "user" WHERE id = \$1;`
-        var result = await pool.query(query, [user_id]);
+        // get the category_id
+        var query = `SELECT category_id FROM "post" WHERE id = \$1`
+        var result = await pool.query(query, [post_id]);
+
+        // get the user id using category's id
+        var query = `SELECT user_id FROM "category" WHERE id = \$1`
+        var result = await pool.query(query, [result.rows[0].category_id]);
+
+        // get the user's username using the user's id
+        var query = `SELECT username FROM "user" WHERE id = \$1`
+        var result = await pool.query(query, [result.rows[0].user_id]);
 
         if (req.auth.username == result.rows[0].username) {
             var message = await deletePost(post_id);
