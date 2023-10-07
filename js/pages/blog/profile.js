@@ -45,7 +45,7 @@ var reload = false
 var reload_category_to_open = null
 var category_create_button_clickable = true
 var post_create_button_clickable = true
-var delete_button_clickable = true
+var delete_button_clickable = false
 
 function infoBoxShow(text) {
     infoBox.style.display = "flex";
@@ -400,7 +400,7 @@ async function deletepost(post_id) {
     }
 
     deleteButton.classList.add("no");
-    delete_button_clickable = true;
+    delete_button_clickable = false;
 
     // send a request to the API to delete the category
     const data = {
@@ -426,21 +426,40 @@ async function deletepost(post_id) {
     deleteTextInfoElement.style.display = "block";
 }
 
-function deletecategory(category_id) {
+async function deletecategory(category_id) {
     if(delete_button_clickable == false) {
         return
     }
 
     deleteButton.classList.add("no");
-    delete_button_clickable = true;
+    delete_button_clickable = false;
 
     // send a request to the API to delete the category
+    const data = {
+        category_id: category_id
+    };
 
-    // set the display of delete button to none
+    const response = await fetch('/blog/api/delete_category', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    });
+
+    var text = await response.text();
+    reload = true
+
+    // set the display of delete button to none (or just remove it :))
+    deleteButton.remove();
+
     // edit the info paragraph and set it's display to block
+    deleteTextInfoElement.textContent = text;
+    deleteTextInfoElement.style.display = "block";
 }
 
 function showDelete(type, id) {
+    sureInput.value = "";
     deleteTextElement.textContent = `Are you sure that you want to delete the ${type}?`;
     deleteButton.setAttribute('onclick', `delete${type}('${id}')`);
 
@@ -818,8 +837,10 @@ sureInput.addEventListener("input", function () {
 
     if (value.toUpperCase() == "Y") {
         deleteButton.classList.remove("no");
+        delete_button_clickable = true;
     } else {
         deleteButton.classList.add("no");
+        delete_button_clickable = false;
     }
 });
 
