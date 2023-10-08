@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>Khenzii :)</title>
+        <link rel="stylesheet" href="../../../css/htmls/pages/blog/post.css">
+        <meta name="keywords" content="post">
+
+        <script defer src="../../../js/pages/blog/post.js"></script>
+        <script defer src="../../../js/utils/buttons.js"></script>
+
+        <script src="/js/utils/mobileinfo.js"></script> <!---delete this thing once mobile is supported :)--->
+        <script>showPage("/mobileinfo");</script> <!---delete this line too! =)--->
+    </head>
+
+    <body>
+        <div class="shadow_effect" id="shadowEffect"></div>
+
+        <div id="more_box" class="more_box">
+            <span id="more_box_close" class="more_box_close">&times;</span>
+        
+            <div class="more_button_container" id="more_button_container">
+                
+            </div>
+        </div>
+
+        <div id="more_info_box" class="more_info_box">
+            <span id="more_info_box_close" class="more_info_box_close">&times;</span>
+        </div>
+
+        <div id="more_share_box" class="more_share_box">
+            <span id="more_share_box_close" class="more_share_box_close">&times;</span>
+        </div>
+
+        <div class="centered_container" id="centered_container">
+            <div class="info_container" id="info_container">
+                <button class="back_to_profile_button" id="back_to_profile_button" onclick="redirectTo('/blog/', event)">
+                    <img src="../../../icons/pages/blog/pfp_placeholder.png" alt="edit pfp button" class="back_to_profile_button_image">
+                </button>
+
+                <p class="under_button" id="under_button">
+                    ^ :) profile ^
+                </p>
+
+                <hr class="line">
+
+                <img src="../../../icons/pages/blog/pfp_placeholder.png" alt="user profile picture" class="pfp" id="pfp">
+
+                <p class="username" id="username">
+                    :)
+                </p>
+
+                <p class="under_username">
+                    ^ Post Made By ^
+                </p>
+            </div>
+
+            <div class="post_container" id="post_container">
+                <hr class="line">
+            </div>
+        </div>
+    </body>
+</html>

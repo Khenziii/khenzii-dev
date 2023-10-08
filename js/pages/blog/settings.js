@@ -98,7 +98,7 @@ function shadowEffectEnd() {
 function createTheGoBackButtonHTML(username) {
     const button = `
     <button class="back_to_profile_button" onclick="redirectTo('/blog/user/${username}', event)">
-        <img src="../../../icons/pages/blog/pfp_placeholder.png" alt="edit pfp button" class="back_to_profile_button_image">
+        <img src="../../../icons/pages/blog/pfp_placeholder.png" alt="go back button" class="back_to_profile_button_image">
     </button>
     `
 

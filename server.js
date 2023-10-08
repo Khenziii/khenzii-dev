@@ -611,7 +611,6 @@ app.get('/blog/user/:username', limit_pages, async (req, res) => {
             return
         }
 
-        const user = result.rows[0];
         res.sendFile(path.join(__dirname, 'html', 'pages', 'blog', 'profile.html'));
     }
 
@@ -621,6 +620,34 @@ app.get('/blog/user/:username', limit_pages, async (req, res) => {
     }
 });
 
+// redirect from /blog/post
+app.get('/blog/post', limit_pages, (req, res) => {
+    consoleInfo('i', `${req.ClientIP} tried to get the '/blog/post' route, sending him to '/blog'`)
+    res.redirect('/blog');
+});
+
+// posts in /blog/post (/blog/post/<posts_id>)
+app.get('/blog/post/:post_id', limit_pages, async (req, res) => {
+    const { post_id } = req.params;
+
+    consoleInfo('i', `${req.ClientIP} requested '/blog/post/${post_id}'.`)
+
+    try {
+        const query = `SELECT * FROM "post" WHERE id = \$1;`
+        const result = await pool.query(query, [post_id]);
+        
+        if (result.rows.length === 0) {
+            res.status(404).sendFile(path.join(__dirname, 'html', 'errors', 'error_404.html'));
+            consoleInfo('i', `${req.ClientIP} got the 404 error. Route: '/blog/post/${post_id}'`)
+            return
+        }
+
+        res.sendFile(path.join(__dirname, 'html', 'pages', 'blog', 'post.html'));
+    } catch (error) {
+        res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Check console for more Details. Sorry.');
+        consoleInfo('e', `${req.ClientIP} got a 500 error. Route: '/blog/post/${post_id}'. Error: ${error}`)
+    }
+});
 
 // Place routes above this comment!!!
 // API endpoints below!! :)
@@ -821,6 +848,25 @@ app.post('/blog/api/get_user', checkAuthMiddleware, limit_api, async (req, res) 
     }
 });
 
+// retrieve user's username using user id
+app.post('/blog/api/get_username', limit_api, async (req, res) => {
+    try {
+        // Retrieve data from the request body
+        const id = req.body[0];
+
+        // get the username
+        var query = `SELECT username FROM "user" WHERE id = \$1;`
+        var result = await pool.query(query, [id]);
+
+        const username = result.rows[0].username
+        
+        res.status(200).send(username)
+    } catch (error) {
+        res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Check console for more Details. Sorry.');
+        consoleInfo('e', `${req.ClientIP} got a 500 error (while communicating with the back-end). Error: ${error}.`)
+    }
+});
+
 // retrieve stuff about user (this endpoint is being used by settings (it's not requesting useless stuff such as categories like get_user endpoint))
 app.post('/blog/api/get_user_settings', authMiddleware, limit_api, async (req, res) => {
     try {
@@ -874,7 +920,7 @@ app.post('/blog/api/get_user_settings', authMiddleware, limit_api, async (req, r
     }
 });
 
-// retrieve user's posts
+// retrieve posts from a category
 app.post('/blog/api/get_posts', limit_api, async (req, res) => {
     try {
         // Retrieve data from the request body
@@ -886,6 +932,40 @@ app.post('/blog/api/get_posts', limit_api, async (req, res) => {
         var result = await pool.query(query, [category_id, number_of_posts_to_get * times])
 
         result.number_of_posts_to_get = number_of_posts_to_get
+
+        res.status(200).send(result)
+    } catch (error) {
+        res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Check console for more Details. Sorry.');
+        consoleInfo('e', `${req.ClientIP} got a 500 error (while communicating with the back-end). Error: ${error}.`)
+    }
+});
+
+// retrieve info about a certain post
+app.post('/blog/api/get_post', limit_api, async (req, res) => {
+    try {
+        // Retrieve data from the request body
+        const post_id = req.body[0];
+
+        // get the post from the db
+        var query = `SELECT * FROM "post" WHERE id = \$1;`
+        var result = await pool.query(query, [post_id])
+
+        res.status(200).send(result)
+    } catch (error) {
+        res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Check console for more Details. Sorry.');
+        consoleInfo('e', `${req.ClientIP} got a 500 error (while communicating with the back-end). Error: ${error}.`)
+    }
+});
+
+// retrieve info about a certain category
+app.post('/blog/api/get_category', limit_api, async (req, res) => {
+    try {
+        // Retrieve data from the request body
+        const category_id = req.body[0];
+
+        // get the category from the db
+        var query = `SELECT * FROM "category" WHERE id = \$1;`
+        var result = await pool.query(query, [category_id])
 
         res.status(200).send(result)
     } catch (error) {

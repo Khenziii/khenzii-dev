@@ -22,8 +22,6 @@ const infoBoxText = document.getElementById("info_box_text");
 const showMoreBox = document.getElementById("more_box");
 const closeShowMoreBox = document.getElementById("more_box_close");
 const showMoreBoxButtonContainer = document.getElementById("more_button_container");
-// this line is useless, since infoShowMoreBox is not yet created here: const infoShowMoreBox = document.getElementById("more_box_info");
-// this line is useless, since deleteShowMoreBox is not yet created here: const deleteShowMoreBox = document.getElementById("more_box_delete");
 const showInfoBox = document.getElementById("more_info_box");
 const showShareBox = document.getElementById("more_share_box");
 const showDeleteBox = document.getElementById("more_delete_box");
@@ -139,8 +137,6 @@ async function getPosts(category_id, clicked_button) {
     how_much_times[category_id]++;
 
     removeShowMoreButtonHTML(category_id)
-
-    console.log(posts)
 
     for (let i = 0; i < posts.length; i++) {
         createHTMLPost(posts[i].text_value, posts[i].created_at, posts[i].id, category_id, posts[i].index_in_category)
@@ -481,14 +477,19 @@ function showMore(logged_in_as_user, info_text, type) {
         if (share_button_element_old) {
             // update the url (well, not in all cases, but you know what i mean)
             if(type === "category") {
+                // if clicked show more on a category
+
                 // get the categroy index from the dictionary for the share button
                 const category_index = JSON.parse(decodeURIComponent(info_text))["index in user"];
 
-                // if clicked show more on a category
                 share_button_element_old.setAttribute("onclick", `showShare('https://khenzii.dev/blog/user/${username}#${category_index}')`);
             } else {
                 // if clicked show more on a post
-                share_button_element_old.setAttribute("onclick", `showShare('no support for post sharing yet!')`);
+
+                // get the post id
+                const id = JSON.parse(decodeURIComponent(info_text))["post id"];
+
+                share_button_element_old.setAttribute("onclick", `showShare('https://khenzii.dev/blog/post/${id}')`);
             }
         }
 
@@ -498,8 +499,8 @@ function showMore(logged_in_as_user, info_text, type) {
                 const category_id = JSON.parse(decodeURIComponent(info_text))["category id"];
                 delete_button_element_old.setAttribute("onclick", `showDelete('${type}', '${category_id}')`)
             } else {
-                const post_id = JSON.parse(decodeURIComponent(info_text))["post id"];
-                delete_button_element_old.setAttribute("onclick", `showDelete('${type}', '${post_id}')`)
+                const id = JSON.parse(decodeURIComponent(info_text))["post id"];
+                delete_button_element_old.setAttribute("onclick", `showDelete('${type}', '${id}')`)
             }
         }
 
@@ -529,8 +530,11 @@ function showMore(logged_in_as_user, info_text, type) {
         </button>
         `
     } else {
+        // get the post id
+        const id = JSON.parse(decodeURIComponent(info_text))["post id"];
+
         var share_button = `
-        <button class="more_button_share" id="more_box_share" onclick="showShare('no support for post sharing yet!')">
+        <button class="more_button_share" id="more_box_share" onclick="showShare('https://khenzii.dev/blog/post/${id}')">
             <img src="../../../icons/pages/blog/share.png" alt="share button" class="more_button_share_image">
         </button>
         `
