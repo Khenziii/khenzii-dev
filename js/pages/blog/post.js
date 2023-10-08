@@ -252,7 +252,7 @@ function showShare(url) {
 }
 
 async function getUserFromServer(username) {
-    return fetch('/blog/api/get_user_settings', {
+    return fetch('/blog/api/get_user', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
