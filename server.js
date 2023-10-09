@@ -414,14 +414,14 @@ async function deleteUser(user_id, access_cookie) {
         if (result.rows[0].default != "true") {
             const image_path = `./images/blog/${result.rows[0].id}.png`
             fs.unlink(image_path, (err) => {
-                if(err){
+                if (err) {
                     consoleInfo("E", `Something went wrong while trying to delete user's image. Here is the error: ${err}`)
                     went_wrong = true
                 }
             });
         }
 
-        if(went_wrong) {
+        if (went_wrong) {
             return [500, 'Something went wrong while removing your account :/'];
         }
 
@@ -549,13 +549,72 @@ app.get('/page_being_build', limit_pages, (req, res) => {
     consoleInfo('i', `${req.ClientIP} requested the '/page_being_build' route`)
 });
 
+// '/zsl' route
+app.get('/zsl', limit_pages, (req, res) => {
+    consoleInfo('i', `${req.ClientIP} requested the '/zsl' route`)
+    res.redirect(`/`)
+});
+
+// '/zsl/logo' route
+app.get('/zsl/logo/', limit_pages, (req, res) => {
+    res.sendFile(path.join(__dirname, 'html', 'pages', 'zsl', 'logo', 'logo.html'))
+    consoleInfo('i', `${req.ClientIP} requested the '/zsl/logo' route`)
+});
+
+// '/zsl/logo' route
+app.get('/zsl/logo/:hex_1', limit_pages, (req, res) => {
+    const { hex_1 } = req.params;
+
+    // Read the HTML file
+    fs.readFile(path.join(__dirname, 'html', 'pages', 'zsl', 'logo', 'logo.html'), 'utf8', (error, data) => {
+        if (error) {
+            consoleInfo('E', `${req.ClientIP} got a 500 error. Route: '/zsl/logo'. Error: ${error}`)
+            return res.status(500).send("Bruh, something went wrong :P. It isnt your fault. Sorry.");
+        }
+
+        // generate the image (with one hex (the same color for the eyes and the beard))
+
+        // Replace the og:image content with the accurate path
+        const result = data.replace(/<meta property="og:image" content="">/g, `<meta property="og:image" content="${path_to_the_png}">`);
+
+        // Send the modified HTML back as the response
+        res.send(result);
+    });
+
+    consoleInfo('i', `${req.ClientIP} requested the '/zsl/logo' route`)
+});
+
+// '/zsl/logo' route
+app.get('/zsl/logo/:hex_1/:hex_2', limit_pages, (req, res) => {
+    const { hex_1, hex_2 } = req.params;
+
+    // Read the HTML file
+    fs.readFile(path.join(__dirname, 'html', 'pages', 'zsl', 'logo', 'logo.html'), 'utf8', (error, data) => {
+        if (error) {
+            consoleInfo('E', `${req.ClientIP} got a 500 error. Route: '/zsl/logo'. Error: ${error}`)
+            return res.status(500).send("Bruh, something went wrong :P. It isnt your fault. Sorry.");
+        }
+
+        // generate the image here (with 2 hexes (different one for the eyes and for the beard))
+
+
+        // Replace the og:image content with the certain_hex
+        const result = data.replace(/<meta property="og:image" content="">/g, `<meta property="og:image" content="${path_to_the_png}">`);
+
+        // Send the modified HTML back as the response
+        res.send(result);
+    });
+
+    consoleInfo('i', `${req.ClientIP} requested the '/zsl/logo' route`)
+});
+
 
 // blog stuff below
 
 // '/blog' route
 app.get('/blog', limit_pages, (req, res) => {
     // res.sendFile(path.join(__dirname, 'html', 'pages', 'blog', 'blog.html'));
-    // consoleInfo('i', `${req.ClientIP} requested the '/blog' route`)
+    consoleInfo('i', `${req.ClientIP} requested the '/blog' route`)
     res.redirect(`/page_being_build`)
 });
 
@@ -635,7 +694,7 @@ app.get('/blog/post/:post_id', limit_pages, async (req, res) => {
     try {
         const query = `SELECT * FROM "post" WHERE id = \$1;`
         const result = await pool.query(query, [post_id]);
-        
+
         if (result.rows.length === 0) {
             res.status(404).sendFile(path.join(__dirname, 'html', 'errors', 'error_404.html'));
             consoleInfo('i', `${req.ClientIP} got the 404 error. Route: '/blog/post/${post_id}'`)
@@ -859,7 +918,7 @@ app.post('/blog/api/get_username', limit_api, async (req, res) => {
         var result = await pool.query(query, [id]);
 
         const username = result.rows[0].username
-        
+
         res.status(200).send(username)
     } catch (error) {
         res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Check console for more Details. Sorry.');
@@ -1355,7 +1414,7 @@ app.post('/blog/api/delete_user', authMiddleware, limit_change, async (req, res)
         var result = await pool.query(query, [user_id]);
 
         if (req.auth.username == result.rows[0].username) {
-            if(req.cookies.jwt_access_cookie) {
+            if (req.cookies.jwt_access_cookie) {
                 var message = await deleteUser(user_id, req.cookies.jwt_access_cookie);
             } else {
                 var message = await deleteUser(user_id, req.cookies.jwt_access_cookie_old);

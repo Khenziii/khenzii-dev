@@ -1,0 +1,8 @@
+@import '../../../../presets/variables.css';
+@import '../../../../presets/fonts.css';
+@import '../../../../presets/body.css';
+
+body {
+    overflow: scroll;
+    overflow-x: hidden;
+}
