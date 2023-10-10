@@ -17,3 +17,6 @@ images/blog/*.png
 images/blog/*.jpg
 images/blog/*.jpeg
 images/blog/*.jfif
+images/blog/*.webp
+# some generated icons are stored in this direcotyr
+images/zsl/logo/*.png

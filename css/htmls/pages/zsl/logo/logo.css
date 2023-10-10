@@ -6,3 +6,38 @@ body {
     overflow: scroll;
     overflow-x: hidden;
 }
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 100vw;
+    max-height: 100vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.zsllolcuplogo {
+    margin-top: 2vh;
+    max-height: 80%;
+    max-width: 80%;
+}
+
+.whitespace {
+    margin-top: 2vh;
+}
+
+.text {
+    text-align: center;
+    color: var(--text);
+    font-size: 1.5rem;
+    font-family: Montserrat;
+    font-weight: 900;
+}

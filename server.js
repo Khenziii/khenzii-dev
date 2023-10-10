@@ -1,12 +1,8 @@
-const { FLIPPED_ALIAS_KEYS } = require('@babel/types');
-const { error, table } = require('console');
-const { configDotenv } = require('dotenv');
 const express = require('express');
 const path = require('path');
 const { Pool } = require('pg');
 require('dotenv').config({ path: path.resolve(__dirname, 'secrets.env') });
 const bcrypt = require('bcryptjs');
-const { rawListeners } = require('process');
 const jwt = require('jsonwebtoken');
 const { expressjwt: expressJwt } = require('express-jwt');
 const cookieParser = require('cookie-parser');
@@ -14,6 +10,9 @@ const fs = require('fs');
 const multer = require('multer');
 const sanitizeHtml = require('sanitize-html');
 const rateLimit = require('express-rate-limit');
+const { JSDOM } = require('jsdom');
+var svg2img = require('svg2img');
+var sharp = require('sharp');
 
 
 const app = express();
@@ -564,48 +563,135 @@ app.get('/zsl/logo/', limit_pages, (req, res) => {
 // '/zsl/logo' route
 app.get('/zsl/logo/:hex_1', limit_pages, (req, res) => {
     const { hex_1 } = req.params;
+    consoleInfo('i', `${req.ClientIP} requested the '/zsl/logo/${hex_1}' route`)
 
     // Read the HTML file
     fs.readFile(path.join(__dirname, 'html', 'pages', 'zsl', 'logo', 'logo.html'), 'utf8', (error, data) => {
         if (error) {
-            consoleInfo('E', `${req.ClientIP} got a 500 error. Route: '/zsl/logo'. Error: ${error}`)
+            consoleInfo('E', `${req.ClientIP} got a 500 error. Route: '/zsl/logo/${hex_1}'. Error: ${error}`)
             return res.status(500).send("Bruh, something went wrong :P. It isnt your fault. Sorry.");
         }
 
-        // generate the image (with one hex (the same color for the eyes and the beard))
+        /// generate the image (with one hex (the same color for the stroke and fill))
+        const svgData = fs.readFileSync('./icons/pages/zsl/logo/zsllolcup.svg', 'utf8');
+        const dom = new JSDOM(svgData);
+        const svg = dom.window.document.querySelector('svg');
 
-        // Replace the og:image content with the accurate path
-        const result = data.replace(/<meta property="og:image" content="">/g, `<meta property="og:image" content="${path_to_the_png}">`);
+        // change the color of all path's to hex_1
+        const paths = svg.querySelectorAll('path');
+        paths.forEach(path => {
+            path.setAttribute('stroke', `#${hex_1}`);
+            if(!(path.parentElement.id === "teeth" || path.parentElement.id === "hair" || path.id === "face" || path.id === "mouth")) {
+                path.setAttribute('fill', `#${hex_1}`);
+            }
+        });
 
-        // Send the modified HTML back as the response
-        res.send(result);
+        fs.readdir("./images/zsl/logo/", (err, files) => {
+            const fileCount = files.length;
+
+            if (fileCount > 200) {
+                res.send("This logo generator has already generated more than 2000 images. To prevent spam / malicious attacks, this is the limit :P")
+                consoleInfo("W", `the /zsl/logo route has already generated more than 2000 images!!!`)
+                return
+            }
+
+
+            const path = `./images/zsl/logo/${hex_1}`
+            const editedSvgData = svg.outerHTML;
+
+            // convert the svg image to png (and save it)
+            svg2img(editedSvgData, function (error, pngData) {
+                if (error) {
+                    consoleInfo(`E`, `Something went wrong while converting the .svg image to .png. Here is the error: ${error}`)
+                    return;
+                }
+
+                sharp(pngData)
+                    .resize(500, 500)
+                    .toFile(`${path}.png`, function (error) {
+                        if (error) {
+                            consoleInfo(`E`, `Something went wrong while converting the .svg image to .png. Here is the error: ${error}`)
+                            return;
+                        }
+                    });
+            });
+
+            // Replace the og:image content with the accurate path
+            /// replace http://localhost:3000 with khenzii.dev before pushing!!!! (delete this comment too)
+            const result = data.replace(/<meta property="og:image" content="">/g, `<meta property="og:image" content="http://localhost:3000/${path}.png">`);
+
+            // Send the modified HTML back as the response
+            res.send(result);
+        })
     });
-
-    consoleInfo('i', `${req.ClientIP} requested the '/zsl/logo' route`)
 });
 
 // '/zsl/logo' route
 app.get('/zsl/logo/:hex_1/:hex_2', limit_pages, (req, res) => {
     const { hex_1, hex_2 } = req.params;
+    consoleInfo('i', `${req.ClientIP} requested the '/zsl/logo/${hex_1}/${hex_2}' route`)
 
     // Read the HTML file
     fs.readFile(path.join(__dirname, 'html', 'pages', 'zsl', 'logo', 'logo.html'), 'utf8', (error, data) => {
         if (error) {
-            consoleInfo('E', `${req.ClientIP} got a 500 error. Route: '/zsl/logo'. Error: ${error}`)
+            consoleInfo('E', `${req.ClientIP} got a 500 error. Route: '/zsl/logo/${hex_1}/${hex_2}'. Error: ${error}`)
             return res.status(500).send("Bruh, something went wrong :P. It isnt your fault. Sorry.");
         }
 
-        // generate the image here (with 2 hexes (different one for the eyes and for the beard))
+        /// generate the image (with one hex (the same color for the stroke and fill))
+        const svgData = fs.readFileSync('./icons/pages/zsl/logo/zsllolcup.svg', 'utf8');
+        const dom = new JSDOM(svgData);
+        const svg = dom.window.document.querySelector('svg');
+
+        // change the color of all path's to hex_1
+        const paths = svg.querySelectorAll('path');
+        paths.forEach(path => {
+            if(path.parentElement.id === "teeth" || path.parentElement.id === "hair" || path.id === "face" || path.id === "mouth") {
+                path.setAttribute('stroke', `#${hex_1}`);
+            } else {
+                path.setAttribute('stroke', `#${hex_2}`);
+                path.setAttribute('fill', `#${hex_2}`);
+            }
+        });
+
+        fs.readdir("./images/zsl/logo/", (err, files) => {
+            const fileCount = files.length;
+
+            if (fileCount > 200) {
+                res.send("This logo generator has already generated more than 2000 images. To prevent spam / malicious attacks, this is the limit :P")
+                consoleInfo("W", `the /zsl/logo route has already generated more than 2000 images!!!`)
+                return
+            }
 
 
-        // Replace the og:image content with the certain_hex
-        const result = data.replace(/<meta property="og:image" content="">/g, `<meta property="og:image" content="${path_to_the_png}">`);
+            const path = `./images/zsl/logo/${hex_1}_${hex_2}`
+            const editedSvgData = svg.outerHTML;
 
-        // Send the modified HTML back as the response
-        res.send(result);
+            // convert the svg image to png (and save it)
+            svg2img(editedSvgData, function (error, pngData) {
+                if (error) {
+                    consoleInfo(`E`, `Something went wrong while converting the .svg image to .png. Here is the error: ${error}`)
+                    return;
+                }
+
+                sharp(pngData)
+                    .resize(500, 500)
+                    .toFile(`${path}.png`, function (error) {
+                        if (error) {
+                            consoleInfo(`E`, `Something went wrong while converting the .svg image to .png. Here is the error: ${error}`)
+                            return;
+                        }
+                    });
+            });
+
+            // Replace the og:image content with the accurate path
+            /// replace http://localhost:3000 with khenzii.dev before pushing!!!! (delete this comment too)
+            const result = data.replace(/<meta property="og:image" content="">/g, `<meta property="og:image" content="http://localhost:3000/${path}.png">`);
+
+            // Send the modified HTML back as the response
+            res.send(result);
+        })
     });
-
-    consoleInfo('i', `${req.ClientIP} requested the '/zsl/logo' route`)
 });
 
 
