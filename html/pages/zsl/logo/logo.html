@@ -4,18 +4,19 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <title>Khenzii :)</title>
+        <title>ZSŁ LoL Cup 2024 | Logo</title>
+        <link rel="icon">
         <link rel="stylesheet" href="../../../../css/htmls/pages/zsl/logo/logo.css">
 
         <!---the content will get filled out by the server--->
         <meta property="og:image" content="">
 
-        <script defer src="../../../js/pages/zsl/logo/logo.js"></script>
-        <script defer src="../../../js/utils/buttons.js"></script>
+        <script defer src="../../../../js/pages/zsl/logo/logo.js"></script>
+        <script defer src="../../../../js/utils/buttons.js"></script>
     </head>
 
     <body>
-        <main class="container">
+        <main class="container" id="container">
             <svg height="300" width="500" viewBox="0 0 750 750" fill="none" xmlns="http://www.w3.org/2000/svg" id="zsllolcuplogo" class="zsllolcuplogo">
                 <g id="logo">
                     <g id="hair">
@@ -45,20 +46,20 @@
 
 
             <p class="text">
-                Fill color
+                Stroke color
             </p>
 
-            <input type="text" class="color_input" id="fill_hex_input">
+            <input type="text" class="color_input" id="stroke_hex_input" placeholder="HEX">
 
 
             <br class="whitespace">
 
 
             <p class="text">
-                Stroke color
+                Fill color
             </p>
 
-            <input type="text" class="color_input" id="fill_hex_input">
+            <input type="text" class="color_input" id="fill_hex_input" placeholder="HEX">
 
 
             <br class="whitespace">
@@ -68,6 +69,9 @@
                 Randomize
             </p>
 
+            <button class="randomize_button" onclick="randomize()">
+                <img src="../../../../icons/pages/zsl/logo/random.png" alt="randomize button" class="randomize_button_image">
+            </button>
 
             <br class="whitespace">
 
@@ -75,6 +79,14 @@
             <p class="text">
                 Grab the URL :)
             </p>
+
+            <code class="share_link_preview" id="share_link_preview">
+                http://localhost:3000/zsl/logo/9141ac/ffffff
+            </code>
+            
+            <button class="copy_button" onclick="copyToClipboard('container')">
+                <img src="../../../../icons/pages/blog/copy.png" alt="copy button" class="copy_button_image">
+            </button>
         </main>
     </body>
 </html>

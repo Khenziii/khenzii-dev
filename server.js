@@ -568,7 +568,7 @@ app.get('/zsl/logo/:hex_1', limit_pages, (req, res) => {
     // Read the HTML file
     fs.readFile(path.join(__dirname, 'html', 'pages', 'zsl', 'logo', 'logo.html'), 'utf8', (error, data) => {
         if (error) {
-            consoleInfo('E', `${req.ClientIP} got a 500 error. Route: '/zsl/logo/${hex_1}'. Error: ${error}`)
+            consoleInfo('E', `${req.ClientIP} got a 500 error (while trying to read logo.html). Route: '/zsl/logo/${hex_1}'. Error: ${error}`)
             return res.status(500).send("Bruh, something went wrong :P. It isnt your fault. Sorry.");
         }
 
@@ -581,7 +581,7 @@ app.get('/zsl/logo/:hex_1', limit_pages, (req, res) => {
         const paths = svg.querySelectorAll('path');
         paths.forEach(path => {
             path.setAttribute('stroke', `#${hex_1}`);
-            if(!(path.parentElement.id === "teeth" || path.parentElement.id === "hair" || path.id === "face" || path.id === "mouth")) {
+            if (!(path.parentElement.id === "teeth" || path.parentElement.id === "hair" || path.id === "face" || path.id === "mouth")) {
                 path.setAttribute('fill', `#${hex_1}`);
             }
         });
@@ -617,8 +617,7 @@ app.get('/zsl/logo/:hex_1', limit_pages, (req, res) => {
             });
 
             // Replace the og:image content with the accurate path
-            /// replace http://localhost:3000 with khenzii.dev before pushing!!!! (delete this comment too)
-            const result = data.replace(/<meta property="og:image" content="">/g, `<meta property="og:image" content="http://localhost:3000/${path}.png">`);
+            const result = data.replace(/<meta property="og:image" content="">/g, `<meta property="og:image" content="https://khenzii.dev/${path}.png">`);
 
             // Send the modified HTML back as the response
             res.send(result);
@@ -634,7 +633,7 @@ app.get('/zsl/logo/:hex_1/:hex_2', limit_pages, (req, res) => {
     // Read the HTML file
     fs.readFile(path.join(__dirname, 'html', 'pages', 'zsl', 'logo', 'logo.html'), 'utf8', (error, data) => {
         if (error) {
-            consoleInfo('E', `${req.ClientIP} got a 500 error. Route: '/zsl/logo/${hex_1}/${hex_2}'. Error: ${error}`)
+            consoleInfo('E', `${req.ClientIP} got a 500 error (while trying to read logo.html). Route: '/zsl/logo/${hex_1}/${hex_2}'. Error: ${error}`)
             return res.status(500).send("Bruh, something went wrong :P. It isnt your fault. Sorry.");
         }
 
@@ -643,10 +642,10 @@ app.get('/zsl/logo/:hex_1/:hex_2', limit_pages, (req, res) => {
         const dom = new JSDOM(svgData);
         const svg = dom.window.document.querySelector('svg');
 
-        // change the color of all path's to hex_1
+        // change the color of the icon
         const paths = svg.querySelectorAll('path');
         paths.forEach(path => {
-            if(path.parentElement.id === "teeth" || path.parentElement.id === "hair" || path.id === "face" || path.id === "mouth") {
+            if (path.parentElement.id === "teeth" || path.parentElement.id === "hair" || path.id === "face" || path.id === "mouth") {
                 path.setAttribute('stroke', `#${hex_1}`);
             } else {
                 path.setAttribute('stroke', `#${hex_2}`);
@@ -685,8 +684,7 @@ app.get('/zsl/logo/:hex_1/:hex_2', limit_pages, (req, res) => {
             });
 
             // Replace the og:image content with the accurate path
-            /// replace http://localhost:3000 with khenzii.dev before pushing!!!! (delete this comment too)
-            const result = data.replace(/<meta property="og:image" content="">/g, `<meta property="og:image" content="http://localhost:3000/${path}.png">`);
+            const result = data.replace(/<meta property="og:image" content="">/g, `<meta property="og:image" content="https://khenzii.dev/${path}.png">`);
 
             // Send the modified HTML back as the response
             res.send(result);
