@@ -16,6 +16,7 @@ code {
     background-color: var(--background_less);
     max-width: 60%;
     text-align: center;
+    word-wrap: break-word;
 }
 
 @media (max-width: 800px) {
