@@ -11,8 +11,8 @@ const multer = require('multer');
 const sanitizeHtml = require('sanitize-html');
 const rateLimit = require('express-rate-limit');
 const { JSDOM } = require('jsdom');
-var svg2img = require('svg2img');
-var sharp = require('sharp');
+const svg2img = require('svg2img');
+const sharp = require('sharp');
 
 
 const app = express();
