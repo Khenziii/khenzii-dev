@@ -617,9 +617,9 @@ app.get('/zsl/logo/:hex_1', limit_pages, (req, res) => {
             });
 
             // Fill out some stuff :)
-            var result = data.replace(/<meta property="og:url" content="">/g, `<meta property="og:url" content="https://khenzii.dev/zsl/logo/${hex_1}">`);
-            var result = data.replace(/<meta property="og:image" content="">/g, `<meta property="og:image" content="https://khenzii.dev/${path}.png">`);
-            var result = data.replace(/<meta name="twitter:image:src" content="">/g, `<meta property="twitter:image:src" content="https://khenzii.dev/${path}.png">`);
+            data = data.replace(/<meta property="og:url" content="">/g, `<meta property="og:url" content="https://khenzii.dev/zsl/logo/${hex_1}">`);
+            data = data.replace(/<meta property="og:image" content="">/g, `<meta property="og:image" content="https://khenzii.dev/${path}.png">`);
+            data = data.replace(/<meta name="twitter:image:src" content="">/g, `<meta property="twitter:image:src" content="https://khenzii.dev/${path}.png">`);
             var result = data.replace(/<meta name="theme-color" content="">/g, `<meta property="theme-color" content="#${hex_1}">`);
 
             // Send the modified HTML back as the response
@@ -687,11 +687,10 @@ app.get('/zsl/logo/:hex_1/:hex_2', limit_pages, (req, res) => {
             });
 
             // Fill out some stuff :)
-            var result = data.replace(/<meta property="og:url" content="">/g, `<meta property="og:url" content="https://khenzii.dev/zsl/logo/${hex_1}/${hex_2}">`);
-            var result = data.replace(/<meta property="og:image" content="">/g, `<meta property="og:image" content="https://khenzii.dev/${path}.png">`);
-            var result = data.replace(/<meta name="twitter:image:src" content="">/g, `<meta property="twitter:image:src" content="https://khenzii.dev/${path}.png">`);
+            data = data.replace(/<meta property="og:url" content="">/g, `<meta property="og:url" content="https://khenzii.dev/zsl/logo/${hex_1}/${hex_2}">`);
+            data = data.replace(/<meta property="og:image" content="">/g, `<meta property="og:image" content="https://khenzii.dev/${path}.png">`);
+            data = data.replace(/<meta name="twitter:image:src" content="">/g, `<meta property="twitter:image:src" content="https://khenzii.dev/${path}.png">`);
             var result = data.replace(/<meta name="theme-color" content="">/g, `<meta property="theme-color" content="#${hex_1}">`);
-
             
             // Send the modified HTML back as the response
             res.send(result);
