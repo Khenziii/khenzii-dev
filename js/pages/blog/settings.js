@@ -350,7 +350,9 @@ sureInput.addEventListener("input", function () {
 function changePreview(element) {
     var file = element.files[0];
     const image_HTML = `
-    <img class="pfp_preview" id="pfp_preview">
+    <div class="pfp_preview_container">
+        <img class="pfp_preview" id="pfp_preview">
+    <div>
     `
 
     var image = document.getElementById("pfp_preview")

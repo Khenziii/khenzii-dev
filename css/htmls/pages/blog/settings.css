@@ -122,16 +122,21 @@ body {
     display: none;
 }
 
-.pfp_preview {
+.pfp_preview_container {
     margin-top: 2vh;
     height: 5vh;
     width: 5vh;
-
-    border-width: 2px;
-    color: var(--text);
-    border-radius: 50%;
-    border-style: solid;
     overflow: hidden;
+    border: 2px solid var(--text);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pfp_preview {
+    height: 100%;
+    width: 100%;
 }
 
 .edit_pfp_drop {
@@ -517,15 +522,22 @@ body {
     border-radius: 2vh;
 }
 
-.pfp {
+.pfp_container {
     width: 10vw;
     height: 10vw;
 
-    border-width: 2px;
-    color: var(--text);
+    border: 2px solid var(--text);
     border-radius: 50%;
-    border-style: solid;
     overflow: hidden;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pfp {
+    height: 100%;
+    width: 100%;
 }
 
 .username {

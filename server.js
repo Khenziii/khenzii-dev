@@ -89,6 +89,24 @@ const limit_account = rateLimit({
 const storage = multer.memoryStorage(); // Store the uploaded image in memory
 const upload = multer({ storage: storage });
 
+// return smaller dimensions for images (for example: width: 600, height: 400, max_dimension: 300, output: 300, 200
+function getSmallerDimensions(width, height, max_dimension, first_time) {
+    // don't downgrade the quality, if haven't checked if it matches yet
+    if(!first_time) {
+        width /= 1.1
+        height /= 1.1
+    
+        width = Math.round(width)
+        height = Math.round(height)
+    }
+
+    if (width > max_dimension || height > max_dimension) {
+        return getSmallerDimensions(width, height, max_dimension, false)
+    }
+
+    return [width, height]
+}
+
 function sanitizeHTML(HTML) {
     const cleanHTML = sanitizeHtml(HTML, {
         allowedTags: [
@@ -589,7 +607,7 @@ app.get('/zsl/logo/:hex_1', limit_pages, (req, res) => {
         fs.readdir("./images/zsl/logo/", (err, files) => {
             const fileCount = files.length;
 
-            if (fileCount > 200) {
+            if (fileCount > 2000) {
                 res.send("This logo generator has already generated more than 2000 images. To prevent spam / malicious attacks, this is the limit :P")
                 consoleInfo("W", `the /zsl/logo route has already generated more than 2000 images!!!`)
                 return
@@ -659,7 +677,7 @@ app.get('/zsl/logo/:hex_1/:hex_2', limit_pages, (req, res) => {
         fs.readdir("./images/zsl/logo/", (err, files) => {
             const fileCount = files.length;
 
-            if (fileCount > 200) {
+            if (fileCount > 2000) {
                 res.send("This logo generator has already generated more than 2000 images. To prevent spam / malicious attacks, this is the limit :P")
                 consoleInfo("W", `the /zsl/logo route has already generated more than 2000 images!!!`)
                 return
@@ -691,7 +709,7 @@ app.get('/zsl/logo/:hex_1/:hex_2', limit_pages, (req, res) => {
             data = data.replace(/<meta property="og:image" content="">/g, `<meta property="og:image" content="https://khenzii.dev/${path}.png">`);
             data = data.replace(/<meta name="twitter:image:src" content="">/g, `<meta property="twitter:image:src" content="https://khenzii.dev/${path}.png">`);
             var result = data.replace(/<meta name="theme-color" content="">/g, `<meta property="theme-color" content="#${hex_1}">`);
-            
+
             // Send the modified HTML back as the response
             res.send(result);
         })
@@ -1266,18 +1284,49 @@ app.post('/blog/api/change_pfp', authMiddleware, upload.single('new_pfp'), limit
             var command = `UPDATE "profile_picture" SET "default" = \$1 WHERE user_id = \$2`
             await pool.query(command, ["nah", user_id]);
 
-            // 4. save the image with appropiate filename
+            // 4. check if there is not a lot of the images already there 
+            // (need to make sure that nobody's going to spam memory out of my VPS)
+            const files = fs.readdirSync("./images/blog/")
+            if (files.length >= 5000) {
+                res.send("5000 users have already changed their's profile picture. To prevent spam, this is the limit. If you're not a spammer, notify Khenzii :). He's going to increase the cap.")
+                consoleInfo("W", `There already are more than 5000 images in the /images/blog directory!`)
+                return
+            }
+
+            // 5. save the image with appropiate filename
             const uploadedImage = req.file.buffer; // Image binary data
             const uniqueFileName = `${image_id}.png`;
             fs.writeFileSync(`images/blog/${uniqueFileName}`, uploadedImage);
 
-            res.status(200).send('Success!');
+            // 6. optimize the image
+            sharp(`images/blog/${uniqueFileName}`)
+                .metadata()
+                .then(function (metadata) {
+                    const current_width = metadata.width
+                    const current_height = metadata.height
+                
+                    if (current_width > 5000 || current_height > 5000) {
+                        res.status(400).send("The image can't be larger than 5000px wide / tall :P")
+                        return
+                    }
+
+                    var [width, height] = getSmallerDimensions(current_width, current_height, 750, true)
+
+                    sharp(`images/blog/${uniqueFileName}`).resize(width, height).png({ compressionLevel: 9 }).toFile(`images/blog/1_${uniqueFileName}`, function (err) {
+                        fs.unlinkSync(`images/blog/${uniqueFileName}`)
+                        fs.renameSync(`images/blog/1_${uniqueFileName}`, `images/blog/${uniqueFileName}`)
+                    });
+
+
+                    res.status(200).send('Success!');
+                }
+                )
         } else {
             res.status(403).send("Access Denied!")
         }
     } catch (error) {
         res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Sorry.');
-        consoleInfo('e', `${req.ClientIP} got a 500 error (while communicating with the back-end). Error: ${error}.`)
+        consoleInfo('e', `${req.ClientIP} got a 500 error (while communicating with the back-end). Error: ${error.stack}.`)
     }
 });
 

@@ -89,17 +89,24 @@ code {
     color: var(--secondary);
 }
 
-.pfp {
+.pfp_container {
     margin-top: 2vh;
 
     width: 10vw;
     height: 10vw;
 
-    border-width: 2px;
+    border: 2px solid var(--text);
     border-radius: 50%;
-    border-style: solid;
     overflow: hidden;
-    border-color: var(--text);
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pfp {
+    height: 100%;
+    width: 100%;
 }
 
 .username {
