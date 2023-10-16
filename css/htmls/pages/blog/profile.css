@@ -482,6 +482,8 @@ ima implement links later
     font-weight: 500;
 
     word-wrap: break-word;
+
+    max-width: 100%;
 }
 
 .info_box {
