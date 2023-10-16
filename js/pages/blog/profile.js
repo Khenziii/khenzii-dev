@@ -34,7 +34,6 @@ const deleteTextElement = document.getElementById("more_delete_box_info_text");
 const deleteTextInfoElement = document.getElementById("more_delete_box_final_info");
 
 
-var first_time = {}
 var how_much_times = {}
 
 var highest_id_posts = -1
@@ -63,7 +62,7 @@ function removeShowMoreButtonHTML(category_id) {
 function createShowMoreButtonHTML(category_id) {
     const posts_list_element = document.getElementById(`${category_id}_posts`);
     const button = `
-    <button class="show_more_posts_button" id="show_more_posts_button_${category_id}" onclick="getPosts(${category_id}, true)">
+    <button class="show_more_posts_button" id="show_more_posts_button_${category_id}" onclick="getPosts(${category_id})">
         fetch more posts!
     </button>
     `
@@ -106,15 +105,10 @@ async function change_category_index(first_index, second_index) {
     return text
 }
 
-async function getPosts(category_id, clicked_button) {
-    if (first_time[category_id] == false && !clicked_button) {
-        return
-    }
-
-    first_time[category_id] = false
-
+async function getPosts(category_id) {
     if (how_much_times[category_id] == null) {
-        how_much_times[category_id] = 0
+        how_much_times[category_id] = 1
+        return
     }
 
     const data = {
@@ -312,7 +306,7 @@ function showInfo(info_dictionary) {
         for (const key in info) {
             const value = info[key];
 
-            if(category_info_list_element_old.children[iteration]) {
+            if (category_info_list_element_old.children[iteration]) {
                 // if the element exists, change the text content
                 category_info_list_element_old.children[iteration].children[0].textContent = `${key}: ${value}`
             } else {
@@ -391,7 +385,7 @@ function showShare(url) {
 }
 
 async function deletepost(post_id) {
-    if(delete_button_clickable == false) {
+    if (delete_button_clickable == false) {
         return
     }
 
@@ -423,7 +417,7 @@ async function deletepost(post_id) {
 }
 
 async function deletecategory(category_id) {
-    if(delete_button_clickable == false) {
+    if (delete_button_clickable == false) {
         return
     }
 
@@ -476,7 +470,7 @@ function showMore(logged_in_as_user, info_text, type) {
 
         if (share_button_element_old) {
             // update the url (well, not in all cases, but you know what i mean)
-            if(type === "category") {
+            if (type === "category") {
                 // if clicked show more on a category
 
                 // get the categroy index from the dictionary for the share button
@@ -495,7 +489,7 @@ function showMore(logged_in_as_user, info_text, type) {
 
         if (delete_button_element_old) {
             // update the variables (well, not in all cases, but you know what i mean)
-            if(type === "category") {
+            if (type === "category") {
                 const category_id = JSON.parse(decodeURIComponent(info_text))["category id"];
                 delete_button_element_old.setAttribute("onclick", `showDelete('${type}', '${category_id}')`)
             } else {
@@ -520,7 +514,7 @@ function showMore(logged_in_as_user, info_text, type) {
 
     var share_button = ""
 
-    if(type === "category") {
+    if (type === "category") {
         // get the categroy index from the dictionary for the share button
         const category_index = JSON.parse(decodeURIComponent(info_text))["index in user"];
 
@@ -542,9 +536,9 @@ function showMore(logged_in_as_user, info_text, type) {
 
     var delete_button = ""
 
-    if(type === "category") {
+    if (type === "category") {
         const id = JSON.parse(decodeURIComponent(info_text))["category id"];
-        
+
         var delete_button = `
         <button class="more_button_delete" id="more_box_delete" onclick="showDelete('${type}', '${id}')">
             <img src="../../../icons/pages/blog/delete.png" alt="delete button" class="more_button_delete_image">
@@ -624,91 +618,6 @@ function createTheSettingsButton() {
     profile_container.insertAdjacentHTML('beforeend', button)
 }
 
-function createHTMLCategory(title, description, id, empty, logged_in_as_user, index_in_user) {
-    var category = ""
-    const info = {
-        "category id": `${id}`,
-        "index in user": `${index_in_user}`
-    }
-
-    if (empty) {
-        if (logged_in_as_user) {
-            var category = `
-            <p class="info_text">
-                No categories yet! <br> Go ahead, create one =)
-            </p>
-            `
-        } else {
-            var category = `
-            <p class="info_text">
-                No categories yet!
-            </p>
-            `
-        }
-    } else {
-        if (logged_in_as_user) {
-            var category = `
-            <li class="category" data-id="${id}" data-index="${index_in_user}">
-                <details class="category_details">
-                    <summary class="category_title" onclick="getPosts(${id}, false)">
-                        ${title}
-                    </summary>
-
-                    <p class="description_text">
-                        ${description}
-                    </p>
-
-                    <button class="post_create_button" id="post_create_button" onclick="showCreatePostPopout(${id})">
-                        <img src="../../../icons/pages/blog/create.png" alt="create button" class="post_create_button_image">
-                    </button>
-
-                    <hr class="post_line">
-
-                    <ul class="posts" id="${id}_posts">
-                
-                    </ul>
-                </details>
-
-                <div class="category_ui_container">
-                    <img src="../../../icons/pages/blog/drag.png" class="category_drag" draggable=true>
-                    <button class="category_more" onclick="showMore(${logged_in_as_user}, '${encodeURIComponent(JSON.stringify(info))}', 'category')">
-                        <img src="../../../icons/pages/blog/more.png" class="category_more_image" draggable=false>
-                    </button>
-                </div>
-            </li>
-            `
-        } else {
-            var category = `
-            <li class="category" data-id="${id}" data-index="${index_in_user}">
-                <details class="category_details">
-                    <summary class="category_title" onclick="getPosts(${id}, false)">
-                        ${title}
-                    </summary>
-
-                    <p class="description_text">
-                        ${description}
-                    </p>
-
-                    <hr class="post_line">
-
-                    <ul class="posts" id="${id}_posts">
-                
-                    </ul>
-                </details>
-                
-                <div class="category_ui_container">
-                    <button class="category_more" onclick="showMore(${logged_in_as_user}, '${encodeURIComponent(JSON.stringify(info))}', 'category')">
-                        <img src="../../../icons/pages/blog/more.png" class="category_more_image" draggable=false>
-                    </button>
-                </div>
-            </li>
-            `
-        }
-    }
-
-    return categories_element.insertAdjacentHTML('afterbegin', category)
-}
-
 function createHTMLPost(text_value, created_at, id, category_id, index_in_category) {
     /// check if the post contains a image or video, if so, style them
     // Define a regular expression to match <img> and <video> tags
@@ -754,13 +663,7 @@ function createHTMLPost(text_value, created_at, id, category_id, index_in_catego
     `
 
 
-    if (id > highest_id_posts) {
-        highest_id_posts = id
-
-        return posts_element.insertAdjacentHTML('afterbegin', post)
-    } else {
-        return posts_element.insertAdjacentHTML('beforeend', post)
-    }
+    return posts_element.insertAdjacentHTML('beforeend', post)
 }
 
 
@@ -915,84 +818,72 @@ getValuesFromServer(username).then(data => {
         }
     }
 
-    if (data.categories == "404") {
-        createHTMLCategory("", "", "", true, data.logged_in_as_user, data.index_in_user)
-    } else {
-        // sort the categories by index_in_user (in reverse)
-        data.categories.sort((a, b) => a.index_in_user - b.index_in_user);
+    let draggedElement = null;
+    let overElement = null
 
-        for (let i = 0; i < data.categories.length; i++) { // loop through all of the categories
-            createHTMLCategory(data.categories[i].title, data.categories[i].description, data.categories[i].id, false, data.logged_in_as_user, data.categories[i].index_in_user)
-        }
+    for (let i = 0; i < categories_element.children.length; i++) {
+        element = categories_element.children[i]
 
+        if (hashable) {
+            for (let j = 0; j < hash.length; j++) {
+                // if incorrect hash, resend user to page without hash
+                if ((hash[j] > data.categories.length || hash[j] < 1) && hash[j] != -1) {
+                    window.location.replace(`/blog/user/${username}`)
+                }
 
-        let draggedElement = null;
-        let overElement = null
-
-        for (let i = 0; i < categories_element.children.length; i++) {
-            element = categories_element.children[i]
-
-            if (hashable) {
-                for (let j = 0; j < hash.length; j++) {
-                    // if incorrect hash, resend user to page without hash
-                    if ((hash[j] > data.categories.length || hash[j] < 1) && hash[j] != -1) {
-                        window.location.replace(`/blog/user/${username}`)
-                    }
-
-                    // open if the hash match, or if hash -1
-                    if (element.getAttribute("data-index") == hash[j] || hash[j] == -1) {
-                        getPosts(element.getAttribute("data-id"), false)
-                        var details_element = categories_element.children[i].querySelector('.category_details');
-                        details_element.open = true
-                    }
+                // open if the hash match, or if hash -1
+                if (element.getAttribute("data-index") == hash[j] || hash[j] == -1) {
+                    getPosts(element.getAttribute("data-id"))
+                    var details_element = categories_element.children[i].querySelector('.category_details');
+                    details_element.open = true
                 }
             }
-
-            element.addEventListener('dragstart', function (event) {
-                draggedElement = this;
-                draggedElement.classList.add('dragging');
-            });
-
-            element.addEventListener('dragover', function (event) {
-                event.preventDefault();
-                overElement = this;
-            });
-
-            element.addEventListener('dragend', function (event) {
-                draggedElement.classList.remove('dragging');
-            });
-
-            element.addEventListener('drop', function (event) {
-                event.preventDefault();
-
-                // remove the dragging class
-                draggedElement.classList.remove('dragging')
-
-                /// Switch places
-                // create a placeholder
-                let temp = document.createElement('div');
-                // put the placeholder before dragged element
-                categories_element.insertBefore(temp, draggedElement);
-                // put the dragged element before target element 
-                categories_element.insertBefore(draggedElement, overElement);
-                // put the target element before the placeholder
-                categories_element.insertBefore(overElement, temp);
-                // get rid of the placeholder
-                categories_element.removeChild(temp);
-
-
-                const first_index = draggedElement.getAttribute("data-index")
-                const second_index = overElement.getAttribute("data-index")
-
-                change_category_index(first_index, second_index).then(data => {
-                    if (reload == true) {
-                        location.reload();
-                    } else {
-                        infoBoxShow(data)
-                        reload = true
-                    }
-                })
-            });
         }
+
+        element.addEventListener('dragstart', function (event) {
+            draggedElement = this;
+            draggedElement.classList.add('dragging');
+        });
+
+        element.addEventListener('dragover', function (event) {
+            event.preventDefault();
+            overElement = this;
+        });
+
+        element.addEventListener('dragend', function (event) {
+            draggedElement.classList.remove('dragging');
+        });
+
+        element.addEventListener('drop', function (event) {
+            event.preventDefault();
+
+            // remove the dragging class
+            draggedElement.classList.remove('dragging')
+
+            /// Switch places
+            // create a placeholder
+            let temp = document.createElement('div');
+            // put the placeholder before dragged element
+            categories_element.insertBefore(temp, draggedElement);
+            // put the dragged element before target element 
+            categories_element.insertBefore(draggedElement, overElement);
+            // put the target element before the placeholder
+            categories_element.insertBefore(overElement, temp);
+            // get rid of the placeholder
+            categories_element.removeChild(temp);
+
+
+            const first_index = draggedElement.getAttribute("data-index")
+            const second_index = overElement.getAttribute("data-index")
+
+            change_category_index(first_index, second_index).then(data => {
+                if (reload == true) {
+                    location.reload();
+                } else {
+                    infoBoxShow(data)
+                    reload = true
+                }
+            })
+        });
     }
 });

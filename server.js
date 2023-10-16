@@ -20,7 +20,7 @@ const port = 3000;
 
 const trusted_usernames = ["Khenzii"]
 const hours_off = 2
-const number_of_posts_to_get = 5
+const number_of_posts_to_get = 100
 const legal_chars = ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'z', 'x', 'c', 'v', 'b', 'n', 'm',
     'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Z', 'X', 'C', 'V', 'B', 'N', 'M',
     '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '@', '.', '-', '_']
@@ -89,13 +89,156 @@ const limit_account = rateLimit({
 const storage = multer.memoryStorage(); // Store the uploaded image in memory
 const upload = multer({ storage: storage });
 
+// create the HTML category that is rendered inside of profile.html (/blog/user/:username)
+function createHTMLCategory(title, description, id, empty, logged_in_as_user, index_in_user) {
+    var category = ""
+    const info = {
+        "category id": `${id}`,
+        "index in user": `${index_in_user}`
+    }
+
+    if (empty) {
+        if (logged_in_as_user) {
+            var category = `
+            <p class="info_text">
+                No categories yet! <br> Go ahead, create one =)
+            </p>
+            `
+        } else {
+            var category = `
+            <p class="info_text">
+                No categories yet!
+            </p>
+            `
+        }
+    } else {
+        if (logged_in_as_user) {
+            var category = `
+            <li class="category" data-id="${id}" data-index="${index_in_user}">
+                <details class="category_details">
+                    <summary class="category_title" onclick="getPosts(${id})">
+                        ${title}
+                    </summary>
+
+                    <p class="description_text">
+                        ${description}
+                    </p>
+
+                    <button class="post_create_button" id="post_create_button" onclick="showCreatePostPopout(${id})">
+                        <img src="../../../icons/pages/blog/create.png" alt="create button" class="post_create_button_image">
+                    </button>
+
+                    <hr class="post_line">
+
+                    <ul class="posts" id="${id}_posts">
+                
+                    </ul>
+                </details>
+
+                <div class="category_ui_container">
+                    <img src="../../../icons/pages/blog/drag.png" class="category_drag" draggable=true>
+                    <button class="category_more" onclick="showMore(${logged_in_as_user}, '${encodeURIComponent(JSON.stringify(info))}', 'category')">
+                        <img src="../../../icons/pages/blog/more.png" class="category_more_image" draggable=false>
+                    </button>
+                </div>
+            </li>
+            `
+        } else {
+            var category = `
+            <li class="category" data-id="${id}" data-index="${index_in_user}">
+                <details class="category_details">
+                    <summary class="category_title" onclick="getPosts(${id})">
+                        ${title}
+                    </summary>
+
+                    <p class="description_text">
+                        ${description}
+                    </p>
+
+                    <hr class="post_line">
+
+                    <ul class="posts" id="${id}_posts">
+                
+                    </ul>
+                </details>
+                
+                <div class="category_ui_container">
+                    <button class="category_more" onclick="showMore(${logged_in_as_user}, '${encodeURIComponent(JSON.stringify(info))}', 'category')">
+                        <img src="../../../icons/pages/blog/more.png" class="category_more_image" draggable=false>
+                    </button>
+                </div>
+            </li>
+            `
+        }
+    }
+
+    return category
+}
+
+function createHTMLPost(text_value, created_at, id, category_id, index_in_category, logged_in_as_user) {
+    /// check if the post contains a image or video, if so, style them
+    // Define a regular expression to match <img> and <video> tags
+    const mediaRegex = /<img[^>]*>|<video[^>]*>/g;
+
+    // Replace <img> and <video> tags with modified versions
+    const modifiedText = text_value.replace(mediaRegex, (match) => {
+        // Check if the matched tag is an <img> or <video>
+        if (match.startsWith("<img")) {
+            // If it's an <img> tag, add the max-width and height styles
+            return match.replace(">", ' style="max-width: 100%; height: auto;" draggable="false" alt="sum image">');
+        } else if (match.startsWith("<video")) {
+            // If it's a <video> tag, add the max-width and height styles
+            return match.replace(">", ' style="max-width: 100%; height: auto;" draggable="false" alt="sum video" controls="true">');
+        }
+        return match;
+    });
+
+    const info = {
+        "post id": `${id}`,
+        "index in category": `${index_in_category}`,
+    }
+
+    const post = `
+    <div class="post">
+        <div class="post_ui">
+            <p class="post_created_at">
+                ${created_at}
+            </p>
+
+            <button class="post_more" onclick="showMore(${logged_in_as_user}, '${encodeURIComponent(JSON.stringify(info))}', 'post')">
+                <img src="../../../icons/pages/blog/more.png" class="post_more_image" draggable=false>
+            </button>
+        </div>
+
+        <p class="post_text">
+            ${modifiedText}
+        </p>
+
+        <hr class="post_line">
+     </div>
+    `
+
+
+    return post
+}
+
+function createShowMoreButtonHTML(category_id) {
+    const button = `
+    <button class="show_more_posts_button" id="show_more_posts_button_${category_id}" onclick="getPosts(${category_id})">
+        fetch more posts!
+    </button>
+    `
+
+    return button
+}
+
 // return smaller dimensions for images (for example: width: 600, height: 400, max_dimension: 300, output: 300, 200
 function getSmallerDimensions(width, height, max_dimension, first_time) {
     // don't downgrade the quality, if haven't checked if it matches yet
-    if(!first_time) {
+    if (!first_time) {
         width /= 1.1
         height /= 1.1
-    
+
         width = Math.round(width)
         height = Math.round(height)
     }
@@ -763,7 +906,7 @@ app.get('/blog/user', limit_pages, (req, res) => {
 });
 
 // user profiles in /blog/user (/blog/user/<username>)
-app.get('/blog/user/:username', limit_pages, async (req, res) => {
+app.get('/blog/user/:username', checkAuthMiddleware, limit_pages, async (req, res) => {
     const { username } = req.params;
 
     consoleInfo('i', `${req.ClientIP} requested '/blog/user/${username}'.`)
@@ -778,10 +921,84 @@ app.get('/blog/user/:username', limit_pages, async (req, res) => {
             return
         }
 
-        res.sendFile(path.join(__dirname, 'html', 'pages', 'blog', 'profile.html'));
-    }
+        // Read the HTML file
+        fs.readFile(path.join(__dirname, 'html', 'pages', 'blog', 'profile.html'), 'utf8', async (error, data) => {
+            if (error) {
+                consoleInfo('E', `${req.ClientIP} got a 500 error (while trying to read logo.html). Route: '/zsl/logo/${hex_1}'. Error: ${error}`)
+                return res.status(500).send("Bruh, something went wrong :P. It isnt your fault. Sorry.");
+            }
 
-    catch (error) {
+            /// create all of the users categories
+            // get all of the users categories
+            // get user_id from username 
+            var query = `SELECT id FROM "user" WHERE username = \$1;`
+            var result = await pool.query(query, [username]);
+
+            const id = result.rows[0].id
+
+            // get the categories
+            var query = `SELECT * FROM "category" WHERE user_id = \$1 ORDER BY id;`
+            var result = await pool.query(query, [id]);
+
+            var categories = ""
+
+            if (result.rowCount > 0) {
+                categories = result.rows
+            } else {
+                categories = "404"
+            }
+
+            var logged_in_as_user = false // if user is owner of the username
+            var logged_in = false // if user is completely not logged in (no cookie)
+            if (req.isAuthenticated) {
+                var logged_in = true
+                if (req.auth.username == username) {
+                    var logged_in_as_user = true
+                }
+            }
+
+            // append the categories into HTML
+            var categories_HTML = ""
+
+            if (categories == "404") {
+                categories_HTML += createHTMLCategory("", "", "", true, logged_in_as_user, logged_in_as_user)
+            } else {
+                // sort the categories by index_in_user (in reverse (the oldest one at the top by default (index_in_user: 1 - bottom)))
+                categories.sort((a, b) => a.index_in_user - b.index_in_user);
+                categories = [...categories].reverse()
+
+                for (let i = 0; i < categories.length; i++) {
+                    var this_HTML = createHTMLCategory(categories[i].title, categories[i].description, categories[i].id, false, logged_in_as_user, categories[i].index_in_user)
+
+                    /// append all of the users posts to the categories
+                    // get the user posts
+                    var query = `SELECT * FROM "post" WHERE category_id = \$1 ORDER BY id DESC LIMIT ${number_of_posts_to_get} OFFSET \$2;`
+                    var result = await pool.query(query, [categories[i].id, number_of_posts_to_get * 0])
+
+                    var posts = result.rows
+
+                    // add the posts into this_HTML
+                    var posts_HTML = ""
+                    for (let i = 0; i < result.rows.length; i++) {
+                        posts_HTML += createHTMLPost(posts[i].text_value, posts[i].created_at, posts[i].id, posts[i].category_id, posts[i].index_in_category, logged_in_as_user)
+                    }
+
+                    // create the "fetch more!" button if we got back the right amount of posts to get and the last one wasn't first in the category
+                    if (posts.length == number_of_posts_to_get && posts[posts.length - 1].index_in_category != 1) {
+                        posts_HTML += createShowMoreButtonHTML(categories[i].id)
+                    }
+
+                    this_HTML = this_HTML.replace(`<ul class="posts" id="${categories[i].id}_posts">`, `<ul class="posts" id="${categories[i].id}_posts">${posts_HTML}`)
+                    categories_HTML += this_HTML
+                }
+            }
+
+            const renderedHTML = data.replace('<ul class="categories" id="categories">', `<ul class="categories" id="categories">${categories_HTML}`);
+
+            // Send the modified HTML back as the response
+            res.send(renderedHTML);
+        });
+    } catch (error) {
         res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Check console for more Details. Sorry.');
         consoleInfo('e', `${req.ClientIP} got a 500 error. Route: '/blog/user/${username}'. Error: ${error}`)
     }
@@ -1304,7 +1521,7 @@ app.post('/blog/api/change_pfp', authMiddleware, upload.single('new_pfp'), limit
                 .then(function (metadata) {
                     const current_width = metadata.width
                     const current_height = metadata.height
-                
+
                     if (current_width > 5000 || current_height > 5000) {
                         res.status(400).send("The image can't be larger than 5000px wide / tall :P")
                         return
