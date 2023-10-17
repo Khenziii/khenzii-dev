@@ -1382,7 +1382,17 @@ app.post('/blog/api/create_category', authMiddleware, limit_create, async (req, 
                 return
             }
 
-            // 3. sanitze the HTML
+            // 3.check if the user doesn't have too many categories already
+            var query = `SELECT id FROM "category" WHERE user_id = \$1;`
+            var result = await pool.query(query, [user_id])
+
+            if(result.rowCount >= 10 && !trusted_usernames.includes(req.auth.username)) {
+                res.status(400).send(`You can't create more than 10 categories. Sorry.`);
+                consoleInfo('i', `${req.ClientIP} aka ${req.auth.username} tried to create ${result.rowCount+1}th category.`)
+                return
+            }
+
+            // 4. sanitze the HTML
             if (trusted_usernames.includes(req.auth.username)) {
                 // if user is trusted
                 var cleanCategoryTitle = categoryTitle;
@@ -1399,7 +1409,7 @@ app.post('/blog/api/create_category', authMiddleware, limit_create, async (req, 
 
             var index_in_user = result.rowCount + 1
 
-            // 4. write to the db
+            // 5. write to the db
             var command = `INSERT INTO "category" (user_id, title, description, index_in_user) VALUES (\$1, \$2, \$3, \$4);`
             await pool.query(command, [user_id, cleanCategoryTitle, cleanCategoryDescription, index_in_user])
 
