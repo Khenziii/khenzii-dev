@@ -59,6 +59,8 @@ code {
     background-color: var(--background_less);
     border: none;
 
+    outline: none;
+
     color: var(--text);
 
     padding-left: 5%;
@@ -440,7 +442,7 @@ ima implement links later
     display: flex;
     justify-content: space-between;
     align-items: center;
-
+    max-width: 100%;
     height: 3vh;
 }
 
@@ -812,6 +814,8 @@ ima implement links later
     width: 40%;
     height: 20%;
 
+    outline: none;
+
     color: var(--text);
     background-color: var(--background);
     padding: 1vh;
@@ -929,6 +933,8 @@ ima implement links later
     width: 60%;
     height: 3.5vh;
 
+    outline: none;
+
     min-width: 10vw;
     min-height: 3vh;
 
@@ -944,6 +950,8 @@ ima implement links later
 
 .create_category_description_input {
     margin-bottom: 1.5vh;
+
+    outline: none;
 
     width: 80%;
     height: 5vh;
@@ -1050,6 +1058,8 @@ ima implement links later
 .create_post_input {
     margin-bottom: 1.5vh;
 
+    outline: none;
+
     width: 80%;
     height: 5vh;
 
@@ -1141,4 +1151,1160 @@ ima implement links later
 .no {
     opacity: 0.3;
     cursor: not-allowed;
+}
+
+/* mobile devices */
+@media (max-height: 900px) {
+    .container {
+        width: fit-content;
+        height: fit-content;
+    
+        position: relative;
+        top: 10vh;
+        left: 50%;
+        transform: translateX(-50%);
+    
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .search_container_parent {
+        position: relative;
+        top: -5vh;
+        transform: translateY(-50%);
+    }
+    
+    .search_container {
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+    
+        width: 80%;
+        height: 2vh;
+    }
+    
+    .search_input {
+        background-color: var(--background_less);
+        border: none;
+    
+        color: var(--text);
+        
+        outline: none;
+
+        padding-left: 6%;
+        height: 100%;
+        width: 95%;
+
+        margin-bottom: 0;
+    }
+    
+    .search_input_icon_image {
+        position: relative;
+        top: -1.3vh;
+        width: 4%;
+        height: auto;
+    }
+    
+    .search_text {
+        color: var(--text);
+        
+        margin-top: 0;
+        margin-bottom: 0;
+
+        text-align: center;
+    
+        font-size: 1.5vh;
+        font-family: Montserrat;
+        font-weight: 600;
+    
+        padding: 0;
+        width: 100%;
+    }
+    
+    .profile_container_parent {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .profile_container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .pfp_container {
+        margin-top: 1vh;
+
+        width: 40vw;
+        height: 40vw;
+    
+        border: 2px solid var(--text);
+        border-radius: 50%;
+        overflow: hidden;
+        
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .pfp {
+        height: 100%;
+        width: 100%;
+    }
+    
+    .username {
+        color: var(--text);
+        
+        margin-top: 2vh;
+        margin-bottom: 2vh;
+
+        text-align: center;
+    
+        font-size: 3vh;
+        font-family: Montserrat;
+        font-weight: 900;
+    }
+    
+    .bio {
+        color: var(--text);
+    
+        font-size: 2.25vh;
+        font-family: Montserrat;
+        font-weight: 700;
+    
+        max-width: 60%;
+        height: auto;
+        word-wrap: break-word;
+    
+        margin: 0;
+    }
+    
+    /*
+    ima implement links later
+    .links {
+        
+    }
+    */
+    
+    .joined_at {
+        color: var(--text);
+        text-align: center;
+    
+        font-size: 1.5vh;
+        font-family: Montserrat;
+        font-weight: 500;
+    
+        max-width: 60%;
+        height: auto;
+        word-wrap: break-word;
+    
+        margin-top: 0;
+        margin-bottom: 2vh;
+    }
+    
+    .user_id {
+        margin-bottom: 0;
+    
+        color: var(--text);
+    
+        font-size: 1.5vh;
+        font-family: Montserrat;
+        font-weight: 500;
+    
+        max-width: 60%;
+        height: auto;
+        word-wrap: break-word;
+    }
+    
+    .settings_button {
+        background: transparent;
+        border: transparent;
+    
+        cursor: pointer;
+    
+        width: 20%;
+        height: auto;
+    }
+    
+    .settings_button_image {
+        background-color: transparent;
+        border: transparent;
+        transition: all 500ms;
+    
+        width: 100%;
+        height: 100%;
+    }
+    
+    .settings_button_image:hover {
+        background-color: var(--secondary);
+        border-radius: 2vh;
+    }
+    
+    .line {
+        width: 60%;
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+        margin: 2vh;
+        margin-left: 0;
+        color: var(--secondary);
+    }
+    
+    .login_button {
+        scale: 1;
+        width: 40vw;
+    
+        background-color: transparent;
+    
+        color: var(--text);
+        font-size: 90%;
+    
+        text-align: center;
+        display: inline-block;
+        padding: 15px 40px;
+        border: 1px solid #fff;
+        cursor: pointer;
+        letter-spacing: 2px;
+        overflow: hidden;
+    }
+    
+    .login_button:before {
+        content: "";
+        position: absolute;
+        height: 340%;
+        width: 30%;
+        background: #fff;
+        right: -27.5%;
+        top: -70%;
+        transform: rotate(37deg) translateY(-20%);
+        transition: all .3s;
+        opacity: 0.3;
+    }
+    
+    .login_button:hover:before {
+        right: 105%;
+    }
+    
+    .logged_or_not_line {
+        margin: 2vh;
+        width: 60%;
+        color: var(--secondary);
+    }
+    
+    .register_button {
+        margin-top: 1vh;
+        margin-bottom: 1vh;
+    
+        scale: 1;
+        width: 40vw;
+    
+        background-color: transparent;
+    
+        color: var(--text);
+        font-size: 90%;
+    
+        text-align: center;
+        display: inline-block;
+        padding: 15px 40px;
+        border: 1px solid #fff;
+        cursor: pointer;
+        letter-spacing: 2px;
+        overflow: hidden;
+    }
+    
+    .register_button:before {
+        content: "";
+        position: absolute;
+        height: 340%;
+        width: 30%;
+        background: #fff;
+        right: -27.5%;
+        top: -70%;
+        transform: rotate(37deg) translateY(-20%);
+        transition: all .3s;
+        opacity: 0.3;
+    }
+    
+    .register_button:hover:before {
+        right: 105%;
+    }
+    
+    .content_container {
+        display: flex;
+        align-items: center;
+    
+        flex-direction: column;
+    }
+    
+    .category_create_button {
+        background: transparent;
+        border: transparent;
+    
+        cursor: pointer;
+    
+        width: 20%;
+        height: auto;
+    
+        margin-bottom: 2vh;
+    }
+    
+    .category_create_button_image {
+        background-color: transparent;
+        border: transparent;
+        transition: all 500ms;
+    
+        width: 100%;
+        height: 100%;
+    }
+    
+    .category_create_button_image:hover {
+        background-color: var(--secondary);
+        border-radius: 2vh;
+    }
+    
+    .categories {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    
+        width: 80vw;
+    
+        display: flex;
+        flex-direction: column;
+        gap: 2vh;
+    }
+    
+    .category {
+        display: flex;
+        flex-direction: row;
+        min-height: 2vh;
+    }
+    
+    .category_details {
+        width: 100%;
+    }
+    
+    .category_ui_container {
+        display: flex;
+        justify-content: end;
+
+        width: 20%;
+        height: fit-content;
+    
+        position: absolute;
+        left: 70%;
+
+        padding: 0;
+        margin: 0;
+    }
+    
+    .category_drag {
+        z-index: 2;
+    
+        height: 2vh;
+    
+        cursor: move;
+        /* fallback if grab cursor is unsupported */
+        cursor: grab;
+        cursor: -moz-grab;
+        cursor: -webkit-grab;
+    }
+    
+    .dragging {
+        opacity: 0.3;
+    }
+    
+    .category_more {
+        background-color: transparent;
+        height: 2vh;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+    }
+    
+    .category_more_image {
+        z-index: 2;
+    
+        height: 2vh;
+    }
+    
+    .info_text {
+        color: var(--text);
+    
+        text-align: center;
+    
+        font-size: 2vh;
+        font-family: Montserrat;
+        font-weight: 800;
+    
+        word-wrap: break-word;
+    }
+    
+    .category_title {
+        color: var(--text);
+    
+        width: 80%;
+    
+        font-size: 2vh;
+        font-family: Montserrat;
+        font-weight: 600;
+    
+        word-wrap: break-word;
+    
+        cursor: pointer;
+    }
+    
+    .description_text {
+        color: var(--text);
+    
+        font-size: 1.75vh;
+        font-family: Montserrat;
+        font-weight: 500;
+    
+        word-wrap: break-word;
+    }
+    
+    .post_line {
+        margin: 1vh;
+        margin-left: 0;
+        margin-right: 0;
+    
+        width: 100%;
+    
+        color: var(--secondary);
+    }
+    
+    .posts {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+    
+    .post {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+    }
+    
+    .post_ui {
+        max-width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 3vh;
+    }
+    
+    .post_created_at {
+        margin: 0;
+    
+        text-align: left;
+    
+        color: var(--text);
+    
+        font-size: 1.5vh;
+        font-family: Montserrat;
+        font-weight: 400;
+        word-wrap: break-word;
+    }
+    
+    .post_more {
+        background-color: transparent;
+        max-height: 100%;
+        border: none;
+        padding: 0;
+        height: 2vh;
+        cursor: pointer;
+    }
+    
+    .post_more_image {
+        z-index: 2;
+    
+        height: 2vh;
+    }
+    
+    .post_text {
+        margin-top: 1vh;
+        margin-bottom: 1vh;
+    
+        color: var(--text);
+    
+        font-size: 1.75vh;
+        font-family: Montserrat;
+        font-weight: 500;
+    
+        word-wrap: break-word;
+    
+        max-width: 100%;
+    }
+    
+    .info_box {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    
+        background-color: var(--background_less);
+        border-radius: 2vh;
+    
+        padding: 1vh;
+    
+        height: fit-content;
+        width: 20vw;
+    
+        position: fixed;
+        z-index: 3;
+    
+        display: none;
+        /*we'll later set it to flex using JS*/
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .info_box_close {
+        color: var(--text);
+        cursor: pointer;
+    }
+    
+    .info_box_text {
+        color: var(--text);
+    
+        text-align: center;
+    
+        font-size: 0.8vw;
+        font-family: Montserrat;
+        font-weight: 500;
+    
+        word-wrap: break-word;
+    
+        margin: 2vh;
+    }
+    
+    .more_box {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    
+        background-color: var(--background_less);
+        border-radius: 2vh;
+    
+        padding: 1vh;
+    
+        height: fit-content;
+        width: 50vw;
+    
+        position: fixed;
+        z-index: 3;
+    
+        display: none;
+        /*we'll later set it to flex using JS*/
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .more_box_close {
+        color: var(--text);
+        cursor: pointer;
+    }
+    
+    .more_button_container {
+        margin-top: 2vh;
+        display: flex;
+        width: 80%;
+        justify-content: space-around;
+    }
+    
+    .more_button_info {
+        background-color: transparent;
+        height: 5vh;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+    }
+    
+    .more_button_info_image {
+        z-index: 2;
+        height: 100%;
+        transition: all 0.5s;
+    }
+    
+    .more_button_info_image:hover {
+        border-radius: 1.5vh;
+        background-color: var(--secondary);
+    }
+    
+    .more_button_share {
+        background-color: transparent;
+        height: 5vh;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+    }
+    
+    .more_button_share_image {
+        z-index: 2;
+        height: 100%;
+        transition: all 0.5s;
+    }
+    
+    .more_button_share_image:hover {
+        border-radius: 1.5vh;
+        background-color: var(--secondary);
+    }
+    
+    .more_button_delete {
+        background-color: transparent;
+        height: 5vh;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+    }
+    
+    .more_button_delete_image {
+        z-index: 2;
+        height: 100%;
+        transition: all 0.5s;
+    }
+    
+    .more_button_delete_image:hover {
+        border-radius: 1.5vh;
+        background-color: var(--secondary);
+    }
+    
+    .more_info_box {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    
+        background-color: var(--background_less);
+        border-radius: 2vh;
+    
+        padding: 1vh;
+    
+        min-height: 15vh;
+        width: 75vw;
+    
+        position: fixed;
+        z-index: 4;
+    
+        display: none;
+        /*we'll later set it to flex using JS*/
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .more_info_box_close {
+        color: var(--text);
+        cursor: pointer;
+    }
+    
+    .category_info_list {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    
+        width: 80%;
+        height: fit-content;
+    
+        gap: 1vh;
+        list-style-type: none;
+        margin-top: 2vh;
+        padding: 0;
+    }
+    
+    .category_info_text {
+        padding: 0;
+        margin: 0;
+    
+        text-align: center;
+    
+        color: var(--text);
+    
+        font-size: 1.5vh;
+        font-family: Montserrat;
+        font-weight: 500;
+    
+        max-width: 80vw;
+        height: auto;
+        word-wrap: break-word;
+    }
+    
+    .more_share_box {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    
+        background-color: var(--background_less);
+        border-radius: 2vh;
+    
+        padding: 1vh;
+    
+        min-height: 15vh;
+        width: 75vw;
+    
+        position: fixed;
+        z-index: 4;
+    
+        display: none;
+        /*we'll later set it to flex using JS*/
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .more_share_box_close {
+        color: var(--text);
+        cursor: pointer;
+    }
+    
+    code {
+        border-radius: 2vw;
+        padding: 1vh;
+    }
+
+    .share_link_preview {
+        max-width: 80%;
+        font-size: 1.5vh;
+        margin-top: 2vh;
+    }
+    
+    .copy_button {
+        margin-top: 2vh;
+    
+        background-color: transparent;
+        height: 5vh;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+    }
+    
+    .copy_button_image {
+        z-index: 2;
+        height: 100%;
+        transition: all 0.5s;
+    }
+    
+    .copy_button_image:hover {
+        border-radius: 1.5vh;
+        background-color: var(--secondary);
+    }
+    
+    .info_text_share {
+        color: var(--text);
+    
+        text-align: center;
+    
+        font-size: 1.5vh;
+        font-family: Montserrat;
+        font-weight: 500;
+    
+        word-wrap: break-word;
+    
+        margin-top: 2vh;
+    }
+    
+    .more_delete_box {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    
+        background-color: var(--background_less);
+        border-radius: 2vh;
+    
+        padding: 1vh;
+    
+        min-height: 15vh;
+        width: 75vw;
+    
+        position: fixed;
+        z-index: 4;
+    
+        display: none;
+        /*we'll later set it to flex using JS*/
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .more_delete_box_close {
+        color: var(--text);
+        cursor: pointer;
+    }
+    
+    .more_delete_box_info_text {
+        color: var(--text);
+    
+        text-align: center;
+    
+        font-size: 2vh;
+        font-family: Montserrat;
+        font-weight: 700;
+    
+        word-wrap: break-word;
+    
+        margin-top: 2vh;
+        margin-bottom: 0;
+    }
+    
+    .more_delete_box_info_text_smaller {
+        color: var(--text);
+    
+        text-align: center;
+    
+        font-size: 1.75vh;
+        font-family: Montserrat;
+        font-weight: 500;
+    
+        word-wrap: break-word;
+    
+        margin-top: 1vh;
+        margin-bottom: 0;
+    }
+    
+    .sure_input {
+        text-align: center;
+    
+        margin-top: 2vh;
+        width: 40%;
+        height: 20%;
+        
+        outline: none;
+
+        color: var(--text);
+        background-color: var(--background);
+        padding: 1vh;
+        border-radius: 1vh;
+        border: none;
+    }
+    
+    .more_delete_box_info_text_under {
+        color: var(--text);
+    
+        text-align: center;
+    
+        font-size: 1.75vh;
+        font-family: Montserrat;
+        font-weight: 500;
+    
+        word-wrap: break-word;
+    
+        margin-top: 2vh;
+    }
+    
+    .delete_button {
+        background: transparent;
+        border: transparent;
+    
+        cursor: pointer;
+    
+        height: 7vh;
+        width: auto;
+    }
+    
+    .delete_button_image {
+        background-color: transparent;
+        border: transparent;
+        transition: all 500ms;
+    
+        width: 100%;
+        height: 100%;
+    }
+    
+    .delete_button_image:hover {
+        background-color: var(--warning);
+        border-radius: 2vh;
+    }
+    
+    .more_delete_box_final_info {
+        display: none;
+    
+        color: var(--text);
+        text-align: center;
+        font-size: 2vh;
+        font-family: Montserrat;
+        font-weight: 500;
+        word-wrap: break-word;
+        margin: 2vh;
+    }
+    
+    .create_category {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    
+        background-color: var(--background_less);
+        border-radius: 2vh;
+    
+        padding: 1vh;
+    
+        height: fit-content;
+        width: 75vw;
+    
+        position: fixed;
+        z-index: 3;
+    
+        display: none;
+        /*we'll later set it to flex using JS*/
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .create_category_close {
+        color: var(--text);
+        cursor: pointer;
+    }
+    
+    .create_category_title_text {
+        color: var(--text);
+    
+        text-align: center;
+    
+        font-size: 1.5vh;
+        font-family: Montserrat;
+        font-weight: 500;
+    
+        word-wrap: break-word;
+    
+        margin: 2vh;
+    }
+    
+    .create_category_description_text {
+        color: var(--text);
+    
+        text-align: center;
+    
+        font-size: 1.5vh;
+        font-family: Montserrat;
+        font-weight: 500;
+    
+        word-wrap: break-word;
+    
+        margin: 2vh;
+    }
+    
+    .create_category_title_input {
+        width: 60%;
+        height: 3.5vh;
+        
+        outline: none;
+
+        min-width: 10vw;
+        min-height: 3vh;
+    
+        max-width: 90%;
+        max-height: none;
+    
+        color: var(--text);
+        background-color: var(--background);
+        padding: 1vh;
+        border-radius: 1vh;
+        border: none;
+    }
+    
+    .create_category_description_input {
+        margin-bottom: 1.5vh;
+
+        outline: none;
+    
+        width: 80%;
+        height: 5vh;
+    
+        min-width: 10vw;
+        min-height: 3vh;
+    
+        max-width: 90%;
+        max-height: none;
+    
+        color: var(--text);
+        background-color: var(--background);
+        padding: 1vh;
+        border-radius: 1vh;
+        border: none;
+    }
+    
+    .create_category_create_button {
+        background: transparent;
+        border: transparent;
+    
+        cursor: pointer;
+    
+        height: 7vh;
+        width: auto;
+    }
+    
+    .create_category_create_button_image {
+        background-color: transparent;
+        border: transparent;
+        transition: all 500ms;
+    
+        width: 100%;
+        height: 100%;
+    }
+    
+    .create_category_create_button_image:hover {
+        background-color: var(--secondary);
+        border-radius: 2vh;
+    }
+    
+    .create_category_info_text {
+        color: var(--text);
+    
+        text-align: center;
+    
+        font-size: 2vh;
+        font-family: Montserrat;
+        font-weight: 500;
+    
+        word-wrap: break-word;
+    
+        margin: 2vh;
+    }
+    
+    .create_post {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    
+        background-color: var(--background_less);
+        border-radius: 2vh;
+    
+        padding: 1vh;
+    
+        height: fit-content;
+        width: 75vw;
+    
+        position: fixed;
+        z-index: 3;
+    
+        display: none;
+        /*we'll later set it to flex using JS*/
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .create_post_close {
+        color: var(--text);
+        cursor: pointer;
+    }
+    
+    .create_post_text {
+        color: var(--text);
+    
+        text-align: center;
+    
+        font-size: 1.5vh;
+        font-family: Montserrat;
+        font-weight: 500;
+    
+        word-wrap: break-word;
+    
+        margin: 2vh;
+    }
+    
+    /*
+    .create_post_title_input {
+    
+    }
+    */
+    
+    .create_post_input {
+        margin-bottom: 1.5vh;
+        
+        outline: none;
+
+        width: 80%;
+        height: 5vh;
+    
+        min-width: 10vw;
+        min-height: 3vh;
+    
+        max-width: 90%;
+        max-height: none;
+    
+        color: var(--text);
+        background-color: var(--background);
+        padding: 1vh;
+        border-radius: 1vh;
+        border: none;
+    }
+    
+    .create_post_create_button {
+        background: transparent;
+        border: transparent;
+    
+        cursor: pointer;
+    
+        height: 7vh;
+        width: auto;
+    }
+    
+    .create_post_create_button_image {
+        background-color: transparent;
+        border: transparent;
+        transition: all 500ms;
+    
+        width: 100%;
+        height: 100%;
+    }
+    
+    .create_post_create_button_image:hover {
+        background-color: var(--secondary);
+        border-radius: 2vh;
+    }
+    
+    .create_post_info_text {
+        color: var(--text);
+    
+        text-align: center;
+    
+        font-size: 2vh;
+        font-family: Montserrat;
+        font-weight: 500;
+    
+        word-wrap: break-word;
+    
+        margin: 2vh;
+    }
+    
+    .post_create_button {
+        background: transparent;
+        border: transparent;
+    
+        cursor: pointer;
+    
+        height: 5vh;
+        width: auto;
+    
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    
+    .post_create_button_image {
+        background-color: transparent;
+        border: transparent;
+        transition: all 500ms;
+    
+        width: 100%;
+        height: 100%;
+    }
+    
+    .post_create_button_image:hover {
+        background-color: var(--secondary);
+        border-radius: 2vh;
+    }
+    
+    .show_more_posts_button {
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    
+    .no {
+        opacity: 0.3;
+        cursor: not-allowed;
+    }
 }

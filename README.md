@@ -27,6 +27,7 @@ Please, read this carefully before spending your time creating cool stuff: The w
 
 ## TO-DO list:
 
+- **cleaning up the code** - the code is TERRIBLE. Don't even bother looking at it. It's like that, because i wanted to add features fast. Ima just have to sit down in the weekend and refactor some stuff.
 - **user convenience** - At the moment, the website is not keyboard only friendly. I'm going to add stuff such as autofocus in some places to make it more convenient to use.
 - **license info** - even though that this GitHub repo (with LICENSE file) is mentioned on the website as it's source-code, people could still argue that they didn't visit the /projects-end route and didn't saw the repo (thus didn't knew about the CC-BY-SA 4.0 license). That's why i think that i'm going to put meta tags indicating the license and a "license" footer on the index page.
 - **email verification** - a email can be linked with 3 accounts at a single time - but we're not verifying if the emails really belong to the user. This means that people could potentially create 3 accounts with a email and then someone that would like to use this email won't be able to. To fix this i will only be counting verified emails to the accounts number.
