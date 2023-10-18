@@ -28,6 +28,9 @@
 
 .line {
     width: 60vw;
+    
+    border-color: var(--secondary);
+    background-color: var(--secondary);
     color: var(--secondary);
 }
 

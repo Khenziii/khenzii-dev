@@ -279,6 +279,8 @@ body {
 .line {
     width: 20vw;
     margin: 2vh;
+    border-color: var(--secondary);
+    background-color: var(--secondary);
     color: var(--secondary);
 }
 

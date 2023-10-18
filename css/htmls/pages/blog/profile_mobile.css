@@ -222,6 +222,9 @@ ima implement links later
     transform: translateX(-50%);
     margin: 2vh;
     margin-left: 0;
+    
+    border-color: var(--secondary);
+    background-color: var(--secondary);
     color: var(--secondary);
 }
 
@@ -263,6 +266,9 @@ ima implement links later
 .logged_or_not_line {
     margin: 2vh;
     width: 60vw;
+    
+    border-color: var(--secondary);
+    background-color: var(--secondary);
     color: var(--secondary);
 }
 
@@ -446,6 +452,8 @@ ima implement links later
 
     width: 100%;
 
+    border-color: var(--secondary);
+    background-color: var(--secondary);
     color: var(--secondary);
 }
 
