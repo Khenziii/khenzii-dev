@@ -58,12 +58,12 @@
     margin-top: 2vh;
     margin-bottom: 2vh;
 
-    width: 30vw;
-    height: 6vh;
+    width: 45vw;
+    height: 0;
 
     color: var(--text);
     text-align: center;
-    font-size: 2vh;
+    font-size: 0;
     font-family: Montserrat;
 
     font-weight: 900;
@@ -83,7 +83,9 @@
 
 .input_username:focus+.username_text {
     opacity: 1;
+    font-size: 2vh;
     cursor: text;
+    height: 8vh;
     margin-bottom: 3vh;
 }
 
@@ -111,11 +113,11 @@
     margin-bottom: 2vh;
 
     width: 80vw;
-    height: 6vh;
+    height: 0;
 
     color: var(--text);
     text-align: center;
-    font-size: 2vh;
+    font-size: 0;
     font-family: Montserrat;
 
     font-weight: 900;
@@ -138,6 +140,8 @@
     cursor: text;
     height: 8;
     margin-bottom: 3vh;
+    font-size: 2vh;
+    height: 8vh;
 }
 
 

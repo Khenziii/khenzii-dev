@@ -59,11 +59,11 @@
     margin-bottom: 2vh;
 
     width: 30vw;
-    height: 6vh;
+    height: 0;
 
     color: var(--text);
     text-align: center;
-    font-size: 2vh;
+    font-size: 0;
     font-family: Montserrat;
 
     font-weight: 900;
@@ -84,6 +84,8 @@
 .input_email:focus+.email_text {
     opacity: 1;
     cursor: text;
+    font-size: 2vh;
+    height: 6vh;
 }
 
 
@@ -110,11 +112,11 @@
     margin-bottom: 2vh;
 
     width: 30vw;
-    height: 6vh;
+    height: 0;
 
     color: var(--text);
     text-align: center;
-    font-size: 2vh;
+    font-size: 0;
     font-family: Montserrat;
 
     font-weight: 900;
@@ -135,6 +137,8 @@
 .input_username:focus+.username_text {
     opacity: 1;
     cursor: text;
+    height: 6vh;
+    font-size: 2vh;
 }
 
 
@@ -161,11 +165,11 @@
     margin-bottom: 2vh;
 
     width: 30vw;
-    height: 6vh;
+    height: 0;
 
     color: var(--text);
     text-align: center;
-    font-size: 2vh;
+    font-size: 0;
     font-family: Montserrat;
 
     font-weight: 900;
@@ -186,6 +190,8 @@
 .input_password:focus+.password_text {
     opacity: 1;
     cursor: text;
+    height: 6vh;
+    font-size: 2vh;
 }
 
 
