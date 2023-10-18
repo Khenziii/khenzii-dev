@@ -38,6 +38,9 @@ code {
 }
 
 .search_container_parent {
+    /* search is not ready yet */
+    display: none;
+
     position: relative;
     top: -5vh;
     transform: translateY(-50%);
@@ -48,7 +51,7 @@ code {
     left: 50%;
     transform: translateX(-50%);
 
-    width: 80%;
+    width: 80vw;
     height: 2vh;
 }
 
@@ -87,10 +90,13 @@ code {
     font-weight: 600;
 
     padding: 0;
-    width: 100%;
+    width: 80vw;
 }
 
 .profile_container_parent {
+    /* delete the line below, if you want to work on search */
+    margin-top: -5vh;
+
     display: flex;
     flex-direction: column;
 }
@@ -141,7 +147,7 @@ code {
     font-family: Montserrat;
     font-weight: 700;
 
-    max-width: 60%;
+    max-width: 60vw;
     height: auto;
     word-wrap: break-word;
 
@@ -163,7 +169,7 @@ ima implement links later
     font-family: Montserrat;
     font-weight: 500;
 
-    max-width: 60%;
+    max-width: 60vw;
     height: auto;
     word-wrap: break-word;
 
@@ -180,7 +186,7 @@ ima implement links later
     font-family: Montserrat;
     font-weight: 500;
 
-    max-width: 60%;
+    max-width: 60vw;
     height: auto;
     word-wrap: break-word;
 }
@@ -191,7 +197,7 @@ ima implement links later
 
     cursor: pointer;
 
-    width: 20%;
+    width: 20vw;
     height: auto;
 }
 
@@ -210,7 +216,7 @@ ima implement links later
 }
 
 .line {
-    width: 60%;
+    width: 60vw;
     position: relative;
     left: 50%;
     transform: translateX(-50%);
@@ -256,7 +262,7 @@ ima implement links later
 
 .logged_or_not_line {
     margin: 2vh;
-    width: 60%;
+    width: 60vw;
     color: var(--secondary);
 }
 
@@ -311,7 +317,7 @@ ima implement links later
 
     cursor: pointer;
 
-    width: 20%;
+    width: 20vw;
     height: auto;
 
     margin-bottom: 2vh;
@@ -361,7 +367,7 @@ ima implement links later
     height: fit-content;
 
     position: absolute;
-    left: 70%;
+    left: 80%;
 
     padding: 0;
     margin: 0;
