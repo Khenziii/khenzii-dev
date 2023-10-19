@@ -864,9 +864,8 @@ app.get('/zsl/logo/:hex_1/:hex_2', limit_pages, (req, res) => {
 
 // '/blog' route
 app.get('/blog', limit_pages, (req, res) => {
-    // res.sendFile(path.join(__dirname, 'html', 'pages', 'blog', 'blog.html'));
+    res.sendFile(path.join(__dirname, 'html', 'pages', 'blog', 'blog.html'));
     consoleInfo('i', `${req.ClientIP} requested the '/blog' route`)
-    res.redirect(`/page_being_build`)
 });
 
 // '/blog/settings'
@@ -899,10 +898,16 @@ app.get('/blog/register', checkAuthMiddleware, limit_pages, (req, res) => {
     consoleInfo('i', `${req.ClientIP} requested the '/blog/register' route`)
 });
 
-// redirect from /blog/user
+// redirect from `/blog/user`
 app.get('/blog/user', limit_pages, (req, res) => {
     consoleInfo('i', `${req.ClientIP} tried to get the '/blog/user' route, sending him to '/blog'`)
     res.redirect('/blog');
+});
+
+// `/blog/users/` route
+app.get('/blog/users', limit_pages, (req, res) => {
+    res.sendFile(path.join(__dirname, 'html', 'pages', 'blog', 'users.html'));
+    consoleInfo('i', `${req.ClientIP} requested the '/blog/users' route`)
 });
 
 // user profiles in /blog/user (/blog/user/<username>)
@@ -1151,6 +1156,25 @@ app.post('/blog/api/register', limit_account, async (req, res) => {
     }
 });
 
+// retrieve users
+app.post('/blog/api/get_users', limit_api, async (req, res) => {
+    try {
+        const { times } = req.body
+        var data = {}
+
+        var query = `SELECT username FROM "user" ORDER BY id DESC LIMIT \$1 OFFSET \$2;`
+        var result = await pool.query(query, [number_of_posts_to_get, times * number_of_posts_to_get]);
+
+        data.users = result.rows
+        data.number_of_posts_to_get = number_of_posts_to_get
+
+        res.status(200).send(data)
+    } catch (error) {
+        res.status(500).send('Bruh, something went wrong :P. It isnt your fault. Check console for more Details. Sorry.');
+        consoleInfo('e', `${req.ClientIP} got a 500 error (while communicating with the back-end). Error: ${error}.`)
+    }
+});
+
 // retrieve stuff about user
 app.post('/blog/api/get_user', checkAuthMiddleware, limit_api, async (req, res) => {
     try {
@@ -1312,8 +1336,8 @@ app.post('/blog/api/get_posts', limit_api, async (req, res) => {
 
         // get <number_of_posts_to_get> posts from the category, sorted by the 
         // newest, with the offset of <number_of_posts_to_get> * <times>
-        var query = `SELECT * FROM "post" WHERE category_id = \$1 ORDER BY id DESC LIMIT ${number_of_posts_to_get} OFFSET \$2;`
-        var result = await pool.query(query, [category_id, number_of_posts_to_get * times])
+        var query = `SELECT * FROM "post" WHERE category_id = \$1 ORDER BY id DESC LIMIT \$2 OFFSET \$3;`
+        var result = await pool.query(query, [category_id, number_of_posts_to_get, number_of_posts_to_get * times])
 
         result.number_of_posts_to_get = number_of_posts_to_get
 

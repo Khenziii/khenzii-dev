@@ -1,0 +1,168 @@
+* {
+    list-style-type: none;
+}
+
+body {
+    overflow: scroll;
+    overflow-x: hidden;
+}
+
+.container {
+    margin-top: 2vh;
+
+    width: 100vw;
+    height: fit-content;
+
+    display: flex;
+    flex-direction: column;
+    /* Center vertically */
+    align-items: center;
+}
+
+.blog_icon {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+
+    width: 40vw;
+    height: auto;
+
+    transition: all 0.5s;
+}
+
+.blog_icon:hover {
+    background-color: var(--secondary);
+    border-radius: 0.5vh;
+}
+
+.blog_icon:active {
+    transition: none;
+    background-color: var(--accent);
+}
+
+.line {
+    margin: 2vh;
+
+    width: 80vw;
+
+    border-color: var(--secondary);
+    background-color: var(--secondary);
+    color: var(--secondary);
+}
+
+.text_blog {
+    color: var(--text);
+
+    text-align: center;
+
+    font-size: 2vh;
+    font-family: Montserrat;
+    font-weight: 600;
+
+    margin: 0;
+    margin-top: 2vh;
+}
+
+.text_main {
+    color: var(--text);
+
+    text-align: center;
+
+    font-size: 2vh;
+    font-family: Montserrat;
+    font-weight: 900;
+
+    margin: 0;
+
+    max-width: 80vw;
+}
+
+.users_list {
+    width: 80vw;
+    padding-left: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1vh;
+}
+
+.user_container {
+    display: flex;
+    flex-direction: row;
+
+    width: 100%;
+    height: 6vh;
+
+    cursor: pointer;
+    background-color: var(--background_less);
+    border-radius: 2vh;
+    padding: 1vh;
+
+    align-items: center;
+}
+
+.user_container:hover {
+    background-color: var(--background_less_less);
+}
+
+.pfp_container {
+    width: auto;
+    height: 100%;
+
+    border: 2px solid var(--text);
+    border-radius: 50%;
+    overflow: hidden;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    flex-shrink: 0;
+}
+
+.pfp {
+    width: 100%;
+    height: 100%;
+}
+
+.username {
+    text-decoration: none;
+    color: var(--text);
+    text-align: center;
+
+    font-size: 2vh;
+    font-family: Montserrat;
+    font-weight: 900;
+
+    margin-left: 2.5%;
+    margin-right: 2.5%;
+}
+
+.profile_line {
+    margin: 0;
+    height: 80%;
+    gap: 0;
+
+    border-color: var(--secondary);
+    background-color: var(--secondary);
+    color: var(--secondary);
+}
+
+.bio {
+    text-decoration: none;
+    color: var(--text);
+    text-align: center;
+
+    font-size: 1.5vh;
+    font-family: Montserrat;
+    font-weight: 700;
+
+
+    margin-left: 2.5%;
+
+    /* Prevent text from wrapping. */
+    white-space: nowrap;
+    /* Hide overflowing text. */
+    overflow: hidden;
+    /* The cool 3 dots :) */
+    text-overflow: ellipsis;
+}

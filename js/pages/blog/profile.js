@@ -129,7 +129,7 @@ async function getPosts(category_id) {
     var posts = response_json["rows"];
     var number_of_posts_to_get = response_json["number_of_posts_to_get"];
     how_much_times[category_id]++;
-
+    
     removeShowMoreButtonHTML(category_id)
 
     for (let i = 0; i < posts.length; i++) {
