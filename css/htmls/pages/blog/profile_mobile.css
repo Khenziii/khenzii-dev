@@ -29,12 +29,15 @@ code {
     height: fit-content;
 
     position: relative;
-    top: 10vh;
+    top: 5vh;
     left: 50%;
     transform: translateX(-50%);
 
     display: flex;
     flex-direction: column;
+
+    /* allow the user to scroll a little bit more down */
+    margin-bottom: 6vh;
 }
 
 .search_container_parent {
@@ -93,10 +96,59 @@ code {
     width: 80vw;
 }
 
-.profile_container_parent {
-    /* delete the line below, if you want to work on search */
-    margin-top: -5vh;
+.blog_container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
 
+    height: fit-content;
+}
+
+.blog_icon {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+
+    width: 35%;
+    height: auto;
+
+    transition: all 0.5s;
+}
+
+.blog_icon:hover {
+    background-color: var(--secondary);
+    border-radius: 0.5vh;
+}
+
+.blog_icon:active {
+    transition: none;
+    background-color: var(--accent);
+}
+
+.blog_text {
+    color: var(--text);
+
+    text-align: center;
+
+    font-size: 1.75vh;
+    font-family: Montserrat;
+    font-weight: 700;
+
+    margin: 0;
+    margin-top: 1vh;
+}
+
+.blog_line {
+    width: 100%;
+    margin: 2vh;
+    margin-left: 0;
+    margin-right: 0;
+    border-color: var(--secondary);
+    background-color: var(--secondary);
+    color: var(--secondary);
+}
+
+.profile_container_parent {
     display: flex;
     flex-direction: column;
 }
@@ -108,8 +160,6 @@ code {
 }
 
 .pfp_container {
-    margin-top: 1vh;
-
     width: 40vw;
     height: 40vw;
 

@@ -29,7 +29,7 @@ code {
     height: fit-content;
 
     position: relative;
-    top: 10vh;
+    top: 5vh;
     left: 50%;
     transform: translateX(-50%);
 
@@ -83,6 +83,58 @@ code {
 
     padding: 0;
     width: 100%;
+}
+
+.blog_container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+
+    height: fit-content;
+}
+
+.blog_icon {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+
+    width: 20%;
+    height: auto;
+
+    transition: all 0.5s;
+}
+
+.blog_icon:hover {
+    background-color: var(--secondary);
+    border-radius: 0.5vh;
+}
+
+.blog_icon:active {
+    transition: none;
+    background-color: var(--accent);
+}
+
+.blog_text {
+    color: var(--text);
+
+    text-align: center;
+
+    font-size: 1.75vh;
+    font-family: Montserrat;
+    font-weight: 700;
+
+    margin: 0;
+    margin-top: 1vh;
+}
+
+.blog_line {
+    width: 100%;
+    margin: 2vw;
+    margin-left: 0;
+    margin-right: 0;
+    border-color: var(--secondary);
+    background-color: var(--secondary);
+    color: var(--secondary);
 }
 
 .profile_container_parent {
