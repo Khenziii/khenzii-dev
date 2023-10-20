@@ -103,8 +103,8 @@ body {
 }
 
 .pfp_container {
-    width: auto;
-    height: 100%;
+    width: 3vw;
+    height: 3vw;
 
     border: 2px solid var(--text);
     border-radius: 50%;

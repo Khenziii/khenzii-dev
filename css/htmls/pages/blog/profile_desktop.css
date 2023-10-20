@@ -5,7 +5,7 @@ body {
 
 code {
     background-color: var(--background);
-    border-radius: 2vw;
+    border-radius: 1vh;
     font-family: Montserrat;
     color: var(--secondary);
     padding: 1vh;
@@ -35,6 +35,9 @@ code {
 
     display: flex;
     flex-direction: column;
+
+    /* allow the user to scroll a little bit more down */
+    margin-bottom: 6vh;
 }
 
 .search_container_parent {
