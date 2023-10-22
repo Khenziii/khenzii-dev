@@ -628,10 +628,10 @@ function createHTMLPost(text_value, created_at, id, category_id, index_in_catego
         // Check if the matched tag is an <img> or <video>
         if (match.startsWith("<img")) {
             // If it's an <img> tag, add the max-width and height styles
-            return match.replace(">", ' style="max-width: 100%; height: auto;" draggable="false" alt="sum image">');
+            return match.replace(">", ' style="max-width: 100%; height: auto; margin-block: 1vh;" draggable="false" alt="sum image">');
         } else if (match.startsWith("<video")) {
             // If it's a <video> tag, add the max-width and height styles
-            return match.replace(">", ' style="max-width: 100%; height: auto;" draggable="false" alt="sum video" controls="true">');
+            return match.replace(">", ' style="max-width: 100%; height: auto; margin-block: 1vh;" draggable="false" alt="sum video" controls="true">');
         }
         return match;
     });
