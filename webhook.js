@@ -47,7 +47,7 @@ app.post('/webhook', (req, res) => {
                 'git pull origin master --no-edit', // Pull the repository
                 'npm install', // install npm packages
                 'pip3 install -r requirements.txt', // install python packages
-                'pm2 restart server webhook' // restart our processes
+                'pm2 restart server webhook archiver' // restart our processes
             ]).then(() => {
                 console.log('Repository pulled, packages installed (if any new), node.js processes restarted.');
                 res.status(200).send('Everything went gut :thumbs_up:. Thanks for the delivery :)');
