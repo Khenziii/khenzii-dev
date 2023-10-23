@@ -26,7 +26,7 @@ def save_page(url, user_agent):
 ### configuration zone! =)
 amount_of_times_a_day = 1
 # the script will archive these things <amount_of_times_a_day> times a day
-list_of_stuff_to_archive = ["https://khenzii.dev/blog/user/Khenzii", "https://khenzii.dev/", "https://khenzii.dev/blog", "https://khenzii.dev/blog/user/Khenzii", "https://khenzii.dev/blog/users"]
+list_of_stuff_to_archive = ["https://khenzii.dev/", "https://khenzii.dev/blog", "https://khenzii.dev/projects", "https://khenzii.dev/blog/users"]
 user_agent = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/117.0"
 
 
