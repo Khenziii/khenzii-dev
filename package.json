@@ -41,7 +41,7 @@
     "sharp": "^0.32.6",
     "svg2img": "^1.0.0-beta.2",
     "swup": "^4.4.2",
-    "terser": "^5.19.4"
+    "terser": "^5.21.0"
   },
   "devDependencies": {
     "@babel/core": "^7.22.19",
