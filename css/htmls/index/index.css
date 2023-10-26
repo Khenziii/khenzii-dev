@@ -3,6 +3,11 @@
 @import '../../presets/elements.css';
 
 
+body {
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
 .icons_lines {
     max-width: 80%;
     height: auto;
