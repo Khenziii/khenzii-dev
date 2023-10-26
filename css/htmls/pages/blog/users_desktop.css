@@ -96,6 +96,8 @@ body {
     padding: 1vh;
 
     align-items: center;
+
+    text-decoration: none;
 }
 
 .user_container:hover {
@@ -123,7 +125,6 @@ body {
 }
 
 .username {
-    text-decoration: none;
     color: var(--text);
     text-align: center;
 
@@ -146,7 +147,6 @@ body {
 }
 
 .bio {
-    text-decoration: none;
     color: var(--text);
     text-align: center;
 
