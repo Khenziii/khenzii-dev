@@ -19,6 +19,7 @@ const app = express();
 const port = 3000;
 
 const trusted_usernames = ["Khenzii"]
+const supporting_usernames = ["Tornamentus"]
 const hours_off = 2
 const number_of_posts_to_get = 5
 const legal_chars = ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'z', 'x', 'c', 'v', 'b', 'n', 'm',
@@ -1464,10 +1465,23 @@ app.post('/blog/api/create_post', authMiddleware, limit_create, async (req, res)
 
         if (req.auth.username == result.rows[0].username) {
             // 2. check if over character limit
-            if (text_value.length > 1000 && !trusted_usernames.includes(req.auth.username)) {
-                res.status(400).send(`The post content can't be longer than 1000 characters. Sorry.`);
-                consoleInfo('i', `${req.ClientIP} aka ${req.auth.username} tried to create a post that was longer than 1000 chars.`)
-                return
+            // if text_value longer than the default limit
+            if (text_value.length > 1_000) {
+                // if the user is trusted, we don't care
+                if (!trusted_usernames.includes(req.auth.username)) {
+                    // if the user is a supporter and the message is longer than 50_000 chars
+                    if(supporting_usernames.includes(req.auth.username) && text_value.length > 50_000) {
+                        res.status(400).send(`Even though that you're a supporting user, the post still can't be longer than 50_000 chars. Sorry.`);
+                        consoleInfo('i', `${req.ClientIP} aka ${req.auth.username} tried to create a post that was longer than 50_000 chars (they're a supporting user :P).`)
+                        return
+                    } else if (!supporting_usernames.includes(req.auth.username)) {
+                        // if the user is not a supporter nor a trusted user and wanted to create a post longer than 1000 chars
+
+                        res.status(400).send(`The post content can't be longer than 1000 characters. Sorry.`);
+                        consoleInfo('i', `${req.ClientIP} aka ${req.auth.username} tried to create a post that was longer than 1_000 chars.`)
+                        return
+                    }
+                }
             }
 
             // 4. get aditional variables
