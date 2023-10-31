@@ -267,10 +267,6 @@ function sanitizeHTML(HTML) {
     return cleanHTML
 }
 
-function addZero(value) { // adds zero to the start of values if possible (eg. input: 7 output: 07)
-    return value.toString().padStart(2, '0');
-}
-
 function getDate(timezone) {
     let currentTime = new Date();
     let options = {
