@@ -1,14 +1,17 @@
 import time
 import waybackpy
 import datetime
+import pytz
 
 
 def log(message: str, prefix: str = 'i'):
-    # Create a timezone for GMT+2 (GMT+2 - Warsaw)
-    gmt_plus_2 = datetime.timezone(datetime.timedelta(hours=2))
-    current_datetime = datetime.datetime.now(gmt_plus_2)
+    # create a timezone for Warsaw
+    warsaw_timezone = pytz.timezone('Europe/Warsaw')
 
-    log_record = current_datetime.strftime(f"[{prefix}] %d/%m/%Y - %H:%M:%S > {message}")
+    # get the current time in Warsaw
+    warsaw_time = datetime.datetime.now(warsaw_timezone)
+
+    log_record = warsaw_time.strftime(f"[{prefix}] %d/%m/%Y - %H:%M:%S > {message}")
     print(log_record)
 
 def save_page(url, user_agent):
