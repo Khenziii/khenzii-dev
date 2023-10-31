@@ -205,7 +205,9 @@ async function createPost() {
     createPostButton.classList.add("no");
     post_create_button_clickable = false
 
-    const postTextContentValue = postInput.value
+    let postTextContentValue = postInput.value
+    // Replace line breaks with <br> tags
+    postTextContentValue = postTextContentValue.replace(/\n/g, '<br>');
 
     const data = {
         category_id: createPostPopout.style.data_category_id,
