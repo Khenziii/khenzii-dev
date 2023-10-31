@@ -20,7 +20,7 @@ const port = 3000;
 
 const trusted_usernames = ["Khenzii"]
 const supporting_usernames = ["Tornamentus"]
-const hours_off = 2
+const timezone = "Europe/Warsaw"
 const number_of_posts_to_get = 5
 const legal_chars = ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'z', 'x', 'c', 'v', 'b', 'n', 'm',
     'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Z', 'X', 'C', 'V', 'B', 'N', 'M',
@@ -271,28 +271,38 @@ function addZero(value) { // adds zero to the start of values if possible (eg. i
     return value.toString().padStart(2, '0');
 }
 
-function getDate(hours_off) {
-    var currentTime = new Date();
+function getDate(timezone) {
+    let currentTime = new Date();
+    let options = {
+        timeZone: `${timezone}`,
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+    };
+    let formattedTime = currentTime.toLocaleString('en-GB', options); // e.g., "31/10/2023, 16:49:45"
 
-    var localYear = addZero(currentTime.getUTCFullYear());
-    var localMonth = addZero(currentTime.getUTCMonth() + 1); // months start from the index 0, so we are adding 1
-    var localDay = addZero(currentTime.getUTCDate());
-    var localHours = addZero(currentTime.getUTCHours() + hours_off);
-    var localMinutes = addZero(currentTime.getUTCMinutes());
-    var localSeconds = addZero(currentTime.getUTCSeconds());
+    let days = formattedTime.split('/')[0]
+    let months = formattedTime.split('/')[1]
+    let years = formattedTime.split('/')[2].split(',')[0]
+    let hours = formattedTime.split(':')[0].split(', ')[1]
+    let minutes = formattedTime.split(':')[1]
+    let seconds = formattedTime.split(':')[2]
 
     return {
-        localYear: localYear,
-        localMonth: localMonth,
-        localDay: localDay,
-        localHours: localHours,
-        localMinutes: localMinutes,
-        localSeconds: localSeconds
+        localYear: years,
+        localMonth: months,
+        localDay: days,
+        localHours: hours,
+        localMinutes: minutes,
+        localSeconds: seconds
     };
 }
 
 function consoleInfo(prefix, message) {
-    var localDate = getDate(hours_off)
+    var localDate = getDate(timezone)
 
     console.log(`[${prefix}] ${localDate.localDay}/${localDate.localMonth}/${localDate.localYear} - ${localDate.localHours}:${localDate.localMinutes}:${localDate.localSeconds} > ${message}`)
 }
@@ -463,7 +473,7 @@ async function checkIfUsernameTaken(username) {
 async function register_account(username, email, password) {
     try {
         // get the current date
-        var localDate = getDate(hours_off)
+        var localDate = getDate(timezone)
         var joined_at = `${localDate.localDay}/${localDate.localMonth}/${localDate.localYear} - ${localDate.localHours}:${localDate.localMinutes}:${localDate.localSeconds}`
 
         // input all of the needed stuff into the user table
@@ -1194,7 +1204,7 @@ app.post('/blog/api/get_user', checkAuthMiddleware, limit_api, async (req, res) 
         data.user_id = user_id;
         const joined_at = result.rows[0].joined_at
 
-        var daysPassed = daysSince(getDate(hours_off), joined_at)
+        var daysPassed = daysSince(getDate(timezone), joined_at)
         var joined_at_with_days = `${joined_at}; ${daysPassed} day/s ago`
 
         data.joined_at = joined_at_with_days;
@@ -1486,7 +1496,7 @@ app.post('/blog/api/create_post', authMiddleware, limit_create, async (req, res)
 
             // 4. get aditional variables
             // get the current date and create created_at using it
-            var localDate = getDate(hours_off)
+            var localDate = getDate(timezone)
             var created_at = `${localDate.localDay}/${localDate.localMonth}/${localDate.localYear} - ${localDate.localHours}:${localDate.localMinutes}:${localDate.localSeconds}`
 
             // get the next index in category
@@ -1871,7 +1881,7 @@ app.listen(port, () => {
     consoleInfo(`i`, `end of info! \n`)
 
     consoleInfo(`i`, `current settings:`)
-    consoleInfo(`i`, `1. using the UTC+${hours_off} timezone, you can change this setting by modifying the hours_off variable inside of server.js.`)
+    consoleInfo(`i`, `1. using the ${timezone} timezone, you can change this setting by modifying the timezone variable inside of server.js.`)
     consoleInfo(`i`, `2. trusted_usernames: ${trusted_usernames} (these usernames can post long posts and use HTML on /blog), you can change this setting by modifying the trusted_usernames variable inside of server.js.`)
     consoleInfo(`i`, `3. number_of_posts_to_get: ${number_of_posts_to_get} (this setting makes the /blog/api/get_posts endpoint return ${number_of_posts_to_get} posts), you can change this setting by modifying the number_of_posts_to_get variable inside of server.js.`)
     consoleInfo(`i`, `end of settings! \n`)
