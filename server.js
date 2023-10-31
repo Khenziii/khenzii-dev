@@ -1194,7 +1194,7 @@ app.post('/blog/api/get_user', checkAuthMiddleware, limit_api, async (req, res) 
         data.user_id = user_id;
         const joined_at = result.rows[0].joined_at
 
-        var daysPassed = daysSince(getDate(2), joined_at)
+        var daysPassed = daysSince(getDate(hours_off), joined_at)
         var joined_at_with_days = `${joined_at}; ${daysPassed} day/s ago`
 
         data.joined_at = joined_at_with_days;
