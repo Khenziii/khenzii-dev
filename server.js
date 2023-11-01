@@ -310,7 +310,7 @@ function daysSince(getDateFunction, then_string) {
 
     const thenDate = new Date(
         parseInt(dateComponents[2]), // year
-        parseInt(dateComponents[1]), // month
+        parseInt(dateComponents[1]) - 1, // month
         parseInt(dateComponents[0]), // day
         parseInt(timeComponents[0]), // hours
         parseInt(timeComponents[1]), // minutes
@@ -319,7 +319,7 @@ function daysSince(getDateFunction, then_string) {
 
     currentDate = new Date(
         getDateFunction.localYear,   // year
-        getDateFunction.localMonth,  // month
+        getDateFunction.localMonth - 1,  // month
         getDateFunction.localDay,    // day
         getDateFunction.localHours,  // hours
         getDateFunction.localMinutes,// minutes
