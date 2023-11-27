@@ -28,7 +28,7 @@
   "homepage": "https://github.com/Khenziii/khenzii-dev#readme",
   "dependencies": {
     "@swup/browserslist-config": "^1.0.1",
-    "@swup/scripts-plugin": "^2.0.0",
+    "@swup/scripts-plugin": "^2.1.0",
     "cjs": "^0.0.11",
     "crypto": "^1.0.1",
     "dotenv": "^16.3.1",
