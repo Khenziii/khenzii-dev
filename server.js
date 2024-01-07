@@ -628,6 +628,7 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use('/js', express.static(path.join(__dirname, 'js')));
 app.use('/videos', express.static(path.join(__dirname, 'videos')));
 app.use('/dist', express.static(path.join(__dirname, 'dist')));
+app.use('/assets', express.static(path.join(__dirname, 'assets')));
 app.use('/robots.txt', express.static(path.join(__dirname, 'robots.txt')));
 
 app.set('trust proxy', true);
