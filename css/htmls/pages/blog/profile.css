@@ -1,8 +1,0 @@
-@import '../../../presets/variables.css';
-@import '../../../presets/fonts.css';
-@import '../../../presets/elements.css';
-
-/* Desktop */
-@import url("./profile_desktop.css") only screen and (min-height: 701px);
-/* Mobile */
-@import url("./profile_mobile.css") only screen and (max-height: 700px);
