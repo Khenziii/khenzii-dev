@@ -1,7 +1,13 @@
 {
   "name": "khenzii-dev",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
+  "author": {
+    "name": "Khenzii",
+    "url": "https://khenzii.dev/"
+  },
+  "homepage": "https://khenzii.dev/",
+  "license": "CC-BY-SA-4.0",
   "type": "module",
   "scripts": {
     "build": "next build",
