@@ -11,7 +11,7 @@ const montserrat = Montserrat({
 export const metadata = {
   title: "Khenzii :)",
   description: "Khenzii's portfolio.",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
+  icons: [{ rel: "icon", url: "/logo.svg" }],
 };
 
 export default function RootLayout({

@@ -1,5 +1,77 @@
 @import '../../../styles/constants.scss';
 
+$animationDelay: 0.1s;
+
+.noAnimate {
+    * {
+        animation: none !important;
+    }
+}
+
 .tile {
-    stroke: $primary;
+    stroke: none;
+    fill: $primary;
+    animation: tileEntrance 1s both step-end;
+}
+
+.three {
+    @for $i from 1 through 11 {
+        &.three-#{$i} {
+            animation-delay: $animationDelay * $i;
+        }
+    }
+}
+
+.a {
+    @for $i from 1 through 11 {
+        &.a-#{$i} {
+            animation-delay: $animationDelay * $i;
+        }
+    }
+}
+
+.two {
+    @for $i from 1 through 8 {
+        &.two-#{$i} {
+            animation-delay: $animationDelay * $i;
+        }
+    }
+}
+
+.nine {
+    @for $i from 1 through 12 {
+        &.nine-#{$i} {
+            animation-delay: $animationDelay * $i;
+        }
+    }
+}
+
+.threeWrapper > rect {
+    @extend .three;
+    @extend .tile;
+}
+
+.aWrapper > rect {
+    @extend .a;
+    @extend .tile;
+}
+
+.twoWrapper > rect {
+    @extend .two;
+    @extend .tile;
+}
+
+.nineWrapper > rect {
+    @extend .nine;
+    @extend .tile;
+}
+
+@keyframes tileEntrance {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
