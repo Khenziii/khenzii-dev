@@ -1,0 +1,9 @@
+@import "../styles/constants.scss";
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  min-height: 100vh;
+  background-color: $background;
+}

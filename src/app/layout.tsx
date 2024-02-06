@@ -1,9 +1,11 @@
 import { Montserrat } from "next/font/google";
 import React from "react";
+import style from "../styles/layout.module.scss";
+import clsx from "clsx";
 
 const montserrat = Montserrat({
   weight: "600",
-  subsets: ["latin"]
+  subsets: ["latin"],
 });
 
 export const metadata = {
@@ -19,7 +21,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={montserrat.className}>{children}</body>
+      <body className={clsx(montserrat.className, style.layout)}>{children}</body>
     </html>
   );
 }
