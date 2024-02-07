@@ -2,6 +2,7 @@ import { Montserrat } from "next/font/google";
 import React from "react";
 import style from "../styles/layout.module.scss";
 import clsx from "clsx";
+import { Footer } from "@khenzii-dev/ui/ogranisms/footer";
 
 const montserrat = Montserrat({
   weight: "600",
@@ -16,7 +17,13 @@ export const metadata = {
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => (
     <html lang="en">
-      <body className={clsx(montserrat.className, style.layout)}>{children}</body>
+        <body className={clsx(montserrat.className, style.layout)}>
+            {children}
+
+            <footer className={style.footer}>
+                <Footer />
+            </footer>
+        </body>
     </html>
 );
 

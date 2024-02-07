@@ -1,8 +1,12 @@
 @import "../styles/constants.scss";
 
 .layout {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: $background;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: $background;
+}
+
+.footer {
+    width: 100%;
 }
