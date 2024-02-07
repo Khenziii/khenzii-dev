@@ -6,4 +6,8 @@
     > :first-child {
         margin-top: $defaultGap;
     }
+
+    > :last-child {
+        margin-bottom: $defaultGap;
+    }
 }
