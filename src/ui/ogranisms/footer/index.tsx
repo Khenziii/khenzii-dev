@@ -1,7 +1,7 @@
 import { type FC } from "react";
 import style from "./index.module.scss";
 import clsx from "clsx";
-import { Flex } from "@khenzii-dev/ui/atoms/flex";
+import { Flex } from "@khenzii-dev/ui/atoms";
 
 export type FooterProps = {};
 
