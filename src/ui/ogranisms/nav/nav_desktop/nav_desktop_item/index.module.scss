@@ -1,0 +1,26 @@
+@import "../../../../../styles/constants.scss";
+
+.link {
+    font-size: 2rem;
+    text-align: center;
+    color: $text;
+    text-decoration: none;
+    position: relative;
+}
+
+.link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 3px;
+    width: 100%;
+    background-color: $text;
+    transition: transform .5s cubic-bezier(0.75, 0, 0.30, 1);
+    transform: scaleX(0);
+}
+
+.link:hover::after {
+    width: 100%;
+    transform: scaleX(1);
+}

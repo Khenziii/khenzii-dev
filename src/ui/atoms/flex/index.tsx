@@ -18,7 +18,7 @@ export const Flex: FC<FlexProps> = ({ children, direction , align, justify, gap 
     const styleSheet: CSSProperties = styles ?? {};
     if (direction !== undefined) styleSheet.flexDirection = direction;
     if (align !== undefined) styleSheet.alignItems = align;
-    if (justify !== undefined) styleSheet.justifyItems = justify;
+    if (justify !== undefined) styleSheet.justifyContent = justify;
     if (gap !== undefined) styleSheet.gap = `${gap}px !important`;
 
     return (

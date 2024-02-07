@@ -1,0 +1,7 @@
+@import "../../../../styles/constants.scss";
+
+.container {
+    width: min(30rem, 500px);
+    border: 1px solid $primary;
+    padding: $defaultGap;
+}
