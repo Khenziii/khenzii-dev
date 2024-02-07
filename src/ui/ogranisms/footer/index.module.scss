@@ -2,12 +2,9 @@
 
 .container {
     border-top: 1px solid $primary;
+    height: $footerHeight;
 
-    > :first-child {
+    > * {
         margin-top: $defaultGap;
-    }
-
-    > :last-child {
-        margin-bottom: $defaultGap;
     }
 }

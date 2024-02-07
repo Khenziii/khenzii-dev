@@ -1,13 +1,20 @@
 @import "../styles/constants.scss";
 
 .layout {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     background-color: $background;
     overflow-x: hidden;
 }
 
-.footer {
+.footer,
+.nav {
     width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.content {
+    min-height: calc(100vh - $navDesktopHeight - $footerHeight);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }

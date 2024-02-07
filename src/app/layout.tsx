@@ -17,12 +17,14 @@ export const metadata = {
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => (
     <html lang="en">
-        <body className={clsx(montserrat.className, style.layout)}>
-            <nav>
+        <body className={clsx(style.layout, montserrat.className)}>
+            <nav className={style.nav}>
                 <Nav />
             </nav>
 
-            {children}
+            <main className={style.content}>
+                {children}
+            </main>
 
             <footer className={style.footer}>
                 <Footer />

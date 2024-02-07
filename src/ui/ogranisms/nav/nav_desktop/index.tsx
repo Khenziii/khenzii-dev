@@ -9,7 +9,7 @@ export type NavDesktopProps = {
 };
 
 export const NavDesktop: FC<NavDesktopProps> = ({ routes }) => (
-    <Flex direction={"row"} justify={"space-around"} className={style.container}>
+    <Flex align={"center"} justify={"space-around"} className={style.container}>
         {routes.map((r, index) => (
             <NavDesktopItem route={r} key={`nav-desktop-item-${index}`} />
         ))}

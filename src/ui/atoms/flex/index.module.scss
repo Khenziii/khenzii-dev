@@ -3,5 +3,5 @@
 .flex {
     display: flex;
     gap: $defaultGap;
-    width: 100%;
+    width: $maxContentWidth;
 }
