@@ -10,7 +10,7 @@ const montserrat = Montserrat({
 });
 
 export const metadata = {
-  title: "Khenzii :)",
+  title: "Khenzii",
   description: "Khenzii's portfolio.",
   icons: [{ rel: "icon", url: "/logo.svg" }],
 };
