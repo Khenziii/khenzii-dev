@@ -3,6 +3,8 @@
 .layout {
     background-color: $background;
     overflow-x: hidden;
+    margin: 0;
+    margin-inline: $defaultGap;
 }
 
 .footer,
