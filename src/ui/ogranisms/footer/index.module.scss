@@ -1,0 +1,9 @@
+@import "../../../styles/constants.scss";
+
+.container {
+    border-top: 1px solid $primary;
+
+    > :first-child {
+        margin-top: $defaultGap;
+    }
+}
