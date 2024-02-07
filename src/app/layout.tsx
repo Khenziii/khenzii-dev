@@ -14,14 +14,10 @@ export const metadata = {
   icons: [{ rel: "icon", url: "/logo.svg" }],
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return (
+const RootLayout = ({ children }: { children: React.ReactNode }) => (
     <html lang="en">
       <body className={clsx(montserrat.className, style.layout)}>{children}</body>
     </html>
-  );
-}
+);
+
+export default RootLayout;
