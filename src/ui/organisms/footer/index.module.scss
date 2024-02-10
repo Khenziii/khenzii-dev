@@ -1,0 +1,21 @@
+@import "../../../styles/constants.scss";
+
+.container {
+    border-top: 1px solid $primary;
+    height: calc(100% - 1px);
+    // ^ this calc is necessary, because
+    // we need to take into account the
+    // border that we create above
+}
+
+.leftItem {
+    margin-left: $defaultGap !important;
+}
+
+.rightItem {
+    margin-right: $defaultGap !important;
+
+    :hover {
+        fill: $textDarkened;
+    }
+}
