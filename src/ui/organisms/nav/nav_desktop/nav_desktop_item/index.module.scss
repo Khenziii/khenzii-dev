@@ -6,6 +6,12 @@
     color: $text;
     text-decoration: none;
     position: relative;
+
+    &:hover::after,
+    &.active::after {
+        width: 100%;
+        transform: scaleX(1);
+    }
 }
 
 .link::after {
@@ -18,9 +24,4 @@
     background-color: $text;
     transition: transform .5s cubic-bezier(0.75, 0, 0.30, 1);
     transform: scaleX(0);
-}
-
-.link:hover::after {
-    width: 100%;
-    transform: scaleX(1);
 }
