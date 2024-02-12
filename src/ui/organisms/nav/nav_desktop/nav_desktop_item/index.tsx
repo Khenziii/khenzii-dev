@@ -10,7 +10,5 @@ export type NavDesktopItemProps = {
 };
 
 export const NavDesktopItem: FC<NavDesktopItemProps> = ({ route, active = false }) => (
-    <>
-        <Link href={route.path} className={clsx([style.link], {[style.active as string]: active})}>{route.name}</Link>
-    </>
+    <Link href={route.path} className={clsx([style.link], {[style.active as string]: active})}>{route.name}</Link>
 );
