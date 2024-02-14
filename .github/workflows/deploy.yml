@@ -6,11 +6,14 @@ on:
 
 jobs:
   deploy-production:
-    name: 🚀 PROD - Deploy
     if: github.ref == 'refs/heads/master'
+    name: 🚀 PROD - Deploy
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
       - name: Build
         run: yarn build
 
@@ -24,11 +27,14 @@ jobs:
           target: ${{ secrets.PROD_PATH }}
 
   deploy-development:
-    name: 🚀 DEV - Deploy
     if: github.ref == 'refs/heads/develop'
+    name: 🚀 DEV - Deploy
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
       - name: Build
         run: yarn build
 
