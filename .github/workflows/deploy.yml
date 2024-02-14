@@ -5,40 +5,22 @@ on:
       - develop
 
 jobs:
-  deploy-production:
-    if: github.ref == 'refs/heads/master'
-    name: 🚀 PROD - Deploy
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      - name: Build
-        run: yarn build
-
-      - name: Copy files to VPS
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: ".next, package.json"
-          target: ${{ secrets.PROD_PATH }}
-
   deploy-development:
-    if: github.ref == 'refs/heads/develop'
-    name: 🚀 DEV - Deploy
+    name: 🚀 Deploy
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
 
+      - name: Install Dependencies
+        run: yarn install
+
       - name: Build
         run: yarn build
 
-      - name: Copy files to VPS
+      - name: Copy files to VPS (staging)
+        if: github.ref == 'refs/heads/develop'
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.HOST }}
@@ -46,3 +28,13 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: ".next, package.json"
           target: ${{ secrets.DEV_PATH }}
+
+      - name: Copy files to VPS (production)
+        if: github.ref == 'refs/heads/master'
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: ".next, package.json"
+          target: ${{ secrets.PROD_PATH }}
