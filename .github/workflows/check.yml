@@ -10,3 +10,13 @@ jobs:
 
       - name: Run ESLint
         run: yarn eslint
+
+  build-check:
+    name: 🗿 Build Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Build
+        run: yarn build
