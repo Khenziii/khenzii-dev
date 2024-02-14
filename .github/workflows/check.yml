@@ -3,7 +3,10 @@ on: push
 jobs:
   eslint-check:
     name: 🤔 ESLint Check
+    env:
+      SKIP_ENV_VALIDATION: true
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -16,7 +19,10 @@ jobs:
 
   build-check:
     name: 🗿 Build Check
+    env:
+      SKIP_ENV_VALIDATION: true
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
