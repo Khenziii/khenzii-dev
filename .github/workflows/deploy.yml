@@ -7,7 +7,7 @@ on:
 jobs:
   deploy-production:
     name: 🚀 PROD - Deploy
-    if: ${github.ref == 'refs/heads/master'}
+    if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
 
     steps:
@@ -25,7 +25,7 @@ jobs:
 
   deploy-development:
     name: 🚀 DEV - Deploy
-    if: ${github.ref == 'refs/heads/develop'}
+    if: github.ref == 'refs/heads/develop'
     runs-on: ubuntu-latest
 
     steps:
