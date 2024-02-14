@@ -5,9 +5,11 @@ on:
       - develop
 
 jobs:
-  deploy-development:
+  deploy:
     name: 🚀 Deploy
     runs-on: ubuntu-latest
+    env:
+      SKIP_ENV_VALIDATION: true
 
     steps:
       - name: Checkout Code
