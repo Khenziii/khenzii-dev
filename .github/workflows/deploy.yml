@@ -6,8 +6,8 @@ on:
 
 jobs:
   deploy-production:
-    name: 🚀 PROD - Deploy
     if: github.ref == 'refs/heads/master'
+    name: 🚀 PROD - Deploy
     runs-on: ubuntu-latest
 
     steps:
@@ -24,8 +24,8 @@ jobs:
           target: ${{ secrets.PROD_PATH }}
 
   deploy-development:
-    name: 🚀 DEV - Deploy
     if: github.ref == 'refs/heads/develop'
+    name: 🚀 DEV - Deploy
     runs-on: ubuntu-latest
 
     steps:
