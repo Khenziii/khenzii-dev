@@ -1,5 +1,9 @@
-import { Loading } from "@khenzii-dev/ui/atoms";
+import { Paragraph } from "@khenzii-dev/ui/atoms";
 
-const Projects = () => <Loading size={100} />;
+const Projects = () => (
+    <Paragraph fontSize={1.5} styles={{ textAlign: "center" }}>
+        Come back here later..
+    </Paragraph>
+);
 
 export default Projects;
