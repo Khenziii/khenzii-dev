@@ -10,7 +10,6 @@
     height: $footerHeight;
 }
 
-
 .nav {
     width: 100%;
     display: flex;
@@ -24,4 +23,14 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+@media (width <= $mobileWidth) {
+    .nav {
+        height: $navMobileHeight;
+    }
+
+    .content {
+        min-height: calc(100vh - $navMobileHeight - $footerHeight);
+    }
 }

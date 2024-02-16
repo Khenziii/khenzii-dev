@@ -1,0 +1,8 @@
+@import "../../../../styles/constants.scss";
+
+.container {
+    padding: $defaultGap;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
