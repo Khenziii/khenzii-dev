@@ -11,7 +11,7 @@ export const Footer: FC = () => (
         </Paragraph>
 
         <a className={style.rightItem} href={"https://github.com/Khenziii/khenzii-dev/"}>
-            <Icon iconName={"Github"}  />
+            <Icon iconName={"Github"} />
         </a>
     </Flex>
 );

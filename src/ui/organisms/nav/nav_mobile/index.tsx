@@ -32,11 +32,13 @@ export const NavMobile: FC<NavMobileProps> = ({ routes, socials }) => {
                 wrapOutOfFlow={true}
                 keepOpenElementVisible={true}
             >
-                {socials.map((s, index) => (
-                    <a className={style.social} href={s.url} key={`nav-mobile-social-${index}`}>
-                        <Icon iconName={s.iconName}/>
-                    </a>
-                ))}
+                <div className={style.socialContainer}>
+                    {socials.map((s, index) => (
+                        <a className={style.social} href={s.url} key={`nav-mobile-social-${index}`}>
+                            <Icon iconName={s.iconName} size={3} />
+                        </a>
+                    ))}
+                </div>
             </Expandable>
 
             {routes.map((r, index) => (
