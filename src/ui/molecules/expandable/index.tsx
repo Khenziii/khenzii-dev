@@ -1,6 +1,6 @@
 "use client"
 
-import { type FC, type ReactNode, useCallback } from "react";
+import { type FC, type ReactNode, useCallback, useEffect, useState } from "react";
 import { useCycle, AnimatePresence, motion } from "framer-motion";
 import style from "./index.module.scss";
 
@@ -18,8 +18,9 @@ export type ExpandableProps = {
 
 export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHeight, endWidth, children, openElement, closeElement, wrapOutOfFlow = false, keepOpenElementVisible = false}) => {
     const [isOpen, cycleIsOpen] = useCycle(false, true);
+    const [isGrowingCompleted, setIsGrowingCompleted] = useState(false);
 
-    const transition = {
+    const growTransition = {
         initial: {
             width: startWidth,
             height: startHeight,
@@ -37,7 +38,20 @@ export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHe
             height: startHeight,
             transition: {
                 duration:  0.5,
-                ease: [0.75, 0, 0.30, 1], // cubic-bezier(0.75, 0, 0.30, 1)
+                ease: [0.75, 0, 0.30, 1],
+            },
+        },
+    };
+
+    const fadeInTransition = {
+        initial: {
+            opacity: 0
+        },
+        animate: {
+            opacity:  1,
+            transition: {
+                duration: 0.5,
+                ease: [0.75, 0, 0.30, 1],
             },
         },
     };
@@ -46,20 +60,42 @@ export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHe
         cycleIsOpen();
     }, [cycleIsOpen]);
 
+    useEffect(() => {
+        setIsGrowingCompleted(false);
+        if (!isOpen) return;
+
+        const timer = setTimeout(() => {
+            setIsGrowingCompleted(true);
+        },  500); // This should match the duration of fadeInTransition
+
+        return () => clearTimeout(timer);
+    }, [isOpen]);
+
     return (
         <div className={style.container}>
             <AnimatePresence>
                 {isOpen && (
                     <motion.aside
-                        {...transition}
+                        {...growTransition}
                         className={style.wrapper}
                         style={wrapOutOfFlow ? {position: "absolute", left: 0, top: 0} : {}}
                     >
-                        <div onClick={clickHandler}>
+                        <motion.div
+                            onClick={clickHandler}
+                            {...fadeInTransition}
+                            animate={isGrowingCompleted ? fadeInTransition.animate : {}}
+                        >
                             {closeElement}
-                        </div>
+                        </motion.div>
 
-                        {children}
+                        {isGrowingCompleted && (
+                            <motion.div
+                                {...fadeInTransition}
+                                style={{height: "100%"}}
+                            >
+                                {children}
+                            </motion.div>
+                        )}
                     </motion.aside>
                 )}
             </AnimatePresence>
