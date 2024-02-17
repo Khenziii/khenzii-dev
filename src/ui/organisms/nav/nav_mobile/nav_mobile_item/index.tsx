@@ -11,7 +11,7 @@ export type NavMobileItemProps = {
 };
 
 export const NavMobileItem: FC<NavMobileItemProps> = ({ route, active = false }) => (
-    <Flex align={"center"} justify={"center"} styles={{ width: "auto" }}>
+    <Flex align={"center"} justify={"center"} styles={{ width: "auto", height: "100%" }}>
         {route.path ? (
             <Link href={route.path} className={clsx([style.link, {[style.active as string]: active}])}>{route.name}</Link>
         ) : (

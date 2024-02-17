@@ -19,8 +19,8 @@ export const NavMobile: FC<NavMobileProps> = ({ routes, socials }) => {
             <Expandable
                 startHeight={"auto"}
                 startWidth={"auto"}
-                endHeight={"auto"}
-                endWidth={"auto"}
+                endHeight={"50vh"}
+                endWidth={"calc(100vw - 2 * 10px)"}
                 openElement={
                     <NavMobileItem route={{name: "socials"}} key={`nav-mobile-item-socials`} />
                 }

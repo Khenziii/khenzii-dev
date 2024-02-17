@@ -27,12 +27,17 @@ export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHe
         animate: {
             width: endWidth,
             height: endHeight,
+            transition: {
+                duration:  0.5,
+                ease: [0.75, 0, 0.30, 1], // cubic-bezier(0.75, 0, 0.30, 1)
+            },
         },
         exit: {
             width: startWidth,
             height: startHeight,
             transition: {
-                duration: 0.3,
+                duration:  0.5,
+                ease: [0.75, 0, 0.30, 1], // cubic-bezier(0.75, 0, 0.30, 1)
             },
         },
     };
@@ -59,7 +64,7 @@ export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHe
                 )}
             </AnimatePresence>
             {(!isOpen || keepOpenElementVisible) && (
-                <div onClick={clickHandler}>
+                <div onClick={clickHandler} style={{height: "100%"}}>
                     {openElement}
                 </div>
             )}

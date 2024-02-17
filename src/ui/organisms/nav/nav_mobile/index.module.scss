@@ -7,6 +7,16 @@
     grid-template-columns: repeat(2, 1fr);
 }
 
+.closeIcon {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+
+    :hover {
+        fill: $textDarkened;
+    }
+}
+
 .social {
     :hover {
         fill: $textDarkened;
