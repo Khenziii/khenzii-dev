@@ -6,3 +6,19 @@
     padding: $defaultGap;
     width: $maxContentWidth;
 }
+
+.closeIcon {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+
+    :hover {
+        fill: $textDarkened;
+    }
+}
+
+.social {
+    :hover {
+        fill: $textDarkened;
+    }
+}

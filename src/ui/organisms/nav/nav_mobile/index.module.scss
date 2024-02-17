@@ -6,3 +6,33 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
 }
+
+.closeIcon {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 10px 0 0 10px;
+
+    :hover {
+        fill: $textDarkened;
+    }
+}
+
+.social {
+    :hover {
+        fill: $textDarkened;
+    }
+}
+
+.socialContainer {
+    display: grid;
+    place-items: center;
+    grid-template-columns: repeat(2, 1fr);
+    height: calc(100% - 2rem - 10px); // we have to take into account the close icon & it's padding
+}
+
+@media (height <= 500px) {
+    .socialContainer {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}

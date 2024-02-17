@@ -1,0 +1,11 @@
+@import "../../../styles/constants";
+
+.container {
+    position: relative;
+}
+
+.wrapper {
+    background-color: $background;
+    border: 1px solid $primary;
+    z-index: 5;
+}
