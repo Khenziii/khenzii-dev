@@ -14,11 +14,13 @@ export type ExpandableProps = {
     closeElement: ReactNode;
     wrapOutOfFlow?: boolean;
     keepOpenElementVisible?: boolean;
+    animationDuration?: number;
 };
 
-export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHeight, endWidth, children, openElement, closeElement, wrapOutOfFlow = false, keepOpenElementVisible = false}) => {
+export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHeight, endWidth, children, openElement, closeElement, wrapOutOfFlow = false, keepOpenElementVisible = false, animationDuration = 0.5}) => {
     const [isOpen, cycleIsOpen] = useCycle(false, true);
     const [isGrowingCompleted, setIsGrowingCompleted] = useState(false);
+    const [isFadingOutCompleted, setIsFadingOutCompleted] = useState(false);
 
     const growTransition = {
         initial: {
@@ -29,7 +31,7 @@ export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHe
             width: endWidth,
             height: endHeight,
             transition: {
-                duration:  0.5,
+                duration:  animationDuration,
                 ease: [0.75, 0, 0.30, 1], // cubic-bezier(0.75, 0, 0.30, 1)
             },
         },
@@ -37,7 +39,7 @@ export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHe
             width: startWidth,
             height: startHeight,
             transition: {
-                duration:  0.5,
+                duration:  animationDuration,
                 ease: [0.75, 0, 0.30, 1],
             },
         },
@@ -50,10 +52,17 @@ export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHe
         animate: {
             opacity:  1,
             transition: {
-                duration: 0.5,
+                duration: animationDuration,
                 ease: [0.75, 0, 0.30, 1],
             },
         },
+        exit: {
+            opacity: 0,
+            transition: {
+                duration: animationDuration,
+                ease: [0.75, 0, 0.30, 1],
+            },
+        }
     };
 
     const clickHandler = useCallback(() => {
@@ -61,15 +70,24 @@ export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHe
     }, [cycleIsOpen]);
 
     useEffect(() => {
-        setIsGrowingCompleted(false);
-        if (!isOpen) return;
+        if (isOpen) {
+            setIsGrowingCompleted(false);
 
-        const timer = setTimeout(() => {
-            setIsGrowingCompleted(true);
-        },  500); // This should match the duration of fadeInTransition
+            const timer = setTimeout(() => {
+                setIsGrowingCompleted(true);
+            },  animationDuration * 1000);
 
-        return () => clearTimeout(timer);
-    }, [isOpen]);
+            return () => clearTimeout(timer);
+        } else {
+            setIsFadingOutCompleted(false);
+
+            const timer = setTimeout(() => {
+                setIsFadingOutCompleted(true);
+            },  animationDuration * 1000);
+
+            return () => clearTimeout(timer);
+        }
+    }, [animationDuration, isOpen]);
 
     return (
         <div className={style.container}>
@@ -77,24 +95,26 @@ export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHe
                 {isOpen && (
                     <motion.aside
                         {...growTransition}
+                        exit={isFadingOutCompleted ? growTransition.exit : {}}
                         className={style.wrapper}
                         style={wrapOutOfFlow ? {position: "absolute", left: 0, top: 0} : {}}
                     >
-                        <motion.div
-                            onClick={clickHandler}
-                            {...fadeInTransition}
-                            animate={isGrowingCompleted ? fadeInTransition.animate : {}}
-                        >
-                            {closeElement}
-                        </motion.div>
-
                         {isGrowingCompleted && (
-                            <motion.div
-                                {...fadeInTransition}
-                                style={{height: "100%"}}
-                            >
-                                {children}
-                            </motion.div>
+                            <>
+                                <motion.div
+                                    onClick={clickHandler}
+                                    {...fadeInTransition}
+                                >
+                                    {closeElement}
+                                </motion.div>
+
+                                <motion.div
+                                    {...fadeInTransition}
+                                    style={{height: "100%"}}
+                                >
+                                    {children}
+                                </motion.div>
+                            </>
                         )}
                     </motion.aside>
                 )}
