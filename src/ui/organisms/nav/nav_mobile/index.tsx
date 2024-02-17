@@ -35,7 +35,7 @@ export const NavMobile: FC<NavMobileProps> = ({ routes, socials }) => {
                 <div className={style.socialContainer}>
                     {socials.map((s, index) => (
                         <a className={style.social} href={s.url} key={`nav-mobile-social-${index}`}>
-                            <Icon iconName={s.iconName} size={3} />
+                            <Icon iconName={s.iconName} size={4} />
                         </a>
                     ))}
                 </div>
