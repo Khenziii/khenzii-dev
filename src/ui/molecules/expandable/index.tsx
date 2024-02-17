@@ -1,7 +1,7 @@
 "use client"
 
-import { type FC, type ReactNode, useCallback, useEffect, useState } from "react";
-import { useCycle, AnimatePresence, motion } from "framer-motion";
+import { type FC, type ReactNode, useCallback, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import style from "./index.module.scss";
 
 export type ExpandableProps = {
@@ -18,11 +18,11 @@ export type ExpandableProps = {
 };
 
 export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHeight, endWidth, children, openElement, closeElement, wrapOutOfFlow = false, keepOpenElementVisible = false, animationDuration = 0.5}) => {
-    const [isOpen, cycleIsOpen] = useCycle(false, true);
+    const [isOpen, setIsOpen] = useState(false);
     const [isGrowingCompleted, setIsGrowingCompleted] = useState(false);
-    const [isFadingOutCompleted, setIsFadingOutCompleted] = useState(false);
 
-    const growTransition = {
+
+    const sizeTransition = {
         initial: {
             width: startWidth,
             height: startHeight,
@@ -31,26 +31,26 @@ export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHe
             width: endWidth,
             height: endHeight,
             transition: {
-                duration:  animationDuration,
+                duration: animationDuration,
                 ease: [0.75, 0, 0.30, 1], // cubic-bezier(0.75, 0, 0.30, 1)
             },
         },
         exit: {
-            width: startWidth,
-            height: startHeight,
+            width: 0,
+            height: 0,
             transition: {
-                duration:  animationDuration,
+                duration: animationDuration,
                 ease: [0.75, 0, 0.30, 1],
             },
         },
     };
 
-    const fadeInTransition = {
+    const fadeTransition = {
         initial: {
             opacity: 0
         },
         animate: {
-            opacity:  1,
+            opacity: 1,
             transition: {
                 duration: animationDuration,
                 ease: [0.75, 0, 0.30, 1],
@@ -65,62 +65,55 @@ export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHe
         }
     };
 
-    const clickHandler = useCallback(() => {
-        cycleIsOpen();
-    }, [cycleIsOpen]);
 
-    useEffect(() => {
-        if (isOpen) {
-            setIsGrowingCompleted(false);
+    const open = useCallback(() => {
+        setIsOpen(true);
 
-            const timer = setTimeout(() => {
-                setIsGrowingCompleted(true);
-            },  animationDuration * 1000);
+        const timer = setTimeout(() => {
+            setIsGrowingCompleted(true);
+        },  animationDuration * 1000);
 
-            return () => clearTimeout(timer);
-        } else {
-            setIsFadingOutCompleted(false);
+        return () => clearTimeout(timer);
+    }, [animationDuration]);
 
-            const timer = setTimeout(() => {
-                setIsFadingOutCompleted(true);
-            },  animationDuration * 1000);
+    const close = useCallback(() => {
+        setIsGrowingCompleted(false);
 
-            return () => clearTimeout(timer);
-        }
-    }, [animationDuration, isOpen]);
+        const timer = setTimeout(() => {
+            setIsOpen(false);
+        }, animationDuration * 1000);
+
+        return () => clearTimeout(timer);
+    }, [animationDuration]);
 
     return (
         <div className={style.container}>
             <AnimatePresence>
                 {isOpen && (
                     <motion.aside
-                        {...growTransition}
-                        exit={isFadingOutCompleted ? growTransition.exit : {}}
+                        {...sizeTransition}
                         className={style.wrapper}
                         style={wrapOutOfFlow ? {position: "absolute", left: 0, top: 0} : {}}
+                        key={"nav-mobile-socials-aside"}
                     >
-                        {isGrowingCompleted && (
-                            <>
-                                <motion.div
-                                    onClick={clickHandler}
-                                    {...fadeInTransition}
-                                >
-                                    {closeElement}
-                                </motion.div>
+                        <AnimatePresence>
+                            {isGrowingCompleted && (
+                                <motion.div {...fadeTransition} style={{height: "100%"}} key={"nav-mobile-socials-container"}>
+                                    <motion.div onClick={close} key={"nav-mobile-socials-close"}>
+                                        {closeElement}
+                                    </motion.div>
 
-                                <motion.div
-                                    {...fadeInTransition}
-                                    style={{height: "100%"}}
-                                >
-                                    {children}
+                                    <motion.div style={{height: "100%"}} key={"nav-mobile-socials-list"}>
+                                        {children}
+                                    </motion.div>
                                 </motion.div>
-                            </>
-                        )}
+                            )}
+                        </AnimatePresence>
                     </motion.aside>
                 )}
             </AnimatePresence>
             {(!isOpen || keepOpenElementVisible) && (
-                <div onClick={clickHandler} style={{height: "100%"}}>
+                <div onClick={open} style={{height: "100%"}}>
                     {openElement}
                 </div>
             )}
