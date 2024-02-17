@@ -12,9 +12,11 @@ export type ExpandableProps = {
     children: ReactNode;
     openElement: ReactNode;
     closeElement: ReactNode;
+    wrapOutOfFlow?: boolean;
+    keepOpenElementVisible?: boolean;
 };
 
-export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHeight, endWidth, children, openElement, closeElement}) => {
+export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHeight, endWidth, children, openElement, closeElement, wrapOutOfFlow = false, keepOpenElementVisible = false}) => {
     const [isOpen, cycleIsOpen] = useCycle(false, true);
 
     const transition = {
@@ -40,12 +42,13 @@ export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHe
     }, [cycleIsOpen]);
 
     return (
-        <>
+        <div className={style.container}>
             <AnimatePresence>
                 {isOpen && (
                     <motion.aside
                         {...transition}
-                        className={style.container}
+                        className={style.wrapper}
+                        style={wrapOutOfFlow ? {position: "absolute", left: 0, top: 0} : {}}
                     >
                         <div onClick={clickHandler}>
                             {closeElement}
@@ -55,11 +58,11 @@ export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHe
                     </motion.aside>
                 )}
             </AnimatePresence>
-            {!isOpen && (
+            {(!isOpen || keepOpenElementVisible) && (
                 <div onClick={clickHandler}>
                     {openElement}
                 </div>
             )}
-        </>
+        </div>
     );
 }

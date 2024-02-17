@@ -7,7 +7,7 @@ import { NavMobile } from "./nav_mobile";
 
 export type route = {
     name: string;
-    path: string;
+    path?: string;
 };
 
 export const routes: route[] = [
