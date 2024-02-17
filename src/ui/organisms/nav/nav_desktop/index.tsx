@@ -1,5 +1,5 @@
 import { type FC } from "react";
-import { type route } from "..";
+import { type route, type social } from "..";
 import style from "./index.module.scss";
 import { NavDesktopItem } from "./nav_desktop_item";
 import { Flex, Icon } from "@khenzii-dev/ui/atoms";
@@ -8,9 +8,10 @@ import { Expandable } from "@khenzii-dev/ui/molecules";
 
 export type NavDesktopProps = {
     routes: route[];
+    socials: social[];
 };
 
-export const NavDesktop: FC<NavDesktopProps> = ({ routes }) => {
+export const NavDesktop: FC<NavDesktopProps> = ({ routes , socials}) => {
     const pathname = usePathname();
 
     return (
@@ -31,7 +32,11 @@ export const NavDesktop: FC<NavDesktopProps> = ({ routes }) => {
                 wrapOutOfFlow={true}
                 keepOpenElementVisible={true}
             >
-                <p>hello!</p>
+                {socials.map((s, index) => (
+                    <a className={style.social} href={s.url} key={`nav-desktop-social-${index}`}>
+                        <Icon iconName={s.iconName}/>
+                    </a>
+                ))}
             </Expandable>
 
             {routes.map((r, index) => (
