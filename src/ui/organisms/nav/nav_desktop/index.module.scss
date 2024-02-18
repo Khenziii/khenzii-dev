@@ -5,6 +5,8 @@
     border-top: none;
     padding: $defaultGap;
     width: $maxContentWidth;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
 }
 
 .closeIcon {

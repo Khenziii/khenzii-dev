@@ -2,7 +2,7 @@ import { type FC } from "react";
 import { type route, type social } from "..";
 import style from "./index.module.scss";
 import { NavDesktopItem } from "./nav_desktop_item";
-import { Flex, Icon } from "@khenzii-dev/ui/atoms";
+import { Icon } from "@khenzii-dev/ui/atoms";
 import { usePathname } from "next/navigation";
 import { Expandable } from "@khenzii-dev/ui/molecules";
 
@@ -15,7 +15,7 @@ export const NavDesktop: FC<NavDesktopProps> = ({ routes , socials}) => {
     const pathname = usePathname();
 
     return (
-        <Flex align={"center"} justify={"space-around"} className={style.container}>
+        <div className={style.container}>
             <Expandable
                 startHeight={"auto"}
                 startWidth={"auto"}
@@ -42,6 +42,6 @@ export const NavDesktop: FC<NavDesktopProps> = ({ routes , socials}) => {
             {routes.map((r, index) => (
                 <NavDesktopItem route={r} key={`nav-desktop-item-${index}`} active={pathname === r.path} />
             ))}
-        </Flex>
+        </div>
     );
 };
