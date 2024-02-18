@@ -9,3 +9,9 @@
     border: 1px solid $primary;
     z-index: 5;
 }
+
+.contentContainer {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}

@@ -2,7 +2,7 @@ import { type FC } from "react";
 import { type route, type social } from "..";
 import style from "./index.module.scss";
 import { NavDesktopItem } from "./nav_desktop_item";
-import { Flex, Icon } from "@khenzii-dev/ui/atoms";
+import { Icon } from "@khenzii-dev/ui/atoms";
 import { usePathname } from "next/navigation";
 import { Expandable } from "@khenzii-dev/ui/molecules";
 
@@ -15,12 +15,12 @@ export const NavDesktop: FC<NavDesktopProps> = ({ routes , socials}) => {
     const pathname = usePathname();
 
     return (
-        <Flex align={"center"} justify={"space-around"} className={style.container}>
+        <div className={style.container}>
             <Expandable
                 startHeight={"auto"}
                 startWidth={"auto"}
-                endHeight={"auto"}
-                endWidth={"auto"}
+                endHeight={"calc(2 * 75px - 10px)"} // 2 times $navDesktopHeight - padding
+                endWidth={"min(calc(100vw - 2 * 10px), 1500px)"}
                 openElement={
                     <NavDesktopItem route={{name: "socials"}} key={`nav-desktop-item-socials`} />
                 }
@@ -32,16 +32,18 @@ export const NavDesktop: FC<NavDesktopProps> = ({ routes , socials}) => {
                 wrapOutOfFlow={true}
                 keepOpenElementVisible={true}
             >
-                {socials.map((s, index) => (
-                    <a className={style.social} href={s.url} key={`nav-desktop-social-${index}`}>
-                        <Icon iconName={s.iconName}/>
-                    </a>
-                ))}
+                <div className={style.socialContainer}>
+                    {socials.map((s, index) => (
+                        <a className={style.social} href={s.url} key={`nav-desktop-social-${index}`}>
+                            <Icon iconName={s.iconName} size={4} />
+                        </a>
+                    ))}
+                </div>
             </Expandable>
 
             {routes.map((r, index) => (
                 <NavDesktopItem route={r} key={`nav-desktop-item-${index}`} active={pathname === r.path} />
             ))}
-        </Flex>
+        </div>
     );
 };
