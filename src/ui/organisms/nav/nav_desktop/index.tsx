@@ -19,7 +19,7 @@ export const NavDesktop: FC<NavDesktopProps> = ({ routes , socials}) => {
             <Expandable
                 startHeight={"auto"}
                 startWidth={"auto"}
-                endHeight={"calc(2 * 75px)"} // 2 times $navDesktopHeight
+                endHeight={"calc(2 * 75px - 10px)"} // 2 times $navDesktopHeight - padding
                 endWidth={"min(calc(100vw - 2 * 10px), 1500px)"}
                 openElement={
                     <NavDesktopItem route={{name: "socials"}} key={`nav-desktop-item-socials`} />
@@ -32,11 +32,13 @@ export const NavDesktop: FC<NavDesktopProps> = ({ routes , socials}) => {
                 wrapOutOfFlow={true}
                 keepOpenElementVisible={true}
             >
-                {socials.map((s, index) => (
-                    <a className={style.social} href={s.url} key={`nav-desktop-social-${index}`}>
-                        <Icon iconName={s.iconName} />
-                    </a>
-                ))}
+                <div className={style.socialContainer}>
+                    {socials.map((s, index) => (
+                        <a className={style.social} href={s.url} key={`nav-desktop-social-${index}`}>
+                            <Icon iconName={s.iconName} size={4} />
+                        </a>
+                    ))}
+                </div>
             </Expandable>
 
             {routes.map((r, index) => (
