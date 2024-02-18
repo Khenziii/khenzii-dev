@@ -19,8 +19,8 @@ export const NavDesktop: FC<NavDesktopProps> = ({ routes , socials}) => {
             <Expandable
                 startHeight={"auto"}
                 startWidth={"auto"}
-                endHeight={"auto"}
-                endWidth={"auto"}
+                endHeight={"calc(2 * 75px)"} // 2 times $navDesktopHeight
+                endWidth={"min(calc(100vw - 2 * 10px), 1500px)"}
                 openElement={
                     <NavDesktopItem route={{name: "socials"}} key={`nav-desktop-item-socials`} />
                 }
@@ -34,7 +34,7 @@ export const NavDesktop: FC<NavDesktopProps> = ({ routes , socials}) => {
             >
                 {socials.map((s, index) => (
                     <a className={style.social} href={s.url} key={`nav-desktop-social-${index}`}>
-                        <Icon iconName={s.iconName}/>
+                        <Icon iconName={s.iconName} />
                     </a>
                 ))}
             </Expandable>

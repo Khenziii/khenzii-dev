@@ -98,12 +98,12 @@ export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHe
                     >
                         <AnimatePresence>
                             {isGrowingCompleted && (
-                                <motion.div {...fadeTransition} style={{height: "100%"}} key={"nav-mobile-socials-container"}>
+                                <motion.div {...fadeTransition} className={style.contentContainer} key={"nav-mobile-socials-container"}>
                                     <motion.div onClick={close} key={"nav-mobile-socials-close"}>
                                         {closeElement}
                                     </motion.div>
 
-                                    <motion.div style={{height: "100%"}} key={"nav-mobile-socials-list"}>
+                                    <motion.div style={{flex: "1"}} key={"nav-mobile-socials-list"}>
                                         {children}
                                     </motion.div>
                                 </motion.div>
