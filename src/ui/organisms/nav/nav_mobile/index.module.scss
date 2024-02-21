@@ -1,0 +1,38 @@
+@import "../../../../styles/constants.scss";
+
+.container {
+    padding: $defaultGap;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.closeIcon {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 10px 0 0 10px;
+
+    :hover {
+        fill: $textDarkened;
+    }
+}
+
+.social {
+    :hover {
+        fill: $textDarkened;
+    }
+}
+
+.socialContainer {
+    display: grid;
+    place-items: center;
+    grid-template-columns: repeat(2, 1fr);
+    height: 100%;
+}
+
+@media (height <= 500px) {
+    .socialContainer {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
