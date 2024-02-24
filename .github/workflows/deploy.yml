@@ -1,7 +1,3 @@
-on:
-  workflow_call:
-    secrets: inherit
-
 # TODO: Current implementation only triggers the deployment webhook.
 # This could potentially lead to false-positive deployment statuses
 # (in situations in which our tests succeed, but Amplify fails to deploy).
@@ -9,6 +5,11 @@ on:
 # (the whole thing would fail on a failed push). However, that's a little bit
 # undocumented & would probably require quite some research. I'm going to
 # come back to this later.
+
+on:
+  workflow_dispatch:
+  workflow_call:
+    secrets: inherit
 
 jobs:
   amplify-deploy:
