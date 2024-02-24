@@ -1,42 +1,48 @@
-#on:
-#  push:
-#    branches:
-#      - master
-#      - develop
-#
-#jobs:
-#  deploy:
-#    name: 🚀 Deploy
-#    env:
-#      SKIP_ENV_VALIDATION: true
-#    runs-on: ubuntu-latest
-#
-#    steps:
-#      - name: Checkout Code
-#        uses: actions/checkout@v3
-#
-#      - name: Install Dependencies
-#        run: yarn install
-#
-#      - name: Build
-#        run: yarn build
-#
-#      - name: Copy files to VPS (staging)
-#        if: github.ref == 'refs/heads/develop'
-#        uses: appleboy/scp-action@master
-#        with:
-#          host: ${{ secrets.HOST }}
-#          username: ${{ secrets.USERNAME }}
-#          key: ${{ secrets.SSH_PRIVATE_KEY }}
-#          source: ".next, package.json"
-#          target: ${{ secrets.DEV_PATH }}
-#
-#      - name: Copy files to VPS (production)
-#        if: github.ref == 'refs/heads/master'
-#        uses: appleboy/scp-action@master
-#        with:
-#          host: ${{ secrets.HOST }}
-#          username: ${{ secrets.USERNAME }}
-#          key: ${{ secrets.SSH_PRIVATE_KEY }}
-#          source: ".next, package.json"
-#          target: ${{ secrets.PROD_PATH }}
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  amplify-deploy:
+    name: 🚀 AWS Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Start Deployment
+        # This step creates a new deployment, check them out here:
+        # https://github.com/Khenziii/khenzii-dev/deployments
+
+        uses: bobheadxi/deployments@v1
+        id: deployment
+        with:
+          step: start
+          token: ${{ secrets.TOKEN_GITHUB }}
+          env: Production
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-north-1
+
+      - name: Install Amplify CLI
+        run: npm install -g @aws-amplify/cli
+
+      - name: Push To Amplify
+        run: |
+          amplify push
+
+      - name: Update Deployment Status
+        uses: bobheadxi/deployments@v1
+        if: always()
+        with:
+          step: finish
+          token: ${{ secrets.TOKEN_GITHUB }}
+          status: ${{ job.status }}
+          env: ${{ steps.deployment.outputs.env }}
+          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
