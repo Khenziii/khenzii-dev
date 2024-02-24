@@ -38,8 +38,7 @@ jobs:
   trigger-deployment:
     if: github.ref == 'refs/head/master'
     name: deploy
-    needs: [eslint-check, build-check]
+    needs: [ eslint-check, build-check ]
     uses: ./.github/workflows/deploy.yml
-    secrets:
-      token_github: ${{ secrets.TOKEN_GITHUB }}
-      deploy_webhook_url: ${{ secrets.DEPLOY_WEBHOOK_URL }}
+    with:
+      secrets: inherit

@@ -9,9 +9,7 @@
 on:
   workflow_dispatch:
   workflow_call:
-    secrets:
-      - ${{ secrets.TOKEN_GITHUB }}
-      - ${{ secrets.DEPLOY_WEBHOOK_URL }}
+    secrets: inherit
 
 jobs:
   amplify-deploy:
@@ -27,7 +25,7 @@ jobs:
         id: deployment
         with:
           step: start
-          token: ${{ secrets.TOKEN_GITHUB }}
+          token: ${{ github.event.inputs.token_github }}
           env: Production
 
       - name: Trigger Deployment Webhook
