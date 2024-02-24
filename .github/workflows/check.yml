@@ -41,4 +41,5 @@ jobs:
     needs: [eslint-check, build-check]
     uses: ./.github/workflows/deploy.yml
     with:
-      secrets: inherit
+      token_github: ${{ secrets.TOKEN_GITHUB }}
+      deploy_webhook_url: ${{ secrets.DEPLOY_WEBHOOK_URL }}
