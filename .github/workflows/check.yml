@@ -34,3 +34,7 @@ jobs:
 
       - name: Build
         run: yarn build
+
+  trigger-deployment:
+    if: github.ref == format('refs/heads/master')
+    uses: ./.github/workflows/deploy.yml
