@@ -36,9 +36,9 @@ jobs:
         run: yarn build
 
   trigger-deployment:
+    if: github.ref == 'refs/head/master'
     name: deploy
-    needs:
-      - build-check
-      - eslint-check
-    if: github.ref == format('refs/heads/master')
+    needs: [eslint-check, build-check]
     uses: ./.github/workflows/deploy.yml
+    with:
+      secrets: inherit
