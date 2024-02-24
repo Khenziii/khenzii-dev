@@ -9,6 +9,13 @@
 on:
   workflow_dispatch:
   workflow_call:
+    secrets:
+      token_github:
+        required: true
+        description: "GitHub PAT token, with permission to manage deployments"
+      deploy_webhook_url:
+        required: true
+        description: "URL that should be notified about the deployment"
 
 jobs:
   amplify-deploy:
@@ -24,19 +31,19 @@ jobs:
         id: deployment
         with:
           step: start
-          token: ${{ github.event.inputs.token_github }}
+          token: ${{ secrets.token_github }}
           env: Production
 
       - name: Trigger Deployment Webhook
         run: |
-          curl -X POST -d {} "${{ secrets.DEPLOY_WEBHOOK_URL }}" -H "Content-Type: application/json"
+          curl -X POST -d {} "${{ secrets.deploy_webhook_url }}" -H "Content-Type: application/json"
 
       - name: Update Deployment Status
         uses: bobheadxi/deployments@v1
         if: always()
         with:
           step: finish
-          token: ${{ secrets.TOKEN_GITHUB }}
+          token: ${{ secrets.token_github }}
           status: ${{ job.status }}
           env: ${{ steps.deployment.outputs.env }}
           deployment_id: ${{ steps.deployment.outputs.deployment_id }}
