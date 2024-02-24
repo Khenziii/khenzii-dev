@@ -1,3 +1,11 @@
+# TODO: Current implementation only triggers the deployment webhook.
+# This could potentially lead to false-positive deployment statuses
+# (in situations in which our tests succeed, but Amplify fails to deploy).
+# A fix to it, could be deploying the app directly in this workflow,
+# (the whole thing would fail on a failed push). However, that's a little bit
+# undocumented & would probably require quite some research. I'm going to
+# come back to this later.
+
 on:
   push:
     branches:
@@ -7,11 +15,6 @@ on:
 jobs:
   amplify-deploy:
     name: 🚀 AWS Deploy
-    env:
-      SKIP_ENV_VALIDATION: true
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_REGION: eu-north-1
     runs-on: ubuntu-latest
 
     steps:
@@ -26,26 +29,9 @@ jobs:
           token: ${{ secrets.TOKEN_GITHUB }}
           env: Production
 
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Install Dependencies
-        run: yarn install
-
-      - name: Build
-        run: yarn build
-
-      - name: Configure Amplify
-        uses: ambientlight/amplify-cli-action@0.3.0
-        with:
-          amplify_command: configure
-          amplify_env: ${{ secrets.AMPLIFY_ENV_NAME }}
-
-      - name: Deploy
-        uses: ambientlight/amplify-cli-action@0.3.0
-        with:
-          amplify_command: publish
-          amplify_env: ${{ secrets.AMPLIFY_ENV_NAME }}
+      - name: Trigger Deployment Webhook
+        run: |
+          curl -X POST -d {} "${{ secrets.DEPLOY_WEBHOOK_URL }}" -H "Content-Type: application/json"
 
       - name: Update Deployment Status
         uses: bobheadxi/deployments@v1
