@@ -40,5 +40,4 @@ jobs:
     name: deploy
     needs: [ eslint-check, build-check ]
     uses: ./.github/workflows/deploy.yml
-    with:
-      secrets: inherit
+    secrets: inherit
