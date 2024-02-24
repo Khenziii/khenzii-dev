@@ -9,6 +9,9 @@
 on:
   workflow_dispatch:
   workflow_call:
+    secrets:
+      - ${{ secrets.TOKEN_GITHUB }}
+      - ${{ secrets.DEPLOY_WEBHOOK_URL }}
 
 jobs:
   amplify-deploy:
