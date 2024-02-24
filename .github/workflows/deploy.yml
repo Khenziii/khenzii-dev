@@ -36,7 +36,7 @@ jobs:
 
       - name: Push To Amplify
         run: |
-          amplify push
+          amplify push --appId ${{ secrets.AMPLIFY_APP_ID }} --envName ${{ secrets.AMPLIFY_ENV_NAME }}
 
       - name: Update Deployment Status
         uses: bobheadxi/deployments@v1
