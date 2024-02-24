@@ -7,6 +7,11 @@ on:
 jobs:
   amplify-deploy:
     name: 🚀 AWS Deploy
+    env:
+      SKIP_ENV_VALIDATION: true
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: eu-north-1
     runs-on: ubuntu-latest
 
     steps:
@@ -22,21 +27,25 @@ jobs:
           env: Production
 
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
+      - name: Install Dependencies
+        run: yarn install
+
+      - name: Build
+        run: yarn build
+
+      - name: Configure Amplify
+        uses: ambientlight/amplify-cli-action@0.3.0
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: eu-north-1
+          amplify_command: configure
+          amplify_env: ${{ secrets.AMPLIFY_ENV_NAME }}
 
-      - name: Install Amplify CLI
-        run: npm install -g @aws-amplify/cli
-
-      - name: Push To Amplify
-        run: |
-          amplify push --appId ${{ secrets.AMPLIFY_APP_ID }} --envName ${{ secrets.AMPLIFY_ENV_NAME }}
+      - name: Deploy
+        uses: ambientlight/amplify-cli-action@0.3.0
+        with:
+          amplify_command: publish
+          amplify_env: ${{ secrets.AMPLIFY_ENV_NAME }}
 
       - name: Update Deployment Status
         uses: bobheadxi/deployments@v1
