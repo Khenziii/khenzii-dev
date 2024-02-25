@@ -5,6 +5,8 @@ on:
 jobs:
   eslint-check:
     name: 🤔 ESLint Check
+    env:
+      SKIP_ENV_VALIDATION: true
     runs-on: ubuntu-latest
 
     steps:
@@ -30,10 +32,8 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Yarn Setup
-        run: |
-          curl -o- -L https://yarnpkg.com/install.sh | bash
-          echo "$HOME/.yarn/bin" >> $GITHUB_PATH
+      - name: Setup Yarn
+        uses: threeal/setup-yarn-action@v1.0.0
 
       - name: Install Dependencies
         run: yarn install
