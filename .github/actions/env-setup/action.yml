@@ -4,9 +4,6 @@ description: 'Does things necessary for most workflows.'
 runs:
   using: "composite"
   steps:
-    - name: Checkout Code
-      uses: actions/checkout@v3
-
     - name: Setup Yarn
       uses: threeal/setup-yarn-action@v1.0.0
 
