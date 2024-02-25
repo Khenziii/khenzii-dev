@@ -11,10 +11,10 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Yarn setup
-        uses: DerYeger/yarn-setup-action@master
-        with:
-          node-version: 20
+      - name: Yarn Setup
+        run: |
+          curl -o- -L https://yarnpkg.com/install.sh | bash
+          echo "$HOME/.yarn/bin" >> $GITHUB_PATH
 
       - name: Install Dependencies
         run: yarn install
@@ -32,16 +32,10 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'
-
-      - name: 🫐 Install Yarn
+      - name: Yarn Setup
         run: |
-          npm install -g yarn@latest
-          yarn set version berry
-          yarn --version
+          curl -o- -L https://yarnpkg.com/install.sh | bash
+          echo "$HOME/.yarn/bin" >> $GITHUB_PATH
 
       - name: Install Dependencies
         run: yarn install
