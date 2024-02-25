@@ -3,12 +3,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  eslint-check:
-    name: 🤔 ESLint Check
-    env:
-      SKIP_ENV_VALIDATION: true
+  setup:
+    name: 🔧 Setup Check Env
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -19,6 +16,14 @@ jobs:
       - name: Install Dependencies
         run: yarn install
 
+  eslint-check:
+    name: 🤔 ESLint Check
+    env:
+      SKIP_ENV_VALIDATION: true
+    runs-on: ubuntu-latest
+    needs: setup
+
+    steps:
       - name: Run ESLint
         run: yarn lint
 
@@ -27,17 +32,9 @@ jobs:
     env:
       SKIP_ENV_VALIDATION: true
     runs-on: ubuntu-latest
+    needs: setup
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      - name: Setup Yarn
-        uses: threeal/setup-yarn-action@v1.0.0
-
-      - name: Install Dependencies
-        run: yarn install
-
       - name: Build
         run: yarn build
 
