@@ -16,6 +16,12 @@ jobs:
       - name: Install Dependencies
         run: yarn install
 
+      - name: Publish Artifacts (env)
+        uses: actions/upload-artifact@v2
+        with:
+          name: source-code
+          path: .
+
   eslint-check:
     name: 🤔 ESLint Check
     env:
@@ -26,6 +32,12 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
+
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: source-code
+          path: .
 
       - name: Run ESLint
         run: yarn lint
@@ -40,6 +52,12 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
+
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: source-code
+          path: .
 
       - name: Build
         run: yarn build
