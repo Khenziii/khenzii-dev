@@ -11,6 +11,20 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
+      - name: Clear npm cache
+        run: npm cache clean --force
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: 🫐 Install Yarn
+        run: |
+          npm install -g yarn@latest
+          yarn set version berry
+          yarn --version
+
       - name: Install Dependencies
         run: yarn install
 
