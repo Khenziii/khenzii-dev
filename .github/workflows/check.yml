@@ -16,8 +16,11 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install Yarn
-        run: npm install -g yarn@4.1.0
+      - name: 🫐 Install Yarn
+        run: |
+          npm install -g yarn@latest
+          yarn set version berry
+          yarn --version
 
       - name: Install Dependencies
         run: yarn install
@@ -40,8 +43,11 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install Yarn
-        run: npm install -g yarn@4.1.0
+      - name: 🫐 Install Yarn
+        run: |
+          npm install -g yarn@latest
+          yarn set version berry
+          yarn --version
 
       - name: Install Dependencies
         run: yarn install
