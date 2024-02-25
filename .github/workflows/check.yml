@@ -3,25 +3,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  setup:
-    name: 🔧 Setup Check Env
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      - name: Setup Yarn
-        uses: threeal/setup-yarn-action@v1.0.0
-
-      - name: Install Dependencies
-        run: yarn install
-
-      - name: Publish Artifacts (env)
-        uses: actions/upload-artifact@v2
-        with:
-          name: source-code
-          path: .
-
   eslint-check:
     name: 🤔 ESLint Check
     env:
@@ -30,14 +11,8 @@ jobs:
     needs: setup
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      - name: Download artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: source-code
-          path: .
+      - name: Setup Environment
+        uses: ./.github/workflows/env-setup.yml
 
       - name: Run ESLint
         run: yarn lint
@@ -50,14 +25,8 @@ jobs:
     needs: setup
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      - name: Download artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: source-code
-          path: .
+      - name: Setup Environment
+        uses: ./.github/workflows/env-setup.yml
 
       - name: Build
         run: yarn build
