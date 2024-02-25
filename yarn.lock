@@ -2853,7 +2853,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/addon-backgrounds@npm:7.6.17":
+"@storybook/addon-backgrounds@npm:7.6.17, @storybook/addon-backgrounds@npm:^7.6.17":
   version: 7.6.17
   resolution: "@storybook/addon-backgrounds@npm:7.6.17"
   dependencies:
@@ -3442,7 +3442,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/manager-api@npm:7.6.17":
+"@storybook/manager-api@npm:7.6.17, @storybook/manager-api@npm:^7.6.17":
   version: 7.6.17
   resolution: "@storybook/manager-api@npm:7.6.17"
   dependencies:
@@ -3728,7 +3728,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/theming@npm:7.6.17":
+"@storybook/theming@npm:7.6.17, @storybook/theming@npm:^7.6.17":
   version: 7.6.17
   resolution: "@storybook/theming@npm:7.6.17"
   dependencies:
@@ -9681,14 +9681,17 @@ __metadata:
   resolution: "khenzii-dev@workspace:."
   dependencies:
     "@prisma/client": "npm:^5.6.0"
+    "@storybook/addon-backgrounds": "npm:^7.6.17"
     "@storybook/addon-essentials": "npm:^7.6.17"
     "@storybook/addon-interactions": "npm:^7.6.17"
     "@storybook/addon-links": "npm:^7.6.17"
     "@storybook/addon-onboarding": "npm:^1.0.11"
     "@storybook/blocks": "npm:^7.6.17"
+    "@storybook/manager-api": "npm:^7.6.17"
     "@storybook/nextjs": "npm:^7.6.17"
     "@storybook/react": "npm:^7.6.17"
     "@storybook/test": "npm:^7.6.17"
+    "@storybook/theming": "npm:^7.6.17"
     "@t3-oss/env-nextjs": "npm:^0.7.1"
     "@types/eslint": "npm:^8.44.7"
     "@types/node": "npm:^18.17.0"

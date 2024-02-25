@@ -30,14 +30,17 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@storybook/addon-backgrounds": "^7.6.17",
     "@storybook/addon-essentials": "^7.6.17",
     "@storybook/addon-interactions": "^7.6.17",
     "@storybook/addon-links": "^7.6.17",
     "@storybook/addon-onboarding": "^1.0.11",
     "@storybook/blocks": "^7.6.17",
+    "@storybook/manager-api": "^7.6.17",
     "@storybook/nextjs": "^7.6.17",
     "@storybook/react": "^7.6.17",
     "@storybook/test": "^7.6.17",
+    "@storybook/theming": "^7.6.17",
     "@types/eslint": "^8.44.7",
     "@types/node": "^18.17.0",
     "@types/react": "^18.2.37",

@@ -1,4 +1,5 @@
 import type { Preview } from "@storybook/react";
+import { khenziiDevTheme } from "./khenzii-dev-theme";
 
 const preview: Preview = {
   parameters: {
@@ -8,6 +9,22 @@ const preview: Preview = {
         color: /(background|color)$/i,
         date: /Date$/i,
       },
+    },
+    docs: {
+      theme: khenziiDevTheme,
+    },
+    backgrounds: {
+      default: 'dark',
+      values: [
+        {
+          name: 'dark',
+          value: '#20201f',
+        },
+        {
+          name: 'light',
+          value: '#FFFFFF',
+        }
+      ],
     },
   },
 };
