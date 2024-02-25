@@ -1,8 +1,5 @@
 import { Anchor, type AnchorProps } from "./index";
-
-export type tempType = {
-    args: AnchorProps;
-}
+import { type StoriesType } from "@khenzii-dev/ui/types/stories-type";
 
 export default {
     component: Anchor,
@@ -10,7 +7,7 @@ export default {
     tags: ['autodocs'],
 };
 
-export const Default: tempType = {
+export const Default: StoriesType<AnchorProps> = {
     args: {
         newTab: true,
         children: <p>I{"'"}m a child!</p>,
