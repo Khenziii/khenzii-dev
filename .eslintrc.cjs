@@ -9,6 +9,7 @@ module.exports = {
     "next/core-web-vitals",
     "plugin:@typescript-eslint/recommended-type-checked",
     "plugin:@typescript-eslint/stylistic-type-checked",
+    "plugin:storybook/recommended"
   ],
   rules: {
     "@typescript-eslint/array-type": "off",
