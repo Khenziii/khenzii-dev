@@ -24,6 +24,9 @@ jobs:
     needs: setup
 
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
       - name: Run ESLint
         run: yarn lint
 
@@ -35,6 +38,9 @@ jobs:
     needs: setup
 
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
       - name: Build
         run: yarn build
 
