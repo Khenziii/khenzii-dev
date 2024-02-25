@@ -2,7 +2,7 @@ import { type FC } from "react";
 import { type route, type social } from "..";
 import style from "./index.module.scss";
 import { NavDesktopItem } from "./nav_desktop_item";
-import { Icon } from "@khenzii-dev/ui/atoms";
+import { Icon, Anchor } from "@khenzii-dev/ui/atoms";
 import { usePathname } from "next/navigation";
 import { Expandable } from "@khenzii-dev/ui/molecules";
 
@@ -34,9 +34,9 @@ export const NavDesktop: FC<NavDesktopProps> = ({ routes , socials}) => {
             >
                 <div className={style.socialContainer}>
                     {socials.map((s, index) => (
-                        <a className={style.social} href={s.url} key={`nav-desktop-social-${index}`}>
+                        <Anchor className={style.social} href={s.url} key={`nav-desktop-social-${index}`} prefetch={false} newTab>
                             <Icon iconName={s.iconName} size={4} />
-                        </a>
+                        </Anchor>
                     ))}
                 </div>
             </Expandable>

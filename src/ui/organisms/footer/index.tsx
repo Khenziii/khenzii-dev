@@ -1,6 +1,6 @@
 import { type FC } from "react";
 import style from "./index.module.scss";
-import { Flex, Paragraph, Icon } from "@khenzii-dev/ui/atoms";
+import { Flex, Paragraph, Icon, Anchor } from "@khenzii-dev/ui/atoms";
 
 // export type FooterProps = {};
 
@@ -10,8 +10,8 @@ export const Footer: FC = () => (
             Made with 🤍 by Khenzii
         </Paragraph>
 
-        <a className={style.rightItem} href={"https://github.com/Khenziii/khenzii-dev/"}>
+        <Anchor className={style.rightItem} href={"https://github.com/Khenziii/khenzii-dev/"} prefetch={false} newTab>
             <Icon iconName={"Github"} />
-        </a>
+        </Anchor>
     </Flex>
 );

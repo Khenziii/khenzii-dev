@@ -3,7 +3,7 @@ import { type route, type social } from "..";
 import style from "./index.module.scss";
 import { NavMobileItem } from "./nav_mobile_item";
 import { usePathname } from "next/navigation";
-import { Icon } from "@khenzii-dev/ui/atoms";
+import { Icon, Anchor } from "@khenzii-dev/ui/atoms";
 import { Expandable } from "@khenzii-dev/ui/molecules";
 
 export type NavMobileProps = {
@@ -34,9 +34,9 @@ export const NavMobile: FC<NavMobileProps> = ({ routes, socials }) => {
             >
                 <div className={style.socialContainer}>
                     {socials.map((s, index) => (
-                        <a className={style.social} href={s.url} key={`nav-mobile-social-${index}`}>
+                        <Anchor className={style.social} href={s.url} key={`nav-mobile-social-${index}`} prefetch={false} newTab>
                             <Icon iconName={s.iconName} size={4} />
-                        </a>
+                        </Anchor>
                     ))}
                 </div>
             </Expandable>
