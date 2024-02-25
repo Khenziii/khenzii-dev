@@ -8,7 +8,6 @@ jobs:
     env:
       SKIP_ENV_VALIDATION: true
     runs-on: ubuntu-latest
-    needs: setup
 
     steps:
       - name: Setup Environment
@@ -22,7 +21,6 @@ jobs:
     env:
       SKIP_ENV_VALIDATION: true
     runs-on: ubuntu-latest
-    needs: setup
 
     steps:
       - name: Setup Environment
