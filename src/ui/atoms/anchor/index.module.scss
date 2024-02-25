@@ -3,3 +3,9 @@
 .anchor {
     color: $text;
 }
+
+.darkenOnHover {
+    &:hover {
+        color: $textDarkened;
+    }
+}

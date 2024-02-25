@@ -9,13 +9,14 @@ export type AnchorProps = {
     newTab?: boolean;
     prefetch?: boolean;
     children?: ReactNode;
+    darkenOnHover?: boolean;
 } & CustomStyles;
 
-export const Anchor: FC<AnchorProps> = ({ newTab, children, className, ...props }) => (
+export const Anchor: FC<AnchorProps> = ({ newTab, children, className, darkenOnHover, ...props }) => (
     <Link
         target={newTab ? "_blank" : undefined}
         rel={newTab ? "noreferrer noopener" : undefined}
-        className={clsx([className], [style.anchor])}
+        className={clsx([className], [style.anchor], {[style.darkenOnHover as string]: darkenOnHover})}
         {...props}
     >
         {children}
