@@ -11,10 +11,12 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Yarn Setup
+      - name: Install Yarn
         run: |
-          curl -o- -L https://yarnpkg.com/install.sh | bash
-          echo "$HOME/.yarn/bin" >> $GITHUB_PATH
+          curl -fsSL https://yarnpkg.com/latest.tar.gz | tar xz --strip-components 1 -C ~/.yarn
+          echo "PATH=$(echo "${PATH}:${HOME}/.yarn/bin")" >> ${GITHUB_ENV}
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v4
 
       - name: Install Dependencies
         run: yarn install
