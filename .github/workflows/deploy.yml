@@ -8,17 +8,15 @@
 
 on:
   workflow_dispatch:
-  workflow_call:
-    secrets:
-      token_github:
-        required: true
-        description: "GitHub PAT token, with permission to manage deployments"
-      deploy_webhook_url:
-        required: true
-        description: "URL that should be notified about the deployment"
+  workflow_run:
+    workflows:
+      - "Checks"
+    types:
+      - completed
 
 jobs:
   amplify-deploy:
+    if: github.ref == 'refs/heads/master'
     name: 🚀 AWS Deploy
     runs-on: ubuntu-latest
 

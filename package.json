@@ -1,7 +1,6 @@
 {
   "name": "khenzii-dev",
   "version": "0.1.0",
-  "private": false,
   "author": {
     "name": "Khenzii",
     "url": "https://khenzii.dev/"
@@ -17,7 +16,9 @@
     "postinstall": "prisma generate",
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
-    "prepare": "husky"
+    "prepare": "husky",
+    "storybook": "storybook dev -p 2999",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "@prisma/client": "^5.6.0",
@@ -29,6 +30,17 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@storybook/addon-backgrounds": "^7.6.17",
+    "@storybook/addon-essentials": "^7.6.17",
+    "@storybook/addon-interactions": "^7.6.17",
+    "@storybook/addon-links": "^7.6.17",
+    "@storybook/addon-onboarding": "^1.0.11",
+    "@storybook/blocks": "^7.6.17",
+    "@storybook/manager-api": "^7.6.17",
+    "@storybook/nextjs": "^7.6.17",
+    "@storybook/react": "^7.6.17",
+    "@storybook/test": "^7.6.17",
+    "@storybook/theming": "^7.6.17",
     "@types/eslint": "^8.44.7",
     "@types/node": "^18.17.0",
     "@types/react": "^18.2.37",
@@ -38,14 +50,16 @@
     "clsx": "^2.1.0",
     "eslint": "^8.54.0",
     "eslint-config-next": "^14.0.4",
+    "eslint-plugin-storybook": "^0.8.0",
     "husky": "^9.0.11",
     "prisma": "^5.6.0",
     "react-bootstrap-icons": "^1.10.3",
     "sass": "^1.70.0",
+    "storybook": "^7.6.17",
     "typescript": "^5.1.6"
   },
   "ct3aMetadata": {
     "initVersion": "7.26.0"
   },
-  "packageManager": "yarn@1.22.21"
+  "packageManager": "yarn@4.1.0"
 }

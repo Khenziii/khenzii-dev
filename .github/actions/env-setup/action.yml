@@ -1,0 +1,12 @@
+name: '🔧 Setup Environment'
+description: 'Does things necessary for most workflows.'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup Yarn
+      uses: threeal/setup-yarn-action@v1.0.0
+
+    - name: Install Dependencies
+      shell: bash
+      run: yarn install
