@@ -24,6 +24,7 @@ next-env.d.ts
 .DS_Store
 *.pem
 .yarn
+.yarnrc
 
 # debug
 npm-debug.log*
