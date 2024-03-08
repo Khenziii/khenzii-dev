@@ -4,7 +4,7 @@ import { type FC } from "react";
 import { useMobile } from "@khenzii-dev/hooks/use_mobile";
 import { NavDesktop } from "./nav_desktop";
 import { NavMobile } from "./nav_mobile";
-import { type IconName } from "@khenzii-dev/ui/types/icon-name.type";
+import { type IconName } from "@khenzii-dev/ui/types/icon-name";
 
 export type social = {
     iconName: IconName;
