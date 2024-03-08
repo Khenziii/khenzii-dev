@@ -11,7 +11,7 @@ export const Footer: FC = () => (
         </Paragraph>
 
         <Anchor className={style.rightItem} href={"https://github.com/Khenziii/khenzii-dev/"} prefetch={false} newTab>
-            <Icon iconName={"Github"} />
+            <Icon iconName={"github"} />
         </Anchor>
     </Flex>
 );

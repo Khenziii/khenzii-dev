@@ -22,11 +22,11 @@ export const Default: StoriesType<NavMobileProps> = {
         socials: [
             {
                 url: "#",
-                iconName: "Youtube",
+                iconName: "youtube",
             },
             {
                 url: "#",
-                iconName: "Instagram",
+                iconName: "instagram",
             },
         ],
     },

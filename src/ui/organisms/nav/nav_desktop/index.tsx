@@ -26,7 +26,7 @@ export const NavDesktop: FC<NavDesktopProps> = ({ routes , socials}) => {
                 }
                 closeElement={
                     <button className={style.closeIcon}>
-                        <Icon iconName={"XLg"}/>
+                        <Icon iconName={"x-lg"}/>
                     </button>
                 }
                 wrapOutOfFlow={true}

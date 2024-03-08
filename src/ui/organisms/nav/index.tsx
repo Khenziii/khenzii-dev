@@ -4,10 +4,10 @@ import { type FC } from "react";
 import { useMobile } from "@khenzii-dev/hooks/use_mobile";
 import { NavDesktop } from "./nav_desktop";
 import { NavMobile } from "./nav_mobile";
-import { type iconName } from "@khenzii-dev/ui/atoms";
+import { type IconName } from "@khenzii-dev/ui/types/icon-name.type";
 
 export type social = {
-    iconName: iconName;
+    iconName: IconName;
     url: string;
 }
 
@@ -18,27 +18,27 @@ export type route = {
 
 export const socials: social[] = [
     {
-        iconName: "Steam",
+        iconName: "steam",
         url: "https://steamcommunity.com/id/khenzii/",
     },
     {
-        iconName: "Discord",
+        iconName: "discord",
         url: "https://discord.com/invite/5JcGp5gRkn",
     },
     {
-        iconName: "Github",
+        iconName: "github",
         url: "https://github.com/Khenziii",
     },
     {
-        iconName: "Twitter",
+        iconName: "twitter",
         url: "https://twitter.com/kheenziii",
     },
     {
-        iconName: "Spotify",
+        iconName: "spotify",
         url: "https://open.spotify.com/user/31yudiyuep2e25bhirxlhavfang4",
     },
     {
-        iconName: "Youtube",
+        iconName: "youtube",
         url: "https://www.youtube.com/@kheenzii",
     },
 ]

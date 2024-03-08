@@ -1,14 +1,17 @@
-import * as icons from 'react-bootstrap-icons';
+import type { CSSProperties, FC } from 'react'
+import "bootstrap-icons/font/bootstrap-icons.scss";
+import type { IconName } from "../../types/icon-name.type";
 
-export type iconName = keyof typeof icons;
-
-export type IconProps = Omit<icons.IconProps, "size" | "color"> & {
-    iconName: iconName;
+export type IconProps = {
+    iconName: IconName;
     size?: number;
     color?: string;
 }
 
-export const Icon = ({ iconName, size = 2, color = "#FFFFFF", ...props }: IconProps) => {
-    const BootstrapIcon = icons[iconName];
-    return <BootstrapIcon fontSize={`${size}rem`} color={color} {...props} />;
+export const Icon: FC<IconProps> = ({ iconName, size = 2, color = "#FFFFFF" }) => {
+    const style: CSSProperties = {};
+    style.fontSize = size;
+    style.color = color;
+
+    return <i style={style} className={`bi bi-${iconName}`} />;
 }
