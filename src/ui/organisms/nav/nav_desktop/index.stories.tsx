@@ -22,11 +22,11 @@ export const Default: StoriesType<NavDesktopProps> = {
         socials: [
             {
                 url: "#",
-                iconName: "Github",
+                iconName: "github",
             },
             {
                 url: "#",
-                iconName: "Facebook",
+                iconName: "facebook",
             },
         ],
     },

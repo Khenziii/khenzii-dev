@@ -9,7 +9,7 @@ export default {
 
 export const Default: StoriesType<IconProps> = {
     args: {
-        iconName: "Github",
+        iconName: "github",
         size: 2,
         color: "#000000",
     }

@@ -21,8 +21,10 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
+    "@next/bundle-analyzer": "^14.1.3",
     "@prisma/client": "^5.6.0",
     "@t3-oss/env-nextjs": "^0.7.1",
+    "bootstrap-icons": "^1.11.3",
     "framer-motion": "^11.0.3",
     "next": "^14.0.4",
     "react": "18.2.0",
@@ -53,7 +55,6 @@
     "eslint-plugin-storybook": "^0.8.0",
     "husky": "^9.0.11",
     "prisma": "^5.6.0",
-    "react-bootstrap-icons": "^1.10.3",
     "sass": "^1.70.0",
     "storybook": "^7.6.17",
     "typescript": "^5.1.6"

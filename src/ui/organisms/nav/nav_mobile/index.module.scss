@@ -14,13 +14,13 @@
     padding: 10px 0 0 10px;
 
     :hover {
-        fill: $textDarkened;
+        color: $textDarkened !important;
     }
 }
 
 .social {
     :hover {
-        fill: $textDarkened;
+        color: $textDarkened !important;
     }
 }
 

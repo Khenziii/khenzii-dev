@@ -16,6 +16,6 @@
     margin-right: $defaultGap !important;
 
     :hover {
-        fill: $textDarkened;
+        color: $textDarkened !important;
     }
 }
