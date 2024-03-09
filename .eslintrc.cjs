@@ -33,6 +33,16 @@ module.exports = {
         checksVoidReturn: { attributes: false },
       },
     ],
+    "@typescript-eslint/member-delimiter-style": ["error", {
+      "multiline": {
+        "delimiter": "semi",
+        "requireLast": true
+      },
+      "singleline": {
+        "delimiter": "semi",
+        "requireLast": false
+      }
+    }],
     "@stylistic/object-curly-spacing": ["error", "always"],
     "@stylistic/js/semi": ["error", "always"],
   },
