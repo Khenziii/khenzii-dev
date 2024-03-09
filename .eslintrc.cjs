@@ -44,6 +44,6 @@ module.exports = {
       }
     }],
     "@stylistic/object-curly-spacing": ["error", "always"],
-    "@stylistic/js/semi": ["error", "always"],
+    "@stylistic/semi": ["error", "always"],
   },
 };
