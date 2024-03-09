@@ -43,6 +43,7 @@
     "@storybook/react": "^7.6.17",
     "@storybook/test": "^7.6.17",
     "@storybook/theming": "^7.6.17",
+    "@stylistic/eslint-plugin": "^1.6.3",
     "@types/eslint": "^8.44.7",
     "@types/node": "^18.17.0",
     "@types/react": "^18.2.37",
