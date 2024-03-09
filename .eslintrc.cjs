@@ -47,5 +47,6 @@ module.exports = {
     "@stylistic/semi": ["error", "always"],
     "@stylistic/function-paren-newline": ["error", { "minItems": 4 }],
     "@stylistic/function-call-argument-newline": ["error", "consistent"],
+    "@stylistic/comma-dangle": ["error", "always-multiline"],
   },
 };
