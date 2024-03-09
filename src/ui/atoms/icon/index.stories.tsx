@@ -12,5 +12,5 @@ export const Default: StoriesType<IconProps> = {
         iconName: "github",
         size: 2,
         color: "#000000",
-    }
+    },
 };

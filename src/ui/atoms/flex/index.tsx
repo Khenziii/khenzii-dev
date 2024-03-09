@@ -24,8 +24,8 @@ export const Flex: FC<FlexProps> = ({ children, direction , align, justify, gap 
     if (fullWidth !== undefined) styleSheet.width = "100% !important";
 
     return (
-        <div className={clsx([style.flex], {[className as string]: className !== undefined})} style={styleSheet}>
+        <div className={clsx([style.flex], { [className as string]: className !== undefined })} style={styleSheet}>
             {children}
         </div>
     );
-}
+};

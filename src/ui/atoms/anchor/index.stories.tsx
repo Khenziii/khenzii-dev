@@ -14,5 +14,5 @@ export const Default: StoriesType<AnchorProps> = {
         href: "https://khenzii.dev/",
         darkenOnHover: true,
         prefetch: true,
-    }
+    },
 };

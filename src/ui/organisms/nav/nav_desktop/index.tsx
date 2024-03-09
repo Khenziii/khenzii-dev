@@ -11,7 +11,7 @@ export type NavDesktopProps = {
     socials: social[];
 };
 
-export const NavDesktop: FC<NavDesktopProps> = ({ routes , socials}) => {
+export const NavDesktop: FC<NavDesktopProps> = ({ routes , socials }) => {
     const pathname = usePathname();
 
     return (
@@ -22,7 +22,7 @@ export const NavDesktop: FC<NavDesktopProps> = ({ routes , socials}) => {
                 endHeight={"calc(2 * 75px - 10px)"} // 2 times $navDesktopHeight - padding
                 endWidth={"min(calc(100vw - 2 * 10px), 1500px)"}
                 openElement={
-                    <NavDesktopItem route={{name: "socials"}} key={`nav-desktop-item-socials`} />
+                    <NavDesktopItem route={{ name: "socials" }} key={`nav-desktop-item-socials`} />
                 }
                 closeElement={
                     <button className={style.closeIcon}>

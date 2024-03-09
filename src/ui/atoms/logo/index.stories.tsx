@@ -11,5 +11,5 @@ export const Default: StoriesType<LogoProps> = {
     args: {
         size: 100,
         animate: true,
-    }
+    },
 };

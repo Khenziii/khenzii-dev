@@ -9,7 +9,7 @@ export type ParagraphProps = CustomStyles & {
 };
 
 export const Paragraph: FC<ParagraphProps> = ({ className, styles, children, fontSize = 1 }) => (
-    <p className={clsx(style.paragraph, {[className as string]: className !== undefined})} style={{ fontSize: `${fontSize}rem`, ...styles }}>
+    <p className={clsx(style.paragraph, { [className as string]: className !== undefined })} style={{ fontSize: `${fontSize}rem`, ...styles }}>
         {children}
     </p>
 );

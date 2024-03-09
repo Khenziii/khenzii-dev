@@ -22,7 +22,7 @@ export const NavMobile: FC<NavMobileProps> = ({ routes, socials }) => {
                 endHeight={"50vh"}
                 endWidth={"calc(100vw - 2 * 10px)"}
                 openElement={
-                    <NavMobileItem route={{name: "socials"}} key={`nav-mobile-item-socials`} />
+                    <NavMobileItem route={{ name: "socials" }} key={`nav-mobile-item-socials`} />
                 }
                 closeElement={
                     <button className={style.closeIcon}>

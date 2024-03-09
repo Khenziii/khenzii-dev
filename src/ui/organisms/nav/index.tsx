@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { type FC } from "react";
 import { useMobile } from "@khenzii-dev/hooks/use_mobile";
@@ -9,7 +9,7 @@ import { type IconName } from "@khenzii-dev/ui/types/icon-name";
 export type social = {
     iconName: IconName;
     url: string;
-}
+};
 
 export type route = {
     name: string;
@@ -41,7 +41,7 @@ export const socials: social[] = [
         iconName: "youtube",
         url: "https://www.youtube.com/@kheenzii",
     },
-]
+];
 
 export const routes: route[] = [
     {
@@ -68,4 +68,4 @@ export const Nav: FC = () => {
             {mobile ? <NavMobile routes={routes} socials={socials} /> : <NavDesktop routes={routes} socials={socials} />}
         </>
     );
-}
+};

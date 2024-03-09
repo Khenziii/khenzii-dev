@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { type FC, memo, useCallback, useEffect, useState } from "react";
 import { type position, type SvgData } from "@khenzii-dev/ui/types";
@@ -55,7 +55,7 @@ type MemoizedRectProps = {
     visibility: string;
 };
 
-const MemoizedRect: FC<MemoizedRectProps> = memo(({x, y, visibility}) => (
+const MemoizedRect: FC<MemoizedRectProps> = memo(({ x, y, visibility }) => (
     <motion.rect
         x={x}
         y={y}
@@ -83,7 +83,7 @@ export const Loading: FC<LoadingProps> = ({ size =  100 }) => {
             setCurrentIndexes((prevIndexes) => {
                 return prevIndexes.map((previousIndex, index) => {
                     if (previousIndex + 1 >= loadingData[index]!.squares.length) {
-                        return 0
+                        return 0;
                     }
 
                     return previousIndex + 1;
@@ -119,11 +119,11 @@ export const Loading: FC<LoadingProps> = ({ size =  100 }) => {
             const updatedSquareIndex = (squareIndex - amountOfTilesAtOnce + squares.length) % squares.length;
 
             return squares[updatedSquareIndex];
-        })
+        });
         oldestSquares.forEach((square) => {
             if (square === undefined || !visiblePositions.includes(square)) return;
 
-            modifyState(square)
+            modifyState(square);
         });
     }, [currentIndexes]);
 
@@ -148,8 +148,7 @@ export const Loading: FC<LoadingProps> = ({ size =  100 }) => {
                             visibility={visibility}
                         />
                     );
-                })
-            )}
+                }))}
         </svg>
     );
 };

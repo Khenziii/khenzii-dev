@@ -9,12 +9,12 @@ export type NavDesktopItemProps = {
     active?: boolean;
 };
 
-export const NavDesktopItem: FC<NavDesktopItemProps> = ({route, active = false}) => (
+export const NavDesktopItem: FC<NavDesktopItemProps> = ({ route, active = false }) => (
     <Flex align={"center"} justify={"center"} styles={{ width: "auto", height: "100%" }}>
         {route.path ? (
-            <Anchor href={route.path} className={clsx([style.link], {[style.active as string]: active})} prefetch>{route.name}</Anchor>
+            <Anchor href={route.path} className={clsx([style.link], { [style.active as string]: active })} prefetch>{route.name}</Anchor>
         ) : (
-            <Paragraph className={clsx([style.link], {[style.active as string]: active})} fontSize={2} styles={{cursor: "pointer"}}>{route.name}</Paragraph>
+            <Paragraph className={clsx([style.link], { [style.active as string]: active })} fontSize={2} styles={{ cursor: "pointer" }}>{route.name}</Paragraph>
         )}
     </Flex>
 );
