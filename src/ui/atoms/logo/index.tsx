@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { type FC, memo } from "react";
 import { type SvgData } from "@khenzii-dev/ui/types";
@@ -73,7 +73,7 @@ const logoData: SvgData = [
             { x: 8, y: 11 },
             { x: 7, y: 11 },
         ],
-    }
+    },
 ];
 
 
@@ -87,7 +87,7 @@ type MemoizedRectProps = {
     };
 };
 
-const MemoizedRect: FC<MemoizedRectProps> = memo(({x, y, initial, animate, transition}) => (
+const MemoizedRect: FC<MemoizedRectProps> = memo(({ x, y, initial, animate, transition }) => (
     <motion.rect
         x={x}
         y={y}
@@ -129,7 +129,6 @@ export const Logo: FC<LogoProps> = ({ size = 100, animate = false }) => (
                 return (
                     <MemoizedRect key={`${wrapper.wrapperName}-${index}`} x={squareSet.x} y={squareSet.y} {...(animate ? animationConfig : {})} />
                 );
-            })
-        )}
+            }))}
     </svg>
 );

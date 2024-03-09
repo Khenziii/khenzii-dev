@@ -12,9 +12,9 @@ export type NavMobileItemProps = {
 export const NavMobileItem: FC<NavMobileItemProps> = ({ route, active = false }) => (
     <Flex align={"center"} justify={"center"} styles={{ width: "auto", height: "100%" }}>
         {route.path ? (
-            <Anchor href={route.path} className={clsx([style.link, {[style.active as string]: active}])} prefetch>{route.name}</Anchor>
+            <Anchor href={route.path} className={clsx([style.link, { [style.active as string]: active }])} prefetch>{route.name}</Anchor>
         ) : (
-            <Paragraph className={clsx([style.link], {[style.active as string]: active})} fontSize={1.5} styles={{cursor: "pointer"}}>{route.name}</Paragraph>
+            <Paragraph className={clsx([style.link], { [style.active as string]: active })} fontSize={1.5} styles={{ cursor: "pointer" }}>{route.name}</Paragraph>
         )}
     </Flex>
 );

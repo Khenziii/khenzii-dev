@@ -10,5 +10,5 @@ export default {
 export const Default: StoriesType<LoadingProps> = {
     args: {
         size: 100,
-    }
+    },
 };

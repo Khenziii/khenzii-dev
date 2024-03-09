@@ -4,7 +4,10 @@ module.exports = {
   parserOptions: {
     project: true,
   },
-  plugins: ["@typescript-eslint"],
+  plugins: [
+      "@typescript-eslint",
+      "@stylistic/eslint-plugin",
+  ],
   extends: [
     "next/core-web-vitals",
     "plugin:@typescript-eslint/recommended-type-checked",
@@ -15,7 +18,6 @@ module.exports = {
     "@typescript-eslint/array-type": "off",
     "@typescript-eslint/consistent-type-definitions": "off",
     '@typescript-eslint/non-nullable-type-assertion-style': 'off',
-
     "@typescript-eslint/consistent-type-imports": [
       "error",
       {
@@ -31,5 +33,20 @@ module.exports = {
         checksVoidReturn: { attributes: false },
       },
     ],
+    "@typescript-eslint/member-delimiter-style": ["error", {
+      "multiline": {
+        "delimiter": "semi",
+        "requireLast": true
+      },
+      "singleline": {
+        "delimiter": "semi",
+        "requireLast": false
+      }
+    }],
+    "@stylistic/object-curly-spacing": ["error", "always"],
+    "@stylistic/semi": ["error", "always"],
+    "@stylistic/function-paren-newline": ["error", { "minItems": 4 }],
+    "@stylistic/function-call-argument-newline": ["error", "consistent"],
+    "@stylistic/comma-dangle": ["error", "always-multiline"],
   },
 };

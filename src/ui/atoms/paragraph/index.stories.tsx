@@ -11,5 +11,5 @@ export const Default: StoriesType<ParagraphProps> = {
     args: {
         fontSize: 2,
         children: "I'm the child!",
-    }
+    },
 };

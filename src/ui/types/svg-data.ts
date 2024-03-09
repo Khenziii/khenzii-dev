@@ -7,7 +7,7 @@
 
 export type position = {
     x: number;
-    y: number
+    y: number;
 };
 
 export type wrapper = {

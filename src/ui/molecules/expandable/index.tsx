@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { type FC, type ReactNode, useCallback, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -17,7 +17,7 @@ export type ExpandableProps = {
     animationDuration?: number;
 };
 
-export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHeight, endWidth, children, openElement, closeElement, wrapOutOfFlow = false, keepOpenElementVisible = false, animationDuration = 0.5}) => {
+export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHeight, endWidth, children, openElement, closeElement, wrapOutOfFlow = false, keepOpenElementVisible = false, animationDuration = 0.5 }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [isGrowingCompleted, setIsGrowingCompleted] = useState(false);
 
@@ -47,7 +47,7 @@ export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHe
 
     const fadeTransition = {
         initial: {
-            opacity: 0
+            opacity: 0,
         },
         animate: {
             opacity: 1,
@@ -62,7 +62,7 @@ export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHe
                 duration: animationDuration,
                 ease: [0.75, 0, 0.30, 1],
             },
-        }
+        },
     };
 
 
@@ -93,7 +93,7 @@ export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHe
                     <motion.aside
                         {...sizeTransition}
                         className={style.wrapper}
-                        style={wrapOutOfFlow ? {position: "absolute", left: 0, top: 0} : {}}
+                        style={wrapOutOfFlow ? { position: "absolute", left: 0, top: 0 } : {}}
                         key={"nav-mobile-socials-aside"}
                     >
                         <AnimatePresence>
@@ -103,7 +103,7 @@ export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHe
                                         {closeElement}
                                     </motion.div>
 
-                                    <motion.div style={{flex: "1"}} key={"nav-mobile-socials-list"}>
+                                    <motion.div style={{ flex: "1" }} key={"nav-mobile-socials-list"}>
                                         {children}
                                     </motion.div>
                                 </motion.div>
@@ -113,10 +113,10 @@ export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHe
                 )}
             </AnimatePresence>
             {(!isOpen || keepOpenElementVisible) && (
-                <div onClick={open} style={{height: "100%"}}>
+                <div onClick={open} style={{ height: "100%" }}>
                     {openElement}
                 </div>
             )}
         </div>
     );
-}
+};

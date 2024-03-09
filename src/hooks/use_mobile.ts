@@ -21,4 +21,4 @@ export const useMobile = () => {
     }, []);
 
     return isMobile;
-}
+};

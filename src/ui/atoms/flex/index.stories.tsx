@@ -15,7 +15,7 @@ const child = <>
     <div>
         <Paragraph>Flex</Paragraph>
     </div>
-</>
+</>;
 
 export const Default: StoriesType<FlexProps> = {
     args: {
@@ -25,5 +25,5 @@ export const Default: StoriesType<FlexProps> = {
         direction: "column",
         fullWidth: true,
         children: child,
-    }
+    },
 };
