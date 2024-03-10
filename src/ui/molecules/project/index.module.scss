@@ -1,1 +1,6 @@
+@import "../../../styles/constants";
 
+.title {
+    min-height: 2rem;
+    padding: $defaultGap;
+}
