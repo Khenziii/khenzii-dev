@@ -7,16 +7,18 @@
 # come back to this later.
 
 on:
-  workflow_dispatch:
-  workflow_run:
-    workflows:
-      - "Checks"
-    types:
-      - completed
+  push:
+    branches:
+      - master
 
 jobs:
+  checks:
+    name: Checks
+    uses: ./.github/workflows/check.yml
+
   amplify-deploy:
-    if: github.ref == 'refs/heads/master'
+    needs:
+      - checks
     name: 🚀 AWS Deploy
     runs-on: ubuntu-latest
 
