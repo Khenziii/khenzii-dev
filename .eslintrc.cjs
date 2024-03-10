@@ -48,5 +48,6 @@ module.exports = {
     "@stylistic/function-paren-newline": ["error", { "minItems": 4 }],
     "@stylistic/function-call-argument-newline": ["error", "consistent"],
     "@stylistic/comma-dangle": ["error", "always-multiline"],
+    "@stylistic/eol-last": ["error", "always"],
   },
 };
