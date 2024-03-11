@@ -1,9 +1,8 @@
 import { type FC, type ReactNode } from "react";
-import { Flex } from "@khenzii-dev/ui/atoms";
-import { Paragraph } from "@khenzii-dev/ui/atoms";
+import { Flex, Paragraph } from "@khenzii-dev/ui/atoms";
+import { Expandable } from "@khenzii-dev/ui/molecules";
 import style from "./index.module.scss";
 import clsx from "clsx";
-import {Expandable} from "@khenzii-dev/ui/molecules";
 
 export type ProjectProps = {
     name: string;
@@ -40,7 +39,7 @@ export const Project: FC<ProjectProps> = ({ name, description, backgroundColor, 
                 closeElement={
                     <Paragraph>close element</Paragraph>
                 }
-                animationDuration={1}
+                animationDuration={0.75}
                 autoSize={true}
                 exitDirection={"top"}
             >

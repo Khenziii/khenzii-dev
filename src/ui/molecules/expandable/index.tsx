@@ -22,7 +22,7 @@ export type ExpandableProps = {
 export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHeight, endWidth, children, openElement, closeElement, wrapOutOfFlow = false, keepOpenElementVisible = false, animationDuration = 0.5, autoSize = false, exitDirection = "top-left" }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [isGrowingCompleted, setIsGrowingCompleted] = useState(false);
-
+    const [isShrinkingCompleted, setIsShrinkingCompleted] = useState(true);
 
     const defaultTransition = {
         duration: animationDuration,
@@ -58,6 +58,7 @@ export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHe
 
     const open = useCallback(() => {
         setIsOpen(true);
+        setIsShrinkingCompleted(false);
 
         const timer = setTimeout(() => {
             setIsGrowingCompleted(true);
@@ -69,11 +70,18 @@ export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHe
     const close = useCallback(() => {
         setIsGrowingCompleted(false);
 
-        const timer = setTimeout(() => {
+        const first_timer = setTimeout(() => {
             setIsOpen(false);
         }, animationDuration * 1000);
 
-        return () => clearTimeout(timer);
+        const second_timer = setTimeout(() => {
+            setIsShrinkingCompleted(true);
+        }, animationDuration * 1000 * 2);
+
+        return () => {
+            clearTimeout(first_timer);
+            clearTimeout(second_timer);
+        };
     }, [animationDuration]);
 
     return (
@@ -107,7 +115,7 @@ export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHe
                     </motion.aside>
                 )}
             </AnimatePresence>
-            {(!isOpen || keepOpenElementVisible) && (
+            {(isShrinkingCompleted || keepOpenElementVisible) && (
                 <div onClick={open} style={{ height: "100%" }}>
                     {openElement}
                 </div>
