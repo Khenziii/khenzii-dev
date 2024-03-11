@@ -10,15 +10,12 @@ export default {
 
 export const Default: StoriesType<ExpandableProps> = {
     args: {
-        animationDuration: 0.5,
-        startWidth: "fit-content",
-        startHeight: "auto",
-        endWidth: "200px",
-        endHeight: "250px",
-        closeElement: <Paragraph styles={{ textAlign: "center", height: "50px" }}>I{"'"}m the close element! (click me to close)</Paragraph>,
-        children: <img src={"https://placekitten.com/200/200"} alt={"200x200 image of a kitten <3"}/>,
-        openElement: <Paragraph styles={{ maxWidth: "200px" }}>I{"'"}m the open element! (click me to open)</Paragraph>,
-        keepOpenElementVisible: true,
-        wrapOutOfFlow: true,
+        isExpanded: true,
+        startWidth: "0",
+        startHeight: "0",
+        endWidth: "auto",
+        endHeight: "auto",
+        exitDirection: "top-left",
+        children: <Paragraph>:3</Paragraph>,
     },
 };
