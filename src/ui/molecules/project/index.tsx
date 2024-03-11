@@ -3,6 +3,7 @@ import { Flex } from "@khenzii-dev/ui/atoms";
 import { Paragraph } from "@khenzii-dev/ui/atoms";
 import style from "./index.module.scss";
 import clsx from "clsx";
+import {Expandable} from "@khenzii-dev/ui/molecules";
 
 export type ProjectProps = {
     name: string;
@@ -28,9 +29,25 @@ export const Project: FC<ProjectProps> = ({ name, description, backgroundColor, 
                 </Paragraph>
             </Flex>
 
-            <Paragraph>
-                {description}
-            </Paragraph>
+            <Expandable
+                startHeight={"0"}
+                startWidth={"100%"}
+                endHeight={""}
+                endWidth={"100%"}
+                openElement={
+                    <Paragraph>open element</Paragraph>
+                }
+                closeElement={
+                    <Paragraph>close element</Paragraph>
+                }
+                animationDuration={1}
+                autoSize={true}
+                exitDirection={"top"}
+            >
+                <div style={{ height: "50vh" }}>
+                    <p>something</p>
+                </div>
+            </Expandable>
         </Flex>
     );
 };
