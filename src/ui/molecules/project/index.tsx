@@ -6,7 +6,7 @@ import style from "./index.module.scss";
 export type ProjectProps = {
     name: string;
     description: string;
-    backgroundColor: string;
+    backgroundGradient: string;
     topLeftComponent: ReactNode;
     startedWorking: Date;
     finishedWorking?: Date;
@@ -14,7 +14,7 @@ export type ProjectProps = {
     websiteUrl?: string;
 };
 
-export const Project: FC<ProjectProps> = ({ name, description, backgroundColor, topLeftComponent, startedWorking, finishedWorking, githubRepoUrl, websiteUrl }) => {
+export const Project: FC<ProjectProps> = ({ name, description, backgroundGradient, topLeftComponent, startedWorking, finishedWorking, githubRepoUrl, websiteUrl }) => {
 
 
     return (
@@ -24,7 +24,7 @@ export const Project: FC<ProjectProps> = ({ name, description, backgroundColor, 
                 align={"center"} 
                 fullWidth 
                 className={style.title}
-                styles={{ backgroundColor: backgroundColor }}
+                styles={{ backgroundImage: backgroundGradient }}
                 gap={10}
             >
                 {topLeftComponent}

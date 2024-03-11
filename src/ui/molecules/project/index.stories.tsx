@@ -12,7 +12,7 @@ export const Default: StoriesType<ProjectProps> = {
     args: {
         name: "khenzii.dev",
         description: "The very project that you're working on right now!",
-        backgroundColor: "#000000",
+        backgroundGradient: "linear-gradient(270deg, #FFFFFF, #000000)",
         githubRepoUrl: "https://github.com/Khenziii/khenzii-dev",
         websiteUrl: "https://khenzii.dev/",
         startedWorking: new Date(new Date().getTime() - 1000 * 60 * 60),
