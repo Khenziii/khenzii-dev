@@ -18,7 +18,7 @@ export const NavDesktop: FC<NavDesktopProps> = ({ routes , socials }) => {
     return (
         <div className={style.container}>
             <div style={{ position: "relative" }}>
-                <div onClick={() => setAreSocialsOpen(true)}>
+                <div onClick={() => setAreSocialsOpen(true)} style={{ display: "flex", justifyContent: "center", height: "100%" }}>
                     <NavDesktopItem route={{ name: "socials" }} key={`nav-desktop-item-socials`} />
                 </div>
 
@@ -30,7 +30,6 @@ export const NavDesktop: FC<NavDesktopProps> = ({ routes , socials }) => {
                         endWidth={"min(calc(100vw - 2 * 10px), 1500px)"}
                         wrapOutOfFlow={true}
                         isExpanded={areSocialsOpen}
-                        autoSize={true}
                     >
                         <Flex direction={"column"} align={"flex-start"} justify={"flex-start"} gap={0} styles={{ height: "100%" }}>
                             <button className={style.closeIcon} onClick={() => setAreSocialsOpen(false)}>

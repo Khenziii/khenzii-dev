@@ -1,3 +1,5 @@
+"use client";
+
 import { type CSSProperties, type FC, type ReactNode, useState } from "react";
 import style from "./index.module.scss";
 import clsx from "clsx";
