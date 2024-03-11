@@ -15,28 +15,39 @@ export type ExpandableProps = {
     wrapOutOfFlow?: boolean;
     keepOpenElementVisible?: boolean;
     animationDuration?: number;
+    autoSize?: boolean;
+    exitDirection?: "top-left" | "top";
 };
 
-export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHeight, endWidth, children, openElement, closeElement, wrapOutOfFlow = false, keepOpenElementVisible = false, animationDuration = 0.5 }) => {
+export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHeight, endWidth, children, openElement, closeElement, wrapOutOfFlow = false, keepOpenElementVisible = false, animationDuration = 0.5, autoSize = false, exitDirection = "top-left" }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [isGrowingCompleted, setIsGrowingCompleted] = useState(false);
 
 
     const sizeTransition = {
-        initial: {
-            width: startWidth,
-            height: startHeight,
-        },
-        animate: {
-            width: endWidth,
-            height: endHeight,
-            transition: {
-                duration: animationDuration,
-                ease: [0.75, 0, 0.30, 1], // cubic-bezier(0.75, 0, 0.30, 1)
+        initial: autoSize 
+            ? {} 
+            : {
+                width: startWidth,
+                height: startHeight,
             },
-        },
+        animate: autoSize 
+            ? {
+                transition: {
+                    duration: animationDuration,
+                    ease: [0.75, 0, 0.30, 1], // cubic-bezier(0.75, 0, 0.30, 1)
+                },
+            }
+            : {
+                width: endWidth,
+                height: endHeight,
+                transition: {
+                    duration: animationDuration,
+                    ease: [0.75, 0, 0.30, 1], // cubic-bezier(0.75, 0, 0.30, 1)
+                },
+            },
         exit: {
-            width: 0,
+            width: exitDirection === "top-left" ? 0 : startWidth,
             height: 0,
             transition: {
                 duration: animationDuration,
@@ -94,16 +105,17 @@ export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHe
                         {...sizeTransition}
                         className={style.wrapper}
                         style={wrapOutOfFlow ? { position: "absolute", left: 0, top: 0 } : {}}
-                        key={"nav-mobile-socials-aside"}
+                        key={"expandable-aside"}
+                        layout={autoSize ? true : undefined}
                     >
                         <AnimatePresence>
                             {isGrowingCompleted && (
-                                <motion.div {...fadeTransition} className={style.contentContainer} key={"nav-mobile-socials-container"}>
-                                    <motion.div onClick={close} key={"nav-mobile-socials-close"}>
+                                <motion.div {...fadeTransition} className={style.contentContainer} key={"expandable-content-container"}>
+                                    <motion.div onClick={close} key={"expandable-content-close"}>
                                         {closeElement}
                                     </motion.div>
 
-                                    <motion.div style={{ flex: "1" }} key={"nav-mobile-socials-list"}>
+                                    <motion.div style={{ flex: "1" }} key={"expandable-content"}>
                                         {children}
                                     </motion.div>
                                 </motion.div>
