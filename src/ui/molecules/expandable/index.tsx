@@ -1,7 +1,7 @@
 "use client";
 
 import { type FC, type ReactNode, useCallback, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, type Variants, type Transition } from "framer-motion";
 import style from "./index.module.scss";
 
 export type ExpandableProps = {
@@ -24,11 +24,11 @@ export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHe
     const [isGrowingCompleted, setIsGrowingCompleted] = useState(false);
     const [isShrinkingCompleted, setIsShrinkingCompleted] = useState(true);
 
-    const defaultTransition = {
+    const defaultTransition: Transition = {
         duration: animationDuration,
         ease: [0.75, 0, 0.30, 1],
     };
-    const sizeTransition = {
+    const sizeTransition: Variants = {
         initial: {
             width: startWidth,
             height: startHeight,
@@ -43,7 +43,7 @@ export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHe
         },
     };
 
-    const fadeTransition = {
+    const fadeTransition: Variants = {
         initial: {
             opacity: 0,
         },

@@ -1,4 +1,5 @@
 import type { FC, ReactNode, CSSProperties } from "react";
+import { type CustomStyles } from "@khenzii-dev/ui/types";
 import clsx from "clsx";
 import style from "./index.module.scss";
 
@@ -11,17 +12,15 @@ export type FlexProps = {
     justify?: position | "space-between" | "space-around";
     gap?: number;
     fullWidth?: boolean;
-    styles?: CSSProperties;
-    className?: string;
-};
+} & CustomStyles;
 
 export const Flex: FC<FlexProps> = ({ children, direction , align, justify, gap , fullWidth, styles, className }) => {
     const styleSheet: CSSProperties = styles ?? {};
     if (direction !== undefined) styleSheet.flexDirection = direction;
     if (align !== undefined) styleSheet.alignItems = align;
     if (justify !== undefined) styleSheet.justifyContent = justify;
-    if (gap !== undefined) styleSheet.gap = `${gap}px !important`;
     if (fullWidth !== undefined) styleSheet.width = "100% !important";
+    styleSheet.gap = `${gap ?? 10}px`;
 
     return (
         <div className={clsx([style.flex], { [className as string]: className !== undefined })} style={styleSheet}>

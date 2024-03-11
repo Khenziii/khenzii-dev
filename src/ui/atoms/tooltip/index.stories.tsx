@@ -9,7 +9,7 @@ export default {
 
 export const Default: StoriesType<TooltipProps> = {
     args: {
-        originalContent: <Icon iconName={"heart"} />,
+        children: <Icon iconName={"heart"} />,
         tooltip: <Paragraph>I{"'"}m a paragraph!</Paragraph>,
     },
 };

@@ -1,8 +1,7 @@
 import { type FC, type ReactNode } from "react";
-import { Flex, Paragraph } from "@khenzii-dev/ui/atoms";
+import { Flex, Paragraph, Tooltip, Icon } from "@khenzii-dev/ui/atoms";
 import { Expandable } from "@khenzii-dev/ui/molecules";
 import style from "./index.module.scss";
-import clsx from "clsx";
 
 export type ProjectProps = {
     name: string;
@@ -19,8 +18,15 @@ export const Project: FC<ProjectProps> = ({ name, description, backgroundColor, 
 
 
     return (
-        <Flex direction={"column"} justify={"center"} fullWidth>
-            <Flex direction={"row"} align={"center"} fullWidth className={style.title}>
+        <Flex direction={"column"} justify={"center"} gap={0} fullWidth>
+            <Flex 
+                direction={"row"} 
+                align={"center"} 
+                fullWidth 
+                className={style.title}
+                styles={{ backgroundColor: backgroundColor }}
+                gap={10}
+            >
                 {topLeftComponent}
 
                 <Paragraph fontSize={2}>
@@ -34,7 +40,16 @@ export const Project: FC<ProjectProps> = ({ name, description, backgroundColor, 
                 endHeight={""}
                 endWidth={"100%"}
                 openElement={
-                    <Paragraph>open element</Paragraph>
+                    <Tooltip
+                        tooltip={
+                            <Paragraph>Click to see more!</Paragraph>
+                        }
+                        transitionDelay={0.75}
+                    >
+                        <div className={style.openWrapper}>
+                            <Icon iconName={"arrow-right-short"} size={3} />
+                        </div>
+                    </Tooltip>
                 }
                 closeElement={
                     <Paragraph>close element</Paragraph>
