@@ -15,6 +15,12 @@
             color: $textDarkened !important;
         }
 
-        transform: rotate(90deg);
+        &.pointingDown {
+            transform: translateY(10px);
+        }
+
+        &.pointingUp {
+            transform: translateY(-10px) rotate(180deg) !important;
+        }
     }
 }

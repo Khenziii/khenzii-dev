@@ -1,14 +1,16 @@
 "use client";
 
 import { type FC, type ReactNode, useState } from "react";
-import { Flex, Paragraph, Tooltip, Icon } from "@khenzii-dev/ui/atoms";
+import { Flex, Paragraph, Icon } from "@khenzii-dev/ui/atoms";
 import { Expandable } from "@khenzii-dev/ui/molecules";
 import style from "./index.module.scss";
+import clsx from "clsx";
 
 export type ProjectProps = {
     name: string;
     description: string;
     backgroundGradient: string;
+    secondaryColor: string;
     topLeftComponent: ReactNode;
     startedWorking: Date;
     finishedWorking?: Date;
@@ -16,7 +18,7 @@ export type ProjectProps = {
     websiteUrl?: string;
 };
 
-export const Project: FC<ProjectProps> = ({ name, description, backgroundGradient, topLeftComponent, startedWorking, finishedWorking, githubRepoUrl, websiteUrl }) => {
+export const Project: FC<ProjectProps> = ({ name, description, backgroundGradient, secondaryColor, topLeftComponent, startedWorking, finishedWorking, githubRepoUrl, websiteUrl }) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
     return (
@@ -29,31 +31,35 @@ export const Project: FC<ProjectProps> = ({ name, description, backgroundGradien
                 styles={{ backgroundImage: backgroundGradient }}
                 gap={10}
             >
-                {topLeftComponent}
+                <Flex direction={"row"} justify={"flex-start"} align={"center"}>
+                    {topLeftComponent}
 
-                <Paragraph fontSize={2}>
-                    {name}
-                </Paragraph>
-            </Flex>
+                    <Paragraph fontSize={2}>
+                        {name}
+                    </Paragraph>
+                </Flex>
 
-            <Flex
-                direction={"row"}
-                align={"center"}
-                gap={10}
-                fullWidth
-            >
-                {!isExpanded && (
-                    <Tooltip
-                        tooltip={
-                            <Paragraph>Click to see more!</Paragraph>
+                <Flex direction={"row"} justify={"flex-end"} align={"center"}>
+                    <div
+                        className={clsx(
+                            [style.openWrapper],
+                            { [style.pointingUp as string]: isExpanded },
+                            { [style.pointingDown as string]: !isExpanded },
+                        )}
+                        onClick={() => setIsExpanded((e) => !e)}
+                        style={
+                            isExpanded
+                                ? { transform: "rotate(180deg)" }
+                                : {}
                         }
-                        transitionDelay={0.75}
                     >
-                        <div className={style.openWrapper} onClick={() => setIsExpanded((e) => !e)}>
-                            <Icon iconName={"arrow-right-short"} size={3} />
-                        </div>
-                    </Tooltip>
-                )}
+                        <Icon
+                            iconName={"arrow-down-short"}
+                            size={3}
+                            color={secondaryColor}
+                        />
+                    </div>
+                </Flex>
             </Flex>
 
             <Expandable
@@ -68,7 +74,7 @@ export const Project: FC<ProjectProps> = ({ name, description, backgroundGradien
                 isExpanded={isExpanded}
             >
                 <div style={{ height: "50vh" }}>
-                    <p>something</p>
+                    <Paragraph>{description}</Paragraph>
                 </div>
             </Expandable>
         </Flex>

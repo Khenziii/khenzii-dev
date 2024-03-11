@@ -16,7 +16,11 @@ export const Anchor: FC<AnchorProps> = ({ newTab, children, className, darkenOnH
     <Link
         target={newTab ? "_blank" : undefined}
         rel={newTab ? "noreferrer noopener" : undefined}
-        className={clsx([className], [style.anchor], { [style.darkenOnHover as string]: darkenOnHover })}
+        className={clsx(
+            [className],
+            [style.anchor],
+            { [style.darkenOnHover as string]: darkenOnHover }
+        )}
         {...props}
     >
         {children}
