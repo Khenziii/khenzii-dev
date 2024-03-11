@@ -1,6 +1,4 @@
-"use client";
-
-import { type FC, type ReactNode, useCallback, useState } from "react";
+import { type FC, type ReactNode, useState, useEffect } from "react";
 import { AnimatePresence, motion, type Variants, type Transition } from "framer-motion";
 import style from "./index.module.scss";
 
@@ -10,19 +8,16 @@ export type ExpandableProps = {
     endHeight: string;
     endWidth: string;
     children: ReactNode;
-    openElement: ReactNode;
-    closeElement: ReactNode;
+    isExpanded: boolean;
     wrapOutOfFlow?: boolean;
-    keepOpenElementVisible?: boolean;
     animationDuration?: number;
     autoSize?: boolean;
     exitDirection?: "top-left" | "top";
 };
 
-export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHeight, endWidth, children, openElement, closeElement, wrapOutOfFlow = false, keepOpenElementVisible = false, animationDuration = 0.5, autoSize = false, exitDirection = "top-left" }) => {
+export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHeight, endWidth, children, wrapOutOfFlow = false, animationDuration = 0.5, autoSize = false, exitDirection = "top-left", isExpanded  }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [isGrowingCompleted, setIsGrowingCompleted] = useState(false);
-    const [isShrinkingCompleted, setIsShrinkingCompleted] = useState(true);
 
     const defaultTransition: Transition = {
         duration: animationDuration,
@@ -55,34 +50,25 @@ export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHe
         },
     };
 
-
-    const open = useCallback(() => {
-        setIsOpen(true);
-        setIsShrinkingCompleted(false);
-
-        const timer = setTimeout(() => {
-            setIsGrowingCompleted(true);
-        },  animationDuration * 1000);
-
-        return () => clearTimeout(timer);
-    }, [animationDuration]);
-
-    const close = useCallback(() => {
+    useEffect(() => {
         setIsGrowingCompleted(false);
 
-        const first_timer = setTimeout(() => {
-            setIsOpen(false);
-        }, animationDuration * 1000);
+        if (isExpanded) {
+            setIsOpen(true);
 
-        const second_timer = setTimeout(() => {
-            setIsShrinkingCompleted(true);
-        }, animationDuration * 1000 * 2);
+            const timer = setTimeout(() => {
+                setIsGrowingCompleted(true);
+            },  animationDuration * 1000);
 
-        return () => {
-            clearTimeout(first_timer);
-            clearTimeout(second_timer);
-        };
-    }, [animationDuration]);
+            return () => clearTimeout(timer);
+        } else {
+            const timer = setTimeout(() => {
+                setIsOpen(false);
+            }, animationDuration * 1000);
+
+            return () => clearTimeout(timer);
+        }
+    }, [animationDuration, isExpanded]);
 
     return (
         <div className={style.container}>
@@ -103,11 +89,7 @@ export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHe
                                 transition={defaultTransition}
                                 {...fadeTransition}
                             >
-                                <motion.div onClick={close} key={"expandable-content-close"}>
-                                    {closeElement}
-                                </motion.div>
-
-                                <motion.div style={{ flex: "1" }} key={"expandable-content"}>
+                                <motion.div key={"expandable-content"}>
                                     {children}
                                 </motion.div>
                             </motion.div>
@@ -115,11 +97,6 @@ export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHe
                     </motion.aside>
                 )}
             </AnimatePresence>
-            {(isShrinkingCompleted || keepOpenElementVisible) && (
-                <div onClick={open} style={{ height: "100%" }}>
-                    {openElement}
-                </div>
-            )}
         </div>
     );
 };
