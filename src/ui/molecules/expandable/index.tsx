@@ -89,7 +89,7 @@ export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHe
                                 transition={defaultTransition}
                                 {...fadeTransition}
                             >
-                                <motion.div key={"expandable-content"}>
+                                <motion.div key={"expandable-content"} style={{ height: "100%" }}>
                                     {children}
                                 </motion.div>
                             </motion.div>
