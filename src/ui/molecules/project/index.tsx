@@ -1,7 +1,7 @@
 "use client";
 
 import { type FC, type ReactNode, useState } from "react";
-import { Flex, Paragraph, Icon } from "@khenzii-dev/ui/atoms";
+import { Flex, Paragraph, Icon, Anchor } from "@khenzii-dev/ui/atoms";
 import { Expandable } from "@khenzii-dev/ui/molecules";
 import style from "./index.module.scss";
 import clsx from "clsx";
@@ -39,10 +39,23 @@ export const Project: FC<ProjectProps> = ({ name, description, backgroundGradien
                     </Paragraph>
                 </Flex>
 
-                <Flex direction={"row"} justify={"flex-end"} align={"center"}>
+                <Flex direction={"row"} justify={"flex-end"} align={"center"} gap={20}>
+                    {websiteUrl && (
+                        <Anchor href={websiteUrl} prefetch={false} newTab className={style.darkenChildOnHover}>
+                            <Icon iconName={"link-45deg"} size={3} color={secondaryColor} />
+                        </Anchor>
+                    )}
+
+                    {githubRepoUrl && (
+                        <Anchor href={githubRepoUrl} prefetch={false} newTab className={style.darkenChildOnHover}>
+                            <Icon iconName={"github"} size={3} color={secondaryColor} />
+                        </Anchor>
+                    )}
+
                     <div
                         className={clsx(
                             [style.openWrapper],
+                            [style.darkenChildOnHover],
                             { [style.pointingUp as string]: isExpanded },
                             { [style.pointingDown as string]: !isExpanded },
                         )}

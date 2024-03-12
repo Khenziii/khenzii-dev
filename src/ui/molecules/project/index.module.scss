@@ -11,10 +11,6 @@
     transition: all .5s cubic-bezier(0.75, 0, 0.30, 1);
 
     &:hover {
-        > * {
-            color: $textDarkened !important;
-        }
-
         &.pointingDown {
             transform: translateY(10px);
         }
@@ -22,5 +18,13 @@
         &.pointingUp {
             transform: translateY(-10px) rotate(180deg) !important;
         }
+    }
+}
+
+.darkenChildOnHover:hover {
+    cursor: pointer;
+
+    > * {
+        color: $textDarkened !important;
     }
 }
