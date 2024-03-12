@@ -6,7 +6,7 @@ export type GithubRepoCardProps = {
 };
 
 export const GitHubRepoCard: FC<GithubRepoCardProps> = ({}) => {
-    
+
 
     return (
         <>
