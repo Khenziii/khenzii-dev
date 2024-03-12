@@ -1,6 +1,6 @@
 import { Project, type ProjectProps } from "@khenzii-dev/ui/molecules";
 import { type StoriesType } from "@khenzii-dev/ui/types/stories-type";
-import { Icon } from "@khenzii-dev/ui/atoms";
+import { Icon, Paragraph } from "@khenzii-dev/ui/atoms";
 
 export default {
     component: Project,
@@ -11,7 +11,7 @@ export default {
 export const Default: StoriesType<ProjectProps> = {
     args: {
         name: "khenzii.dev",
-        description: "The very project that you're working on right now!",
+        description: <Paragraph>The very project that you{"'"}re working on right now!</Paragraph>,
         backgroundGradient: "linear-gradient(270deg, #FFFFFF, #20201f)",
         secondaryColor: "#20201f",
         githubRepoUrl: "https://github.com/Khenziii/khenzii-dev",

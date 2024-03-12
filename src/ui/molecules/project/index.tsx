@@ -8,7 +8,7 @@ import clsx from "clsx";
 
 export type ProjectProps = {
     name: string;
-    description: string;
+    description: ReactNode;
     backgroundGradient: string;
     secondaryColor: string;
     topLeftComponent: ReactNode;
@@ -86,9 +86,7 @@ export const Project: FC<ProjectProps> = ({ name, description, backgroundGradien
                 wrapOutOfFlow={true}
                 isExpanded={isExpanded}
             >
-                <div style={{ height: "50vh" }}>
-                    <Paragraph>{description}</Paragraph>
-                </div>
+                {description}
             </Expandable>
         </Flex>
     );
