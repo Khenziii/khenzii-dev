@@ -4023,6 +4023,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tanstack/query-devtools@npm:5.27.8":
+  version: 5.27.8
+  resolution: "@tanstack/query-devtools@npm:5.27.8"
+  checksum: 10c0/6be9cb45f114b04a567aee142e30db366ea75a14746ee1005d06014c55f65c780a8ebeeb9a7622763374a9038ec2765b930b8f930c6e7da4613273302e70cf5d
+  languageName: node
+  linkType: hard
+
+"@tanstack/react-query-devtools@npm:^5.27.8":
+  version: 5.27.8
+  resolution: "@tanstack/react-query-devtools@npm:5.27.8"
+  dependencies:
+    "@tanstack/query-devtools": "npm:5.27.8"
+  peerDependencies:
+    "@tanstack/react-query": ^5.27.5
+    react: ^18.0.0
+  checksum: 10c0/e04287fe9ab6715cc38cd8c41fb44eb93ec01daaa1497a7bb93fa65e6b47f8478fde8cac0537d8de75853f5692f6252b91d521b5c1607fdbefe4b7b786aca23f
+  languageName: node
+  linkType: hard
+
 "@tanstack/react-query@npm:^5.27.5":
   version: 5.27.5
   resolution: "@tanstack/react-query@npm:5.27.5"
@@ -9900,6 +9919,7 @@ __metadata:
     "@t3-oss/env-nextjs": "npm:^0.7.1"
     "@tanstack/query-core": "npm:^5.27.5"
     "@tanstack/react-query": "npm:^5.27.5"
+    "@tanstack/react-query-devtools": "npm:^5.27.8"
     "@types/eslint": "npm:^8.44.7"
     "@types/node": "npm:^18.17.0"
     "@types/react": "npm:^18.2.37"
