@@ -8,5 +8,7 @@ export default {
 };
 
 export const Default: StoriesType<GithubRepoCardProps> = {
-    args: {},
+    args: {
+        githubRepoLink: "https://github.com/khenziii/khenz-tiktokbot",
+    },
 };
