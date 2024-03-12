@@ -4016,7 +4016,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/query-core@npm:5.27.5":
+"@tanstack/query-core@npm:5.27.5, @tanstack/query-core@npm:^5.27.5":
   version: 5.27.5
   resolution: "@tanstack/query-core@npm:5.27.5"
   checksum: 10c0/e0a06216de04c2b62d278a666c16ac9dc3cad82d97202ca87ecfb09272912e508a4d365947f98ef4f2d53d46d7a1c1d1011e05d3a9da1e50ba70419e7a385bd7
@@ -9898,6 +9898,7 @@ __metadata:
     "@storybook/theming": "npm:^7.6.17"
     "@stylistic/eslint-plugin": "npm:^1.6.3"
     "@t3-oss/env-nextjs": "npm:^0.7.1"
+    "@tanstack/query-core": "npm:^5.27.5"
     "@tanstack/react-query": "npm:^5.27.5"
     "@types/eslint": "npm:^8.44.7"
     "@types/node": "npm:^18.17.0"
