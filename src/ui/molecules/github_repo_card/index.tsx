@@ -1,5 +1,5 @@
 import { type FC, useMemo } from "react";
-import { Loading, Paragraph, Flex, Anchor } from "@khenzii-dev/ui/atoms";
+import { Loading, Paragraph, Flex, Anchor, Icon } from "@khenzii-dev/ui/atoms";
 import { useQuery } from "@tanstack/react-query";
 import style from "./index.module.scss";
 
@@ -59,6 +59,45 @@ export const GitHubRepoCard: FC<GithubRepoCardProps> = ({ githubRepoLink }) => {
                     <Anchor href={githubRepoLink} prefetch={false} darkenOnHover={true} newTab={true}>
                         {username}/{repo}
                     </Anchor>
+
+                    <Flex direction={"row"} align={"center"} className={style.statsContainer} gap={20}>
+                        <div className={style.statContainer}>
+                            <Anchor
+                                href={`${githubRepoLink}/stargazers`}
+                                prefetch={false}
+                                className={style.iconWrapper}
+                                newTab
+                            >
+                                <Icon iconName={"star-fill"}/>
+                            </Anchor>
+                            <Paragraph>{data.stargazers_count}</Paragraph>
+                        </div>
+
+                        <div className={style.statContainer}>
+                            <Anchor
+                                href={`${githubRepoLink}/forks`}
+                                prefetch={false}
+                                className={style.iconWrapper}
+                                styles={{ rotate: "90deg" }}
+                                newTab
+                            >
+                                <Icon iconName={"option"} />
+                            </Anchor>
+                            <Paragraph>{data.forks_count}</Paragraph>
+                        </div>
+
+                        <div className={style.statContainer}>
+                            <Anchor
+                                href={`${githubRepoLink}/watchers`}
+                                prefetch={false}
+                                className={style.iconWrapper}
+                                newTab
+                            >
+                                <Icon iconName={"eye-fill"}/>
+                            </Anchor>
+                            <Paragraph>{data.subscribers_count}</Paragraph>
+                        </div>
+                    </Flex>
                 </Flex>
             )}
         </>

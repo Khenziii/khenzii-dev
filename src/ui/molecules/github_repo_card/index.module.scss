@@ -6,3 +6,22 @@
     padding: $defaultGap;
     width: fit-content;
 }
+
+.statsContainer {
+    width: fit-content;
+}
+
+.statContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: $defaultGap;
+}
+
+.iconWrapper:hover {
+    //> * {
+    //    color: $textDarkened !important;
+    //}
+
+    color: $textDarkened !important;
+}
