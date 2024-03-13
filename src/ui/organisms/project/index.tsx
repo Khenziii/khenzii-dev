@@ -2,7 +2,7 @@
 
 import { type FC, type ReactNode, useState } from "react";
 import { Flex, Paragraph, Icon, Anchor } from "@khenzii-dev/ui/atoms";
-import { Expandable } from "@khenzii-dev/ui/molecules";
+import { Expandable, GitHubRepoCard } from "@khenzii-dev/ui/molecules";
 import style from "./index.module.scss";
 
 export type ProjectProps = {
@@ -87,6 +87,10 @@ export const Project: FC<ProjectProps> = ({ name, description, backgroundGradien
                 padding={10}
             >
                 {description}
+
+                {githubRepoUrl && (
+                    <GitHubRepoCard githubRepoLink={githubRepoUrl} />
+                )}
             </Expandable>
         </Flex>
     );
