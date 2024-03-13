@@ -1,5 +1,6 @@
 import type { Preview } from "@storybook/react";
 import { khenziiDevTheme } from "./khenzii-dev-theme";
+import { ReactQueryProvider } from "@khenzii-dev/providers";
 
 const preview: Preview = {
   parameters: {
@@ -27,6 +28,7 @@ const preview: Preview = {
       ],
     },
   },
+  decorators: [(Story) => <ReactQueryProvider> <Story /> </ReactQueryProvider>],
 };
 
 export default preview;

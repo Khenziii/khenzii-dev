@@ -16,5 +16,6 @@ const config: StorybookConfig = {
   docs: {
     autodocs: "tag",
   },
+  previewAnnotations: ["./.storybook/preview.tsx"],
 };
 export default config;
