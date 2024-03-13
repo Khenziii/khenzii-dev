@@ -7,6 +7,7 @@ export type GithubAPIResponse = {
     stargazers_count: number;
     forks_count: number;
     subscribers_count: number;
+    description: string;
 };
 
 type GithubLinkInfo = {
@@ -31,8 +32,6 @@ export const GitHubRepoCard: FC<GithubRepoCardProps> = ({ githubRepoLink }) => {
         const url = githubRepoLink.endsWith("/")
             ? githubRepoLink.slice(0, -1)
             : githubRepoLink;
-
-        console.log(url);
 
         const array = url.split("/");
         const last_index = array.length - 1;
@@ -64,8 +63,12 @@ export const GitHubRepoCard: FC<GithubRepoCardProps> = ({ githubRepoLink }) => {
             {data && (
                 <Flex direction={"column"} justify={"center"} className={style.container}>
                     <Anchor href={url} prefetch={false} darkenOnHover={true} newTab={true}>
-                        {username}/{repo}
+                        <Paragraph fontSize={1.5}>
+                            {username}/{repo}
+                        </Paragraph>
                     </Anchor>
+
+                    <Paragraph styles={{}}>{data.description}</Paragraph>
 
                     <Flex direction={"row"} align={"center"} className={style.statsContainer} gap={20}>
                         <div className={style.statContainer}>
