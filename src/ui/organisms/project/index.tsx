@@ -4,7 +4,6 @@ import { type FC, type ReactNode, useState } from "react";
 import { Flex, Paragraph, Icon, Anchor } from "@khenzii-dev/ui/atoms";
 import { Expandable } from "@khenzii-dev/ui/molecules";
 import style from "./index.module.scss";
-import clsx from "clsx";
 
 export type ProjectProps = {
     name: string;
@@ -59,21 +58,15 @@ export const Project: FC<ProjectProps> = ({ name, description, backgroundGradien
                     )}
 
                     <div
-                        className={clsx(
-                            [style.openWrapper],
-                            [style.darkenChildOnHover],
-                            { [style.pointingUp as string]: isExpanded },
-                            { [style.pointingDown as string]: !isExpanded },
-                        )}
+                        className={style.darkenChildOnHover}
                         onClick={() => setIsExpanded((e) => !e)}
-                        style={
-                            isExpanded
-                                ? { transform: "rotate(180deg)" }
-                                : {}
-                        }
                     >
                         <Icon
-                            iconName={"arrow-down-short"}
+                            iconName={
+                                isExpanded
+                                ? "arrow-up-short"
+                                : "arrow-down-short"
+                            }
                             size={3}
                             color={secondaryColor}
                         />

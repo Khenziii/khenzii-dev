@@ -11,20 +11,6 @@
     border: solid $primary 1px;
 }
 
-.openWrapper {
-    transition: all .5s cubic-bezier(0.75, 0, 0.30, 1);
-
-    &:hover {
-        &.pointingDown {
-            transform: translateY(10px);
-        }
-
-        &.pointingUp {
-            transform: translateY(-10px) rotate(180deg) !important;
-        }
-    }
-}
-
 .darkenChildOnHover:hover {
     cursor: pointer;
 
