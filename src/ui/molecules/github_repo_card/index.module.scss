@@ -1,0 +1,8 @@
+@import "../../../styles/constants";
+
+.container {
+    border: solid 1px $primary;
+    border-radius: 10px;
+    padding: $defaultGap;
+    width: fit-content;
+}

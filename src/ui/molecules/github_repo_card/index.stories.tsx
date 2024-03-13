@@ -10,7 +10,7 @@ export default {
 
 export const Default: StoriesType<GithubRepoCardProps> = {
     args: {
-        githubRepoLink: "https://github.com/khenziii/khenz-tiktokbot/",
+        githubRepoLink: "https://github.com/Khenziii/khenz-tiktokbot/",
     },
     decorators: [(Story) => <ReactQueryProvider><Story /></ReactQueryProvider>],
 };
