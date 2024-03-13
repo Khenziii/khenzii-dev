@@ -70,7 +70,12 @@ export const GitHubRepoCard: FC<GithubRepoCardProps> = ({ githubRepoLink }) => {
 
                     <Paragraph styles={{}}>{data.description}</Paragraph>
 
-                    <Flex direction={"row"} align={"center"} className={style.statsContainer} gap={20}>
+                    <Flex
+                        direction={"row"}
+                        align={"center"}
+                        justify={"space-around"}
+                        fullWidth
+                    >
                         <div className={style.statContainer}>
                             <Anchor
                                 href={`${url}/stargazers`}
@@ -80,7 +85,7 @@ export const GitHubRepoCard: FC<GithubRepoCardProps> = ({ githubRepoLink }) => {
                             >
                                 <Icon iconName={"star-fill"}/>
                             </Anchor>
-                            <Paragraph>{data.stargazers_count}</Paragraph>
+                            <Paragraph fontSize={1.25}>{data.stargazers_count}</Paragraph>
                         </div>
 
                         <div className={style.statContainer}>
@@ -93,7 +98,7 @@ export const GitHubRepoCard: FC<GithubRepoCardProps> = ({ githubRepoLink }) => {
                             >
                                 <Icon iconName={"option"} />
                             </Anchor>
-                            <Paragraph>{data.forks_count}</Paragraph>
+                            <Paragraph fontSize={1.25}>{data.forks_count}</Paragraph>
                         </div>
 
                         <div className={style.statContainer}>
@@ -105,7 +110,7 @@ export const GitHubRepoCard: FC<GithubRepoCardProps> = ({ githubRepoLink }) => {
                             >
                                 <Icon iconName={"eye-fill"}/>
                             </Anchor>
-                            <Paragraph>{data.subscribers_count}</Paragraph>
+                            <Paragraph fontSize={1.25}>{data.subscribers_count}</Paragraph>
                         </div>
                     </Flex>
                 </Flex>
