@@ -62,18 +62,18 @@ export const GitHubRepoCard: FC<GithubRepoCardProps> = ({ githubRepoLink }) => {
         <>
             {data && (
                 <Flex direction={"column"} justify={"center"} className={style.container}>
-                    <Anchor href={url} prefetch={false} darkenOnHover={true} newTab={true}>
-                        <Paragraph fontSize={1.5}>
+                    <Anchor href={url} prefetch={false} newTab>
+                        <Paragraph fontSize={1.5} className={style.cardTitle}>
                             {username}/{repo}
                         </Paragraph>
                     </Anchor>
 
-                    <Paragraph styles={{}}>{data.description}</Paragraph>
+                    <Paragraph>{data.description}</Paragraph>
 
                     <Flex
                         direction={"row"}
                         align={"center"}
-                        justify={"space-around"}
+                        justify={"flex-start"}
                         fullWidth
                     >
                         <div className={style.statContainer}>
