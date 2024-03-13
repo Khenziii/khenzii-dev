@@ -1,9 +1,7 @@
-import { Paragraph } from "@khenzii-dev/ui/atoms";
+import { Projects as ProjectsComponent } from "@khenzii-dev/ui/organisms";
 
 const Projects = () => (
-    <Paragraph fontSize={1.5} styles={{ textAlign: "center" }}>
-        Come back here later..
-    </Paragraph>
+    <ProjectsComponent />
 );
 
 export default Projects;

@@ -79,7 +79,7 @@ export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHe
                     <motion.aside
                         {...sizeTransition}
                         className={clsx([style.wrapper, { [style.outOfFlow as string]: wrapOutOfFlow }])}
-                        style={padding ? { padding: padding } : {}}
+                        style={padding ? { padding: padding, boxSizing: "border-box" } : {}}
                         key={"expandable-aside"}
                         layout={autoSize ? true : undefined}
                         transition={defaultTransition}

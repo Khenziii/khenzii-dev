@@ -50,7 +50,7 @@ export const projects: project[] = [
         startedWorking: new Date(new Date().getTime() - 1000 * 60 * 60),
         topLeftComponent: <Image
             alt={"lol-cup 2024 Logo"}
-            src={"https://lolcup.zsl.gda.pl/logo.svg/"}
+            src={"/lolcup-2024-logo.svg"}
             width={200}
             height={200}
             style={{ maxWidth: "2rem", maxHeight: "2rem" }}
