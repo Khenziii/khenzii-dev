@@ -12,6 +12,10 @@ export type GithubAPIResponse = {
 type GithubLinkInfo = {
     username: string;
     repo: string;
+    /*
+     * githubRepoLink, but without trailing slash
+     */
+    url: string;
 };
 
 export type GithubRepoCardProps = {
@@ -19,23 +23,26 @@ export type GithubRepoCardProps = {
 };
 
 export const GitHubRepoCard: FC<GithubRepoCardProps> = ({ githubRepoLink }) => {
-    const { username, repo } = useMemo((): GithubLinkInfo => {
+    const { username, repo, url } = useMemo((): GithubLinkInfo => {
         // githubRepoLink should look like this: https://github.com/<user>/<repo>
         // we need to fetch this: https://api.github.com/repos/<user>/<repo>
         // this means, that we need to obtain <user> & <repo> from the original format.
 
-        const array = githubRepoLink.split("/");
-        let last_index = array.length - 1;
+        const url = githubRepoLink.endsWith("/")
+            ? githubRepoLink.slice(0, -1)
+            : githubRepoLink;
 
-        if (githubRepoLink.endsWith("/")) last_index -= 1;
+        console.log(url);
 
+        const array = url.split("/");
+        const last_index = array.length - 1;
         const repo = array[last_index];
         const username = array[last_index - 1];
 
         if (!repo) throw new Error("Failed to get repo's name out of passed link!");
         if (!username) throw new Error("Failed to get owner user's name out of passed link!");
 
-        return { username, repo };
+        return { username, repo, url };
     }, [githubRepoLink]);
 
     const { isLoading, error, data } = useQuery({
@@ -56,14 +63,14 @@ export const GitHubRepoCard: FC<GithubRepoCardProps> = ({ githubRepoLink }) => {
         <>
             {data && (
                 <Flex direction={"column"} justify={"center"} className={style.container}>
-                    <Anchor href={githubRepoLink} prefetch={false} darkenOnHover={true} newTab={true}>
+                    <Anchor href={url} prefetch={false} darkenOnHover={true} newTab={true}>
                         {username}/{repo}
                     </Anchor>
 
                     <Flex direction={"row"} align={"center"} className={style.statsContainer} gap={20}>
                         <div className={style.statContainer}>
                             <Anchor
-                                href={`${githubRepoLink}/stargazers`}
+                                href={`${url}/stargazers`}
                                 prefetch={false}
                                 className={style.iconWrapper}
                                 newTab
@@ -75,7 +82,7 @@ export const GitHubRepoCard: FC<GithubRepoCardProps> = ({ githubRepoLink }) => {
 
                         <div className={style.statContainer}>
                             <Anchor
-                                href={`${githubRepoLink}/forks`}
+                                href={`${url}/forks`}
                                 prefetch={false}
                                 className={style.iconWrapper}
                                 styles={{ rotate: "270deg" }}
@@ -88,7 +95,7 @@ export const GitHubRepoCard: FC<GithubRepoCardProps> = ({ githubRepoLink }) => {
 
                         <div className={style.statContainer}>
                             <Anchor
-                                href={`${githubRepoLink}/watchers`}
+                                href={`${url}/watchers`}
                                 prefetch={false}
                                 className={style.iconWrapper}
                                 newTab
