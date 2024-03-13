@@ -1,5 +1,9 @@
 @import "../../../styles/constants";
 
+.container {
+    width: $maxContentWidth;
+}
+
 .title {
     min-height: 2rem;
     padding: $defaultGap;

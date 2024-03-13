@@ -22,7 +22,7 @@ export const Project: FC<ProjectProps> = ({ name, description, backgroundGradien
     const [isExpanded, setIsExpanded] = useState(false);
 
     return (
-        <Flex direction={"column"} justify={"center"} gap={0} fullWidth>
+        <Flex direction={"column"} justify={"center"} gap={0} className={style.container}>
             <Flex 
                 direction={"row"} 
                 align={"center"} 
@@ -39,7 +39,13 @@ export const Project: FC<ProjectProps> = ({ name, description, backgroundGradien
                     </Paragraph>
                 </Flex>
 
-                <Flex direction={"row"} justify={"flex-end"} align={"center"} gap={20}>
+                <Flex
+                    direction={"row"}
+                    justify={"flex-end"}
+                    align={"center"}
+                    gap={20}
+                    fullWidth
+                >
                     {websiteUrl && (
                         <Anchor href={websiteUrl} prefetch={false} newTab className={style.darkenChildOnHover}>
                             <Icon iconName={"link-45deg"} size={3} color={secondaryColor} />
