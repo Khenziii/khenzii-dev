@@ -12,7 +12,7 @@ export type AnchorProps = {
     darkenOnHover?: boolean;
 } & CustomStyles;
 
-export const Anchor: FC<AnchorProps> = ({ newTab, children, className, darkenOnHover, ...props }) => (
+export const Anchor: FC<AnchorProps> = ({ newTab, children, className, darkenOnHover, styles, ...props }) => (
     <Link
         target={newTab ? "_blank" : undefined}
         rel={newTab ? "noreferrer noopener" : undefined}
@@ -21,6 +21,7 @@ export const Anchor: FC<AnchorProps> = ({ newTab, children, className, darkenOnH
             [style.anchor],
             { [style.darkenOnHover as string]: darkenOnHover }
         )}
+        style={styles}
         {...props}
     >
         {children}

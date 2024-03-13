@@ -78,7 +78,7 @@ export const GitHubRepoCard: FC<GithubRepoCardProps> = ({ githubRepoLink }) => {
                                 href={`${githubRepoLink}/forks`}
                                 prefetch={false}
                                 className={style.iconWrapper}
-                                styles={{ rotate: "90deg" }}
+                                styles={{ rotate: "270deg" }}
                                 newTab
                             >
                                 <Icon iconName={"option"} />

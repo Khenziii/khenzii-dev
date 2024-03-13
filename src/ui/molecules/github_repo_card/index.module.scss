@@ -19,9 +19,7 @@
 }
 
 .iconWrapper:hover {
-    //> * {
-    //    color: $textDarkened !important;
-    //}
-
-    color: $textDarkened !important;
+    > * {
+        color: $textDarkened !important;
+    }
 }
