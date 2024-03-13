@@ -91,6 +91,7 @@ export const Project: FC<ProjectProps> = ({ name, description, backgroundGradien
                 exitDirection={"top"}
                 wrapOutOfFlow={true}
                 isExpanded={isExpanded}
+                padding={10}
             >
                 {description}
             </Expandable>

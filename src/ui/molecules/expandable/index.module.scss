@@ -8,6 +8,12 @@
     background-color: $background;
     border: 1px solid $primary;
     z-index: 5;
+
+    &.outOfFlow {
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
 }
 
 .contentContainer {

@@ -1,6 +1,7 @@
 import { type FC, type ReactNode, useState, useEffect } from "react";
 import { AnimatePresence, motion, type Variants, type Transition } from "framer-motion";
 import style from "./index.module.scss";
+import clsx from "clsx";
 
 export type ExpandableProps = {
     startHeight: string;
@@ -13,9 +14,10 @@ export type ExpandableProps = {
     animationDuration?: number;
     autoSize?: boolean;
     exitDirection?: "top-left" | "top";
+    padding?: number;
 };
 
-export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHeight, endWidth, children, wrapOutOfFlow = false, animationDuration = 0.5, autoSize = false, exitDirection = "top-left", isExpanded  }) => {
+export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHeight, endWidth, children, wrapOutOfFlow = false, animationDuration = 0.5, autoSize = false, exitDirection = "top-left", isExpanded, padding  }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [isGrowingCompleted, setIsGrowingCompleted] = useState(false);
 
@@ -76,8 +78,8 @@ export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHe
                 {isOpen && (
                     <motion.aside
                         {...sizeTransition}
-                        className={style.wrapper}
-                        style={wrapOutOfFlow ? { position: "absolute", left: 0, top: 0 } : {}}
+                        className={clsx([style.wrapper, { [style.outOfFlow as string]: wrapOutOfFlow }])}
+                        style={padding ? { padding: padding } : {}}
                         key={"expandable-aside"}
                         layout={autoSize ? true : undefined}
                         transition={defaultTransition}
