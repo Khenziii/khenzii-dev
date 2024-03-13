@@ -33,7 +33,7 @@ export const Project: FC<ProjectProps> = ({ name, description, backgroundGradien
                 <Flex direction={"row"} justify={"flex-start"} align={"center"}>
                     {topLeftComponent}
 
-                    <Paragraph fontSize={2}>
+                    <Paragraph fontSize={2} styles={{ whiteSpace: "nowrap" }}>
                         {name}
                     </Paragraph>
                 </Flex>
@@ -82,7 +82,6 @@ export const Project: FC<ProjectProps> = ({ name, description, backgroundGradien
                 animationDuration={0.75}
                 autoSize={true}
                 exitDirection={"top"}
-                wrapOutOfFlow={true}
                 isExpanded={isExpanded}
                 padding={10}
             >
