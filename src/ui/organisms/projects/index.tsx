@@ -1,8 +1,21 @@
-import { Project, type ProjectProps } from "@khenzii-dev/ui/organisms";
+import { type ReactNode } from "react";
 import { Paragraph, Icon } from "@khenzii-dev/ui/atoms";
+import { Project } from "./project";
 import Image from "next/image";
 
-export const projects: ProjectProps[] = [
+export type project = {
+    name: string;
+    description: ReactNode;
+    backgroundGradient: string;
+    secondaryColor: string;
+    topLeftComponent: ReactNode;
+    startedWorking: Date;
+    finishedWorking?: Date;
+    githubRepoUrl?: string;
+    websiteUrl?: string;
+};
+
+export const projects: project[] = [
     {
         name: "khenzii.dev",
         description: <Paragraph>

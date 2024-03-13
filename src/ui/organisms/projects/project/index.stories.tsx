@@ -1,4 +1,5 @@
-import { Project, type ProjectProps } from "@khenzii-dev/ui/organisms";
+import { Project } from ".";
+import { type project } from "@khenzii-dev/ui/organisms";
 import { type StoriesType } from "@khenzii-dev/ui/types/stories-type";
 import { Icon, Paragraph } from "@khenzii-dev/ui/atoms";
 
@@ -8,7 +9,7 @@ export default {
     tags: ['autodocs'],
 };
 
-export const Default: StoriesType<ProjectProps> = {
+export const Default: StoriesType<project> = {
     args: {
         name: "khenzii.dev",
         description: <Paragraph>The very project that you{"'"}re working on right now!</Paragraph>,

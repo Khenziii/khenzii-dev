@@ -7,6 +7,6 @@ export default {
     tags: ['autodocs'],
 };
 
-export const Default: StoriesType<unknown> = {
+export const Default: StoriesType<Record<string, null>> = {
     args: {},
 };

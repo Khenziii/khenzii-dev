@@ -1,23 +1,12 @@
 "use client";
 
-import { type FC, type ReactNode, useState } from "react";
+import { type FC, useState } from "react";
 import { Flex, Paragraph, Icon, Anchor } from "@khenzii-dev/ui/atoms";
 import { Expandable, GitHubRepoCard } from "@khenzii-dev/ui/molecules";
 import style from "./index.module.scss";
+import { type project } from "..";
 
-export type ProjectProps = {
-    name: string;
-    description: ReactNode;
-    backgroundGradient: string;
-    secondaryColor: string;
-    topLeftComponent: ReactNode;
-    startedWorking: Date;
-    finishedWorking?: Date;
-    githubRepoUrl?: string;
-    websiteUrl?: string;
-};
-
-export const Project: FC<ProjectProps> = ({ name, description, backgroundGradient, secondaryColor, topLeftComponent, startedWorking, finishedWorking, githubRepoUrl, websiteUrl }) => {
+export const Project: FC<project> = ({ name, description, backgroundGradient, secondaryColor, topLeftComponent, startedWorking, finishedWorking, githubRepoUrl, websiteUrl }) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
     return (
