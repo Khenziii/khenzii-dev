@@ -27,7 +27,7 @@ export const NavMobile: FC<NavMobileProps> = ({ routes, socials }) => {
                         startHeight={"0"}
                         startWidth={"0"}
                         endHeight={"50vh"}
-                        endWidth={"calc(100vw - 2 * 10px)"}
+                        endWidth={"calc(100vw - 2 * 10px - 2 * 1px)"}
                         wrapOutOfFlow={true}
                         isExpanded={areSocialsOpen}
                     >

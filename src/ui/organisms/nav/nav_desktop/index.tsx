@@ -27,7 +27,7 @@ export const NavDesktop: FC<NavDesktopProps> = ({ routes , socials }) => {
                         startHeight={"0"}
                         startWidth={"0"}
                         endHeight={"calc(2 * 75px - 10px)"} // 2 times $navDesktopHeight - padding
-                        endWidth={"min(calc(100vw - 2 * 10px), 1500px)"}
+                        endWidth={"min(calc(100vw - 2 * 10px - 1px * 4), calc(1500px - 10px * 2 - 1px * 4))"} // 10px * 2 = both paddings, 1px * 4 = borders
                         wrapOutOfFlow={true}
                         isExpanded={areSocialsOpen}
                     >
