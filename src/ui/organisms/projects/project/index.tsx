@@ -66,19 +66,21 @@ export const Project: FC<project> = ({ name, description, backgroundGradient, to
 
             <Expandable
                 startHeight={"0"}
-                startWidth={"100%"}
+                startWidth={"calc(100% - 1px * 2)"} // 1px * 2 - borders
                 endHeight={""}
-                endWidth={"100%"}
+                endWidth={"calc(100% - 1px * 2)%"}
                 animationDuration={0.75}
                 autoSize={true}
                 exitDirection={"top"}
                 isExpanded={isExpanded}
             >
-                {description}
+                <div style={{ padding: "10px", boxSizing: "border-box" }}>
+                    {description}
 
-                {githubRepoUrl && (
-                    <GitHubRepoCard githubRepoLink={githubRepoUrl} />
-                )}
+                    {githubRepoUrl && (
+                        <GitHubRepoCard githubRepoLink={githubRepoUrl} />
+                    )}
+                </div>
             </Expandable>
         </Flex>
     );
