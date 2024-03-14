@@ -14,10 +14,9 @@ export type ExpandableProps = {
     animationDuration?: number;
     autoSize?: boolean;
     exitDirection?: "top-left" | "top";
-    padding?: number;
 };
 
-export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHeight, endWidth, children, wrapOutOfFlow = false, animationDuration = 0.5, autoSize = false, exitDirection = "top-left", isExpanded, padding  }) => {
+export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHeight, endWidth, children, wrapOutOfFlow = false, animationDuration = 0.5, autoSize = false, exitDirection = "top-left", isExpanded  }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [isGrowingCompleted, setIsGrowingCompleted] = useState(false);
 
@@ -79,7 +78,6 @@ export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHe
                     <motion.aside
                         {...sizeTransition}
                         className={clsx([style.wrapper, { [style.outOfFlow as string]: wrapOutOfFlow }])}
-                        style={padding ? { padding: padding, boxSizing: "border-box" } : {}}
                         key={"expandable-aside"}
                         layout={autoSize ? true : undefined}
                         transition={defaultTransition}

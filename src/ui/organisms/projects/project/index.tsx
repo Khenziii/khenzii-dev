@@ -73,7 +73,6 @@ export const Project: FC<project> = ({ name, description, backgroundGradient, to
                 autoSize={true}
                 exitDirection={"top"}
                 isExpanded={isExpanded}
-                padding={10}
             >
                 {description}
 
