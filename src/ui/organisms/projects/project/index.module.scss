@@ -12,6 +12,11 @@
     border: solid $primary 1px;
 }
 
+.underline {
+    width: 100%;
+    border-radius: 5px;
+}
+
 .darkenChildOnHover:hover {
     cursor: pointer;
 
