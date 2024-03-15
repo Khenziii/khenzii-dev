@@ -6,6 +6,15 @@ import { Expandable, GitHubRepoCard } from "@khenzii-dev/ui/molecules";
 import style from "./index.module.scss";
 import { type project } from "..";
 
+const formatDate = (date?: Date): string => {
+    if (date === undefined) return "...";
+
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const year = date.getFullYear();
+
+    return `${month}/${year}`;
+};
+
 export const Project: FC<project> = ({ name, description, backgroundGradient, topLeftComponent, startedWorking, finishedWorking, githubRepoUrl, websiteUrl, role }) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
@@ -75,10 +84,15 @@ export const Project: FC<project> = ({ name, description, backgroundGradient, to
                 isExpanded={isExpanded}
             >
                 <Flex direction={"column"} styles={{ padding: "10px", boxSizing: "border-box" }}>
-                    {role && (
-                        <Paragraph fontSize={1.5}>
-                            <i>Role: {role}</i>
+                    <Flex direction={"row"} align={"center"} gap={5}>
+                        <Icon iconName={"clock"} size={1} />
+                        <Paragraph>
+                            {`${formatDate(startedWorking)} - ${formatDate(finishedWorking)}`}
                         </Paragraph>
+                    </Flex>
+
+                    {role && (
+                        <Paragraph>Role: {role}</Paragraph>
                     )}
 
                     {description}
