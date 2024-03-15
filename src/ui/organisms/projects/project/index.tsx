@@ -84,7 +84,7 @@ export const Project: FC<project> = ({ name, description, backgroundGradient, to
                 isExpanded={isExpanded}
             >
                 <Flex direction={"column"} styles={{ padding: "10px", boxSizing: "border-box" }}>
-                    <Flex direction={"row"} align={"center"} gap={5}>
+                    <Flex direction={"row"} align={"center"} gap={5} className={style.darkenChild}>
                         <Icon iconName={"clock"} size={1} />
                         <Paragraph>
                             {`${formatDate(startedWorking)} - ${formatDate(finishedWorking)}`}
@@ -92,7 +92,9 @@ export const Project: FC<project> = ({ name, description, backgroundGradient, to
                     </Flex>
 
                     {role && (
-                        <Paragraph>Role: {role}</Paragraph>
+                        <div className={style.darkenChild}>
+                            <Paragraph>Role: {role}</Paragraph>
+                        </div>
                     )}
 
                     {description}

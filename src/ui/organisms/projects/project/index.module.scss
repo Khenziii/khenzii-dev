@@ -17,10 +17,17 @@
     border-radius: 5px;
 }
 
-.darkenChildOnHover:hover {
-    cursor: pointer;
-
+@mixin darkenChildren {
     > * {
         color: $textDarkened !important;
     }
+}
+
+.darkenChild {
+    @include darkenChildren;
+}
+
+.darkenChildOnHover:hover {
+    cursor: pointer;
+    @include darkenChildren;
 }
