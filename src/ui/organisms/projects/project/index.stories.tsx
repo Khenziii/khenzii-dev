@@ -14,7 +14,6 @@ export const Default: StoriesType<project> = {
         name: "khenzii.dev",
         description: <Paragraph>The very project that you{"'"}re working on right now!</Paragraph>,
         backgroundGradient: "linear-gradient(270deg, #FFFFFF, #20201f)",
-        secondaryColor: "#20201f",
         githubRepoUrl: "https://github.com/Khenziii/khenzii-dev",
         websiteUrl: "https://khenzii.dev/",
         startedWorking: new Date(new Date().getTime() - 1000 * 60 * 60),
