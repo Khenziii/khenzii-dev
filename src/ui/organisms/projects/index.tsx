@@ -17,8 +17,7 @@ export type project = {
     description: ReactNode;
     backgroundGradient: string;
     topLeftComponent: ReactNode;
-    startedWorking: Date;
-    finishedWorking?: Date;
+    dates?: [Date, Date?][];
     githubRepoUrl?: string;
     websiteUrl?: string;
     role?: projectRole;
@@ -31,7 +30,10 @@ export const projects: project[] = [
         backgroundGradient: "linear-gradient(270deg, #FFFFFF, #20201f)",
         githubRepoUrl: "https://github.com/Khenziii/khenzii-dev",
         websiteUrl: "https://khenzii.dev/",
-        startedWorking: new Date(new Date().getTime() - 1000 * 60 * 60),
+        dates: [
+            [new Date(2023, 7), new Date(2023, 9)],
+            [new Date(2024, 2)],
+        ],
         topLeftComponent: <Icon iconName={"globe2"} size={2} />,
         role: projectRole.FOUNDER,
     },
@@ -50,7 +52,9 @@ export const projects: project[] = [
         description: <LolCupDescription />,
         backgroundGradient: "linear-gradient(270deg, #1AFFAF, #111112)",
         websiteUrl: "https://lolcup.zsl.gda.pl/",
-        startedWorking: new Date(new Date().getTime() - 1000 * 60 * 60),
+        dates: [
+            [new Date(2023, 9), new Date(2024, 1)],
+        ],
         topLeftComponent: <Image
             alt={"lol-cup 2024 Logo"}
             src={"/lolcup-2024-logo.svg"}

@@ -6,6 +6,14 @@ import { Expandable, GitHubRepoCard } from "@khenzii-dev/ui/molecules";
 import style from "./index.module.scss";
 import { type project } from "..";
 
+const formatDates = (dates: project["dates"]): string => {
+    if (dates === undefined) return "";
+
+    return dates.map((entry): string => {
+        return `${formatDate(entry[0])} - ${formatDate(entry[1])}`;
+    }).join(", ");
+};
+
 const formatDate = (date?: Date): string => {
     if (date === undefined) return "...";
 
@@ -15,7 +23,7 @@ const formatDate = (date?: Date): string => {
     return `${month}/${year}`;
 };
 
-export const Project: FC<project> = ({ name, description, backgroundGradient, topLeftComponent, startedWorking, finishedWorking, githubRepoUrl, websiteUrl, role }) => {
+export const Project: FC<project> = ({ name, description, backgroundGradient, topLeftComponent, dates, githubRepoUrl, websiteUrl, role }) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
     return (
@@ -84,12 +92,12 @@ export const Project: FC<project> = ({ name, description, backgroundGradient, to
                 isExpanded={isExpanded}
             >
                 <Flex direction={"column"} styles={{ padding: "10px", boxSizing: "border-box" }}>
-                    <Flex direction={"row"} align={"center"} gap={5} className={style.darkenChild}>
-                        <Icon iconName={"clock"} size={1} />
-                        <Paragraph>
-                            {`${formatDate(startedWorking)} - ${formatDate(finishedWorking)}`}
-                        </Paragraph>
-                    </Flex>
+                    {dates && (
+                        <Flex direction={"row"} align={"center"} gap={5} className={style.darkenChild}>
+                            <Icon iconName={"clock"} size={1} />
+                            <Paragraph>{formatDates(dates)}</Paragraph>
+                        </Flex>
+                    )}
 
                     {role && (
                         <div className={style.darkenChild}>
