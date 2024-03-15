@@ -74,13 +74,13 @@ export const Project: FC<project> = ({ name, description, backgroundGradient, to
                 exitDirection={"top"}
                 isExpanded={isExpanded}
             >
-                <div style={{ padding: "10px", boxSizing: "border-box" }}>
+                <Flex direction={"column"} styles={{ padding: "10px", boxSizing: "border-box" }}>
                     {description}
 
                     {githubRepoUrl && (
                         <GitHubRepoCard githubRepoLink={githubRepoUrl} />
                     )}
-                </div>
+                </Flex>
             </Expandable>
         </Flex>
     );
