@@ -1,5 +1,5 @@
 import { type ReactNode } from "react";
-import { Paragraph, Icon } from "@khenzii-dev/ui/atoms";
+import { Icon } from "@khenzii-dev/ui/atoms";
 import { Project } from "./project";
 import Image from "next/image";
 import {
