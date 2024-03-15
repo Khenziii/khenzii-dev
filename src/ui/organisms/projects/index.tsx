@@ -7,6 +7,11 @@ import {
     LolCupDescription,
 } from "@khenzii-dev/ui/organisms/projects/descriptions";
 
+enum projectRole {
+    FOUNDER = "Founder",
+    CONTRIBUTOR = "Contributor",
+}
+
 export type project = {
     name: string;
     description: ReactNode;
@@ -16,6 +21,7 @@ export type project = {
     finishedWorking?: Date;
     githubRepoUrl?: string;
     websiteUrl?: string;
+    role?: projectRole;
 };
 
 export const projects: project[] = [
@@ -27,6 +33,7 @@ export const projects: project[] = [
         websiteUrl: "https://khenzii.dev/",
         startedWorking: new Date(new Date().getTime() - 1000 * 60 * 60),
         topLeftComponent: <Icon iconName={"globe2"} size={2} />,
+        role: projectRole.FOUNDER,
     },
     // {
     //     name: "khenz-tiktokbot",
@@ -51,6 +58,7 @@ export const projects: project[] = [
             height={200}
             style={{ maxWidth: "2rem", maxHeight: "2rem" }}
         />,
+        role: projectRole.CONTRIBUTOR,
     },
 ];
 

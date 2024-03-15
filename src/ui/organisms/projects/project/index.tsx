@@ -6,7 +6,7 @@ import { Expandable, GitHubRepoCard } from "@khenzii-dev/ui/molecules";
 import style from "./index.module.scss";
 import { type project } from "..";
 
-export const Project: FC<project> = ({ name, description, backgroundGradient, topLeftComponent, startedWorking, finishedWorking, githubRepoUrl, websiteUrl }) => {
+export const Project: FC<project> = ({ name, description, backgroundGradient, topLeftComponent, startedWorking, finishedWorking, githubRepoUrl, websiteUrl, role }) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
     return (
@@ -75,6 +75,12 @@ export const Project: FC<project> = ({ name, description, backgroundGradient, to
                 isExpanded={isExpanded}
             >
                 <Flex direction={"column"} styles={{ padding: "10px", boxSizing: "border-box" }}>
+                    {role && (
+                        <Paragraph fontSize={1.5}>
+                            <i>Role: {role}</i>
+                        </Paragraph>
+                    )}
+
                     {description}
 
                     {githubRepoUrl && (
