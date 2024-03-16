@@ -26,7 +26,7 @@ const formatDate = (date?: Date): string => {
 
 export const Project: FC<project> = ({ name, description, backgroundGradient, topLeftComponent, dates, githubRepoUrl, websiteUrl, role }) => {
     const [isExpanded, setIsExpanded] = useState(false);
-    const mobile = useMobile();
+    const mobile = useMobile(500);
 
     return (
         <Flex direction={"column"} justify={"center"} gap={0} className={style.container}>
