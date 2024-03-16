@@ -16,8 +16,9 @@ export const Default: StoriesType<project> = {
         backgroundGradient: "linear-gradient(270deg, #FFFFFF, #20201f)",
         githubRepoUrl: "https://github.com/Khenziii/khenzii-dev",
         websiteUrl: "https://khenzii.dev/",
-        startedWorking: new Date(new Date().getTime() - 1000 * 60 * 60),
-        finishedWorking: new Date(),
+        dates: [
+            [new Date(new Date().getTime() - 1000 * 60 * 60), new Date()],
+        ],
         topLeftComponent: <Icon iconName={"globe2"} size={2} />,
     },
 };
