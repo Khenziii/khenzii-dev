@@ -84,7 +84,7 @@ export const Project: FC<project> = ({ name, description, backgroundGradient, to
             <Expandable
                 startHeight={"0"}
                 startWidth={"calc(100% - 1px * 2)"} // 1px * 2 - borders
-                endHeight={""}
+                endHeight={"auto"}
                 endWidth={"calc(100% - 1px * 2)%"}
                 animationDuration={0.75}
                 autoSize={true}
