@@ -87,9 +87,9 @@ export const Project: FC<project> = ({ name, description, backgroundGradient, to
                 endHeight={"auto"}
                 endWidth={"calc(100% - 1px * 2)%"}
                 animationDuration={0.75}
-                autoSize={true}
                 exitDirection={"top"}
                 isExpanded={isExpanded}
+                autoSize
             >
                 <Flex direction={"column"} styles={{ padding: "10px", boxSizing: "border-box" }}>
                     {dates && (
