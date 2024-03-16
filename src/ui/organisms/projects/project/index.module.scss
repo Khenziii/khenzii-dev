@@ -1,0 +1,33 @@
+@import "../../../../styles/constants";
+
+.container {
+    width: min(100vw - 2 * 10px, $maxContentWidth);
+}
+
+.title {
+    min-height: 2rem;
+    padding: $defaultGap;
+    box-sizing: border-box;
+    width: calc(100% - 2 * $defaultGap);
+    border: solid $primary 1px;
+}
+
+.underline {
+    width: 100%;
+    border-radius: 5px;
+}
+
+@mixin darkenChildren {
+    > * {
+        color: $textDarkened !important;
+    }
+}
+
+.darkenChild {
+    @include darkenChildren;
+}
+
+.darkenChildOnHover:hover {
+    cursor: pointer;
+    @include darkenChildren;
+}

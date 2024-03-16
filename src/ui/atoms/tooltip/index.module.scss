@@ -1,0 +1,24 @@
+@import "../../../styles/constants";
+
+.container {
+    position: relative;
+    width: fit-content;
+    height: fit-content;
+}
+
+.tooltip {
+    position: absolute;
+    transition: all 0.5s ease-in-out;
+    border-width: 1px;
+    border-style: solid;
+    padding: $defaultGap;
+    opacity: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    top: calc(-100% - $defaultGap * 2); // * 2, because: padding-bottom & top
+
+    &.active {
+        opacity: 1;
+        transform: translate(-50%, -10%);
+    }
+}

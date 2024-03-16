@@ -1,0 +1,25 @@
+@import "../../../styles/constants";
+
+.container {
+    border: solid 1px $primary;
+    border-radius: 10px;
+    padding: $defaultGap;
+    width: fit-content;
+}
+
+.statContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: $defaultGap;
+}
+
+.iconWrapper:hover {
+    > * {
+        color: $textDarkened !important;
+    }
+}
+
+.cardTitle:hover {
+    color: $textDarkened;
+}

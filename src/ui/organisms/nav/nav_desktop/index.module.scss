@@ -4,6 +4,7 @@
     border: 1px solid $primary;
     border-top: none;
     padding: $defaultGap;
+    box-sizing: border-box;
     width: $maxContentWidth;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -31,4 +32,5 @@
     place-items: center;
     grid-template-columns: repeat(6, 1fr);
     height: 100%;
+    width: 100%;
 }

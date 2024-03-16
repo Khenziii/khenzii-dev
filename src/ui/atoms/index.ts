@@ -4,3 +4,4 @@ export * from "./paragraph";
 export * from "./icon";
 export * from "./loading";
 export * from "./anchor";
+export * from "./tooltip";

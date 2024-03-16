@@ -45,8 +45,9 @@ module.exports = {
     }],
     "@stylistic/object-curly-spacing": ["error", "always"],
     "@stylistic/semi": ["error", "always"],
-    "@stylistic/function-paren-newline": ["error", { "minItems": 4 }],
+    "@stylistic/function-paren-newline": ["error", { "minItems": 3 }],
     "@stylistic/function-call-argument-newline": ["error", "consistent"],
     "@stylistic/comma-dangle": ["error", "always-multiline"],
+    "@stylistic/eol-last": ["error", "always"],
   },
 };
