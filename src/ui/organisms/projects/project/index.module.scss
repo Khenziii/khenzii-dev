@@ -1,7 +1,7 @@
 @import "../../../../styles/constants";
 
 .container {
-    width: $maxContentWidth;
+    width: min(100vw - 2 * 10px, $maxContentWidth);
 }
 
 .title {

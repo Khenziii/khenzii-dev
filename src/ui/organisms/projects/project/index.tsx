@@ -3,6 +3,7 @@
 import { type FC, useState } from "react";
 import { Flex, Paragraph, Icon, Anchor } from "@khenzii-dev/ui/atoms";
 import { Expandable, GitHubRepoCard } from "@khenzii-dev/ui/molecules";
+import { useMobile } from "@khenzii-dev/hooks";
 import style from "./index.module.scss";
 import { type project } from "..";
 
@@ -25,30 +26,29 @@ const formatDate = (date?: Date): string => {
 
 export const Project: FC<project> = ({ name, description, backgroundGradient, topLeftComponent, dates, githubRepoUrl, websiteUrl, role }) => {
     const [isExpanded, setIsExpanded] = useState(false);
+    const mobile = useMobile();
 
     return (
         <Flex direction={"column"} justify={"center"} gap={0} className={style.container}>
             <Flex direction={"column"} justify={"center"} gap={0} fullWidth className={style.title}>
                 <Flex
-                    direction={"row"}
-                    align={"center"}
+                    direction={mobile ? "column" : "row"}
+                    align={mobile ? "flex-start" : "center"}
                     fullWidth
                     gap={10}
                 >
-                    <Flex direction={"row"} justify={"flex-start"} align={"center"}>
+                    <Flex direction={"row"} justify={"flex-start"} align={"center"} fullWidth>
                         {topLeftComponent}
 
-                        <Paragraph fontSize={2} styles={{ whiteSpace: "nowrap" }}>
+                        <Paragraph fontSize={2} styles={{ width: "100%" }}>
                             {name}
                         </Paragraph>
                     </Flex>
 
                     <Flex
-                        direction={"row"}
-                        justify={"flex-end"}
+                        direction={mobile ? "row-reverse" : "row"}
                         align={"center"}
                         gap={20}
-                        fullWidth
                     >
                         {websiteUrl && (
                             <Anchor href={websiteUrl} prefetch={false} newTab className={style.darkenChildOnHover}>
