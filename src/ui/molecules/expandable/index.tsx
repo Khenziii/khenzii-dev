@@ -76,7 +76,7 @@ export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHe
                 {isOpen && (
                     <motion.aside
                         {...sizeTransition}
-                        className={clsx([style.wrapper, {[style.outOfFlow as string]: wrapOutOfFlow}])}
+                        className={clsx([style.wrapper, { [style.outOfFlow as string]: wrapOutOfFlow }])}
                         key={"expandable-aside"}
                         layout={autoSize}
                         transition={defaultTransition}
