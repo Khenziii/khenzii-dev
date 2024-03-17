@@ -76,22 +76,24 @@ export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHe
                 {isOpen && (
                     <motion.aside
                         {...sizeTransition}
-                        className={clsx([style.wrapper, { [style.outOfFlow as string]: wrapOutOfFlow }])}
+                        className={clsx([style.wrapper, {[style.outOfFlow as string]: wrapOutOfFlow}])}
                         key={"expandable-aside"}
                         layout={autoSize}
                         transition={defaultTransition}
                     >
                         <AnimatePresence>
-                            <motion.div
-                                className={style.contentContainer}
-                                key={"expandable-content-container"}
-                                transition={defaultTransition}
-                                {...fadeTransition}
-                            >
-                                <motion.div key={"expandable-content"} style={{ height: "100%", width: "100%" }}>
-                                    {children}
+                            {(autoSize || isGrowingCompleted) && (
+                                <motion.div
+                                    className={style.contentContainer}
+                                    key={"expandable-content-container"}
+                                    transition={defaultTransition}
+                                    {...fadeTransition}
+                                >
+                                    <motion.div key={"expandable-content"} style={{ height: "100%", width: "100%" }}>
+                                        {children}
+                                    </motion.div>
                                 </motion.div>
-                            </motion.div>
+                            )}
                         </AnimatePresence>
                     </motion.aside>
                 )}
