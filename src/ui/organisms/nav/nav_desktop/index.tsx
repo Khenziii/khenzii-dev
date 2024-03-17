@@ -32,7 +32,7 @@ export const NavDesktop: FC<NavDesktopProps> = ({ routes , socials }) => {
                         isExpanded={areSocialsOpen}
                         autoSize
                     >
-                        <Flex direction={"column"} align={"flex-start"} justify={"flex-start"} gap={0} styles={{ height: "100%" }}>
+                        <Flex direction={"column"} align={"flex-start"} justify={"flex-start"} gap={0} styles={{ height: "100%", width: "100%" }}>
                             <button className={style.closeIcon} onClick={() => setAreSocialsOpen(false)}>
                                 <Icon iconName={"x-lg"}/>
                             </button>
@@ -50,7 +50,7 @@ export const NavDesktop: FC<NavDesktopProps> = ({ routes , socials }) => {
             </div>
 
             {routes.map((r, index) => (
-                <NavDesktopItem route={r} key={`nav-desktop-item-${index}`} active={pathname === r.path} />
+                <NavDesktopItem route={r} key={`nav-desktop-item-${index}`} active={pathname === r.path}/>
             ))}
         </div>
     );

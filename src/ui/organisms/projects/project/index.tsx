@@ -91,34 +91,26 @@ export const Project: FC<project> = ({ name, description, backgroundGradient, to
                 isExpanded={isExpanded}
                 autoSize
             >
-                {/*<Flex direction={"column"} styles={{ padding: "10px", boxSizing: "border-box" }}>*/}
-                {/*    {dates && (*/}
-                {/*        <Flex direction={"row"} align={"center"} gap={5} className={style.darkenChild}>*/}
-                {/*            <Icon iconName={"clock"} size={1} />*/}
-                {/*            <Paragraph>{formatDates(dates)}</Paragraph>*/}
-                {/*        </Flex>*/}
-                {/*    )}*/}
+                <Flex direction={"column"} styles={{ padding: "10px", boxSizing: "border-box" }}>
+                    {dates && (
+                        <Flex direction={"row"} align={"center"} gap={5} className={style.darkenChild}>
+                            <Icon iconName={"clock"} size={1} />
+                            <Paragraph>{formatDates(dates)}</Paragraph>
+                        </Flex>
+                    )}
 
-                {/*    {role && (*/}
-                {/*        <div className={style.darkenChild}>*/}
-                {/*            <Paragraph>Role: {role}</Paragraph>*/}
-                {/*        </div>*/}
-                {/*    )}*/}
+                    {role && (
+                        <div className={style.darkenChild}>
+                            <Paragraph>Role: {role}</Paragraph>
+                        </div>
+                    )}
 
-                {/*    {description}*/}
+                    {description}
 
-                {/*    {githubRepoUrl && (*/}
-                {/*        <GitHubRepoCard githubRepoLink={githubRepoUrl} />*/}
-                {/*    )}*/}
-                {/*</Flex>*/}
-
-                <div style={{ height: "50vh" }}>
-                    <Paragraph>
-                        Yes, I know, testing in production is bad.
-
-                        However, it for some reason only breaks there ;/
-                    </Paragraph>
-                </div>
+                    {githubRepoUrl && (
+                        <GitHubRepoCard githubRepoLink={githubRepoUrl} />
+                    )}
+                </Flex>
             </Expandable>
         </Flex>
     );
