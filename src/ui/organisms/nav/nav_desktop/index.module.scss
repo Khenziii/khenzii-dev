@@ -35,3 +35,12 @@
     width: 100%;
     margin-block: 5px;
 }
+
+.expandContainer {
+    height: calc(2 * $navDesktopHeight - $defaultGap);
+    // 10px * 2 = both paddings, 1px * 4 = borders
+    width: min(
+            calc(100vw - 2 * $defaultGap - 1px * 4),
+            calc($maxContentWidth - $defaultGap * 2 - 1px * 4)
+    );
+}

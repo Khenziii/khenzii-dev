@@ -32,10 +32,7 @@ export const NavDesktop: FC<NavDesktopProps> = ({ routes , socials }) => {
                             align={"flex-start"}
                             justify={"flex-start"}
                             gap={0}
-                            styles={{
-                                height: "calc(2 * 75px - 10px)",
-                                width: "min(calc(100vw - 2 * 10px - 1px * 4), calc(1500px - 10px * 2 - 1px * 4))", // 10px * 2 = both paddings, 1px * 4 = borders
-                            }}
+                            className={style.expandContainer}
                         >
                             <button className={style.closeIcon} onClick={() => setAreSocialsOpen(false)}>
                                 <Icon iconName={"x-lg"}/>
