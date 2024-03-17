@@ -24,8 +24,13 @@ export const NavMobile: FC<NavMobileProps> = ({ routes, socials }) => {
 
                 <div style={{ position: "absolute", top: 0, left: 0 }}>
                     <Expandable
+                        startHeight={"0"}
+                        startWidth={"0"}
+                        endHeight={"auto"}
+                        endWidth={"calc(100vw - 2 * 10px - 2 * 1px)"}
                         wrapOutOfFlow={true}
                         isExpanded={areSocialsOpen}
+                        autoSize
                     >
                         <Flex direction={"column"} align={"flex-start"} justify={"flex-start"} gap={0} styles={{ height: "100%", width: "100%" }}>
                             <button className={style.closeIcon} onClick={() => setAreSocialsOpen(false)}>
