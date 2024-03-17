@@ -34,11 +34,10 @@ export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHe
             height: endHeight,
         },
         exit: {
-            width: exitDirection === "top-left" ? 0 : startWidth,
+            width: (exitDirection === "top-left") ? 0 : startWidth,
             height: 0,
         },
     };
-
     const fadeTransition: Variants = {
         initial: {
             opacity: 0,
