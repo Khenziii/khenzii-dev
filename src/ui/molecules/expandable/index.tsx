@@ -4,19 +4,19 @@ import style from "./index.module.scss";
 import clsx from "clsx";
 
 export type ExpandableProps = {
-    startHeight: string;
-    startWidth: string;
-    endHeight: string;
-    endWidth: string;
     children: ReactNode;
     isExpanded: boolean;
+    autoSize?: boolean;
+    startHeight?: string;
+    startWidth?: string;
+    endHeight?: string;
+    endWidth?: string;
     wrapOutOfFlow?: boolean;
     animationDuration?: number;
-    autoSize?: boolean;
     exitDirection?: "top-left" | "top";
 };
 
-export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHeight, endWidth, children, wrapOutOfFlow = false, animationDuration = 0.5, autoSize = false, exitDirection = "top-left", isExpanded  }) => {
+export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHeight, endWidth, children, wrapOutOfFlow = false, animationDuration = 0.5, autoSize = true, exitDirection = "top-left", isExpanded  }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [isGrowingCompleted, setIsGrowingCompleted] = useState(false);
 
@@ -35,7 +35,7 @@ export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHe
         },
         exit: {
             width: (exitDirection === "top-left") ? 0 : startWidth,
-            height: startHeight,
+            height: (exitDirection === "top-left") ? 0 : startHeight,
         },
     };
     const fadeTransition: Variants = {

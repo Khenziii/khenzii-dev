@@ -82,14 +82,9 @@ export const Project: FC<project> = ({ name, description, backgroundGradient, to
             </Flex>
 
             <Expandable
-                startHeight={"0"}
-                startWidth={"calc(100% - 1px * 2)"} // 1px * 2 - borders
-                endHeight={"auto"}
-                endWidth={"calc(100% - 1px * 2)%"}
                 animationDuration={0.75}
                 exitDirection={"top"}
                 isExpanded={isExpanded}
-                autoSize
             >
                 <Flex direction={"column"} styles={{ padding: "10px", boxSizing: "border-box" }}>
                     {dates && (
