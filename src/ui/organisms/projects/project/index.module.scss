@@ -31,3 +31,10 @@
     cursor: pointer;
     @include darkenChildren;
 }
+
+.expandContainer {
+    padding: $defaultGap;
+    box-sizing: border-box;
+    height: auto;
+    width: calc(100% - 1px * 2);
+}

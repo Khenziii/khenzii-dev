@@ -87,15 +87,7 @@ export const Project: FC<project> = ({ name, description, backgroundGradient, to
                 inDirection={"top"}
                 exitDirection={"top"}
             >
-                <Flex
-                    direction={"column"}
-                    styles={{
-                        padding: "10px",
-                        boxSizing: "border-box",
-                        height: "auto",
-                        width: "calc(100% - 1px * 2)",
-                    }}
-                >
+                <Flex direction={"column"} className={style.expandContainer}>
                     {dates && (
                         <Flex direction={"row"} align={"center"} gap={5} className={style.darkenChild}>
                             <Icon iconName={"clock"} size={1} />
