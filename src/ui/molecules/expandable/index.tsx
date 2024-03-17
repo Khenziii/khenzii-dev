@@ -4,19 +4,15 @@ import style from "./index.module.scss";
 import clsx from "clsx";
 
 export type ExpandableProps = {
-    startHeight: string;
-    startWidth: string;
-    endHeight: string;
-    endWidth: string;
     children: ReactNode;
     isExpanded: boolean;
     wrapOutOfFlow?: boolean;
     animationDuration?: number;
-    autoSize?: boolean;
+    inDirection?: "top-left" | "top";
     exitDirection?: "top-left" | "top";
 };
 
-export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHeight, endWidth, children, wrapOutOfFlow = false, animationDuration = 0.5, autoSize = false, exitDirection = "top-left", isExpanded  }) => {
+export const Expandable: FC<ExpandableProps> = ({ children, isExpanded, wrapOutOfFlow = false, animationDuration = 0.5, inDirection = "top-left", exitDirection = "top-left"  }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [isGrowingCompleted, setIsGrowingCompleted] = useState(false);
 
@@ -25,18 +21,28 @@ export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHe
         ease: [0.75, 0, 0.30, 1],
     };
     const sizeTransition: Variants = {
-        initial: {
-            width: startWidth,
-            height: startHeight,
-        },
+        initial: inDirection === "top-left"
+            ? {
+                width: 0,
+                height: 0,
+            }
+            : {
+                width: "auto",
+                height: 0,
+            },
         animate: {
-            width: endWidth,
-            height: endHeight,
+            width: "auto",
+            height: "auto",
         },
-        exit: {
-            width: (exitDirection === "top-left") ? 0 : startWidth,
-            height: (exitDirection === "top-left") ? 0 : startHeight,
-        },
+        exit: exitDirection === "top-left"
+            ? {
+                width: 0,
+                height: 0,
+            }
+            : {
+                width: "auto",
+                height: 0,
+            },
     };
     const fadeTransition: Variants = {
         initial: {
@@ -78,22 +84,18 @@ export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHe
                         {...sizeTransition}
                         className={clsx([style.wrapper, { [style.outOfFlow as string]: wrapOutOfFlow }])}
                         key={"expandable-aside"}
-                        layout={autoSize}
                         transition={defaultTransition}
+                        layout
                     >
                         <AnimatePresence>
-                            {(autoSize || isGrowingCompleted) && (
-                                <motion.div
-                                    className={style.contentContainer}
-                                    key={"expandable-content-container"}
-                                    transition={defaultTransition}
-                                    {...fadeTransition}
-                                >
-                                    <motion.div key={"expandable-content"} style={{ height: "100%", width: "100%" }}>
-                                        {children}
-                                    </motion.div>
-                                </motion.div>
-                            )}
+                            <motion.div
+                                className={style.contentContainer}
+                                key={"expandable-content-container"}
+                                transition={defaultTransition}
+                                {...fadeTransition}
+                            >
+                                {children}
+                            </motion.div>
                         </AnimatePresence>
                     </motion.aside>
                 )}

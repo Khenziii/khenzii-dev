@@ -82,16 +82,20 @@ export const Project: FC<project> = ({ name, description, backgroundGradient, to
             </Flex>
 
             <Expandable
-                startHeight={"0"}
-                startWidth={"calc(100% - 1px * 2)"} // 1px * 2 - borders
-                endHeight={"auto"}
-                endWidth={"calc(100% - 1px * 2)%"}
-                animationDuration={0.75}
-                exitDirection={"top"}
                 isExpanded={isExpanded}
-                autoSize
+                animationDuration={0.75}
+                inDirection={"top"}
+                exitDirection={"top"}
             >
-                <Flex direction={"column"} styles={{ padding: "10px", boxSizing: "border-box" }}>
+                <Flex
+                    direction={"column"}
+                    styles={{
+                        padding: "10px",
+                        boxSizing: "border-box",
+                        height: "auto",
+                        width: "calc(100% - 1px * 2)",
+                    }}
+                >
                     {dates && (
                         <Flex direction={"row"} align={"center"} gap={5} className={style.darkenChild}>
                             <Icon iconName={"clock"} size={1} />

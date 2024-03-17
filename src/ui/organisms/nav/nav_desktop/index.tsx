@@ -24,14 +24,19 @@ export const NavDesktop: FC<NavDesktopProps> = ({ routes , socials }) => {
 
                 <div style={{ position: "absolute", top: 0, left: 0 }}>
                     <Expandable
-                        startHeight={"0"}
-                        startWidth={"0"}
-                        endHeight={"calc(2 * 75px - 10px)"}
-                        endWidth={"min(calc(100vw - 2 * 10px - 1px * 4), calc(1500px - 10px * 2 - 1px * 4))"} // 10px * 2 = both paddings, 1px * 4 = borders
                         wrapOutOfFlow={true}
                         isExpanded={areSocialsOpen}
                     >
-                        <Flex direction={"column"} align={"flex-start"} justify={"flex-start"} gap={0} styles={{ height: "100%", width: "100%" }}>
+                        <Flex
+                            direction={"column"}
+                            align={"flex-start"}
+                            justify={"flex-start"}
+                            gap={0}
+                            styles={{
+                                height: "calc(2 * 75px - 10px)",
+                                width: "min(calc(100vw - 2 * 10px - 1px * 4), calc(1500px - 10px * 2 - 1px * 4))", // 10px * 2 = both paddings, 1px * 4 = borders
+                            }}
+                        >
                             <button className={style.closeIcon} onClick={() => setAreSocialsOpen(false)}>
                                 <Icon iconName={"x-lg"}/>
                             </button>
