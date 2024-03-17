@@ -30,7 +30,6 @@ export const NavMobile: FC<NavMobileProps> = ({ routes, socials }) => {
                         endWidth={"calc(100vw - 2 * 10px - 2 * 1px)"}
                         wrapOutOfFlow={true}
                         isExpanded={areSocialsOpen}
-                        autoSize
                     >
                         <Flex direction={"column"} align={"flex-start"} justify={"flex-start"} gap={0} styles={{ height: "100%", width: "100%" }}>
                             <button className={style.closeIcon} onClick={() => setAreSocialsOpen(false)}>

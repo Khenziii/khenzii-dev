@@ -35,7 +35,7 @@ export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHe
         },
         exit: {
             width: (exitDirection === "top-left") ? 0 : startWidth,
-            height: startHeight,
+            height: (exitDirection === "top-left") ? 0 : startHeight,
         },
     };
     const fadeTransition: Variants = {
@@ -78,7 +78,7 @@ export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHe
                         {...sizeTransition}
                         className={clsx([style.wrapper, { [style.outOfFlow as string]: wrapOutOfFlow }])}
                         key={"expandable-aside"}
-                        layout={autoSize ? true : undefined}
+                        layout={autoSize}
                         transition={defaultTransition}
                     >
                         <AnimatePresence>
@@ -88,7 +88,7 @@ export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHe
                                 transition={defaultTransition}
                                 {...fadeTransition}
                             >
-                                <motion.div key={"expandable-content"} style={{ height: "100%" }}>
+                                <motion.div key={"expandable-content"} style={{ height: "100%", width: "100%" }}>
                                     {children}
                                 </motion.div>
                             </motion.div>
