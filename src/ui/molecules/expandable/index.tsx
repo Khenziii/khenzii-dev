@@ -75,11 +75,11 @@ export const Expandable: FC<ExpandableProps> = ({ startHeight, startWidth, endHe
             <AnimatePresence>
                 {isOpen && (
                     <motion.aside
-                        {...sizeTransition}
                         className={clsx([style.wrapper, { [style.outOfFlow as string]: wrapOutOfFlow }])}
                         key={"expandable-aside"}
                         layout={autoSize}
                         transition={defaultTransition}
+                        {...sizeTransition}
                     >
                         <AnimatePresence>
                             {(autoSize || isGrowingCompleted) && (
