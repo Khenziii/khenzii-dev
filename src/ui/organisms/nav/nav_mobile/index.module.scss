@@ -34,6 +34,11 @@
     gap: 10px;
 }
 
+.expandContainer {
+    height: auto;
+    width: calc(100vw - 2 * $defaultGap - 2 * 1px);
+}
+
 @media (height <= 500px) {
     .socialContainer {
         grid-template-columns: repeat(3, 1fr);

@@ -32,10 +32,7 @@ export const NavMobile: FC<NavMobileProps> = ({ routes, socials }) => {
                             align={"flex-start"}
                             justify={"flex-start"}
                             gap={0}
-                            styles={{
-                                height: "auto",
-                                width: "calc(100vw - 2 * 10px - 2 * 1px)",
-                            }}
+                            className={style.expandContainer}
                         >
                             <button className={style.closeIcon} onClick={() => setAreSocialsOpen(false)}>
                                 <Icon iconName={"x-lg"}/>
