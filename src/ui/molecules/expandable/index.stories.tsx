@@ -11,10 +11,7 @@ export default {
 export const Default: StoriesType<ExpandableProps> = {
     args: {
         isExpanded: true,
-        startWidth: "0",
-        startHeight: "0",
-        endWidth: "auto",
-        endHeight: "auto",
+        inDirection: "top-left",
         exitDirection: "top-left",
         children: <Paragraph>:3</Paragraph>,
     },
