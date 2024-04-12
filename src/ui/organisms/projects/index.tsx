@@ -78,11 +78,11 @@ export enum sortByEnum {
 
 export const sortByOptions: option[] = [
     {
-        text: sortByEnum.OldestToNewest,
+        text: sortByEnum.NewestToOldest,
         iconName: "clock",
     },
     {
-        text: sortByEnum.NewestToOldest,
+        text: sortByEnum.OldestToNewest,
         iconName: "clock",
     },
     {
