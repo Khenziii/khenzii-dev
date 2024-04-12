@@ -26,5 +26,6 @@ export const Default: StoriesType<SelectProps> = {
         fontSize: 2,
         openedByDefault: false,
         animationDuration: 0.5,
+        width: "fit-content",
     },
 };

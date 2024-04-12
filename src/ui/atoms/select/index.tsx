@@ -11,21 +11,28 @@ export type option = {
 
 export type SelectProps = {
     options: option[];
+    setCurrentOption: (item: option) => void;
+    currentOption: option;
     fontSize?: number;
     openedByDefault?: boolean;
     animationDuration?: number;
+    width?: string;
 };
 
-export const Select: FC<SelectProps> = ({ options, fontSize = 2, openedByDefault = false, animationDuration = 0.5 }) => {
+export const Select: FC<SelectProps> = ({ options, setCurrentOption, currentOption, fontSize = 2, openedByDefault = false, animationDuration = 0.5, width = "fit-content" }) => {
     const [isFocused, setIsFocused] = useState(openedByDefault);
-    const [currentOption, setCurrentOption] = useState<option>(options[0]!);
 
     return (
-        <Flex direction={"column"} gap={0} className={style.container}>
+        <Flex
+            direction={"column"}
+            gap={0}
+            styles={{ width: width }}
+        >
             <Flex
                 direction={"row"}
                 align={"center"}
                 className={style.currentChoiceContainer}
+                justify={"space-between"}
             >
                 <Paragraph fontSize={fontSize}>
                     {currentOption.text}
