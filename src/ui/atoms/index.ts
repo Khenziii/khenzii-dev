@@ -5,3 +5,4 @@ export * from "./icon";
 export * from "./loading";
 export * from "./anchor";
 export * from "./tooltip";
+export * from "./select";

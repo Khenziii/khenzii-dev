@@ -1,0 +1,24 @@
+@import "../../../styles/constants";
+
+.currentChoiceContainer {
+    background-color: $contentBackground;
+    border: solid 1px $primary;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.darkenChildOnHover:hover {
+    cursor: pointer;
+    > * {
+        color: $textDarkened !important;
+    }
+}
+
+.optionWrapper {
+    padding: 5px;
+
+    &:hover {
+        filter: brightness(50%);
+        cursor: pointer;
+    }
+}
