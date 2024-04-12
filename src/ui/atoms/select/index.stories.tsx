@@ -8,5 +8,23 @@ export default {
 };
 
 export const Default: StoriesType<SelectProps> = {
-    args: {},
+    args: {
+        options: [
+            {
+                text: "First option",
+                iconName: "clock",
+            },
+            {
+                text: "Second option",
+                iconName: "alphabet",
+            },
+            {
+                text: "Third option",
+                iconName: "key",
+            },
+        ],
+        fontSize: 2,
+        openedByDefault: false,
+        animationDuration: 0.5,
+    },
 };
