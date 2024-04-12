@@ -147,7 +147,7 @@ export const Projects = () => {
             <Flex direction={"column"} align={"center"}>
                 <Paragraph fontSize={1.25}>Sort by:</Paragraph>
 
-                <SelectContext.Provider value={{ currentSortOption, setCurrentSortOption }}>
+                <SelectContext.Provider value={{ currentOption: currentSortOption, setCurrentOption: setCurrentSortOption }}>
                     <Select options={sortByOptions} fontSize={1.5} width={"min(20rem, 100vw - 2 * 10px)"} />
                 </SelectContext.Provider>
             </Flex>

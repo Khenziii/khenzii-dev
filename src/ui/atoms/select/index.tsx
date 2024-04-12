@@ -24,7 +24,7 @@ export type SelectProps = {
 
 export const Select: FC<SelectProps> = ({ options, fontSize = 2, openedByDefault = false, animationDuration = 0.5, width = "fit-content" }) => {
     const [isFocused, setIsFocused] = useState(openedByDefault);
-    const { currentSortOption, setCurrentSortOption }= useContext(SelectContext);
+    const { currentOption, setCurrentOption } = useContext(SelectContext);
 
     return (
         <Flex
@@ -39,7 +39,7 @@ export const Select: FC<SelectProps> = ({ options, fontSize = 2, openedByDefault
                 justify={"space-between"}
             >
                 <Paragraph fontSize={fontSize}>
-                    {currentSortOption.text}
+                    {currentOption.text}
                 </Paragraph>
 
                 <div
@@ -63,10 +63,10 @@ export const Select: FC<SelectProps> = ({ options, fontSize = 2, openedByDefault
                 inDirection={"top"}
                 exitDirection={"top"}
             >
-                {options.filter(item => item != currentSortOption).map((item, index) => (
+                {options.filter(item => item != currentOption).map((item, index) => (
                     <div
                         onClick={() => {
-                            setCurrentSortOption(item);
+                            setCurrentOption(item);
                             setIsFocused(false);
                         }}
                         key={`select-item-${index}`}
