@@ -1,7 +1,7 @@
 "use client";
 
 import { type ReactNode, useEffect, useState } from "react";
-import { Flex, Icon, type option, Paragraph, Select } from "@khenzii-dev/ui/atoms";
+import { Flex, Icon, type option, Paragraph, Select, SelectContext } from "@khenzii-dev/ui/atoms";
 import { Project } from "./project";
 import Image from "next/image";
 import {
@@ -146,7 +146,10 @@ export const Projects = () => {
         <Flex direction={"column"} styles={{ marginTop: "10px" }}>
             <Flex direction={"column"} align={"center"}>
                 <Paragraph fontSize={1.25}>Sort by:</Paragraph>
-                <Select options={sortByOptions} currentOption={currentSortOption} setCurrentOption={setCurrentSortOption} fontSize={1.5} width={"min(20rem, 100vw - 2 * 10px)"} />
+
+                <SelectContext.Provider value={{ currentSortOption, setCurrentSortOption }}>
+                    <Select options={sortByOptions} fontSize={1.5} width={"min(20rem, 100vw - 2 * 10px)"} />
+                </SelectContext.Provider>
             </Flex>
 
             <div>

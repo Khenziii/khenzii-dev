@@ -1,10 +1,13 @@
 "use client";
 
-import { type FC, useState } from "react";
+export * from "./select_context";
+
+import { type FC, useState, useContext } from "react";
 import { Paragraph, Flex, Icon } from "@khenzii-dev/ui/atoms";
 import { type IconName } from "@khenzii-dev/ui/types/icon-name";
 import { Expandable } from "@khenzii-dev/ui/molecules";
 import style from "./index.module.scss";
+import { SelectContext } from "./select_context";
 
 export type option = {
     text: string;
@@ -13,16 +16,15 @@ export type option = {
 
 export type SelectProps = {
     options: option[];
-    setCurrentOption: (item: option) => void;
-    currentOption: option;
     fontSize?: number;
     openedByDefault?: boolean;
     animationDuration?: number;
     width?: string;
 };
 
-export const Select: FC<SelectProps> = ({ options, setCurrentOption, currentOption, fontSize = 2, openedByDefault = false, animationDuration = 0.5, width = "fit-content" }) => {
+export const Select: FC<SelectProps> = ({ options, fontSize = 2, openedByDefault = false, animationDuration = 0.5, width = "fit-content" }) => {
     const [isFocused, setIsFocused] = useState(openedByDefault);
+    const { currentSortOption, setCurrentSortOption }= useContext(SelectContext);
 
     return (
         <Flex
@@ -37,7 +39,7 @@ export const Select: FC<SelectProps> = ({ options, setCurrentOption, currentOpti
                 justify={"space-between"}
             >
                 <Paragraph fontSize={fontSize}>
-                    {currentOption.text}
+                    {currentSortOption.text}
                 </Paragraph>
 
                 <div
@@ -61,10 +63,10 @@ export const Select: FC<SelectProps> = ({ options, setCurrentOption, currentOpti
                 inDirection={"top"}
                 exitDirection={"top"}
             >
-                {options.filter(item => item != currentOption).map((item, index) => (
+                {options.filter(item => item != currentSortOption).map((item, index) => (
                     <div
                         onClick={() => {
-                            setCurrentOption(item);
+                            setCurrentSortOption(item);
                             setIsFocused(false);
                         }}
                         key={`select-item-${index}`}
