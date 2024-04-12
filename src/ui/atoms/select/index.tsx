@@ -1,3 +1,5 @@
+"use client";
+
 import { type FC, useState } from "react";
 import { Paragraph, Flex, Icon } from "@khenzii-dev/ui/atoms";
 import { type IconName } from "@khenzii-dev/ui/types/icon-name";

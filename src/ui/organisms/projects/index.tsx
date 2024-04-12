@@ -1,3 +1,5 @@
+"use client";
+
 import { type ReactNode, useEffect, useState } from "react";
 import { Flex, Icon, type option, Paragraph, Select } from "@khenzii-dev/ui/atoms";
 import { Project } from "./project";
@@ -141,11 +143,11 @@ export const Projects = () => {
     }, [currentSortOption]);
 
     return (
-        <Flex direction={"column"}>
-            <div>
+        <Flex direction={"column"} styles={{ marginTop: "10px" }}>
+            <Flex direction={"column"} align={"center"}>
                 <Paragraph fontSize={1.25}>Sort by:</Paragraph>
-                <Select options={sortByOptions} currentOption={currentSortOption} setCurrentOption={setCurrentSortOption} fontSize={1.5} width={"20rem"} />
-            </div>
+                <Select options={sortByOptions} currentOption={currentSortOption} setCurrentOption={setCurrentSortOption} fontSize={1.5} width={"min(20rem, 100vw - 2 * 10px)"} />
+            </Flex>
 
             <div>
                 {projectsArray.map((project, index) => (
