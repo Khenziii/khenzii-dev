@@ -4007,7 +4007,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/query-core@npm:5.27.5, @tanstack/query-core@npm:^5.27.5":
+"@tanstack/query-core@npm:5.29.0":
+  version: 5.29.0
+  resolution: "@tanstack/query-core@npm:5.29.0"
+  checksum: 10c0/ec90801c7234a551e347656b02c6e4dcc448722c466cc42eaf03bb69ac535c2e26a74f7189c21cf836cacf41851f30d17beae0f9478017b6220b612e1803eddb
+  languageName: node
+  linkType: hard
+
+"@tanstack/query-core@npm:^5.27.5":
   version: 5.27.5
   resolution: "@tanstack/query-core@npm:5.27.5"
   checksum: 10c0/e0a06216de04c2b62d278a666c16ac9dc3cad82d97202ca87ecfb09272912e508a4d365947f98ef4f2d53d46d7a1c1d1011e05d3a9da1e50ba70419e7a385bd7
@@ -4033,14 +4040,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/react-query@npm:^5.27.5":
-  version: 5.27.5
-  resolution: "@tanstack/react-query@npm:5.27.5"
+"@tanstack/react-query@npm:^5.29.2":
+  version: 5.29.2
+  resolution: "@tanstack/react-query@npm:5.29.2"
   dependencies:
-    "@tanstack/query-core": "npm:5.27.5"
+    "@tanstack/query-core": "npm:5.29.0"
   peerDependencies:
     react: ^18.0.0
-  checksum: 10c0/2ca456e763d94b454ab6d6506b8b033863bcf1095fd2925edd29ef88bca4de23acec0d24507f9aa7ef737d0cb1298ee97f011470e19131312a32f832b4c10ff0
+  checksum: 10c0/80a47d2c04b1f68b8890c7d48c4e6330c0c83569f751d91a631291ca4f32e5521663b93cfd12fa06800aa73ae50a372b91614b85679eec3a92dba5b4c5f87b2e
   languageName: node
   linkType: hard
 
@@ -4099,6 +4106,55 @@ __metadata:
   peerDependencies:
     "@testing-library/dom": ">=7.21.4"
   checksum: 10c0/8a0e708709f2510287568dff668bc7d6f5c4e7e17407452b7aa0fcf74732dccf511c63fc76ac514d753cb1f0586c1def59ba7f5245a9523715d37a8f198745d3
+  languageName: node
+  linkType: hard
+
+"@trpc/client@npm:^11.0.0-rc.340":
+  version: 11.0.0-rc.340
+  resolution: "@trpc/client@npm:11.0.0-rc.340"
+  peerDependencies:
+    "@trpc/server": 11.0.0-rc.340+d1652d1bc
+  checksum: 10c0/d52feaa0557180e06ce7baead2e356f247caefd4c1f3df3117c2d460eb56fcb738d2d45d608724cfdc8e4e962e72ffa3fb8ecb73684e560f9967cb8980023d39
+  languageName: node
+  linkType: hard
+
+"@trpc/next@npm:^11.0.0-rc.340":
+  version: 11.0.0-rc.340
+  resolution: "@trpc/next@npm:11.0.0-rc.340"
+  peerDependencies:
+    "@tanstack/react-query": ^5.25.0
+    "@trpc/client": 11.0.0-rc.340+d1652d1bc
+    "@trpc/react-query": 11.0.0-rc.340+d1652d1bc
+    "@trpc/server": 11.0.0-rc.340+d1652d1bc
+    next: "*"
+    react: ">=16.8.0"
+    react-dom: ">=16.8.0"
+  peerDependenciesMeta:
+    "@tanstack/react-query":
+      optional: true
+    "@trpc/react-query":
+      optional: true
+  checksum: 10c0/2d2ae8b96ba71a43244e60010c53bb5b7a6c55dad3a07d8f813160c6942d325262104795032bbd087512765f21c4da8b72ae764a9eed7fabcb9f3ed049342c7d
+  languageName: node
+  linkType: hard
+
+"@trpc/react-query@npm:^11.0.0-rc.340":
+  version: 11.0.0-rc.340
+  resolution: "@trpc/react-query@npm:11.0.0-rc.340"
+  peerDependencies:
+    "@tanstack/react-query": ^5.25.0
+    "@trpc/client": 11.0.0-rc.340+d1652d1bc
+    "@trpc/server": 11.0.0-rc.340+d1652d1bc
+    react: ">=18.2.0"
+    react-dom: ">=18.2.0"
+  checksum: 10c0/ff1f32d8e5383dbe3b51b8a5d0d2c41c0ef4d2c627677e297c440e9a31ade33aa82927ad84bfa08f081b91d5740e6b573c369f16de89c04730b66f36e1533289
+  languageName: node
+  linkType: hard
+
+"@trpc/server@npm:^11.0.0-rc.340":
+  version: 11.0.0-rc.340
+  resolution: "@trpc/server@npm:11.0.0-rc.340"
+  checksum: 10c0/f9bfaa79dff5a5b99477c99d02fd6cfdfd7a5d0b7ee52176bff88c47ee62370c7f8589370dcecf356bda8d1ee4f37ea13f7e3fb673031bda8ce89e85d7180a0f
   languageName: node
   linkType: hard
 
@@ -9879,8 +9935,12 @@ __metadata:
     "@stylistic/eslint-plugin": "npm:^1.6.3"
     "@t3-oss/env-nextjs": "npm:^0.7.1"
     "@tanstack/query-core": "npm:^5.27.5"
-    "@tanstack/react-query": "npm:^5.27.5"
+    "@tanstack/react-query": "npm:^5.29.2"
     "@tanstack/react-query-devtools": "npm:^5.27.8"
+    "@trpc/client": "npm:^11.0.0-rc.340"
+    "@trpc/next": "npm:^11.0.0-rc.340"
+    "@trpc/react-query": "npm:^11.0.0-rc.340"
+    "@trpc/server": "npm:^11.0.0-rc.340"
     "@types/eslint": "npm:^8.44.7"
     "@types/node": "npm:^18.17.0"
     "@types/react": "npm:^18.2.37"
