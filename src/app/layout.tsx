@@ -2,7 +2,7 @@ import { Montserrat } from "next/font/google";
 import type { Metadata } from "next";
 import type { ReactNode, FC } from "react";
 import { Footer, Nav } from "src/ui/organisms";
-import { ReactQueryProvider } from "@khenzii-dev/providers";
+import { TRPCProvider } from "@khenzii-dev/providers";
 import style from "../styles/layout.module.scss";
 import clsx from "clsx";
 
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 };
 
 const RootLayout: FC<{ children: ReactNode }> = ({ children }) => (
-    <ReactQueryProvider>
+    <TRPCProvider>
         <html lang="en">
             <body className={clsx(style.layout, montserrat.className)}>
                 <nav className={style.nav}>
@@ -37,7 +37,7 @@ const RootLayout: FC<{ children: ReactNode }> = ({ children }) => (
                 </footer>
             </body>
         </html>
-    </ReactQueryProvider>
+    </TRPCProvider>
 );
 
 export default RootLayout;

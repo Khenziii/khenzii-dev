@@ -2,9 +2,8 @@ import "server-only";
 
 import { headers } from "next/headers";
 import { cache } from "react";
-
 import { createCaller } from "@khenzii-dev/server/api/root";
-import { createTRPCContext } from "../server/api/trpc";
+import { createTRPCContext } from "@khenzii-dev/server/api/trpc";
 
 /**
  * This wraps the `createTRPCContext` helper and provides the required context for the tRPC API when

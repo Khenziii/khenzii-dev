@@ -10,7 +10,6 @@
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
-
 import { getServerAuthSession } from "@khenzii-dev/server/auth";
 import { db } from "@khenzii-dev/server/db";
 
