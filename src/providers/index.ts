@@ -1,1 +1,1 @@
-export * from "./react-query-provider";
+export * from "./trpc_provider";
