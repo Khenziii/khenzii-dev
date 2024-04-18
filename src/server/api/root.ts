@@ -1,4 +1,7 @@
 import { createCallerFactory, createTRPCRouter } from "@khenzii-dev/server/api/trpc";
+import {
+    currentProjectRouter,
+} from "@khenzii-dev/server/api/routers";
 
 /**
  * This is the primary router for your server.
@@ -6,7 +9,7 @@ import { createCallerFactory, createTRPCRouter } from "@khenzii-dev/server/api/t
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
-    // example: exampleRouter,
+    current_project: currentProjectRouter,
 });
 
 // export type definition of API
