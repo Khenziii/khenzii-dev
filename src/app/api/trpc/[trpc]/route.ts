@@ -11,7 +11,7 @@ import { createTRPCContext } from "@khenzii-dev/server/api/trpc";
 const createContext = async (req: NextRequest) => {
     // default to application/json; charset=UTF-8 Content-Type
     if(!req.headers.get("content-type")) {
-        req.headers.set("content-type", "application/json; charset=UTF-8");
+        req.headers.set("Content-Type", "application/json; charset=UTF-8");
     }
 
     return createTRPCContext({
