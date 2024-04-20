@@ -9,9 +9,9 @@ import { createTRPCContext } from "@khenzii-dev/server/api/trpc";
  * handling an HTTP request (e.g. when you make requests from Client Components).
  */
 const createContext = async (req: NextRequest) => {
-    // default to application/json Content-Type
+    // default to application/json; charset=UTF-8 Content-Type
     if(!req.headers.get("content-type")) {
-        req.headers.set("content-type", "application/json");
+        req.headers.set("content-type", "application/json; charset=UTF-8");
     }
 
     return createTRPCContext({
@@ -26,14 +26,11 @@ const handler = (req: NextRequest) =>
         router: appRouter,
         createContext: () => createContext(req),
         onError:
-            // env.NODE_ENV === "development"
-            //     ? ({ path, error }) => {
-            //         console.error(`ERROR: tRPC failed on ${path ?? "<no-path>"}: ${error.message}`);
-            //     }
-            //     : undefined,
-            ({ path, error }) => {
-                console.error(`ERROR: tRPC failed on ${path ?? "<no-path>"}: ${error.message}`);
-            },
+            env.NODE_ENV === "development"
+                ? ({ path, error }) => {
+                    console.error(`ERROR: tRPC failed on ${path ?? "<no-path>"}: ${error.message}`);
+                }
+                : undefined,
     });
 
 export { handler as GET, handler as POST };
