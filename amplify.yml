@@ -10,7 +10,7 @@ frontend:
         # https://github.com/aws-amplify/amplify-hosting/issues/1987
         # https://docs.aws.amazon.com/amplify/latest/userguide/ssr-environment-variables.html
         - env | grep -e NEXT_PUBLIC_ >> ./.env.production
-        - env | grep -e NEXT_AUTH_ >> ./.env.production
+        - env | grep -e NEXTAUTH_ >> ./.env.production
         - env | grep -e SKIP_ENV_VALIDATION >> ./.env.production
         - env | grep -e DATABASE_URL >> ./.env.production
         - yarn build
