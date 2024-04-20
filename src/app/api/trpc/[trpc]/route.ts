@@ -9,18 +9,18 @@ import { createTRPCContext } from "@khenzii-dev/server/api/trpc";
  * handling an HTTP request (e.g. when you make requests from Client Components).
  */
 const createContext = async (req: NextRequest) => {
-    // default to application/json; charset=UTF-8 Content-Type
-    if(!req.headers.get("content-type")) {
-        req.headers.set("Content-Type", "application/json; charset=UTF-8");
-    }
-
     return createTRPCContext({
         headers: req.headers,
     });
 };
 
-const handler = (req: NextRequest) =>
-    fetchRequestHandler({
+const handler = (req: NextRequest) => {
+    // default to application/json; charset=UTF-8 Content-Type
+    if(!req.headers.get("content-type")) {
+        req.headers.set("content-type", "application/json; charset=UTF-8");
+    }
+
+    return fetchRequestHandler({
         endpoint: "/api/trpc",
         req,
         router: appRouter,
@@ -32,5 +32,6 @@ const handler = (req: NextRequest) =>
                 }
                 : undefined,
     });
+};
 
 export { handler as GET, handler as POST };
