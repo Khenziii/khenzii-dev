@@ -9,6 +9,13 @@ import { createTRPCContext } from "@khenzii-dev/server/api/trpc";
  * handling an HTTP request (e.g. when you make requests from Client Components).
  */
 const createContext = async (req: NextRequest) => {
+    // default to application/json Content-Type
+    if(!req.headers.get("content-type")) {
+        req.headers.set("content-type", "application/json");
+    }
+
+    console.log(req.headers);
+
     return createTRPCContext({
         headers: req.headers,
     });
