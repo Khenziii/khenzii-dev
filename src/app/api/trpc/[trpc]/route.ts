@@ -14,8 +14,6 @@ const createContext = async (req: NextRequest) => {
         req.headers.set("content-type", "application/json");
     }
 
-    console.log(req.headers);
-
     return createTRPCContext({
         headers: req.headers,
     });
@@ -28,11 +26,14 @@ const handler = (req: NextRequest) =>
         router: appRouter,
         createContext: () => createContext(req),
         onError:
-            env.NODE_ENV === "development"
-                ? ({ path, error }) => {
-                    console.error(`ERROR: tRPC failed on ${path ?? "<no-path>"}: ${error.message}`);
-                }
-                : undefined,
+            // env.NODE_ENV === "development"
+            //     ? ({ path, error }) => {
+            //         console.error(`ERROR: tRPC failed on ${path ?? "<no-path>"}: ${error.message}`);
+            //     }
+            //     : undefined,
+            ({ path, error }) => {
+                console.error(`ERROR: tRPC failed on ${path ?? "<no-path>"}: ${error.message}`);
+            },
     });
 
 export { handler as GET, handler as POST };
