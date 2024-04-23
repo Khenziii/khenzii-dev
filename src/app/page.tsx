@@ -1,13 +1,20 @@
-import { Logo, Paragraph, Anchor } from "@khenzii-dev/ui/atoms";
+import { Logo, Paragraph, Flex } from "@khenzii-dev/ui/atoms";
+import style from "@khenzii-dev/styles/home.module.scss";
 
 const Home = () => (
-    <>
-        <Logo animate={true} size={300} />
+    <Flex direction={"column"} gap={20}>
+        <Flex direction={"column"} align={"center"} gap={0}>
+            <Logo animate={true} size={300} />
 
-        <Paragraph fontSize={1.5} styles={{ textAlign: "center" }}>
-            Hello! This page is being rebuilt. While waiting, visit old version of the site; it can be found <Anchor href={"https://old.khenzii.dev/"} newTab prefetch darkenOnHover>here</Anchor>.
-        </Paragraph>
-    </>
+            <Paragraph fontSize={2}>
+                Khenzii
+            </Paragraph>
+
+            <Paragraph fontSize={1.5} className={style.title}>
+                Hobbyist Programmer
+            </Paragraph>
+        </Flex>
+    </Flex>
 );
 
 export default Home;
