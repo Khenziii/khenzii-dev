@@ -4,3 +4,12 @@
     font-style: italic;
     color: $textDarkened !important;
 }
+
+.aboutList {
+    list-style-type: square;
+    color: $text;
+    display: flex;
+    flex-direction: column;
+    gap: $defaultGap / 2;
+    font-size: 1.25rem;
+}
