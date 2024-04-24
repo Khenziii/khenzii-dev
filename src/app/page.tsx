@@ -1,4 +1,9 @@
-import { Logo, Paragraph, Flex } from "@khenzii-dev/ui/atoms";
+import {
+    Logo,
+    Paragraph,
+    Flex,
+} from "@khenzii-dev/ui/atoms";
+import { CurrentProject } from "@khenzii-dev/ui/organisms";
 import style from "@khenzii-dev/styles/home.module.scss";
 
 const Home = () => (
@@ -44,6 +49,8 @@ const Home = () => (
                 </li>
             </ul>
         </Flex>
+
+        <CurrentProject />
     </Flex>
 );
 
