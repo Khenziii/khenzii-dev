@@ -2,6 +2,7 @@ import {
     Logo,
     Paragraph,
     Flex,
+    CurrentTime,
 } from "@khenzii-dev/ui/atoms";
 import { CurrentProject } from "@khenzii-dev/ui/organisms";
 import style from "@khenzii-dev/styles/home.module.scss";
@@ -38,7 +39,7 @@ const Home = () => (
                     {/*TODO: implement calculating current Europe/Warsaw time, and create a `code` component*/}
                     <Paragraph fontSize={1.25}>
                         {"Based in Poland, Gdańsk; where it's currently "}
-                        <code>18:13</code>
+                        <CurrentTime />
                         {"."}
                     </Paragraph>
                 </li>

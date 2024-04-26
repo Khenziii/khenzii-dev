@@ -1,3 +1,5 @@
+"use client";
+
 import { type FC, useEffect, useState } from "react";
 import { type timezone } from "@khenzii-dev/ui/types";
 
