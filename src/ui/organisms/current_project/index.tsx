@@ -8,6 +8,7 @@ import { type FC } from "react";
 import {
     Anchor,
     Flex,
+    Header,
     Loading,
     Paragraph,
 } from "@khenzii-dev/ui/atoms";
@@ -29,10 +30,7 @@ export const CurrentProject: FC = () => {
                 )
                 : (
                     <Flex direction={"column"} align={"flex-start"}>
-                        {/*TODO: replace with a `Header`*/}
-                        <Paragraph fontSize={1.5}>
-                            {"Currently working on"}
-                        </Paragraph>
+                        <Header>Currently working on</Header>
 
                         <Paragraph fontSize={1.25}>
                             <code>{currentProjectData.name}</code>

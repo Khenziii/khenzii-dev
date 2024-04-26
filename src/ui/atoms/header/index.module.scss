@@ -1,0 +1,13 @@
+@import "../../../styles/constants";
+
+.container {
+    width: 100%;
+}
+
+.line {
+    flex: 1;
+    border: none;
+    margin: 0;
+    color: $text;
+    background-color: $text;
+}

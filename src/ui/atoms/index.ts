@@ -7,3 +7,4 @@ export * from "./anchor";
 export * from "./tooltip";
 export * from "./select";
 export * from "./current_time";
+export * from "./header";

@@ -3,6 +3,7 @@ import {
     Paragraph,
     Flex,
     CurrentTime,
+    Header,
 } from "@khenzii-dev/ui/atoms";
 import { CurrentProject } from "@khenzii-dev/ui/organisms";
 import style from "@khenzii-dev/styles/home.module.scss";
@@ -26,17 +27,13 @@ const Home = () => (
         </Paragraph>
 
         <Flex direction={"column"} align={"flex-start"} gap={0}>
-            {/*TODO: implement a `Header` component*/}
-            <Paragraph fontSize={1.5}>
-                About Me
-            </Paragraph>
+            <Header>About Me</Header>
 
             <ul className={style.aboutList}>
                 <li>
                     <Paragraph fontSize={1.25}>Open-Source enjoyer.</Paragraph>
                 </li>
                 <li>
-                    {/*TODO: implement calculating current Europe/Warsaw time, and create a `code` component*/}
                     <Paragraph fontSize={1.25}>
                         {"Based in Poland, Gdańsk; where it's currently "}
                         <CurrentTime accuracy={"seconds"} />
