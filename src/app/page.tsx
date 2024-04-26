@@ -39,7 +39,7 @@ const Home = () => (
                     {/*TODO: implement calculating current Europe/Warsaw time, and create a `code` component*/}
                     <Paragraph fontSize={1.25}>
                         {"Based in Poland, Gdańsk; where it's currently "}
-                        <CurrentTime />
+                        <CurrentTime accuracy={"seconds"} />
                         {"."}
                     </Paragraph>
                 </li>

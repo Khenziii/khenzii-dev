@@ -16,6 +16,12 @@ export const getDateWithTimezone = (timezone: timezone): Date => {
 
 export const CurrentTime: FC<CurrentTimeProps> = ({ timezone = "Europe/Warsaw", accuracy = "minutes" }) => {
     const [now, setNow] = useState<Date>(new Date());
+    const [isClient, setIsClient] = useState(false);
+
+
+    useEffect(() => {
+        setIsClient(true);
+    }, []);
 
     useEffect(() => {
         const update = (): Date => {
@@ -48,6 +54,7 @@ export const CurrentTime: FC<CurrentTimeProps> = ({ timezone = "Europe/Warsaw", 
         }
 
         const timeout = setTimeout(() => {
+            update();
             const timer = setInterval(update, msIntervalDuration);
 
             return () => {
@@ -59,6 +66,13 @@ export const CurrentTime: FC<CurrentTimeProps> = ({ timezone = "Europe/Warsaw", 
             clearTimeout(timeout);
         };
     }, [timezone, accuracy]);
+
+
+    if (!isClient) {
+        // This ensures, that the component won't be pre rendered on the server,
+        // thus saving us from a hydration error.
+        return null;
+    }
 
     return (
         // TODO: use custom code component here
