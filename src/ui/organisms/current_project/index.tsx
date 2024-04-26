@@ -11,6 +11,7 @@ import {
     Header,
     Loading,
     Paragraph,
+    CodeBlock,
 } from "@khenzii-dev/ui/atoms";
 import { api } from "@khenzii-dev/providers";
 
@@ -33,9 +34,9 @@ export const CurrentProject: FC = () => {
                         <Header>Currently working on</Header>
 
                         <Paragraph fontSize={1.25}>
-                            <code>{currentProjectData.name}</code>
+                            <CodeBlock>{currentProjectData.name}</CodeBlock>
                             {" which is "}
-                            <code>{currentProjectData.description}</code>
+                            <CodeBlock>{currentProjectData.description}</CodeBlock>
                         </Paragraph>
 
                         <Paragraph fontSize={1.25}>

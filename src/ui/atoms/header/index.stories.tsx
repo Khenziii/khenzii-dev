@@ -9,7 +9,7 @@ export default {
 
 export const Default: StoriesType<HeaderProps> = {
     args: {
-        text: "I'm a header!",
+        children: "I'm a header!",
         fontsize: 2,
     },
 };

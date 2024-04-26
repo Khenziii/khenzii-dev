@@ -2,6 +2,7 @@
 
 import { type FC, useEffect, useState } from "react";
 import { type timezone } from "@khenzii-dev/ui/types";
+import { CodeBlock } from "@khenzii-dev/ui/atoms";
 
 export type CurrentTimeProps = {
     timezone?: timezone;
@@ -76,7 +77,7 @@ export const CurrentTime: FC<CurrentTimeProps> = ({ timezone = "Europe/Warsaw", 
 
     return (
         // TODO: use custom code component here
-        <code>
+        <CodeBlock>
             {accuracy === "hours" ? (
                 `${now.getHours().toString().padStart(2, "0")}`
             ) : accuracy === "minutes" ? (
@@ -90,6 +91,6 @@ export const CurrentTime: FC<CurrentTimeProps> = ({ timezone = "Europe/Warsaw", 
                 + ":" +
                 `${now.getSeconds().toString().padStart(2, "0")}`
             )}
-        </code>
+        </CodeBlock>
     );
 };
