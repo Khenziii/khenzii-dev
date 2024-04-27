@@ -76,7 +76,6 @@ export const CurrentTime: FC<CurrentTimeProps> = ({ timezone = "Europe/Warsaw", 
     }
 
     return (
-        // TODO: use custom code component here
         <CodeBlock>
             {accuracy === "hours" ? (
                 `${now.getHours().toString().padStart(2, "0")}`
