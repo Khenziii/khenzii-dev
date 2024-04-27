@@ -1,4 +1,4 @@
-import { CurrentProject } from "@khenzii-dev/ui/organisms";
+import { CurrentProject, type CurrentProjectProps } from "@khenzii-dev/ui/organisms";
 import { type StoriesType } from "@khenzii-dev/ui/types/stories-type";
 
 export default {
@@ -7,6 +7,9 @@ export default {
     tags: ['autodocs'],
 };
 
-export const Default: StoriesType<Record<string, null>> = {
-    args: {},
+export const Default: StoriesType<CurrentProjectProps> = {
+    args: {
+        fontSize: 1.25,
+        loadingSize: 100,
+    },
 };

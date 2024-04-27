@@ -6,18 +6,18 @@
 
 import { type FC } from "react";
 import {
-    Anchor,
-    Flex,
-    Header,
     Loading,
     Paragraph,
     CodeBlock,
 } from "@khenzii-dev/ui/atoms";
 import { api } from "@khenzii-dev/providers";
 
-// export type currentProjectProps = {};
+export type CurrentProjectProps = {
+    fontSize?: number;
+    loadingSize?: number;
+};
 
-export const CurrentProject: FC = () => {
+export const CurrentProject: FC<CurrentProjectProps> = ({ fontSize = 1.25, loadingSize = 100 }) => {
     const {
         data: currentProjectData,
         isLoading: currentProjectIsLoading ,
@@ -27,24 +27,14 @@ export const CurrentProject: FC = () => {
         <>
             {(currentProjectIsLoading || currentProjectData === undefined)
                 ? (
-                    <Loading size={200} />
+                    <Loading size={loadingSize} />
                 )
                 : (
-                    <Flex direction={"column"} align={"flex-start"}>
-                        <Header>Currently working on</Header>
-
-                        <Paragraph fontSize={1.25}>
-                            <CodeBlock>{currentProjectData.name}</CodeBlock>
-                            {" which is "}
-                            <CodeBlock>{currentProjectData.description}</CodeBlock>
-                        </Paragraph>
-
-                        <Paragraph fontSize={1.25}>
-                            {"Check out other things that I've made on the "}
-                            <Anchor href={"/projects"} prefetch darkenOnHover>projects</Anchor>
-                            {" route."}
-                        </Paragraph>
-                    </Flex>
+                    <Paragraph fontSize={fontSize}>
+                        <CodeBlock>{currentProjectData.name}</CodeBlock>
+                        {" which is "}
+                        <CodeBlock>{currentProjectData.description}</CodeBlock>
+                    </Paragraph>
                 )
             }
         </>

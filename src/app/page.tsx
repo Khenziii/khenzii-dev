@@ -4,6 +4,7 @@ import {
     Flex,
     CurrentTime,
     Header,
+    Anchor,
 } from "@khenzii-dev/ui/atoms";
 import { CurrentProject } from "@khenzii-dev/ui/organisms";
 import style from "@khenzii-dev/styles/home.module.scss";
@@ -48,7 +49,19 @@ const Home = () => (
             </ul>
         </Flex>
 
-        <CurrentProject />
+        <Flex direction={"column"} align={"flex-start"}>
+            <Header>Currently Working on</Header>
+
+            <Flex justify={"center"} styles={{ width: "100%" }}>
+                <CurrentProject />
+            </Flex>
+
+            <Paragraph fontSize={1.25}>
+                {"Check out other things that I've made on the "}
+                <Anchor href={"/projects"} prefetch darkenOnHover>projects</Anchor>
+                {" route."}
+            </Paragraph>
+        </Flex>
     </Flex>
 );
 
