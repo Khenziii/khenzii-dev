@@ -82,7 +82,9 @@ const Home = () => {
 
                         {(currentProjectIsLoading || currentProjectData === undefined)
                             ? (
-                                <Loading size={100} />
+                                <Flex justify={"center"} fullWidth>
+                                    <Loading size={100} />
+                                </Flex>
                             )
                             : (
                                 <Paragraph fontSize={1.25}>
