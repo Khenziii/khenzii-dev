@@ -6,11 +6,13 @@
 
 .name {
     margin-top: $defaultGap / 2 !important;
+    text-align: center;
 }
 
 .title {
     font-style: italic;
     color: $textDarkened !important;
+    text-align: center;
 }
 
 .aboutList {
