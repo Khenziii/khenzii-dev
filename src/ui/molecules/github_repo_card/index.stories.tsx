@@ -1,5 +1,5 @@
 import { GitHubRepoCard, type GithubRepoCardProps } from "@khenzii-dev/ui/molecules";
-import { type StoriesType } from "@khenzii-dev/ui/types/stories-type";
+import type { StoriesType } from "@khenzii-dev/ui/types";
 
 export default {
     component: GitHubRepoCard,
