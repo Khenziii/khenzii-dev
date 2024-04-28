@@ -9,8 +9,8 @@ import {
 
 
 export const currentProjectRouter = createTRPCRouter({
-    getProject: publicProcedure.query(({ ctx }): currentProject => {
+    getProject: publicProcedure.query(async ({ ctx }): Promise<currentProject> => {
         const handler = new CurrentProjectService(ctx);
-        return handler.getCurrentProject();
+        return await handler.getCurrentProject();
     }),
 });

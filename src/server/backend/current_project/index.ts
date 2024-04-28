@@ -6,11 +6,15 @@ export type currentProject = {
 };
 
 export class CurrentProjectService extends BaseService {
-    getCurrentProject(): currentProject {
-        // TODO: fetch this from the database
-        return {
-            name: "khenzii-dev",
-            description: "the very website that you're using right now!",
-        };
+    async getCurrentProject(): Promise<currentProject> {
+        const latestProject = await this.ctx.db.currentProject.findMany({
+            orderBy: {
+                id: "desc",
+            },
+            take: 1,
+        });
+        const { name, description } = latestProject[0] ?? { name: "...", description: "..." };
+
+        return { name, description };
     }
 }
