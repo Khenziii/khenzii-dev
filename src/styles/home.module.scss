@@ -1,0 +1,31 @@
+@import "./constants.scss";
+
+.container {
+    margin-block: $defaultGap;
+}
+
+.name {
+    margin-top: $defaultGap / 2 !important;
+    text-align: center;
+}
+
+.title {
+    font-style: italic;
+    color: $textDarkened !important;
+    text-align: center;
+}
+
+.aboutList {
+    list-style-type: square;
+    color: $text;
+    display: flex;
+    flex-direction: column;
+    gap: $defaultGap / 2;
+    font-size: 1.25rem;
+}
+
+@media (width <= $mobileWidth) {
+    .container {
+        max-width: 90vw;
+    }
+}

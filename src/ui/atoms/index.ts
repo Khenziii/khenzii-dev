@@ -6,3 +6,7 @@ export * from "./loading";
 export * from "./anchor";
 export * from "./tooltip";
 export * from "./select";
+export * from "./current_time";
+export * from "./header";
+export * from "./code_block";
+export * from "./fade_in";

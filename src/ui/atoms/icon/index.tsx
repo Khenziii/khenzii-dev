@@ -1,6 +1,6 @@
 import type { CSSProperties, FC } from 'react';
 import "bootstrap-icons/font/bootstrap-icons.min.css";
-import type { IconName } from "../../types/icon-name";
+import type { IconName } from "@khenzii-dev/ui/types";
 
 export type IconProps = {
     iconName: IconName;

@@ -9,6 +9,7 @@ import clsx from "clsx";
 const montserrat = Montserrat({
     weight: "600",
     subsets: ["latin"],
+    display: "swap",
 });
 
 export const metadata: Metadata = {

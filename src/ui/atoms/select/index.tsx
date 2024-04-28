@@ -4,7 +4,7 @@ export * from "./select_context";
 
 import { type FC, useState, useContext } from "react";
 import { Paragraph, Flex, Icon } from "@khenzii-dev/ui/atoms";
-import { type IconName } from "@khenzii-dev/ui/types/icon-name";
+import type { IconName } from "@khenzii-dev/ui/types";
 import { Expandable } from "@khenzii-dev/ui/molecules";
 import style from "./index.module.scss";
 import { SelectContext } from "./select_context";

@@ -2,19 +2,15 @@ import {
     createTRPCRouter,
     publicProcedure,
 } from "@khenzii-dev/server/api/trpc";
+import {
+    CurrentProjectService,
+    type currentProject,
+} from "@khenzii-dev/server/backend";
 
-
-export type currentProject = {
-    name: string;
-    description: string;
-};
 
 export const currentProjectRouter = createTRPCRouter({
-    getProject: publicProcedure.query((): currentProject => {
-        // TODO: fetch this from the database
-        return {
-            name: "khenzii-dev",
-            description: "The very website that you're using right now!",
-        };
+    getProject: publicProcedure.query(({ ctx }): currentProject => {
+        const handler = new CurrentProjectService(ctx);
+        return handler.getCurrentProject();
     }),
 });

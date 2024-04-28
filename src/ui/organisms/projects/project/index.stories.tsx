@@ -1,6 +1,6 @@
 import { Project } from ".";
 import { type project } from "@khenzii-dev/ui/organisms";
-import { type StoriesType } from "@khenzii-dev/ui/types/stories-type";
+import type { StoriesType } from "@khenzii-dev/ui/types";
 import { Icon, Paragraph } from "@khenzii-dev/ui/atoms";
 
 export default {

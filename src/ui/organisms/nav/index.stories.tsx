@@ -1,5 +1,5 @@
 import { Nav } from "@khenzii-dev/ui/organisms";
-import { type StoriesType } from "@khenzii-dev/ui/types/stories-type";
+import type { StoriesType } from "@khenzii-dev/ui/types";
 
 export default {
     component: Nav,

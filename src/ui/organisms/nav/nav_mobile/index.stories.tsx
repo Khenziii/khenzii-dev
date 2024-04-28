@@ -1,5 +1,5 @@
 import { NavMobile, type NavMobileProps } from ".";
-import { type StoriesType } from "@khenzii-dev/ui/types/stories-type";
+import type { StoriesType } from "@khenzii-dev/ui/types";
 
 export default {
     component: NavMobile,
