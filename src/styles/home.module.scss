@@ -1,5 +1,9 @@
 @import "./constants.scss";
 
+.container {
+    margin-block: $defaultGap;
+}
+
 .title {
     font-style: italic;
     color: $textDarkened !important;
@@ -12,4 +16,10 @@
     flex-direction: column;
     gap: $defaultGap / 2;
     font-size: 1.25rem;
+}
+
+@media (width <= $mobileWidth) {
+    .container {
+        max-width: 90vw;
+    }
 }

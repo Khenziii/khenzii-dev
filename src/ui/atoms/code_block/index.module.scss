@@ -2,8 +2,16 @@
 
 .code_block {
     background-color: $background;
-    padding: $defaultGap / 2;
+    padding: $defaultGap / 4;
     font-size: 80%;
     border-radius: 5px;
     border: solid 2px lighten($background, 10%);
+    vertical-align: middle;
+    box-sizing: border-box;
+}
+
+@media (width <= $mobileWidth) {
+    .code_block {
+        font-size: 75%;
+    }
 }
