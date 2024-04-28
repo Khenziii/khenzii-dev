@@ -27,7 +27,7 @@ const Home = () => {
             <Flex direction={"column"} align={"center"} gap={0}>
                 <Logo animate={true} size={mobile ? 275 : 300} />
 
-                <Paragraph fontSize={mobile ? 2 : 2.25}>
+                <Paragraph fontSize={mobile ? 2 : 2.25} className={style.name}>
                     Khenzii
                 </Paragraph>
 

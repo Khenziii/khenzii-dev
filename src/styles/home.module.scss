@@ -4,6 +4,10 @@
     margin-block: $defaultGap;
 }
 
+.name {
+    margin-top: $defaultGap / 2 !important;
+}
+
 .title {
     font-style: italic;
     color: $textDarkened !important;
