@@ -12,6 +12,7 @@ const bundleAnalyzer = withBundleAnalyzer({
 /** @type {import("next").NextConfig} */
 const config = bundleAnalyzer({
     reactStrictMode: true,
+    output: "standalone",
 });
 
 export default config;
