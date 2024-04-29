@@ -16,7 +16,7 @@ jobs:
     name: Checks
     uses: ./.github/workflows/check.yml
 
-  amplify-deploy:
+  ecs-deploy:
     needs:
       - checks
     name: 🚀 AWS Deploy
@@ -34,9 +34,10 @@ jobs:
           token: ${{ secrets.token_github }}
           env: Production
 
-      - name: Trigger Deployment Webhook
-        run: |
-          curl -X POST -d {} "${{ secrets.deploy_webhook_url }}" -H "Content-Type: application/json"
+      # Amplify deployment
+      # - name: Trigger Deployment Webhook
+      #   run: |
+      #     curl -X POST -d {} "${{ secrets.deploy_webhook_url }}" -H "Content-Type: application/json"
 
       - name: Update Deployment Status
         uses: bobheadxi/deployments@v1
