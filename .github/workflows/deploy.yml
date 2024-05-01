@@ -1,15 +1,9 @@
-# TODO: Current implementation only triggers the deployment webhook.
-# This could potentially lead to false-positive deployment statuses
-# (in situations in which our tests succeed, but Amplify fails to deploy).
-# A fix to it, could be deploying the app directly in this workflow,
-# (the whole thing would fail on a failed push). However, that's a little bit
-# undocumented & would probably require quite some research. I'm going to
-# come back to this later.
-
+name: Deployment
 on:
   push:
     branches:
       - master
+  workflow_dispatch:
 
 jobs:
   checks:
@@ -31,20 +25,38 @@ jobs:
         id: deployment
         with:
           step: start
-          token: ${{ secrets.token_github }}
+          token: ${{ secrets.TOKEN_GITHUB }}
           env: Production
 
       # Amplify deployment
       # - name: Trigger Deployment Webhook
       #   run: |
-      #     curl -X POST -d {} "${{ secrets.deploy_webhook_url }}" -H "Content-Type: application/json"
+      #     curl -X POST -d {} "${{ secrets.DEPLOY_WEBHOOK_URL }}" -H "Content-Type: application/json"
+
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Docker Build
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Registry
+        uses: docker/login-action@v3
+        with:
+          username: khenzii
+          password: ${{ secrets.DOCKER_PAT }}
+
+      - name: Docker Build & Push
+        uses: docker/build-push-action@v5
+        with:
+          push: true
+          tags: khenzii/khenzii-dev:latest
 
       - name: Update Deployment Status
         uses: bobheadxi/deployments@v1
         if: always()
         with:
           step: finish
-          token: ${{ secrets.token_github }}
+          token: ${{ secrets.TOKEN_GITHUB }}
           status: ${{ job.status }}
           env: ${{ steps.deployment.outputs.env }}
           deployment_id: ${{ steps.deployment.outputs.deployment_id }}
