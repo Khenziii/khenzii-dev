@@ -1,0 +1,15 @@
+.dockerignore
+Dockerfile
+.git
+.github
+.next
+.husky
+.storybook
+.env.example
+node_modules
+npm-debug.log
+README.md
+LICENSE
+.eslintrc.cjs
+.gitignore
+start-database.sh
