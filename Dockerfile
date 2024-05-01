@@ -1,5 +1,3 @@
-ENV NODE_ENV production
-
 FROM node:20-alpine AS base
 
 # Install dependencies only when needed
@@ -9,6 +7,8 @@ FROM base AS deps
 # to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
+
+ENV NODE_ENV production
 
 # Install dependencies based on the preferred package manager
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
@@ -31,6 +31,7 @@ COPY . .
 # Uncomment the following line in case you want to disable telemetry during the build.
 # ENV NEXT_TELEMETRY_DISABLED 1
 ENV SKIP_ENV_VALIDATION true
+ENV NODE_ENV production
 
 RUN yarn run prisma generate
 RUN \
