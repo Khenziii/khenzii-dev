@@ -2,10 +2,10 @@ import { PrismaClient } from "@prisma/client";
 import { env } from "@khenzii-dev/env";
 
 const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined;
+  prisma?: PrismaClient;
 };
 
-export const db =
+export const db: PrismaClient =
   globalForPrisma.prisma ??
   new PrismaClient({
     log:
