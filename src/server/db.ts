@@ -1,9 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { env } from "@khenzii-dev/env";
 
-const globalForPrisma = globalThis as unknown as {
-  prisma?: PrismaClient;
-};
+const globalForPrisma: typeof globalThis & { prisma?: PrismaClient } = globalThis;
 
 export const db: PrismaClient =
   globalForPrisma.prisma ??
