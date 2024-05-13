@@ -15,7 +15,7 @@
     "start": "next start",
     "postinstall": "prisma generate",
     "db-push": "prisma db push",
-    "db-studio": "prisma studio",
+    "db-studio": "prisma studio --port 3002 --browser none",
     "prepare": "husky",
     "storybook": "storybook dev -p 3001",
     "build-storybook": "storybook build"

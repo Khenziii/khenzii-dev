@@ -13,19 +13,6 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-  pgweb:
-    container_name: pgweb
-    image: sosedoff/pgweb:0.15.0
-    environment:
-      PGWEB_DATABASE_URL: postgres://developmentuser:developmentpassword@postgres:5432/postgres?sslmode=disable
-    restart: always
-    ports: 
-      - "3002:8081"
-    depends_on:
-      - postgres
-    links: 
-      - postgres:postgres
-
   minio:
     container_name: minio
     image: minio/minio:latest
