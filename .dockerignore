@@ -1,5 +1,6 @@
 .dockerignore
 Dockerfile
+compose.yaml
 .git
 .github
 .next
@@ -11,5 +12,4 @@ npm-debug.log
 README.md
 LICENSE
 .gitignore
-start-database.sh
 .yarnrc.yml
