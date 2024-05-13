@@ -1,0 +1,12 @@
+version: "3.9" 
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: developmentuser 
+      POSTGRES_PASSWORD: developmentpassword 
+    restart: always
+    ports:
+      - 127.0.0.1:5432:5432
+
