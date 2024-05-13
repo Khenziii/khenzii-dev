@@ -9,7 +9,7 @@ services:
       POSTGRES_PASSWORD: developmentpassword 
     restart: always
     ports:
-      - "127.0.0.1:5432:5432"
+      - "5432:5432"
 
   pgweb:
     container_name: pgweb
@@ -23,4 +23,17 @@ services:
       - postgres
     links: 
       - postgres:postgres
+
+  minio:
+    container_name: minio
+    image: minio/minio:latest
+    environment:
+      MINIO_ROOT_USER: developmentuser
+      MINIO_ROOT_PASSWORD: developmentpassword
+      MINIO_ADDRESS: ":9000"
+      MINIO_CONSOLE_ADDRESS: ":9001"
+    restart: always
+    ports:
+      - "9000:9000" 
+      - "9001:9001" 
 
