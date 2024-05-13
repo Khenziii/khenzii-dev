@@ -17,7 +17,7 @@ After installing them, fetch app's dependencies:
 $ yarn install
 ```
 
-To finish the setup, run:
+And finish the setup with:
 ```shell
 $ yarn prepare
 ```
