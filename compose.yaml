@@ -20,7 +20,7 @@ services:
       PGWEB_DATABASE_URL: postgres://developmentuser:developmentpassword@postgres:5432/postgres?sslmode=disable
     restart: always
     ports: 
-      - "8081:8081" 
+      - "3002:8081"
     depends_on:
       - postgres
     links: 
@@ -36,8 +36,8 @@ services:
       MINIO_CONSOLE_ADDRESS: ":9001"
     restart: always
     ports:
-      - "9000:9000" 
-      - "9001:9001" 
+      - "9000:9000"
+      - "3003:9001"
     volumes:
       - minio_data:/data
     command: server /data

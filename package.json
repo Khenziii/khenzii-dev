@@ -17,7 +17,7 @@
     "db-push": "prisma db push",
     "db-studio": "prisma studio",
     "prepare": "husky",
-    "storybook": "storybook dev -p 2999",
+    "storybook": "storybook dev -p 3001",
     "build-storybook": "storybook build"
   },
   "dependencies": {
