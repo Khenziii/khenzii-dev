@@ -2,11 +2,25 @@ version: "3.9"
 
 services:
   postgres:
+    container_name: postgres 
     image: postgres:16-alpine
     environment:
       POSTGRES_USER: developmentuser 
       POSTGRES_PASSWORD: developmentpassword 
     restart: always
     ports:
-      - 127.0.0.1:5432:5432
+      - "127.0.0.1:5432:5432"
+
+  pgweb:
+    container_name: pgweb
+    image: sosedoff/pgweb:0.15.0
+    environment:
+      PGWEB_DATABASE_URL: postgres://developmentuser:developmentpassword@postgres:5432/postgres?sslmode=disable
+    restart: always
+    ports: 
+      - "8081:8081" 
+    depends_on:
+      - postgres
+    links: 
+      - postgres:postgres
 
