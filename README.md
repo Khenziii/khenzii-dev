@@ -55,6 +55,6 @@ After running all those commands, you'll have access to these webpages:
 1. Website - [localhost:3000](http://localhost:3000)
 2. UI library ([storybook](https://github.com/storybookjs/storybook/)) - [localhost:3001](http://localhost:3001)
 3. DB console ([prisma studio](https://github.com/prisma/studio)) - [localhost:3002](http://localhost:3002)
-4. DB ([postgres](https://github.com/postgres/postgres)) - *localhost:5432*
+4. DB ([mongo](https://github.com/mongodb/mongo)) - *localhost:27017*
 5. Object storage console - [localhost:3003](http://localhost:3003)
 6. Object storage ([minio](https://github.com/minio/minio)) - *localhost:9000*

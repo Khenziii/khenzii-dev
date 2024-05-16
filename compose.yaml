@@ -9,7 +9,7 @@ services:
       MONGO_INIT_DB_PASSWORD: developmentpassword
     restart: always
     ports:
-      - "27017:27017" 
+      - "27017:27017"
     volumes:
       - mongo_data:/data/db
 
