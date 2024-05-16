@@ -1,17 +1,17 @@
 version: "3.9" 
 
 services:
-  postgres:
-    container_name: postgres 
-    image: postgres:16-alpine
+  mongo:
+    container_name: mongo 
+    image: mongo:latest
     environment:
-      POSTGRES_USER: developmentuser 
-      POSTGRES_PASSWORD: developmentpassword 
+      MONGO_INIT_DB_USERNAME: developmentuser
+      MONGO_INIT_DB_PASSWORD: developmentpassword
     restart: always
     ports:
-      - "5432:5432"
+      - "27017:27017" 
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - mongo_data:/data/db
 
   minio:
     container_name: minio
@@ -30,6 +30,6 @@ services:
     command: server /data
 
 volumes:
-  postgres_data: ~
+  mongo_data: ~
   minio_data: ~
 
