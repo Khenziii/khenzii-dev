@@ -52,6 +52,8 @@ jobs:
         with:
           push: true
           tags: khenzii/khenzii-dev:latest
+          context: .
+          file: docker/khenzii-dev.Dockerfile
 
       - name: Update Deployment Status
         uses: bobheadxi/deployments@v1
