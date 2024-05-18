@@ -1,17 +1,16 @@
 version: "3.9" 
 
 services:
-  postgres:
-    container_name: postgres 
-    image: postgres:16-alpine
-    environment:
-      POSTGRES_USER: developmentuser 
-      POSTGRES_PASSWORD: developmentpassword 
+  mongo:
+    container_name: mongo 
+    build:
+      dockerfile: docker/mongo-replica-set.Dockerfile
+      context: .
     restart: always
     ports:
-      - "5432:5432"
+      - "27017:27017"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - mongo_data:/data/db
 
   minio:
     container_name: minio
@@ -30,6 +29,6 @@ services:
     command: server /data
 
 volumes:
-  postgres_data: ~
+  mongo_data: ~
   minio_data: ~
 

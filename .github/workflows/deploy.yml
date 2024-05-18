@@ -12,10 +12,10 @@ jobs:
     name: Checks
     uses: ./.github/workflows/check.yml
 
-  ecs-deploy:
+  deployment:
     needs:
       - checks
-    name: 🚀 AWS Deploy
+    name: 🚀 GCP Deploy
     runs-on: ubuntu-latest
 
     steps:
@@ -52,6 +52,8 @@ jobs:
         with:
           push: true
           tags: khenzii/khenzii-dev:latest
+          context: .
+          file: docker/khenzii-dev.Dockerfile
 
       - name: Update Deployment Status
         uses: bobheadxi/deployments@v1
