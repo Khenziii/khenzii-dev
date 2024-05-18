@@ -3,10 +3,9 @@ version: "3.9"
 services:
   mongo:
     container_name: mongo 
-    image: mongo:latest
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: developmentuser
-      MONGO_INITDB_ROOT_PASSWORD: developmentpassword
+    build:
+      dockerfile: docker/mongo-replica-set.Dockerfile
+      context: .
     restart: always
     ports:
       - "27017:27017"
