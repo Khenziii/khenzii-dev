@@ -1,6 +1,6 @@
 "use client";
 
-import { type FC, memo, useCallback, useEffect, useState } from "react";
+import { type FC, memo, useEffect, useState } from "react";
 import { type position, type SvgData } from "@khenzii-dev/ui/types";
 import { motion } from "framer-motion";
 import style from "./index.module.scss";
@@ -76,56 +76,42 @@ export type LoadingProps = {
 
 export const Loading: FC<LoadingProps> = ({ size =  100 }) => {
     const [visiblePositions, setVisiblePositions] = useState<position[]>([]);
-    const [currentIndexes, setCurrentIndexes] = useState(loadingData.map(() => 0));
+    const [visibleIndexes, setVisibleIndexes] = useState<number[]>([]);
 
     useEffect(() => {
-        const timer = setInterval(() => {
-            setCurrentIndexes((prevIndexes) => {
-                return prevIndexes.map((previousIndex, index) => {
-                    if (previousIndex + 1 >= loadingData[index]!.squares.length) {
-                        return 0;
-                    }
+        let newPositions: position[] = [];
+        loadingData.map((wrapper) => {
+            const squares = visibleIndexes.map((index) => wrapper.squares[index]!);
+            newPositions = [...newPositions, ...squares];
+        });
 
-                    return previousIndex + 1;
-                });
+        setVisiblePositions(newPositions);
+    }, [visibleIndexes]);
+
+	useEffect(() => {
+		const timer = setInterval(() => {
+            setVisibleIndexes((currentVisibleIndexes) => {
+                const lastVisibleIndex = currentVisibleIndexes[currentVisibleIndexes.length - 1];
+                let nextIndex = (lastVisibleIndex ?? -1) + 1;
+
+                if (nextIndex >= loadingData[0]!.squares.length) {
+                    nextIndex = 0;
+                }
+
+                const newIndexes = [...currentVisibleIndexes];
+                newIndexes.push(nextIndex);
+
+                if (newIndexes.length > amountOfTilesAtOnce) {
+                    newIndexes.shift(); // removes first element
+                }
+
+                return newIndexes;
             });
-        }, animationDelay *  1000);
+
+        }, animationDelay * 1000);
 
         return () => clearInterval(timer);
-    }, []);
-
-    /*
-     * shows a square if it's hidden & hides if it's currently visible
-     */
-    const modifyState = useCallback((square: position) => {
-        setVisiblePositions((prevVisiblePositions) => {
-            if (prevVisiblePositions.some((pos) => pos.x === square.x && pos.y === square.y)) {
-                return prevVisiblePositions.filter((pos) => pos.x !== square.x || pos.y !== square.y);
-            } else {
-                return [...prevVisiblePositions, square];
-            }
-        });
-    }, []);
-
-    useEffect(() => {
-        const newSquares = currentIndexes.map((squareIndex, index) => loadingData[index]!.squares[squareIndex]);
-        newSquares.forEach((square) => {
-           if (square === undefined) return;
-           modifyState(square);
-        });
-
-        const oldestSquares = currentIndexes.map((squareIndex, index) => {
-            const squares = loadingData[index]!.squares;
-            const updatedSquareIndex = (squareIndex - amountOfTilesAtOnce + squares.length) % squares.length;
-
-            return squares[updatedSquareIndex];
-        });
-        oldestSquares.forEach((square) => {
-            if (square === undefined || !visiblePositions.includes(square)) return;
-
-            modifyState(square);
-        });
-    }, [currentIndexes]);
+	}, []);
 
     return (
         <svg
