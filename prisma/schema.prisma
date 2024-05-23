@@ -11,7 +11,7 @@ datasource db {
 }
 
 model CurrentProject {
-    id          Int    @id @map("_id")
+    id          String @id @default(auto()) @map("_id") @db.ObjectId
     name        String
     description String
 }
