@@ -55,6 +55,10 @@ jobs:
           context: .
           file: docker/khenzii-dev.Dockerfile
 
+      - name: Trigger Deployment Webhook
+        run: |
+          curl -X POST -d {} "${{ secrets.DEPLOY_WEBHOOK_URL }}" -H "Content-Type: application/json"
+
       - name: Update Deployment Status
         uses: bobheadxi/deployments@v1
         if: always()
