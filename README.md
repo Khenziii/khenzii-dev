@@ -58,3 +58,4 @@ After running all those commands, you'll have access to these webpages:
 4. DB ([mongo](https://github.com/mongodb/mongo)) - *localhost:27017*
 5. Object storage console - [localhost:3003](http://localhost:3003)
 6. Object storage ([minio](https://github.com/minio/minio)) - *localhost:9000*
+
