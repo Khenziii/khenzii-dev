@@ -19,10 +19,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # This step creates a new deployment, check them out here:
+      # https://github.com/Khenziii/khenzii-dev/deployments
       - name: Start Deployment
-        # This step creates a new deployment, check them out here:
-        # https://github.com/Khenziii/khenzii-dev/deployments
-
         uses: bobheadxi/deployments@v1
         id: deployment
         with:
