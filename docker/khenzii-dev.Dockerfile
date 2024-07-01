@@ -8,13 +8,10 @@ FROM base AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-# This is necessary, as we're using yarn-berry 
-RUN corepack enable
-
 # Install dependencies based on the preferred package manager
-COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
+COPY package.json yarn.lock* .yarnrc.yml* package-lock.json* pnpm-lock.yaml* ./
 RUN \
- if [ -f yarn.lock ]; then yarn; \
+ if [ -f yarn.lock ]; then corepack enable && yarn; \
  elif [ -f package-lock.json ]; then npm ci; \
  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm i --frozen-lockfile; \
  else echo "Lockfile not found." && exit 1; \
@@ -33,7 +30,7 @@ COPY . .
 ENV SKIP_ENV_VALIDATION true
 ENV NODE_ENV production
 
-RUN yarn run prisma generate
+RUN corepack enable && yarn run prisma generate
 RUN \
   if [ -f yarn.lock ]; then yarn run build; \
   elif [ -f package-lock.json ]; then npm run build; \
