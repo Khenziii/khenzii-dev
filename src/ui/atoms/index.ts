@@ -10,3 +10,4 @@ export * from "./current_time";
 export * from "./header";
 export * from "./code_block";
 export * from "./fade_in";
+export * from "./button";

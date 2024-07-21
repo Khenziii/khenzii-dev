@@ -1,0 +1,46 @@
+@import "../../../styles/constants.scss";
+
+.button {
+  border-radius: 0;
+  cursor: pointer;
+  transition: all .15s cubic-bezier(0.75, 0, 0.30, 1);
+}
+
+.color_normal {
+  border: solid 1px darken($primary, 15%);
+  background-color: $background;
+
+  &:hover {
+    background-color: darken($primary, 15%);
+  }
+}
+
+.color_inverted {
+  border: solid 1px $background;
+  background-color: darken($primary, 15%);
+
+  &:hover {
+    background-color: $background;
+  }
+}
+
+.color_inactive {
+  cursor: not-allowed !important;
+  border: solid 1px darken($primary, 20%);
+  background-color: darken($primary, 20%);
+}
+
+.color_destructive {
+  border: solid 1px $destructive;
+  background-color: $destructive;
+
+  &:hover {
+    border: solid 1px darken($destructive, 10%);
+    background-color: darken($destructive, 10%);
+  }
+}
+
+.rounded {
+  border-radius: 5px;
+}
+
