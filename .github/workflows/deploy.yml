@@ -56,7 +56,7 @@ jobs:
 
       - name: Trigger Deployment Webhook
         run: |
-          curl -X POST -d {} "${{ secrets.DEPLOY_WEBHOOK_URL }}" -H "Content-Type: application/json"
+          curl "${{ secrets.DEPLOY_WEBHOOK_URL }}"
 
       - name: Update Deployment Status
         uses: bobheadxi/deployments@v1
