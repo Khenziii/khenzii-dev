@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 
 const Blog = () => (
     <Paragraph fontSize={1.5} styles={{ textAlign: "center" }}>
-        This page is not yet available!
+        This page is not yet available!!
     </Paragraph>
 );
 
