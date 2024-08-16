@@ -11,3 +11,4 @@ export * from "./header";
 export * from "./code_block";
 export * from "./fade_in";
 export * from "./button";
+export * from "./input";

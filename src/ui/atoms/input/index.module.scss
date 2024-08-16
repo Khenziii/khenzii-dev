@@ -1,0 +1,18 @@
+@import "../../../styles/constants";
+
+.input {
+  border: solid 1px darken($primary, 15%);
+  background-color: $background;
+  color: $primary;
+
+  &:focus {
+    color: $text;
+    border: solid 1px $text;
+    outline: none;
+  }
+}
+
+.rounded {
+  border-radius: 5px;
+}
+

@@ -18,6 +18,7 @@ $ yarn install
 ```
 
 And finish the setup with:
+
 ```shell
 $ yarn prepare
 ```
