@@ -1,0 +1,19 @@
+@import "../../../styles/constants";
+
+.input {
+  border: solid 1px darken($primary, 15%);
+  background-color: $background;
+  color: $primary;
+  transition: all .15s cubic-bezier(0.75, 0, 0.30, 1);
+
+  &:focus {
+    color: $text;
+    border: solid 1px $text;
+    outline: none;
+  }
+}
+
+.rounded {
+  border-radius: 5px;
+}
+
