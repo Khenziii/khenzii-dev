@@ -13,6 +13,18 @@
   }
 }
 
+.green_when_valid {
+  &:user-valid {
+    border: solid 1px $successful;
+  }
+}
+
+.red_when_invalid {
+  &:user-invalid {
+    border: solid 1px $destructive;
+  }
+}
+
 .rounded {
   border-radius: 5px;
 }

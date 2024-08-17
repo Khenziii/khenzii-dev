@@ -25,8 +25,18 @@ const Admin = () => {
                 justify="center"
                 gap={10}
             >
-                <Input className={style.input} placeholder="email" type="email" />
-                <Input className={style.input} placeholder="password" type="password" />
+                <Input
+                    className={style.input}
+                    placeholder="email"
+                    type="email"
+                    borderGreenIfValid
+                    borderRedIfInvalid
+                />
+                <Input
+                    className={style.input}
+                    placeholder="password"
+                    type="password"
+                />
             </Flex>
 
             <Button onClick={() => setAwaitingResponse(true)}>
