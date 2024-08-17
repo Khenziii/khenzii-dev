@@ -1,9 +1,8 @@
 import { Montserrat } from "next/font/google";
 import type { Metadata } from "next";
 import type { ReactNode, FC } from "react";
-import { Footer, Nav } from "src/ui/organisms";
 import { TRPCProvider } from "@khenzii-dev/providers";
-import style from "../styles/layout.module.scss";
+import style from "@khenzii-dev/styles/layout_admin.module.scss";
 import clsx from "clsx";
 
 const montserrat = Montserrat({
@@ -14,8 +13,8 @@ const montserrat = Montserrat({
 
 export const metadata: Metadata = {
     title: {
-        default: "Khenzii",
-        template: "%s | Khenzii",
+        default: "Admin Panel | Khenzii",
+        template: "%s | Admin Panel | Khenzii",
     },
     description: "Khenzii's portfolio.",
     icons: [{ rel: "icon", url: "/logo.svg" }],
@@ -25,17 +24,9 @@ const RootLayout: FC<{ children: ReactNode }> = ({ children }) => (
     <TRPCProvider>
         <html lang="en">
             <body className={clsx(style.layout, montserrat.className)}>
-                <nav className={style.nav}>
-                    <Nav/>
-                </nav>
-
                 <main className={style.content}>
                     {children}
                 </main>
-
-                <footer className={style.footer}>
-                    <Footer/>
-                </footer>
             </body>
         </html>
     </TRPCProvider>
