@@ -1,15 +1,15 @@
 import clsx from "clsx";
-import type { FC, ReactNode } from "react";
+import type { FC, ReactNode, ButtonHTMLAttributes } from "react";
 import style from "./index.module.scss";
 
-export type ButtonProps = {
+export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
     children: ReactNode;
     color?: "normal" | "inverted" | "inactive" | "destructive";
     padding?: number;
     rounded?: boolean;
 };
 
-export const Button: FC<ButtonProps> = ({ children, padding = 10, rounded = true, color = "normal" }) => (
+export const Button: FC<ButtonProps> = ({ children, padding = 10, rounded = true, color = "normal", ...props }) => (
     <button
       className={clsx([style.button], {
         [style.rounded as string]: rounded,
@@ -21,6 +21,7 @@ export const Button: FC<ButtonProps> = ({ children, padding = 10, rounded = true
       style={{
         padding: `${padding}px`,
       }}
+      {...props}
     >
         {children}
     </button>
