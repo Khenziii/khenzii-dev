@@ -1,14 +1,43 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type KeyboardEventHandler, useRef, useEffect } from "react";
 import { Flex, Logo, Input, Button, Paragraph, Loading } from "@khenzii-dev/ui/atoms";
 import { useMobile } from "@khenzii-dev/hooks";
 import style from "@khenzii-dev/styles/admin.module.scss";
 
 const Admin = () => {
     const mobile = useMobile();
+    const emailInput = useRef<HTMLInputElement>(null);
+    const passwordInput = useRef<HTMLInputElement>(null);
     const [awaitingResponse, setAwaitingResponse] = useState(false);
     const [statusParagraphContent, setStatusParagraphContent] = useState("");
+
+
+    const handleKeyDownEmail: KeyboardEventHandler = (event) => {
+        const keys: string[] = ["Enter", "ArrowDown"];
+        if (keys.includes(event.key)) {
+            if (!passwordInput.current) return;
+            passwordInput.current.focus();
+        };
+    };
+
+    const handleKeyDownPassword: KeyboardEventHandler = (event) => {
+        if (event.key == "ArrowUp") {
+            if (!emailInput.current) return;
+            emailInput.current.focus();
+        }
+        
+        if (event.key == "Enter") {
+            // TODO send the request here later
+            setAwaitingResponse(true);        
+        }
+    };
+
+    useEffect(() => {
+        if (!emailInput.current) return;
+        emailInput.current.focus();
+    }, []);
+
 
     return (
         <Flex 
@@ -29,6 +58,8 @@ const Admin = () => {
                     className={style.input}
                     placeholder="email"
                     type="email"
+                    onKeyDown={handleKeyDownEmail}
+                    ref={emailInput}
                     borderGreenIfValid
                     borderRedIfInvalid
                 />
@@ -36,6 +67,8 @@ const Admin = () => {
                     className={style.input}
                     placeholder="password"
                     type="password"
+                    onKeyDown={handleKeyDownPassword}
+                    ref={passwordInput}
                 />
             </Flex>
 
