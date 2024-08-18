@@ -4,7 +4,6 @@ services:
     build:
       dockerfile: docker/mongo-replica-set.Dockerfile
       context: .
-    restart: always
     ports:
       - "27017:27017"
     volumes:
@@ -18,7 +17,6 @@ services:
       MINIO_ROOT_PASSWORD: developmentpassword
       MINIO_ADDRESS: ":9000"
       MINIO_CONSOLE_ADDRESS: ":9001"
-    restart: always
     ports:
       - "9000:9000"
       - "3003:9001"
