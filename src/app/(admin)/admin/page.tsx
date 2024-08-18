@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type KeyboardEventHandler, useRef, useEffect } from "react";
+import { signIn } from "next-auth/react";
 import { Flex, Logo, Input, Button, Paragraph, Loading } from "@khenzii-dev/ui/atoms";
 import { useMobile } from "@khenzii-dev/hooks";
 import style from "@khenzii-dev/styles/admin.module.scss";
@@ -14,22 +15,43 @@ const Admin = () => {
 
 
     const handleKeyDownEmail: KeyboardEventHandler = (event) => {
+        if (!passwordInput.current) return;
+
         const keys: string[] = ["Enter", "ArrowDown"];
-        if (keys.includes(event.key)) {
-            if (!passwordInput.current) return;
-            passwordInput.current.focus();
-        };
+        if (keys.includes(event.key)) passwordInput.current.focus();
     };
 
-    const handleKeyDownPassword: KeyboardEventHandler = (event) => {
-        if (event.key == "ArrowUp") {
-            if (!emailInput.current) return;
-            emailInput.current.focus();
-        }
-        
+    const handleKeyDownPassword: KeyboardEventHandler = async (event) => {
+        if (!emailInput.current || !passwordInput.current) return;
+
+        if (event.key == "ArrowUp") emailInput.current.focus();
         if (event.key == "Enter") {
-            // TODO send the request here later
-            setAwaitingResponse(true);        
+            setAwaitingResponse(true);
+
+            const result = await signIn("credentials", {
+                redirect: false,
+                email: emailInput.current.value,
+                password: passwordInput.current.value,
+            });
+
+            if (result === undefined) {
+                setAwaitingResponse(false);
+                setStatusParagraphContent("An error occurred. Try again later.");
+                return;
+            }
+
+            if (!result.ok) {
+                setAwaitingResponse(false);
+                setStatusParagraphContent("Credentials invalid!");
+                return;
+            }
+
+            if (result.ok) {
+                // TODO: redirect to / load the panel here
+                setAwaitingResponse(false);
+                setStatusParagraphContent("Success!");
+                return;
+            }
         }
     };
 

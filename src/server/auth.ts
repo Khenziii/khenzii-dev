@@ -5,7 +5,7 @@ import {
     type NextAuthOptions,
 } from "next-auth";
 import { type Adapter } from "next-auth/adapters";
-// import DiscordProvider from "next-auth/providers/discord";
+import CredentialsProvider from "next-auth/providers/credentials";
 // import { env } from "@khenzii-dev/env";
 import { db } from "@khenzii-dev/server/db";
 
@@ -23,10 +23,9 @@ declare module "next-auth" {
     //         // role: UserRole;
     //     } & DefaultSession["user"];
     // }
-    // interface User {
-    //   // ...other properties
-    //   // role: UserRole;
-    // }
+    interface User {
+        email: string;
+    }
 }
 
 /**
@@ -46,19 +45,35 @@ export const authOptions: NextAuthOptions = {
     },
     adapter: PrismaAdapter(db) as Adapter,
     providers: [
-        // DiscordProvider({
-        //     clientId: env.DISCORD_CLIENT_ID,
-        //     clientSecret: env.DISCORD_CLIENT_SECRET,
-        // }),
-        /**
-         * ...add more providers here.
-         *
-         * Most other providers require a bit more work than the Discord provider. For example, the
-         * GitHub provider requires you to add the `refresh_token_expires_in` field to the Account
-         * model. Refer to the NextAuth.js docs for the provider you want to use. Example:
-         *
-         * @see https://next-auth.js.org/providers/github
-         */
+        CredentialsProvider({
+            name: 'credentials',
+            credentials: {
+                email: { label: "Email", type: "email" },
+                password: { label: "Password", type: "password" }
+            },
+            async authorize(credentials, req) {
+                // const res = await fetch("/your/endpoint", {
+                //    method: 'POST',
+                //    body: JSON.stringify(credentials),
+                //    headers: { "Content-Type": "application/json" }
+                // })
+                // const user = await res.json()
+
+                // if (res.ok && user) {
+                //    return user
+                // }
+
+                // return null
+    
+                if (!credentials) return null;
+
+                if (credentials.email == "a@b.c" && credentials.password == "test") return {
+                    email: credentials.email,
+                }
+
+                return null;
+            }
+        }),
     ],
 };
 
