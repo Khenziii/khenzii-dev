@@ -48,8 +48,8 @@ export const authOptions: NextAuthOptions = {
         CredentialsProvider({
             name: 'credentials',
             credentials: {
-                email: { label: "Email", type: "email" },
-                password: { label: "Password", type: "password" }
+                email: { type: "email" },
+                password: { type: "password" },
             },
             async authorize(credentials, req) {
                 // const res = await fetch("/your/endpoint", {
@@ -64,15 +64,16 @@ export const authOptions: NextAuthOptions = {
                 // }
 
                 // return null
-    
+
                 if (!credentials) return null;
 
                 if (credentials.email == "a@b.c" && credentials.password == "test") return {
+                    id: "test-id",
                     email: credentials.email,
-                }
+                };
 
                 return null;
-            }
+            },
         }),
     ],
 };

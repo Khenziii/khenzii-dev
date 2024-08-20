@@ -4,3 +4,13 @@
   max-width: 75vw;
 }
 
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.login_button {
+  width: fit-content;
+}
+

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type KeyboardEventHandler, useRef, useEffect } from "react";
+import { useState, type KeyboardEventHandler, type FormEventHandler, useRef, useEffect } from "react";
 import { signIn } from "next-auth/react";
 import { Flex, Logo, Input, Button, Paragraph, Loading } from "@khenzii-dev/ui/atoms";
 import { useMobile } from "@khenzii-dev/hooks";
@@ -18,41 +18,49 @@ const Admin = () => {
         if (!passwordInput.current) return;
 
         const keys: string[] = ["Enter", "ArrowDown"];
-        if (keys.includes(event.key)) passwordInput.current.focus();
+        if (keys.includes(event.key)) {
+            // don't submit the form if clicked "Enter"
+            event.preventDefault();
+
+            passwordInput.current.focus();
+        }
     };
 
-    const handleKeyDownPassword: KeyboardEventHandler = async (event) => {
-        if (!emailInput.current || !passwordInput.current) return;
+    const handleKeyDownPassword: KeyboardEventHandler = (event) => {
+        if (!emailInput.current) return;
 
         if (event.key == "ArrowUp") emailInput.current.focus();
-        if (event.key == "Enter") {
-            setAwaitingResponse(true);
+    };
 
-            const result = await signIn("credentials", {
-                redirect: false,
-                email: emailInput.current.value,
-                password: passwordInput.current.value,
-            });
+    // eslint-disable-next-line
+    const handleSubmit: FormEventHandler = async (event) => {
+        // don't refresh the page
+        event.preventDefault();
 
-            if (result === undefined) {
-                setAwaitingResponse(false);
-                setStatusParagraphContent("An error occurred. Try again later.");
-                return;
-            }
+        if (!emailInput.current || !passwordInput.current) return;
 
-            if (!result.ok) {
-                setAwaitingResponse(false);
-                setStatusParagraphContent("Credentials invalid!");
-                return;
-            }
+        setAwaitingResponse(true);
 
-            if (result.ok) {
-                // TODO: redirect to / load the panel here
-                setAwaitingResponse(false);
-                setStatusParagraphContent("Success!");
-                return;
-            }
+        const result = await signIn("credentials", {
+            redirect: false,
+            email: emailInput.current.value,
+            password: passwordInput.current.value,
+        });
+
+        setAwaitingResponse(false);
+
+        if (result === undefined) {
+            setStatusParagraphContent("An error occurred. Try again later.");
+            return;
         }
+
+        if (!result.ok) {
+            setStatusParagraphContent("Credentials invalid!");
+            return;
+        }
+
+        // TODO: redirect to / load the panel here
+        setStatusParagraphContent("Success!");
     };
 
     useEffect(() => {
@@ -70,34 +78,44 @@ const Admin = () => {
             gap={50}
         >
             <Logo animate={true} size={mobile ? 275 : 300} />
+   
     
-            <Flex
-                direction="column"
-                justify="center"
-                gap={10}
+            <form
+                className={style.form}
+                style={{ gap: "50px" }}
+                onSubmit={handleSubmit}
             >
-                <Input
-                    className={style.input}
-                    placeholder="email"
-                    type="email"
-                    onKeyDown={handleKeyDownEmail}
-                    ref={emailInput}
-                    borderGreenIfValid
-                    borderRedIfInvalid
-                />
-                <Input
-                    className={style.input}
-                    placeholder="password"
-                    type="password"
-                    onKeyDown={handleKeyDownPassword}
-                    ref={passwordInput}
-                />
-            </Flex>
-
-            <Button onClick={() => setAwaitingResponse(true)}>
-                <Paragraph>Login</Paragraph>
-            </Button>
-
+                <Flex
+                    direction="column"
+                    justify="center"
+                    gap={10}
+                >
+                    <Input
+                        className={style.input}
+                        placeholder="email"
+                        type="email"
+                        onKeyDown={handleKeyDownEmail}
+                        ref={emailInput}
+                        borderGreenIfValid
+                        borderRedIfInvalid
+                    />
+                    <Input
+                        className={style.input}
+                        placeholder="password"
+                        type="password"
+                        onKeyDown={handleKeyDownPassword}
+                        ref={passwordInput}
+                    />
+                </Flex>
+                
+                <Button
+                    onClick={handleSubmit}
+                    className={style.login_buton}
+                >
+                    <Paragraph>Login</Paragraph>
+                </Button>
+            </form>
+            
             <Flex
                 styles={{ height: mobile ? "100px" : "150px" }}
                 justify="center"
