@@ -1,14 +1,10 @@
 @import "./constants.scss";
 
-.layout {
-    background-color: $contentBackground;
-    overflow-x: hidden;
-    margin: 0;
-}
-
 .content {
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-color: $contentBackground;
+    min-height: 100vh;
 }
 

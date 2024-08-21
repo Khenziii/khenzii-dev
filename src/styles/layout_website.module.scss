@@ -1,11 +1,5 @@
 @import "./constants.scss";
 
-.layout {
-    background-color: $background;
-    overflow-x: hidden;
-    margin: 0;
-}
-
 .footer {
     height: $footerHeight;
 }
@@ -38,3 +32,4 @@
         min-height: calc(100vh - $navMobileHeight - $footerHeight);
     }
 }
+
