@@ -43,6 +43,13 @@ export const authOptions: NextAuthOptions = {
             },
         }),
     },
+    pages: {
+        signIn: "/",
+        signOut: "/",
+        error: "/",
+        verifyRequest: "/",
+        newUser: "/",
+    },
     adapter: PrismaAdapter(db) as Adapter,
     providers: [
         CredentialsProvider({
