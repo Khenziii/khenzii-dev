@@ -1,13 +1,19 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import {
     getServerSession,
-    // type DefaultSession,
+    type DefaultSession,
     type NextAuthOptions,
+    // This type is imported as NextAuthUser because
+    // it's later exported using the `User` name.
+    type User as NextAuthUser,
 } from "next-auth";
 import { type Adapter } from "next-auth/adapters";
 import CredentialsProvider from "next-auth/providers/credentials";
 // import { env } from "@khenzii-dev/env";
 import { db } from "@khenzii-dev/server/db";
+import { api } from "@khenzii-dev/server/api";
+
+export type User = NextAuthUser;
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -16,14 +22,11 @@ import { db } from "@khenzii-dev/server/db";
  * @see https://next-auth.js.org/getting-started/typescript#module-augmentation
  */
 declare module "next-auth" {
-    // interface Session extends DefaultSession {
-    //     user: {
-    //         id: string;
-    //         // ...other properties
-    //         // role: UserRole;
-    //     } & DefaultSession["user"];
-    // }
+    interface Session extends DefaultSession {
+        user: User;
+    }
     interface User {
+        id: string;
         email: string;
     }
 }
@@ -58,28 +61,10 @@ export const authOptions: NextAuthOptions = {
                 email: { type: "email" },
                 password: { type: "password" },
             },
-            async authorize(credentials, req) {
-                // const res = await fetch("/your/endpoint", {
-                //    method: 'POST',
-                //    body: JSON.stringify(credentials),
-                //    headers: { "Content-Type": "application/json" }
-                // })
-                // const user = await res.json()
-
-                // if (res.ok && user) {
-                //    return user
-                // }
-
-                // return null
-
+            async authorize(credentials): Promise<User | null> {
                 if (!credentials) return null;
-
-                if (credentials.email == "a@b.c" && credentials.password == "test") return {
-                    id: "test-id",
-                    email: credentials.email,
-                };
-
-                return null;
+                
+                return await api.account.login(credentials);
             },
         }),
     ],

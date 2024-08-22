@@ -15,3 +15,9 @@ model CurrentProject {
     name        String
     description String
 }
+
+model Account {
+    id          String @id @default(auto()) @map("_id") @db.ObjectId
+    email       String @unique
+    password    String
+}
