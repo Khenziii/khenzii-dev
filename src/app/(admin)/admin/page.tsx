@@ -123,7 +123,7 @@ const Admin = () => {
                 {awaitingResponse ? (
                     <Loading />
                 ) : (
-                    <Paragraph>
+                    <Paragraph fontSize={1.5}>
                         {statusParagraphContent}
                     </Paragraph>
                 )}
