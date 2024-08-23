@@ -1,7 +1,6 @@
 import { createCallerFactory, createTRPCRouter } from "@khenzii-dev/server/api/trpc";
 import {
     currentProjectRouter,
-    accountRouter,
 } from "@khenzii-dev/server/api/routers";
 
 /**
@@ -11,7 +10,6 @@ import {
  */
 export const appRouter = createTRPCRouter({
     current_project: currentProjectRouter,
-    account: accountRouter,
 });
 
 // export type definition of API

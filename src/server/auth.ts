@@ -9,18 +9,12 @@ import {
 } from "next-auth";
 import { type Adapter } from "next-auth/adapters";
 import CredentialsProvider from "next-auth/providers/credentials";
-// import { env } from "@khenzii-dev/env";
+import { compare } from "bcrypt";
 import { db } from "@khenzii-dev/server/db";
-import { api } from "@khenzii-dev/server/api";
+
 
 export type User = NextAuthUser;
 
-/**
- * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
- * object and keep type safety.
- *
- * @see https://next-auth.js.org/getting-started/typescript#module-augmentation
- */
 declare module "next-auth" {
     interface Session extends DefaultSession {
         user: User;
@@ -31,11 +25,6 @@ declare module "next-auth" {
     }
 }
 
-/**
- * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
- *
- * @see https://next-auth.js.org/configuration/options
- */
 export const authOptions: NextAuthOptions = {
     callbacks: {
         session: ({ session, user }) => ({
@@ -63,16 +52,22 @@ export const authOptions: NextAuthOptions = {
             },
             async authorize(credentials): Promise<User | null> {
                 if (!credentials) return null;
-                
-                return await api.account.login(credentials);
+
+                const account = await db.account.findFirst({
+                    where: {
+                        email: credentials.email,
+                    },
+                });
+
+                if (!account) return null;
+
+                const passwordValid = await compare(credentials.password, account.password);
+                if (passwordValid) return account;
+
+                return null;
             },
         }),
     ],
 };
 
-/**
- * Wrapper for `getServerSession` so that you don't need to import the `authOptions` in every file.
- *
- * @see https://next-auth.js.org/configuration/nextjs
- */
 export const getServerAuthSession = () => getServerSession(authOptions);
