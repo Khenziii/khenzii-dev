@@ -43,6 +43,11 @@ export const authOptions: NextAuthOptions = {
         newUser: "/",
     },
     adapter: PrismaAdapter(db) as Adapter,
+    session: {
+        // This is required for `CredentialsProvider` to work.
+        // See: https://next-auth.js.org/configuration/providers/credentials
+        strategy: "jwt",
+    },
     providers: [
         CredentialsProvider({
             name: 'credentials',
