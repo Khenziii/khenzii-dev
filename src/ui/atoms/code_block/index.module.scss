@@ -8,6 +8,7 @@
     border: solid 2px lighten($background, 10%);
     vertical-align: middle;
     box-sizing: border-box;
+    display: inline-block;
 }
 
 @media (width <= $mobileWidth) {

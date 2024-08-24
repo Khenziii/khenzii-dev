@@ -1,0 +1,10 @@
+@import "./constants.scss";
+
+.container {
+  width: min($maxContentWidth / 2, 100vw - 2 * 10px);
+}
+
+.logout_button {
+  width: fit-content;
+}
+
