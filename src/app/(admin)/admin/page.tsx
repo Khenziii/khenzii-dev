@@ -1,5 +1,7 @@
 "use client";
 
+import { useSession, signOut } from "next-auth/react";
+import { api } from "@khenzii-dev/providers";
 import {
     Paragraph,
     Button,
@@ -7,11 +9,21 @@ import {
     Flex,
     Header,
     CodeBlock,
+    Loading,
 } from "@khenzii-dev/ui/atoms";
-import { useSession, signOut } from "next-auth/react";
 import style from "@khenzii-dev/styles/admin.module.scss";
 
 const Admin = () => {
+    const {
+        data: currentProjectData,
+        isLoading: currentProjectIsLoading ,
+    } = api.current_project.getProject.useQuery();
+    const {
+        data: oldProjectsData,
+        isLoading: oldProjectsAreLoading ,
+    } = api.current_project.getOldProjects.useQuery();
+
+
     const { data: session } = useSession();
     if (!session) return;
 
@@ -27,7 +39,7 @@ const Admin = () => {
             >
                 <Header>Welcome, {session.user.name}!</Header>
 
-                <Flex direction="column" align="flex-start">
+                <Flex direction="column" align="center">
                     <Paragraph fontSize={1.75}>Session Details:</Paragraph>
                     <Paragraph fontSize={1.5}>
                         <CodeBlock>
@@ -54,7 +66,45 @@ const Admin = () => {
             >
                 <Header>Current Project</Header>
 
-                <Paragraph fontSize={1.75}>This section is still being built..</Paragraph>
+                {(currentProjectIsLoading || currentProjectData === undefined)
+                    ? (
+                        <Loading size={100} />
+                    )
+                    : (
+                        <Paragraph fontSize={1.5}>
+                            <CodeBlock>
+                                Name: {currentProjectData.name} <br />
+                                description: {currentProjectData.description} <br />
+                            </CodeBlock>
+                        </Paragraph>
+                    )
+                }
+
+                <Paragraph fontSize={1.75}>Other Projects:</Paragraph>
+
+                <Paragraph fontSize={1.5}>TIP: Click a checkmark to tag an old project as current.</Paragraph>
+
+                {(oldProjectsAreLoading || oldProjectsData === undefined)
+                    ? (
+                        <Loading size={100} />
+                    )
+                    : oldProjectsData.map((project, index) => (
+                        <Flex key={`project-${index}`}>
+                            <Paragraph fontSize={1.5}>
+                                <CodeBlock>
+                                    Name: {project.name} <br />
+                                    description: {project.description} <br />
+                                </CodeBlock>
+                            </Paragraph>
+
+                            <Button
+                                onClick={() => console.log("Hello!")}
+                            >
+                                <Icon iconName={"check"} size={1.5} />
+                            </Button>
+                        </Flex>
+                    ))
+                }
             </Flex>
 
             <Flex

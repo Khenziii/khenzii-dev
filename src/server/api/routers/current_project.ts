@@ -14,8 +14,8 @@ export const currentProjectRouter = createTRPCRouter({
         const handler = new CurrentProjectService(ctx);
         return await handler.getCurrentProject();
     }),
-    getProjects: protectedProcedure.query(async ({ ctx }): Promise<CurrentProject[]> => {
+    getOldProjects: protectedProcedure.query(async ({ ctx }): Promise<CurrentProject[]> => {
         const handler = new CurrentProjectService(ctx);
-        return await handler.getEveryProject();
+        return await handler.getOldProjects();
     }),
 });

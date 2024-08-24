@@ -7,19 +7,23 @@ export type CurrentProject = {
 
 export class CurrentProjectService extends BaseService {
     async getCurrentProject(): Promise<CurrentProject> {
-        const latestProject = await this.ctx.db.currentProject.findMany({
-            orderBy: {
-                id: "desc",
+        const currentProject = await this.ctx.db.currentProject.findFirst({
+            where: {
+                current: true,
             },
-            take: 1,
         });
-        const { name, description } = latestProject[0] ?? { name: "...", description: "..." };
+        const { name, description } = currentProject ?? { name: "...", description: "..." };
 
         return { name, description };
     }
 
-    async getEveryProject(): Promise<CurrentProject[]> {
-        const everyProject = await this.ctx.db.currentProject.findMany();
-        return everyProject;
+    async getOldProjects(): Promise<CurrentProject[]> {
+        const oldProjects = await this.ctx.db.currentProject.findMany({
+            where: {
+                current: false,
+            },
+        });
+
+        return oldProjects;
     }
 }
