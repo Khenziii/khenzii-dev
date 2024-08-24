@@ -1,5 +1,6 @@
 import type { ReactNode, FC } from "react";
 import { type Metadata } from "next";
+import { ProtectedPage } from "@khenzii-dev/ui/organisms";
 import style from "@khenzii-dev/styles/layout_admin.module.scss";
 
 export const metadata: Metadata = {
@@ -8,7 +9,9 @@ export const metadata: Metadata = {
 
 const AdminLayout: FC<{ children: ReactNode }> = ({ children }) => (
     <main className={style.content}>
-        {children}
+        <ProtectedPage>
+            {children}
+        </ProtectedPage>
     </main>
 );
 
