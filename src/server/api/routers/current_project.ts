@@ -27,4 +27,13 @@ export const currentProjectRouter = createTRPCRouter({
             const handler =  new CurrentProjectService(ctx, input);
             return await handler.setCurrentProject();
         }),
+    deleteProject: protectedProcedure
+        .input(z.object({
+            projectId: z.string(),
+        }))
+        .mutation(async ({ ctx, input }) => {
+            const handler =  new CurrentProjectService(ctx, input);
+            return await handler.deleteProject();
+        }),
+
 });

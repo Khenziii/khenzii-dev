@@ -26,6 +26,7 @@ const Admin = () => {
         refetch: oldProjectsRefetch,
     } = api.currentProject.getOldProjects.useQuery();
     const { mutateAsync: setCurrentProjectMutation } = api.currentProject.setCurrentProject.useMutation();
+    const { mutateAsync: deleteProjectMutation } = api.currentProject.deleteProject.useMutation();
 
     const setCurrentProject = useCallback(async (projectId: string) => {
         await setCurrentProjectMutation({ projectId });
@@ -33,6 +34,12 @@ const Admin = () => {
         await currentProjectRefetch();
         await oldProjectsRefetch();
     }, [setCurrentProjectMutation, currentProjectRefetch, oldProjectsRefetch]);
+
+    const deleteProject = useCallback(async (projectId: string) => {
+        await deleteProjectMutation({ projectId });
+
+        await oldProjectsRefetch();
+    }, [deleteProjectMutation, oldProjectsRefetch]);
 
     
     const { data: session } = useSession();
@@ -112,7 +119,7 @@ const Admin = () => {
                             </Button>
 
                              <Button
-                                onClick={() => console.log(project.id)}
+                                onClick={() => deleteProject(project.id)}
                                 color={"destructive"}
                              >
                                 <Icon iconName={"trash"} size={1.5} />

@@ -47,4 +47,15 @@ export class CurrentProjectService extends BaseService {
             },
         });
     }
+
+    async deleteProject() {
+        if (!this.input) return;
+        if (typeof this.input.projectId !== "string") return;
+        
+        await this.ctx.db.currentProject.delete({
+            where: {
+                id: this.input.projectId,
+            },
+        });
+    }
 }
