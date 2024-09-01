@@ -9,7 +9,7 @@ import {
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
-    current_project: currentProjectRouter,
+    currentProject: currentProjectRouter,
 });
 
 // export type definition of API

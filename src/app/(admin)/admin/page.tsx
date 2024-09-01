@@ -19,13 +19,13 @@ const Admin = () => {
         data: currentProjectData,
         isLoading: currentProjectIsLoading,
         refetch: currentProjectRefetch,
-    } = api.current_project.getProject.useQuery();
+    } = api.currentProject.getProject.useQuery();
     const {
         data: oldProjectsData,
         isLoading: oldProjectsAreLoading,
         refetch: oldProjectsRefetch,
-    } = api.current_project.getOldProjects.useQuery();
-    const { mutateAsync: setCurrentProjectMutation } = api.current_project.setCurrentProject.useMutation();
+    } = api.currentProject.getOldProjects.useQuery();
+    const { mutateAsync: setCurrentProjectMutation } = api.currentProject.setCurrentProject.useMutation();
 
     const setCurrentProject = useCallback(async (projectId: string) => {
         await setCurrentProjectMutation({ projectId });
