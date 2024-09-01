@@ -12,3 +12,4 @@ export * from "./code_block";
 export * from "./fade_in";
 export * from "./button";
 export * from "./input";
+export * from "./dialog";
