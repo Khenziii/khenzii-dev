@@ -3,6 +3,7 @@ import { BaseService } from "@khenzii-dev/server/backend";
 export type CurrentProject = {
     name: string;
     description: string;
+    id: string;
 };
 
 export class CurrentProjectService extends BaseService {
@@ -12,9 +13,9 @@ export class CurrentProjectService extends BaseService {
                 current: true,
             },
         });
-        const { name, description } = currentProject ?? { name: "...", description: "..." };
+        const { name, description, id } = currentProject ?? { name: "...", description: "...", id: "..." };
 
-        return { name, description };
+        return { name, description, id };
     }
 
     async getOldProjects(): Promise<CurrentProject[]> {
@@ -25,5 +26,25 @@ export class CurrentProjectService extends BaseService {
         });
 
         return oldProjects;
+    }
+    
+    async setCurrentProject() {
+        if (!this.input) return;
+        if (typeof this.input.projectId !== "string") return;
+
+        await this.ctx.db.currentProject.updateMany({
+            where: {},
+            data: {
+                current: false,
+            },
+        });
+        await this.ctx.db.currentProject.update({
+            where: {
+                id: this.input.projectId,
+            },
+            data: {
+                current: true,
+            },
+        });
     }
 }

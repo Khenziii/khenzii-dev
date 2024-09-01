@@ -7,6 +7,7 @@ import {
     CurrentProjectService,
     type CurrentProject,
 } from "@khenzii-dev/server/backend";
+import { z } from "zod";
 
 
 export const currentProjectRouter = createTRPCRouter({
@@ -18,4 +19,12 @@ export const currentProjectRouter = createTRPCRouter({
         const handler = new CurrentProjectService(ctx);
         return await handler.getOldProjects();
     }),
+    setCurrentProject: protectedProcedure
+        .input(z.object({
+            projectId: z.string(),
+        }))
+        .mutation(async ({ ctx, input }) => {
+            const handler =  new CurrentProjectService(ctx, input);
+            return await handler.setCurrentProject();
+        }),
 });

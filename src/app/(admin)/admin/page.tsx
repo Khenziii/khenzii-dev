@@ -1,5 +1,6 @@
 "use client";
 
+import { useCallback } from "react";
 import { useSession, signOut } from "next-auth/react";
 import { api } from "@khenzii-dev/providers";
 import {
@@ -16,16 +17,27 @@ import style from "@khenzii-dev/styles/admin.module.scss";
 const Admin = () => {
     const {
         data: currentProjectData,
-        isLoading: currentProjectIsLoading ,
+        isLoading: currentProjectIsLoading,
+        refetch: currentProjectRefetch,
     } = api.current_project.getProject.useQuery();
     const {
         data: oldProjectsData,
-        isLoading: oldProjectsAreLoading ,
+        isLoading: oldProjectsAreLoading,
+        refetch: oldProjectsRefetch,
     } = api.current_project.getOldProjects.useQuery();
+    const { mutateAsync: setCurrentProjectMutation } = api.current_project.setCurrentProject.useMutation();
 
+    const setCurrentProject = useCallback(async (projectId: string) => {
+        await setCurrentProjectMutation({ projectId });
 
+        await currentProjectRefetch();
+        await oldProjectsRefetch();
+    }, [setCurrentProjectMutation, currentProjectRefetch, oldProjectsRefetch]);
+
+    
     const { data: session } = useSession();
     if (!session) return;
+
 
     return (
         <Flex
@@ -82,8 +94,6 @@ const Admin = () => {
 
                 <Paragraph fontSize={1.75}>Other Projects:</Paragraph>
 
-                <Paragraph fontSize={1.5}>TIP: Click a checkmark to tag an old project as current.</Paragraph>
-
                 {(oldProjectsAreLoading || oldProjectsData === undefined)
                     ? (
                         <Loading size={100} />
@@ -97,11 +107,16 @@ const Admin = () => {
                                 </CodeBlock>
                             </Paragraph>
 
-                            <Button
-                                onClick={() => console.log("Hello!")}
-                            >
+                            <Button onClick={() => setCurrentProject(project.id)}>
                                 <Icon iconName={"check"} size={1.5} />
                             </Button>
+
+                             <Button
+                                onClick={() => console.log(project.id)}
+                                color={"destructive"}
+                             >
+                                <Icon iconName={"trash"} size={1.5} />
+                             </Button>
                         </Flex>
                     ))
                 }
