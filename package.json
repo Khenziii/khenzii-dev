@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "author": {
     "name": "Khenzii",
-    "url": "https://khenzii.dev/"
+    "url": "https://khenzii.dev"
   },
-  "homepage": "https://khenzii.dev/",
+  "homepage": "https://khenzii.dev",
   "license": "GPL-3.0",
   "type": "module",
   "scripts": {
@@ -13,8 +13,7 @@
     "dev": "next dev",
     "lint": "next lint",
     "start": "next start",
-    "postinstall": "prisma generate",
-    "db-push": "prisma db push",
+    "db-push": "prisma generate",
     "db-studio": "prisma studio --port 3002 --browser none",
     "prepare": "husky",
     "storybook": "storybook dev -p 3001",
