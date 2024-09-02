@@ -1,0 +1,17 @@
+@import "./constants.scss";
+
+.container {
+  width: min($maxContentWidth / 2, 100vw - 2 * 10px);
+}
+
+.logout_button {
+  width: fit-content;
+}
+
+.add_project_form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+}
+

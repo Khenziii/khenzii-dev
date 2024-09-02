@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "author": {
     "name": "Khenzii",
-    "url": "https://khenzii.dev/"
+    "url": "https://khenzii.dev"
   },
-  "homepage": "https://khenzii.dev/",
+  "homepage": "https://khenzii.dev",
   "license": "GPL-3.0",
   "type": "module",
   "scripts": {
@@ -13,8 +13,7 @@
     "dev": "next dev",
     "lint": "next lint",
     "start": "next start",
-    "postinstall": "prisma generate",
-    "db-push": "prisma db push",
+    "db-push": "prisma generate",
     "db-studio": "prisma studio --port 3002 --browser none",
     "prepare": "husky",
     "storybook": "storybook dev -p 3001",
@@ -31,6 +30,7 @@
     "@trpc/next": "^11.0.0-rc.340",
     "@trpc/react-query": "^11.0.0-rc.340",
     "@trpc/server": "^11.0.0-rc.340",
+    "bcrypt": "^5.1.1",
     "bootstrap-icons": "^1.11.3",
     "clsx": "^2.1.0",
     "framer-motion": "^11.0.3",
@@ -55,6 +55,7 @@
     "@storybook/theming": "^7.6.17",
     "@stylistic/eslint-plugin": "^1.6.3",
     "@tanstack/react-query-devtools": "^5.27.8",
+    "@types/bcrypt": "^5.0.2",
     "@types/eslint": "^8.44.7",
     "@types/node": "^18.17.0",
     "@types/react": "^18.2.37",

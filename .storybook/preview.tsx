@@ -1,6 +1,6 @@
 import type { Preview } from "@storybook/react";
 import { khenziiDevTheme } from "./khenzii-dev-theme";
-import { TRPCProvider } from "@khenzii-dev/providers";
+import { TRPCProvider, SessionProviderWrapper } from "../src/providers";
 
 const preview: Preview = {
   parameters: {
@@ -28,7 +28,13 @@ const preview: Preview = {
       ],
     },
   },
-  decorators: [(Story) => <TRPCProvider> <Story /> </TRPCProvider>],
+  decorators: [(Story) => <>
+        <TRPCProvider>
+            <SessionProviderWrapper>
+                <Story />
+            </SessionProviderWrapper>
+        </TRPCProvider>
+  </>],
 };
 
 export default preview;

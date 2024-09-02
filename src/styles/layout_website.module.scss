@@ -1,0 +1,35 @@
+@import "./constants.scss";
+
+.footer {
+    height: $footerHeight;
+}
+
+.nav {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    height: $navDesktopHeight;
+    position: sticky;
+    top: 0;
+    z-index: 9999;
+    background-color: $background;
+}
+
+.content {
+    background-color: $contentBackground;
+    min-height: calc(100vh - $navDesktopHeight - $footerHeight);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+@media (width <= $mobileWidth) {
+    .nav {
+        height: $navMobileHeight;
+    }
+
+    .content {
+        min-height: calc(100vh - $navMobileHeight - $footerHeight);
+    }
+}
+

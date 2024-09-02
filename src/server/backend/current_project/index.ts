@@ -1,20 +1,75 @@
 import { BaseService } from "@khenzii-dev/server/backend";
 
-export type currentProject = {
+export type CurrentProject = {
     name: string;
     description: string;
+    id: string;
 };
 
 export class CurrentProjectService extends BaseService {
-    async getCurrentProject(): Promise<currentProject> {
-        const latestProject = await this.ctx.db.currentProject.findMany({
-            orderBy: {
-                id: "desc",
+    async getCurrentProject(): Promise<CurrentProject> {
+        const currentProject = await this.ctx.db.currentProject.findFirst({
+            where: {
+                current: true,
             },
-            take: 1,
         });
-        const { name, description } = latestProject[0] ?? { name: "...", description: "..." };
+        const { name, description, id } = currentProject ?? { name: "...", description: "...", id: "..." };
 
-        return { name, description };
+        return { name, description, id };
+    }
+
+    async getOldProjects(): Promise<CurrentProject[]> {
+        const oldProjects = await this.ctx.db.currentProject.findMany({
+            where: {
+                current: false,
+            },
+        });
+
+        return oldProjects;
+    }
+    
+    async setCurrentProject() {
+        if (!this.input) return;
+        if (typeof this.input.projectId !== "string") return;
+
+        await this.ctx.db.currentProject.updateMany({
+            where: {},
+            data: {
+                current: false,
+            },
+        });
+        await this.ctx.db.currentProject.update({
+            where: {
+                id: this.input.projectId,
+            },
+            data: {
+                current: true,
+            },
+        });
+    }
+
+    async deleteProject() {
+        if (!this.input) return;
+        if (typeof this.input.projectId !== "string") return;
+        
+        await this.ctx.db.currentProject.delete({
+            where: {
+                id: this.input.projectId,
+            },
+        });
+    }
+
+    async addProject() {
+        if (!this.input) return;
+        if (typeof this.input.name !== "string") return;
+        if (typeof this.input.description !== "string") return;
+
+        await this.ctx.db.currentProject.create({
+            data: {
+                name: this.input.name,
+                description: this.input.description,
+                current: false,
+            },
+        });
     }
 }

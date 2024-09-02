@@ -22,7 +22,7 @@ const Home = () => {
     const {
         data: currentProjectData,
         isLoading: currentProjectIsLoading ,
-    } = api.current_project.getProject.useQuery();
+    } = api.currentProject.getProject.useQuery();
 
 
     useEffect(() => {
