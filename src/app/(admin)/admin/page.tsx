@@ -1,6 +1,12 @@
 "use client";
 
-import { useCallback } from "react";
+import {
+    useCallback,
+    useState,
+    useRef,
+    type KeyboardEventHandler,
+    type FormEventHandler,
+} from "react";
 import { useSession, signOut } from "next-auth/react";
 import { api } from "@khenzii-dev/providers";
 import {
@@ -11,10 +17,15 @@ import {
     Header,
     CodeBlock,
     Loading,
+    Dialog,
+    Input,
 } from "@khenzii-dev/ui/atoms";
 import style from "@khenzii-dev/styles/admin.module.scss";
 
 const Admin = () => {
+    const [isAddProjectDialogOpen, setIsAddProjectDialogOpen] = useState(false);
+    const projectNameInput = useRef<HTMLInputElement>(null);
+    const projectDescriptionInput = useRef<HTMLInputElement>(null);
     const {
         data: currentProjectData,
         isLoading: currentProjectIsLoading,
@@ -27,6 +38,7 @@ const Admin = () => {
     } = api.currentProject.getOldProjects.useQuery();
     const { mutateAsync: setCurrentProjectMutation } = api.currentProject.setCurrentProject.useMutation();
     const { mutateAsync: deleteProjectMutation } = api.currentProject.deleteProject.useMutation();
+    const { mutateAsync: addProjectMutation } = api.currentProject.addProject.useMutation();
 
     const setCurrentProject = useCallback(async (projectId: string) => {
         await setCurrentProjectMutation({ projectId });
@@ -40,6 +52,55 @@ const Admin = () => {
 
         await oldProjectsRefetch();
     }, [deleteProjectMutation, oldProjectsRefetch]);
+
+    const addProject = useCallback(async (name: string, description: string) => {
+        await addProjectMutation({ name, description });
+
+        await oldProjectsRefetch();
+    }, [addProjectMutation, oldProjectsRefetch]);
+
+    const handleKeyDownProjectNameInput: KeyboardEventHandler = (event) => {
+        if (!projectDescriptionInput.current) return;
+
+        const keys: string[] = ["Enter", "ArrowDown"];
+        if (keys.includes(event.key)) {
+            // don't submit the form if clicked "Enter"
+            event.preventDefault();
+
+            projectDescriptionInput.current.focus();
+        }
+    };
+
+    const handleKeyDownProjectDescriptionInput: KeyboardEventHandler = (event) => {
+        if (!projectNameInput.current) return;
+
+        if (event.key == "ArrowUp") projectNameInput.current.focus();
+    };
+
+    const onAddProjectDialogOpen = useCallback(() => {
+        setIsAddProjectDialogOpen(true);
+
+        if (!projectNameInput.current) return;
+        projectNameInput.current.focus();
+    }, []);
+
+    const onAddProjectDialogClose = useCallback(async (confirmed: boolean) => {
+        setIsAddProjectDialogOpen(false);
+        if (!confirmed) return;
+
+        if (!projectNameInput.current || !projectDescriptionInput.current) return;
+        const name = projectNameInput.current.value;
+        const description = projectDescriptionInput.current.value;
+        await addProject(name, description);
+    }, [addProject]);
+
+    // eslint-disable-next-line
+    const handleAddProjectFormSubmit: FormEventHandler = useCallback(async (event) => {
+        // don't refresh the page
+        event.preventDefault();
+
+        await onAddProjectDialogClose(true);
+    }, [onAddProjectDialogClose]);
 
     
     const { data: session } = useSession();
@@ -100,6 +161,36 @@ const Admin = () => {
                 }
 
                 <Paragraph fontSize={1.75}>Other Projects:</Paragraph>
+
+                <Button onClick={onAddProjectDialogOpen}>
+                    <Icon iconName={"plus-lg"} size={1.5} />
+                </Button>
+
+                <Dialog
+                    title={"Add Project"}
+                    open={isAddProjectDialogOpen}
+                    onClose={() => onAddProjectDialogClose(false)}
+                >
+                    <form onSubmit={handleAddProjectFormSubmit} className={style.add_project_form}>
+                        <Flex direction={"column"} gap={10}>
+                            <Input
+                                placeholder={"Project's Name.."}
+                                onKeyDown={handleKeyDownProjectNameInput}
+                                ref={projectNameInput}
+                            />
+
+                            <Input
+                                placeholder={"Project's Description.."}
+                                onKeyDown={handleKeyDownProjectDescriptionInput}
+                                ref={projectDescriptionInput}
+                            />
+                        </Flex>
+                        
+                        <Button onClick={handleAddProjectFormSubmit}>
+                            <Icon iconName={"check"} size={1.5} />
+                        </Button>
+                    </form>
+                </Dialog>
 
                 {(oldProjectsAreLoading || oldProjectsData === undefined)
                     ? (

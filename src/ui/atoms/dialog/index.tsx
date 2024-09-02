@@ -20,12 +20,15 @@ export const Dialog: FC<DialogProps> = ({ children, open, onClose, title }) => (
         <dialog
             className={style.dialog}
             open={open}
+            onClick={(event) => {
+                event.stopPropagation();
+            }}
         >
             <Flex direction={"column"}>
-                <Flex justify={"space-around"} align={"center"}>
+                <Flex align={"center"} fullWidth>
                     <Paragraph fontSize={1.5}>{title}</Paragraph>
 
-                    <Button onClick={onClose}>
+                    <Button onClick={onClose} style={{ marginLeft: "auto" }}>
                         <Icon iconName={"x-lg"} size={1.5}/>
                     </Button>
                 </Flex>

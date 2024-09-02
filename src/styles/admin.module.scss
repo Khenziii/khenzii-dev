@@ -8,3 +8,10 @@
   width: fit-content;
 }
 
+.add_project_form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+}
+

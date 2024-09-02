@@ -58,4 +58,18 @@ export class CurrentProjectService extends BaseService {
             },
         });
     }
+
+    async addProject() {
+        if (!this.input) return;
+        if (typeof this.input.name !== "string") return;
+        if (typeof this.input.description !== "string") return;
+
+        await this.ctx.db.currentProject.create({
+            data: {
+                name: this.input.name,
+                description: this.input.description,
+                current: false,
+            },
+        });
+    }
 }
