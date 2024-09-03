@@ -7,6 +7,7 @@ import {
     useRef,
     useEffect,
     useState,
+    useCallback,
 } from "react";
 import { signIn } from "next-auth/react";
 import {
@@ -30,7 +31,7 @@ export const AdminLogin: FC = () => {
     const [statusParagraphContent, setStatusParagraphContent] = useState("");
 
 
-    const handleKeyDownEmail: KeyboardEventHandler = (event) => {
+    const handleKeyDownEmail: KeyboardEventHandler = useCallback((event) => {
         if (!passwordInput.current) return;
 
         const keys: string[] = ["Enter", "ArrowDown"];
@@ -40,16 +41,16 @@ export const AdminLogin: FC = () => {
 
             passwordInput.current.focus();
         }
-    };
+    }, []);
 
-    const handleKeyDownPassword: KeyboardEventHandler = (event) => {
+    const handleKeyDownPassword: KeyboardEventHandler = useCallback((event) => {
         if (!emailInput.current) return;
 
         if (event.key == "ArrowUp") emailInput.current.focus();
-    };
+    }, []);
 
     // eslint-disable-next-line
-    const handleSubmit: FormEventHandler = async (event) => {
+    const handleSubmit: FormEventHandler = useCallback(async (event) => {
         // don't refresh the page
         event.preventDefault();
 
@@ -76,7 +77,7 @@ export const AdminLogin: FC = () => {
         }
 
         setStatusParagraphContent("Success!");
-    };
+    }, []);
 
     useEffect(() => {
         if (!emailInput.current) return;
