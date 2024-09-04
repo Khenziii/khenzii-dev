@@ -18,7 +18,7 @@
     "prepare": "husky",
     "storybook": "storybook dev -p 3001",
     "build-storybook": "storybook build",
-    "test": "jest"
+    "test": "jest --transformIgnorePatterns '!node_modules/react-markdown'"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.0.0",
