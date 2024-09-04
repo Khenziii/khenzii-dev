@@ -68,6 +68,7 @@
     "@types/react-dom": "^18.2.15",
     "@typescript-eslint/eslint-plugin": "^6.11.0",
     "@typescript-eslint/parser": "^6.11.0",
+    "cypress": "^13.14.1",
     "eslint": "^8.54.0",
     "eslint-config-next": "^14.0.4",
     "eslint-plugin-storybook": "^0.8.0",
