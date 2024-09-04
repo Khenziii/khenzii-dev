@@ -4,8 +4,9 @@ description: 'Does things necessary for most workflows.'
 runs:
   using: "composite"
   steps:
-    - name: Setup Yarn
-      uses: threeal/setup-yarn-action@v1.0.0
+    - name: Enable Corepack
+      shell: bash
+      run: corepack enable
 
     - name: Install Dependencies
       shell: bash

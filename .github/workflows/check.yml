@@ -34,3 +34,17 @@ jobs:
 
       - name: Build
         run: yarn build
+
+  tests-check:
+    name: 🧪 Tests Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Environment
+        uses: ./.github/actions/env-setup
+
+      - name: Run Unit Tests
+        run: yarn test
