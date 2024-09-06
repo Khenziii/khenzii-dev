@@ -19,7 +19,7 @@
     "storybook": "storybook dev -p 3001",
     "build-storybook": "storybook build",
     "unit-tests": "jest --transformIgnorePatterns '!node_modules/react-markdown'",
-    "e2e-tests": "yarn install && docker compose up & yarn dev & wait-on http://localhost:3000 tcp:9000 tcp:27017 --interval 5000 && cypress run && docker compose down && pkill yarn",
+    "e2e-tests": "yarn install && docker compose up --detach && yarn dev & wait-on http://localhost:3000 --interval 5000 && cypress run && docker compose down && kill $(pgrep -f 'yarn dev')",
     "test": "yarn unit-tests && yarn e2e-tests"
   },
   "dependencies": {
