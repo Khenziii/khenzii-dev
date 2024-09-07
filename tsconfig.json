@@ -39,6 +39,7 @@
     ".next/types/**/*.ts"
   ],
   "exclude": [
+    "coverage",
     "node_modules",
     "cypress.config.ts",
     "cypress"
