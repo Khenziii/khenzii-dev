@@ -3,7 +3,7 @@ describe("Home Page", () => {
         const baseUrl = Cypress.config().baseUrl ?? "http://localhost:3000";
         cy.visit(baseUrl);
 
-        cy.get("body").should("contain", "Khenzii");
+        cy.get("body").should("contain", "I should fail!!!11!!11");
     });
 });
 
