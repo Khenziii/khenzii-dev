@@ -60,3 +60,23 @@ After running all those commands, you'll have access to these webpages:
 5. Object storage console - [localhost:3003](http://localhost:3003)
 6. Object storage ([minio](https://github.com/minio/minio)) - *localhost:9000*
 
+### Testing
+
+Run every test:
+
+```shell
+$ yarn test
+```
+
+Only E2E tests:
+
+```shell
+$ yarn e2e-tests
+```
+
+Only unit tests:
+
+```shell
+$ yarn unit-tests
+```
+
