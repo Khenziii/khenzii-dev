@@ -15,7 +15,7 @@
 .link {
   font-size: 2rem;
 
-  :hover {
+  & > i:hover {
     color: $textDarkened !important;
   }
 }

@@ -19,7 +19,7 @@ import {
     type KeyboardEventHandler,
     type FormEventHandler,
 } from "react";
-import style from "@khenzii-dev/styles/admin.module.scss";
+import style from "@khenzii-dev/styles/admin_current_project.module.scss";
 
 const AdminCurrentProject = () => {
     const [isAddProjectDialogOpen, setIsAddProjectDialogOpen] = useState(false);
