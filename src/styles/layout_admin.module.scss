@@ -8,3 +8,15 @@
     min-height: 100vh;
 }
 
+.container {
+  width: min($maxContentWidth / 2, 100vw - 2 * 10px);
+}
+
+.link {
+  font-size: 2rem;
+
+  & > i:hover {
+    color: $textDarkened !important;
+  }
+}
+
