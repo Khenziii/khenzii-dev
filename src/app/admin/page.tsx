@@ -27,8 +27,8 @@ const Admin = () => {
                 <Paragraph fontSize={1.75}>Session Details:</Paragraph>
                 <Paragraph fontSize={1.5}>
                     <CodeBlock>
-                    Username: {session.user.name} <br />
-                    Email: {session.user.email} <br />
+                        Username: {session.user.name} <br />
+                        Email: {session.user.email} <br />
                     </CodeBlock>
                 </Paragraph>
             </Flex>
