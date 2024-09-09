@@ -8,3 +8,7 @@
     min-height: 100vh;
 }
 
+.container {
+  width: min($maxContentWidth / 2, 100vw - 2 * 10px);
+}
+

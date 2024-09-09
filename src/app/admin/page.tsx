@@ -108,11 +108,7 @@ const Admin = () => {
 
 
     return (
-        <Flex
-            direction="column"
-            gap={20}
-            className={style.container}
-        >
+        <>
             <Flex
                 direction="column"
                 align="center"
@@ -224,20 +220,12 @@ const Admin = () => {
                 direction="column"
                 align="center"
             >
-                <Header>Blog</Header>
-
-                <Paragraph fontSize={1.75}>This section is still being built..</Paragraph>
-            </Flex>
-
-            <Flex
-                direction="column"
-                align="center"
-            >
                 <Header>Event Log</Header>
 
                 <Paragraph fontSize={1.75}>This section is still being built..</Paragraph>
             </Flex>
-        </Flex>
+
+        </>
     );
 };
 
