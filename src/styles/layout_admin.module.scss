@@ -12,3 +12,11 @@
   width: min($maxContentWidth / 2, 100vw - 2 * 10px);
 }
 
+.link {
+  font-size: 2rem;
+
+  :hover {
+    color: $textDarkened !important;
+  }
+}
+

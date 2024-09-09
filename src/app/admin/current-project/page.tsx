@@ -163,8 +163,8 @@ const AdminCurrentProject = () => {
                     <Flex key={`project-${index}`}>
                         <Paragraph fontSize={1.5}>
                             <CodeBlock>
-                            name: {project.name} <br />
-                            description: {project.description} <br />
+                                name: {project.name} <br />
+                                description: {project.description} <br />
                             </CodeBlock>
                         </Paragraph>
 
