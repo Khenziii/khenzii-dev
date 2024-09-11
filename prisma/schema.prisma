@@ -26,6 +26,8 @@ model Account {
 model Tag {
     id          String @id @default(auto()) @map("_id") @db.ObjectId
     name        String
+    postIDs     String[] @db.ObjectId
+    posts       Post[] @relation(fields: [postIDs], references: [id])
 }
 
 model Post {
@@ -33,6 +35,7 @@ model Post {
     title       String
     content     String
     created_at  DateTime
-    tags        Tag[]
+    tagIDs      String[] @db.ObjectId
+    tags        Tag[] @relation(fields: [tagIDs], references: [id])
 }
 
