@@ -47,7 +47,7 @@ jobs:
         uses: ./.github/actions/env-setup
 
       - name: Run Prisma Validate
-        run: yarn run prisma validate
+        run: DATABASE_URL=mongodb:// yarn run prisma validate
 
   tests-check:
     name: 🧪 Tests Check
