@@ -3,7 +3,7 @@ import { env } from "@khenzii-dev/env";
 
 const globalForPrisma: typeof globalThis & { prisma?: PrismaClient } = globalThis;
 
-export const db =
+export const db: PrismaClient =
   globalForPrisma.prisma ??
   new PrismaClient({
     log:
