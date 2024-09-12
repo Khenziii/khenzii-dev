@@ -6,4 +6,5 @@ export default defineConfig({
         specPattern: "cypress/**/*.ts*",
         baseUrl: 'http://localhost:3000',
     },
+    screenshotOnRunFailure: false,
 });
