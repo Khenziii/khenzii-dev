@@ -64,4 +64,4 @@ jobs:
         run: mv .env.example .env
 
       - name: Run Tests
-        run: NODE_ENV=test yarn test
+        run: yarn test
