@@ -26,7 +26,9 @@ export const blogTagRouter = createTRPCRouter({
     updateTag: protectedProcedure
         .input(z.object({
             id: z.string(),
-            // TODO: pass the new value here
+            updatedTag: z.object({
+                name: z.string(),
+            }),
         }))
         .mutation(async ({ ctx, input }) => {
             const handler =  new BlogTagService(ctx, input);
