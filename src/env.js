@@ -12,6 +12,9 @@ export const env = createEnv({
         NODE_ENV: z
             .enum(["development", "test", "production"])
             .default("development"),
+        ENV: z
+            .enum(["development", "test", "production"])
+            .default("development"),
         NEXTAUTH_SECRET:
             process.env.NODE_ENV === "production"
                 ? z.string()
@@ -33,6 +36,7 @@ export const env = createEnv({
         NODE_ENV: process.env.NODE_ENV,
         NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
         NEXTAUTH_URL: process.env.NEXTAUTH_URL,
+        ENV: process.env.ENV,
         // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
     },
     skipValidation: !!process.env.SKIP_ENV_VALIDATION,

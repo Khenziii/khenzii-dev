@@ -50,7 +50,7 @@ export const publicProcedure = t.procedure;
 // guarantees that `ctx.session.user` is not null
 export const protectedProcedure = t.procedure.use(({ ctx, next }) => {
     // if testing, skip authentication
-    if (env.NODE_ENV === "test") return next();   
+    if (env.ENV === "test") return next();   
 
     if (!ctx.session?.user) {
         throw new TRPCError({ code: "UNAUTHORIZED" });

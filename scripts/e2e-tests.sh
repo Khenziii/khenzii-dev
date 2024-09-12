@@ -1,6 +1,6 @@
 #!/bin/sh
 
-NODE_ENV=test
+export ENV=test
 
 # Start the app.
 yarn install
