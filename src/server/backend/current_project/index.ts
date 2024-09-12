@@ -1,4 +1,22 @@
 import { BaseService } from "@khenzii-dev/server/backend";
+import { z } from "zod";
+
+export const setCurrentProjectInput = z.object({
+    projectId: z.string(),
+});
+
+export const deleteProjectInput = z.object({
+    projectId: z.string(),
+});
+
+export const addProjectInput = z.object({
+    name: z.string(),
+    description: z.string(),
+});
+
+type setCurrentProjectInputType = z.infer<typeof setCurrentProjectInput>;
+type deleteProjectInputType = z.infer<typeof deleteProjectInput>;
+type addProjectInputType = z.infer<typeof addProjectInput>;
 
 export type CurrentProject = {
     name: string;
@@ -28,10 +46,7 @@ export class CurrentProjectService extends BaseService {
         return oldProjects;
     }
     
-    async setCurrentProject() {
-        if (!this.input) return;
-        if (typeof this.input.projectId !== "string") return;
-
+    async setCurrentProject(input: setCurrentProjectInputType) {
         await this.ctx.db.currentProject.updateMany({
             where: {},
             data: {
@@ -40,7 +55,7 @@ export class CurrentProjectService extends BaseService {
         });
         await this.ctx.db.currentProject.update({
             where: {
-                id: this.input.projectId,
+                id: input.projectId,
             },
             data: {
                 current: true,
@@ -48,26 +63,19 @@ export class CurrentProjectService extends BaseService {
         });
     }
 
-    async deleteProject() {
-        if (!this.input) return;
-        if (typeof this.input.projectId !== "string") return;
-        
+    async deleteProject(input: deleteProjectInputType) {
         await this.ctx.db.currentProject.delete({
             where: {
-                id: this.input.projectId,
+                id: input.projectId,
             },
         });
     }
 
-    async addProject() {
-        if (!this.input) return;
-        if (typeof this.input.name !== "string") return;
-        if (typeof this.input.description !== "string") return;
-
+    async addProject(input: addProjectInputType) {
         await this.ctx.db.currentProject.create({
             data: {
-                name: this.input.name,
-                description: this.input.description,
+                name: input.name,
+                description: input.description,
                 current: false,
             },
         });

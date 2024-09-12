@@ -1,4 +1,24 @@
 import { BaseService } from "@khenzii-dev/server/backend";
+import { z } from "zod";
+
+export const createTagInput = z.object({
+    name: z.string(),
+});
+
+export const updateTagInput = z.object({
+    id: z.string(),
+    updatedTag: z.object({
+        name: z.string(),
+    }),
+});
+
+export const deleteTagInput = z.object({
+    id: z.string(),
+});
+
+type createTagInputType = z.infer<typeof createTagInput>;
+type updateTagInputType = z.infer<typeof updateTagInput>;
+type deleteTagInputType = z.infer<typeof deleteTagInput>;
 
 export type BlogTag = {
     name: string;
@@ -10,41 +30,31 @@ export class BlogTagService extends BaseService {
         return await this.ctx.db.tag.findMany();
     }
 
-    async createTag(): Promise<BlogTag | undefined> {
-        if (!this.input) return;
-        if (typeof this.input.name !== "string") return;
-
+    async createTag(input: createTagInputType): Promise<BlogTag> {
         return await this.ctx.db.tag.create({
             data: {
-                name: this.input.name,
+                name: input.name,
             },
         });
     }
 
-    async updateTag(): Promise<BlogTag | undefined> {
-        if (!this.input) return;
-        if (typeof this.input.id !== "string") return;
-        if (typeof this.input.updatedTag !== "object") return;
-
+    async updateTag(input: updateTagInputType): Promise<BlogTag> {
         const currentTag = await this.ctx.db.tag.findUnique({
-            where: { id: this.input.id },
+            where: { id: input.id },
         });
         return await this.ctx.db.tag.update({
-            where: { id: this.input.id },
+            where: { id: input.id },
             data: {
                 ...currentTag,
-                ...this.input.updatedTag,
+                ...input.updatedTag,
             },
         });
     }
 
-    async deleteTag() {
-        if (!this.input) return;
-        if (typeof this.input.id !== "string") return;
-        
+    async deleteTag(input: deleteTagInputType) {
         await this.ctx.db.tag.delete({
             where: {
-                id: this.input.id,
+                id: input.id,
             },
         });
     }
