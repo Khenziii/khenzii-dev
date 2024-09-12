@@ -45,7 +45,7 @@ describe("API Tag Router", () => {
             method: "POST",
             url: `${baseUrl}/api/trpc/blog.blogTag.updateTag`,
             body: { input: {
-                tagId: newTagId,
+                id: newTagId,
                 updatedTag: updatedTag,
             } },
         }).then((response) => {
@@ -64,7 +64,7 @@ describe("API Tag Router", () => {
         cy.request({
             method: "POST",
             url: `${baseUrl}/api/trpc/blog.blogTag.getTags`,
-            body: { input: { tagId: newTagId } },
+            body: { input: { id: newTagId } },
         }).then((response) => {
             expect(response.status).to.equal(200);
         });
