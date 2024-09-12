@@ -19,7 +19,7 @@ export const blogTagRouter = createTRPCRouter({
         .input(z.object({
             name: z.string(),
         }))
-        .mutation(async ({ ctx, input }) => {
+        .mutation(async ({ ctx, input }): Promise<BlogTag | undefined> => {
             const handler =  new BlogTagService(ctx, input);
             return await handler.createTag();
         }),
@@ -30,7 +30,7 @@ export const blogTagRouter = createTRPCRouter({
                 name: z.string(),
             }),
         }))
-        .mutation(async ({ ctx, input }) => {
+        .mutation(async ({ ctx, input }): Promise<BlogTag | undefined> => {
             const handler =  new BlogTagService(ctx, input);
             return await handler.updateTag();
         }),
