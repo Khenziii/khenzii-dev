@@ -42,12 +42,16 @@ export class BlogTagService extends BaseService {
         const currentTag = await this.ctx.db.tag.findUnique({
             where: { id: input.id },
         });
+        const mergedTag = {
+            ...currentTag,
+            ...input.updatedTag,
+        };
+        // exclude the `id` field from `mergedTag`.
+        const { id, ...newTag } = mergedTag;
+
         return await this.ctx.db.tag.update({
             where: { id: input.id },
-            data: {
-                ...currentTag,
-                ...input.updatedTag,
-            },
+            data: newTag,
         });
     }
 

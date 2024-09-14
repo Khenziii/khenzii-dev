@@ -5,22 +5,25 @@ describe("API Tag Router", () => {
 
     it("Allows creating tags", () => {
         const baseUrl = Cypress.config().baseUrl ?? "http://localhost:3000";
-
+    
         cy.request({
             method: "POST",
             url: `${baseUrl}/api/trpc/blog.blogTag.createTag`,
-            body: { input: newTag },
+            body: { json: newTag },
+            headers: { "Content-Type": "application/json" },
         }).then((response) => {
             expect(response.status).to.equal(200);
-            expect(response.body).to.have.property("data");
-            expect(response.body.data).to.have.property("json");
-            expect(response.body.data.json).to.have.property("id");
-            expect(response.body.data.json).to.have.property("name");
-
-            newTagId = response.body.data.json.id;
+            expect(response.body).to.have.property("result");
+            expect(response.body.result).to.have.property("data");
+            expect(response.body.result.data).to.have.property("json");
+            expect(response.body.result.data.json).to.have.property("name");
+            expect(response.body.result.data.json).to.have.property("id");
+            expect(response.body.result.data.json).to.have.property("postIDs");
+           
+            newTagId = response.body.result.data.json.id;
         });
     });
-
+    
     it("Allows fetching tags", () => {
         const baseUrl = Cypress.config().baseUrl ?? "http://localhost:3000";
 
@@ -29,42 +32,47 @@ describe("API Tag Router", () => {
             url: `${baseUrl}/api/trpc/blog.blogTag.getTags`,
         }).then((response) => {
             expect(response.status).to.equal(200);
-            expect(response.body).to.have.property("data");
-            expect(response.body.data).to.have.property("json");
-            expect(response.body.data.json).to.have.property("id");
-            expect(response.body.data.json).to.have.property("name");
-            expect(response.body.data.json.name).to.eq(newTag.name);
-            expect(response.body.data.json.id).to.eq(newTagId);
+            expect(response.body).to.have.property("result");
+            expect(response.body.result).to.have.property("data");
+            expect(response.body.result.data).to.have.property("json");
+            expect(response.body.result.data.json[0]).to.have.property("name");
+            expect(response.body.result.data.json[0]).to.have.property("id");
+            expect(response.body.result.data.json[0]).to.have.property("postIDs");
+            expect(response.body.result.data.json[0].name).to.eq(newTag.name);
         });
     });
 
     it("Allows updating tags", () => {
         const baseUrl = Cypress.config().baseUrl ?? "http://localhost:3000";
-
+    
         cy.request({
             method: "POST",
             url: `${baseUrl}/api/trpc/blog.blogTag.updateTag`,
-            body: { input: {
+            body: { json: {
                 id: newTagId,
                 updatedTag: updatedTag,
             } },
+            headers: { "Content-Type": "application/json" },
         }).then((response) => {
             expect(response.status).to.equal(200);
-            expect(response.body).to.have.property("data");
-            expect(response.body.data).to.have.property("json");
-            expect(response.body.data.json).to.have.property("id");
-            expect(response.body.data.json).to.have.property("name");
-            expect(response.body.data.json.name).to.eq(newTag.name);
+            expect(response.body).to.have.property("result");
+            expect(response.body.result).to.have.property("data");
+            expect(response.body.result.data).to.have.property("json");
+            expect(response.body.result.data.json).to.have.property("name");
+            expect(response.body.result.data.json).to.have.property("id");
+            expect(response.body.result.data.json).to.have.property("postIDs");
+            expect(response.body.result.data.json.name).to.eq(updatedTag.name);
         });
     });
-
+    
     it("Allows deleting tags", () => {
         const baseUrl = Cypress.config().baseUrl ?? "http://localhost:3000";
-
+    
         cy.request({
             method: "POST",
-            url: `${baseUrl}/api/trpc/blog.blogTag.getTags`,
-            body: { input: { id: newTagId } },
+            url: `${baseUrl}/api/trpc/blog.blogTag.deleteTag`,
+            body: { json: { id: newTagId } },
+            headers: { "Content-Type": "application/json" },
         }).then((response) => {
             expect(response.status).to.equal(200);
         });
