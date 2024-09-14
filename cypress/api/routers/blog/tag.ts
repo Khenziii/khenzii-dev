@@ -1,17 +1,12 @@
+import { apiRequest } from "@khenzii-dev-tests/utils";
+
 describe("API Tag Router", () => {
     let newTagId: string;
     const newTag = { name: "test-tag" };
     const updatedTag = { name: "updated-tag" };
 
     it("Allows creating tags", () => {
-        const baseUrl = Cypress.config().baseUrl ?? "http://localhost:3000";
-    
-        cy.request({
-            method: "POST",
-            url: `${baseUrl}/api/trpc/blog.blogTag.createTag`,
-            body: { json: newTag },
-            headers: { "Content-Type": "application/json" },
-        }).then((response) => {
+        const createTagTest = (response: Cypress.Response<any>) => {
             expect(response.status).to.equal(200);
             expect(response.body).to.have.property("result");
             expect(response.body.result).to.have.property("data");
@@ -21,16 +16,18 @@ describe("API Tag Router", () => {
             expect(response.body.result.data.json).to.have.property("postIDs");
            
             newTagId = response.body.result.data.json.id;
+        };
+
+        apiRequest({
+            method: "POST",
+            tRPCPath: "blog.blogTag.createTag",
+            data: newTag,
+            callback: createTagTest,
         });
     });
     
     it("Allows fetching tags", () => {
-        const baseUrl = Cypress.config().baseUrl ?? "http://localhost:3000";
-
-        cy.request({
-            method: "GET",
-            url: `${baseUrl}/api/trpc/blog.blogTag.getTags`,
-        }).then((response) => {
+        const fetchTagsTest = (response: Cypress.Response<any>) => {
             expect(response.status).to.equal(200);
             expect(response.body).to.have.property("result");
             expect(response.body.result).to.have.property("data");
@@ -39,21 +36,17 @@ describe("API Tag Router", () => {
             expect(response.body.result.data.json[0]).to.have.property("id");
             expect(response.body.result.data.json[0]).to.have.property("postIDs");
             expect(response.body.result.data.json[0].name).to.eq(newTag.name);
+        };
+
+        apiRequest({
+            method: "GET",
+            tRPCPath: "blog.blogTag.getTags",
+            callback: fetchTagsTest,
         });
     });
 
     it("Allows updating tags", () => {
-        const baseUrl = Cypress.config().baseUrl ?? "http://localhost:3000";
-    
-        cy.request({
-            method: "POST",
-            url: `${baseUrl}/api/trpc/blog.blogTag.updateTag`,
-            body: { json: {
-                id: newTagId,
-                updatedTag: updatedTag,
-            } },
-            headers: { "Content-Type": "application/json" },
-        }).then((response) => {
+        const updateTagTest = (response: Cypress.Response<any>) => {
             expect(response.status).to.equal(200);
             expect(response.body).to.have.property("result");
             expect(response.body.result).to.have.property("data");
@@ -62,19 +55,29 @@ describe("API Tag Router", () => {
             expect(response.body.result.data.json).to.have.property("id");
             expect(response.body.result.data.json).to.have.property("postIDs");
             expect(response.body.result.data.json.name).to.eq(updatedTag.name);
+        };
+
+        apiRequest({
+            method: "POST",
+            tRPCPath: "blog.blogTag.updateTag",
+            data: {
+                id: newTagId,
+                updatedTag: updatedTag,
+            },
+            callback: updateTagTest,
         });
     });
     
     it("Allows deleting tags", () => {
-        const baseUrl = Cypress.config().baseUrl ?? "http://localhost:3000";
-    
-        cy.request({
-            method: "POST",
-            url: `${baseUrl}/api/trpc/blog.blogTag.deleteTag`,
-            body: { json: { id: newTagId } },
-            headers: { "Content-Type": "application/json" },
-        }).then((response) => {
+        const deleteTagTest = (response: Cypress.Response<any>) => {
             expect(response.status).to.equal(200);
+        };
+
+        apiRequest({
+            method: "POST",
+            tRPCPath: "blog.blogTag.deleteTag",
+            data: { id: newTagId },
+            callback: deleteTagTest,
         });
     });
 });
