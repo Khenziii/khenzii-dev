@@ -5,6 +5,7 @@ import {
 } from "@khenzii-dev/server/api/trpc";
 import {
     BlogPostService,
+    getPostsInput,
     createPostInput,
     updatePostInput,
     deletePostInput,
@@ -12,10 +13,12 @@ import {
 
 
 export const blogPostRouter = createTRPCRouter({
-    getPosts: publicProcedure.query(async ({ ctx }) => {
-        const handler = new BlogPostService(ctx);
-        return await handler.getPosts();
-    }),
+    getPosts: publicProcedure
+        .input(getPostsInput)
+        .query(async ({ ctx, input }) => {
+            const handler = new BlogPostService(ctx);
+            return await handler.getPosts(input);
+        }),
     createPost: protectedProcedure
         .input(createPostInput)
         .mutation(async ({ ctx, input }) => {
