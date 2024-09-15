@@ -62,7 +62,7 @@ describe("API Tag Router", () => {
             tRPCPath: "blog.blogTag.updateTag",
             data: {
                 id: newTagId,
-                updatedTag: updatedTag,
+                updatedTag,
             },
             callback: updateTagTest,
         });
