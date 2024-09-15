@@ -6,6 +6,7 @@ describe("API Post Router", () => {
         title: "test-post",
         content: "test-post's content",
         created_at: new Date(),
+        tagIDs: [],
     };
     const updatedPost = { title: "updated-post" };
 
