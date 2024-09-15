@@ -12,9 +12,10 @@ export type FlexProps = {
     justify?: position | "space-between" | "space-around";
     gap?: number;
     fullWidth?: boolean;
+    id?: string;
 } & CustomStyles;
 
-export const Flex: FC<FlexProps> = ({ children, direction , align, justify, gap, fullWidth, styles, className }) => {
+export const Flex: FC<FlexProps> = ({ children, direction , align, justify, gap, fullWidth, styles, className, id }) => {
     const styleSheet: CSSProperties = styles ?? {};
     if (direction !== undefined) styleSheet.flexDirection = direction;
     if (align !== undefined) styleSheet.alignItems = align;
@@ -23,7 +24,7 @@ export const Flex: FC<FlexProps> = ({ children, direction , align, justify, gap,
     styleSheet.gap = `${gap ?? 10}px`;
 
     return (
-        <div className={clsx([style.flex], { [className as string]: className !== undefined })} style={styleSheet}>
+        <div className={clsx([style.flex], { [className as string]: className !== undefined })} style={styleSheet} id={id}>
             {children}
         </div>
     );

@@ -1,7 +1,7 @@
 import { assertAdminLogin } from "@khenzii-dev-tests/utils";
 
 describe("Admin Blog Page", () => {
-    it("Shows the admin login prompt", () => assertAdminLogin({
+    beforeEach("Shows the admin login prompt", () => assertAdminLogin({
         route: "blog",
     }));
 
