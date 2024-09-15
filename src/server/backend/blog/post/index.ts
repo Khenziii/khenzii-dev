@@ -3,7 +3,7 @@ import { z } from "zod";
 
 export const getPostsInput = z.object({
     offset: z.number().optional(),
-});
+}).optional();
 
 export const createPostInput = z.object({
     title: z.string(),
@@ -47,7 +47,7 @@ export type BlogPost = {
 export class BlogPostService extends BaseService {
     async getPosts(input: getPostsInputType): Promise<BlogPost[]> {
         return await this.ctx.db.post.findMany({
-            skip: (input.offset ?? 0) * 10,
+            skip: (input?.offset ?? 0) * 10,
             take: 10,
         });
     }
