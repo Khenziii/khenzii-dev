@@ -8,6 +8,7 @@ import {
     type FormEventHandler,
     type KeyboardEventHandler,
 } from "react";
+import { type BlogTag } from "@khenzii-dev/server/backend";
 import { api } from "@khenzii-dev/providers";
 import {
     Flex,
@@ -21,6 +22,20 @@ import {
     CodeBlock,
 } from "@khenzii-dev/ui/atoms";
 import style from "@khenzii-dev/styles/admin_blog.module.scss";
+
+const getTagNamesByIds = (
+    ids: string[],
+    fullTagsArray: BlogTag[] | undefined,
+): string[]  => {
+    if (fullTagsArray === undefined) return [];
+
+    const names: string[] = [];
+    ids.forEach((id) => {
+        const tag = fullTagsArray.find(tag => tag.id === id);
+        if (tag) names.push(tag.name);
+    });
+    return names;
+};
 
 enum dialogTitleEnum {
     NEW_POST = "New Post",
@@ -353,6 +368,7 @@ const AdminBlog = () => {
                                 title: {post.title} <br />
                                 content: {post.content} <br />
                                 created_at: {post.created_at.toString()} <br />
+                                tags: {getTagNamesByIds(post.tagIDs, blogTagsData).join(", ")} <br />
                             </CodeBlock>
                         </Paragraph>
 
