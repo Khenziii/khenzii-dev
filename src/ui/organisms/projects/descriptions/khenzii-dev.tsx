@@ -13,7 +13,7 @@ export const KhenziiDevDescription = () => <>
         <br />
         <br />
 
-        {"This website has some pretty deep history behind it ;>."}
+        {"This website has some pretty interesting history behind it."}
         <br />
         {"The version of the site that you're currently using, is actually a rewrite of an old one!"}
         <br />
