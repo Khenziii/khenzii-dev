@@ -7,14 +7,14 @@ import {
 import { Flex } from "@khenzii-dev/ui/atoms";
 import { Tag } from "@khenzii-dev/ui/molecules";
 
-export type TagType = {
+export type UITag = {
     active: boolean;
     name: string;
 };
 
 export type TagsProps = {
-    tags: TagType[];
-    onClick?: (tags: TagType[]) => void;
+    tags: UITag[];
+    onClick?: (tags: UITag[]) => void;
     size?: number;
 };
 
@@ -22,7 +22,7 @@ export const Tags: FC<TagsProps> = ({ tags, onClick, size }) => {
     const handleTagClick = useCallback((name: string) => {
         // Changes tag's active state by name.
         const updatedTags = tags.map((tag) => 
-            tag.name == name
+            tag.name === name
                 ? { ...tag, active: !tag.active }
                 : tag
         );

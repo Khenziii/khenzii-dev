@@ -8,7 +8,6 @@ import {
     type FormEventHandler,
     type KeyboardEventHandler,
 } from "react";
-import { type BlogTag } from "@khenzii-dev/server/backend";
 import { api } from "@khenzii-dev/providers";
 import {
     Flex,
@@ -21,44 +20,13 @@ import {
     Loading,
     CodeBlock,
 } from "@khenzii-dev/ui/atoms";
-import { Tags, type TagType } from "@khenzii-dev/ui/organisms";
+import { Tags, type UITag } from "@khenzii-dev/ui/organisms";
+import {
+    filterTagsByIds,
+    blogTagToUiTag,
+    uiTagToBlogTag,
+} from "@khenzii-dev/utils";
 import style from "@khenzii-dev/styles/admin_blog.module.scss";
-
-// Returns only tags that have an ID present in the passed string array.
-const filterTagsByIds = (
-    ids: string[],
-    fullTagsArray: BlogTag[] | undefined,
-): BlogTag[] => {
-    if (!fullTagsArray) return [];
-
-    return fullTagsArray.filter((tag) => ids.includes(tag.id));
-};
-
-const blogTagToTagType = (
-    ids: string[],
-    fullTagsArray: BlogTag[] | undefined,
-): TagType[] => {
-    if (!fullTagsArray) return [];
-
-    return fullTagsArray.map((tag) => ({
-        ...tag,
-        active: ids.includes(tag.id),
-    }));
-};
-
-const tagTypeToBlogTag = (
-    tagTypeArray: TagType[],
-    blogTypeArray: BlogTag[] | undefined,
-): BlogTag[] => {
-    if (!blogTypeArray) return [];
-
-    return (tagTypeArray.map((tagType) => {
-        if (!tagType.active) return;
-
-        const blogTag = blogTypeArray.find((tag) => tag.name === tagType.name);
-        return blogTag;
-    }).filter(tag => tag !== undefined)) as BlogTag[];
-};
 
 enum dialogTitleEnum {
     NEW_POST = "New Post",
@@ -77,7 +45,7 @@ const AdminBlog = () => {
     const [dialogVariant, setDialogVariant] = useState(dialogVariantEnum.POST);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [currentDatasId, setCurrentDatasId] = useState("");
-    const [tags, setTags] = useState<TagType[]>([]);
+    const [tags, setTags] = useState<UITag[]>([]);
     const postTitleInput = useRef<HTMLInputElement>(null);
     const postContentInput = useRef<HTMLInputElement>(null);
     const tagNameInput = useRef<HTMLInputElement>(null);
@@ -178,7 +146,7 @@ const AdminBlog = () => {
 
         const title = postTitleInput.current.value;
         const content = postContentInput.current.value;
-        const tagIDs = tagTypeToBlogTag(tags, blogTagsData).map((tag) => tag.id);
+        const tagIDs = uiTagToBlogTag(tags, blogTagsData).map((tag) => tag.id);
 
         await createPost({ title, content, tagIDs });
     }, [tags, blogTagsData, createPost]);
@@ -188,7 +156,7 @@ const AdminBlog = () => {
 
         const title = postTitleInput.current.value;
         const content = postContentInput.current.value;
-        const tagIDs = tagTypeToBlogTag(tags, blogTagsData).map((tag) => tag.id);
+        const tagIDs = uiTagToBlogTag(tags, blogTagsData).map((tag) => tag.id);
         const id = currentDatasId;
 
         await updatePost({ id, updatedPost: { title, content, tagIDs } });
@@ -384,7 +352,7 @@ const AdminBlog = () => {
 
                 postTitleInput.current.value = "";
                 postContentInput.current.value = "";
-                setTags(blogTagToTagType([], blogTagsData));
+                setTags(blogTagToUiTag([], blogTagsData));
 
                 dialogOpen(dialogTitleEnum.NEW_POST);
             }}>
@@ -418,7 +386,7 @@ const AdminBlog = () => {
                             
                             postTitleInput.current.value = post.title;
                             postContentInput.current.value = post.content;
-                            setTags(blogTagToTagType(post.tagIDs, blogTagsData));
+                            setTags(blogTagToUiTag(post.tagIDs, blogTagsData));
 
                             setCurrentDatasId(post.id);
                             dialogOpen(dialogTitleEnum.UPDATE_POST);
