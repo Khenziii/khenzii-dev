@@ -2,19 +2,10 @@
 
 import {
     useCallback,
-    useState,
     type FC,
 } from "react";
 import { Flex } from "@khenzii-dev/ui/atoms";
 import { Tag } from "@khenzii-dev/ui/molecules";
-
-const toggleActiveByName = (tagArray: TagType[], name: string) => {
-    return tagArray.map((tag) => 
-        tag.name == name
-            ? { ...tag, active: !tag.active }
-            : tag
-    );
-};
 
 export type TagType = {
     active: boolean;
@@ -28,13 +19,16 @@ export type TagsProps = {
 };
 
 export const Tags: FC<TagsProps> = ({ tags, onClick, size }) => {
-    const [currentTags, setCurrentTags] = useState(tags);
+    const handleTagClick = useCallback((name: string) => {
+        // Changes tag's active state by name.
+        const updatedTags = tags.map((tag) => 
+            tag.name == name
+                ? { ...tag, active: !tag.active }
+                : tag
+        );
 
-    const handleTagClick = useCallback((tagName: string) => {
-        setCurrentTags((prev) => toggleActiveByName(prev, tagName));
-
-        if (onClick !== undefined) onClick(currentTags);
-    }, [onClick, currentTags]);
+        if (onClick !== undefined) onClick(updatedTags);
+    }, [tags, onClick]);
 
     return (
         <Flex direction={"row"}>

@@ -21,20 +21,43 @@ import {
     Loading,
     CodeBlock,
 } from "@khenzii-dev/ui/atoms";
+import { Tags, type TagType } from "@khenzii-dev/ui/organisms";
 import style from "@khenzii-dev/styles/admin_blog.module.scss";
 
-const getTagNamesByIds = (
+// Returns only tags that have an ID present in the passed string array.
+const filterTagsByIds = (
     ids: string[],
     fullTagsArray: BlogTag[] | undefined,
-): string[]  => {
-    if (fullTagsArray === undefined) return [];
+): BlogTag[] => {
+    if (!fullTagsArray) return [];
 
-    const names: string[] = [];
-    ids.forEach((id) => {
-        const tag = fullTagsArray.find(tag => tag.id === id);
-        if (tag) names.push(tag.name);
-    });
-    return names;
+    return fullTagsArray.filter((tag) => ids.includes(tag.id));
+};
+
+const blogTagToTagType = (
+    ids: string[],
+    fullTagsArray: BlogTag[] | undefined,
+): TagType[] => {
+    if (!fullTagsArray) return [];
+
+    return fullTagsArray.map((tag) => ({
+        ...tag,
+        active: ids.includes(tag.id),
+    }));
+};
+
+const tagTypeToBlogTag = (
+    tagTypeArray: TagType[],
+    blogTypeArray: BlogTag[] | undefined,
+): BlogTag[] => {
+    if (!blogTypeArray) return [];
+
+    return (tagTypeArray.map((tagType) => {
+        if (!tagType.active) return;
+
+        const blogTag = blogTypeArray.find((tag) => tag.name === tagType.name);
+        return blogTag;
+    }).filter(tag => tag !== undefined)) as BlogTag[];
 };
 
 enum dialogTitleEnum {
@@ -54,6 +77,7 @@ const AdminBlog = () => {
     const [dialogVariant, setDialogVariant] = useState(dialogVariantEnum.POST);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [currentDatasId, setCurrentDatasId] = useState("");
+    const [tags, setTags] = useState<TagType[]>([]);
     const postTitleInput = useRef<HTMLInputElement>(null);
     const postContentInput = useRef<HTMLInputElement>(null);
     const tagNameInput = useRef<HTMLInputElement>(null);
@@ -149,25 +173,26 @@ const AdminBlog = () => {
         setIsDialogOpen(true);
     }, []);
 
-    const handleNewProjectSubmit = useCallback(async () => {
+    const handleNewPostSubmit = useCallback(async () => {
         if (!postTitleInput.current || !postContentInput.current) return;
 
         const title = postTitleInput.current.value;
         const content = postContentInput.current.value;
-    
-        // TODO: add support for picking tags
-        await createPost({ title, content, tagIDs: [] });
-    }, [createPost]);
+        const tagIDs = tagTypeToBlogTag(tags, blogTagsData).map((tag) => tag.id);
 
-    const handleUpdateProjectSubmit = useCallback(async () => {
+        await createPost({ title, content, tagIDs });
+    }, [tags, blogTagsData, createPost]);
+
+    const handleUpdatePostSubmit = useCallback(async () => {
         if (!postTitleInput.current || !postContentInput.current) return;
 
         const title = postTitleInput.current.value;
         const content = postContentInput.current.value;
+        const tagIDs = tagTypeToBlogTag(tags, blogTagsData).map((tag) => tag.id);
         const id = currentDatasId;
 
-        await updatePost({ id, updatedPost: { title, content, tagIDs: [] } });
-    }, [currentDatasId, updatePost]);
+        await updatePost({ id, updatedPost: { title, content, tagIDs } });
+    }, [tags, blogTagsData, currentDatasId, updatePost]);
 
     const handleNewTagSubmit = useCallback(async () => {
         if (!tagNameInput.current) return;
@@ -192,11 +217,11 @@ const AdminBlog = () => {
 
         switch (dialogTitle) {
             case dialogTitleEnum.NEW_POST:
-                await handleNewProjectSubmit();
+                await handleNewPostSubmit();
                 break;
                 
             case dialogTitleEnum.UPDATE_POST:
-                await handleUpdateProjectSubmit();
+                await handleUpdatePostSubmit();
                 break;
 
             case dialogTitleEnum.NEW_TAG:
@@ -209,8 +234,8 @@ const AdminBlog = () => {
         }
     }, [
         dialogTitle,
-        handleNewProjectSubmit,
-        handleUpdateProjectSubmit,
+        handleNewPostSubmit,
+        handleUpdatePostSubmit,
         handleNewTagSubmit,
         handleUpdateTagSubmit,
     ]);
@@ -311,6 +336,14 @@ const AdminBlog = () => {
             >
                 <form onSubmit={handleDialogFormSubmit} className={style.form} id={"dialog"}>
                     <Flex direction={"column"} gap={10}>
+                        <div style={dialogVariant === dialogVariantEnum.TAG ? { display: "none" } : {}}>
+                            <Tags
+                                tags={tags}
+                                onClick={(updatedTags) => setTags(updatedTags)}
+                                size={1.5}
+                            />
+                        </div>
+
                         <Input
                             placeholder={"Post's Title.."}
                             id={"post-input-title"}
@@ -351,6 +384,7 @@ const AdminBlog = () => {
 
                 postTitleInput.current.value = "";
                 postContentInput.current.value = "";
+                setTags(blogTagToTagType([], blogTagsData));
 
                 dialogOpen(dialogTitleEnum.NEW_POST);
             }}>
@@ -368,7 +402,11 @@ const AdminBlog = () => {
                                 title: {post.title} <br />
                                 content: {post.content} <br />
                                 created_at: {post.created_at.toString()} <br />
-                                tags: {getTagNamesByIds(post.tagIDs, blogTagsData).join(", ")} <br />
+                                tags: {
+                                    filterTagsByIds(post.tagIDs, blogTagsData)
+                                        .map((tag) => tag.name)
+                                        .join(", ")
+                                } <br />
                             </CodeBlock>
                         </Paragraph>
 
@@ -380,6 +418,7 @@ const AdminBlog = () => {
                             
                             postTitleInput.current.value = post.title;
                             postContentInput.current.value = post.content;
+                            setTags(blogTagToTagType(post.tagIDs, blogTagsData));
 
                             setCurrentDatasId(post.id);
                             dialogOpen(dialogTitleEnum.UPDATE_POST);
