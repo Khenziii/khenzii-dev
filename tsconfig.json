@@ -26,7 +26,8 @@
     /* Path Aliases */
     "baseUrl": ".",
     "paths": {
-      "@khenzii-dev/*": ["./src/*"]
+      "@khenzii-dev/*": ["./src/*"],
+      "@khenzii-dev-tests/*": ["./cypress/*"]
     }
   },
   "include": [

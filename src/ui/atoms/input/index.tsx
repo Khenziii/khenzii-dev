@@ -1,15 +1,18 @@
 import { type InputHTMLAttributes, forwardRef } from "react";
+import { type CustomStyles } from "@khenzii-dev/ui/types";
 import style from "./index.module.scss";
 import clsx from "clsx";
 
-export type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, "className"> & {
+export type InputProps = Omit<
+    InputHTMLAttributes<HTMLInputElement>,
+    "className" | "style"
+> & {
     rounded?: boolean;
     padding?: number;
     fontSize?: number;
     borderGreenIfValid?: boolean;
     borderRedIfInvalid?: boolean;
-    className?: string;
-};
+} & CustomStyles;
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(({
     rounded = true,
@@ -18,6 +21,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(({
     borderGreenIfValid = false,
     borderRedIfInvalid = false,
     className,
+    styles,
     ...props
 }, ref) => (
     <input
@@ -31,6 +35,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(({
         style={{
             padding: `${padding}px`,
             fontSize: `${fontSize}rem`,
+            ...styles,
         }}
         ref={ref}
         {...props}

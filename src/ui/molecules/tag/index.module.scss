@@ -1,0 +1,29 @@
+@import "../../../styles/constants";
+
+.tag {
+  width: fit-content;
+  padding: 10px;
+  transition: all .15s cubic-bezier(0.75, 0, 0.30, 1);
+  border: solid 1px $primary;
+  border-radius: 999px;
+  background-color: $contentBackground;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $primary;
+  }
+
+  &.active {
+    background-color: $text;
+    border: solid 1px $text;
+  
+    &:hover {
+      background-color: $textDarkened;
+      border: solid 1px $textDarkened;
+    }
+
+    & > p {
+      color: $background !important;
+    }
+  }
+}

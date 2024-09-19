@@ -1,5 +1,4 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// https://pris.ly/d/prisma-schema
 
 generator client {
     provider = "prisma-client-js"
@@ -23,3 +22,20 @@ model Account {
     name        String @unique
     password    String
 }
+
+model Tag {
+    id          String @id @default(auto()) @map("_id") @db.ObjectId
+    name        String
+    postIDs     String[] @db.ObjectId
+    posts       Post[] @relation(fields: [postIDs], references: [id])
+}
+
+model Post {
+    id          String @id @default(auto()) @map("_id") @db.ObjectId
+    title       String
+    content     String
+    created_at  DateTime
+    tagIDs      String[] @db.ObjectId
+    tags        Tag[] @relation(fields: [tagIDs], references: [id])
+}
+

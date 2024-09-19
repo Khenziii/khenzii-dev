@@ -5,43 +5,37 @@ import {
 } from "@khenzii-dev/server/api/trpc";
 import {
     CurrentProjectService,
-    type CurrentProject,
+    setCurrentProjectInput,
+    deleteProjectInput,
+    addProjectInput,
 } from "@khenzii-dev/server/backend";
-import { z } from "zod";
 
 
 export const currentProjectRouter = createTRPCRouter({
-    getProject: publicProcedure.query(async ({ ctx }): Promise<CurrentProject> => {
+    getProject: publicProcedure.query(async ({ ctx }) => {
         const handler = new CurrentProjectService(ctx);
         return await handler.getCurrentProject();
     }),
-    getOldProjects: protectedProcedure.query(async ({ ctx }): Promise<CurrentProject[]> => {
+    getOldProjects: protectedProcedure.query(async ({ ctx }) => {
         const handler = new CurrentProjectService(ctx);
         return await handler.getOldProjects();
     }),
     setCurrentProject: protectedProcedure
-        .input(z.object({
-            projectId: z.string(),
-        }))
+        .input(setCurrentProjectInput)
         .mutation(async ({ ctx, input }) => {
-            const handler =  new CurrentProjectService(ctx, input);
-            return await handler.setCurrentProject();
+            const handler =  new CurrentProjectService(ctx);
+            return await handler.setCurrentProject(input);
         }),
     deleteProject: protectedProcedure
-        .input(z.object({
-            projectId: z.string(),
-        }))
+        .input(deleteProjectInput)
         .mutation(async ({ ctx, input }) => {
-            const handler =  new CurrentProjectService(ctx, input);
-            return await handler.deleteProject();
+            const handler =  new CurrentProjectService(ctx);
+            return await handler.deleteProject(input);
         }),
     addProject: protectedProcedure
-        .input(z.object({
-            name: z.string(),
-            description: z.string(),
-        }))
+        .input(addProjectInput)
         .mutation(async ({ ctx, input }) => {
-            const handler =  new CurrentProjectService(ctx, input);
-            return await handler.addProject();
+            const handler =  new CurrentProjectService(ctx);
+            return await handler.addProject(input);
         }),
 });

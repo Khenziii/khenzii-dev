@@ -10,6 +10,7 @@ import {
 import { type Adapter } from "next-auth/adapters";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { compare } from "bcrypt";
+import { env } from "@khenzii-dev/env";
 import { db } from "@khenzii-dev/server/db";
 
 
@@ -48,6 +49,12 @@ export const authOptions: NextAuthOptions = {
                 password: { type: "password" },
             },
             async authorize(credentials): Promise<User | null> {
+                if (env.ENV == "test") return {
+                    id: "test-user",
+                    email: "test.user@mail.com",
+                    name: "Test User",
+                };
+
                 if (!credentials) return null;
 
                 const account = await db.account.findFirst({

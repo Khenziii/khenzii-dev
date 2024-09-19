@@ -1,8 +1,9 @@
+import { getServerAuthSession } from "@khenzii-dev/server/auth";
+import { db } from "@khenzii-dev/server/db";
+import { env } from "@khenzii-dev/env";
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
-import { getServerAuthSession } from "@khenzii-dev/server/auth";
-import { db } from "@khenzii-dev/server/db";
 import { type PrismaClient } from "@prisma/client";
 import { type Session } from "next-auth";
 
@@ -48,6 +49,9 @@ export const publicProcedure = t.procedure;
 
 // guarantees that `ctx.session.user` is not null
 export const protectedProcedure = t.procedure.use(({ ctx, next }) => {
+    // if testing, skip authentication
+    if (env.ENV === "test") return next();   
+
     if (!ctx.session?.user) {
         throw new TRPCError({ code: "UNAUTHORIZED" });
     }

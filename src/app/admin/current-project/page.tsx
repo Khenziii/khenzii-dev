@@ -1,6 +1,13 @@
 "use client";
 
 import {
+    useCallback,
+    useRef,
+    useState,
+    type KeyboardEventHandler,
+    type FormEventHandler,
+} from "react";
+import {
     Flex,
     Header,
     Paragraph,
@@ -12,13 +19,6 @@ import {
     Input,
 } from "@khenzii-dev/ui/atoms";
 import { api } from "@khenzii-dev/providers";
-import {
-    useCallback,
-    useRef,
-    useState,
-    type KeyboardEventHandler,
-    type FormEventHandler,
-} from "react";
 import style from "@khenzii-dev/styles/admin_current_project.module.scss";
 
 const AdminCurrentProject = () => {
@@ -58,7 +58,7 @@ const AdminCurrentProject = () => {
         await oldProjectsRefetch();
     }, [addProjectMutation, oldProjectsRefetch]);
 
-    const handleKeyDownProjectNameInput: KeyboardEventHandler = (event) => {
+    const handleKeyDownProjectNameInput: KeyboardEventHandler = useCallback((event) => {
         if (!projectDescriptionInput.current) return;
 
         const keys: string[] = ["Enter", "ArrowDown"];
@@ -68,13 +68,13 @@ const AdminCurrentProject = () => {
 
             projectDescriptionInput.current.focus();
         }
-    };
+    }, []);
 
-    const handleKeyDownProjectDescriptionInput: KeyboardEventHandler = (event) => {
+    const handleKeyDownProjectDescriptionInput: KeyboardEventHandler = useCallback((event) => {
         if (!projectNameInput.current) return;
 
         if (event.key == "ArrowUp") projectNameInput.current.focus();
-    };
+    }, []);
 
     const onAddProjectDialogOpen = useCallback(() => {
         setIsAddProjectDialogOpen(true);
