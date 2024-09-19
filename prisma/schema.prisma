@@ -41,6 +41,7 @@ model Post {
 
 model Event {
     id          String @id @default(auto()) @map("_id") @db.ObjectId
+    title       String
     message     String
     created_at  DateTime
 }

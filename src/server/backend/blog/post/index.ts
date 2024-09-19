@@ -1,4 +1,5 @@
-import { BaseService } from "@khenzii-dev/server/backend";
+import { BaseService, Event } from "@khenzii-dev/server/backend";
+import { formatObjectToString } from "@khenzii-dev/utils";
 import { z } from "zod";
 
 export const getPostsInput = z.object({
@@ -53,6 +54,11 @@ export class BlogPostService extends BaseService {
     }
 
     async createPost(input: createPostInputType): Promise<BlogPost> {
+        const event = new Event()
+            .setTitle("Created a new post")
+            .setMessage(formatObjectToString(input));
+        await event.create();
+
         return await this.ctx.db.post.create({
             data: {
                 title: input.title,
@@ -74,6 +80,11 @@ export class BlogPostService extends BaseService {
         // exclude the `id` field from `mergedPost`.
         const { id, ...newPost } = mergedPost;
 
+        const event = new Event()
+            .setTitle("Updated an post")
+            .setMessage(`${formatObjectToString(currentPost ?? {})} --> ${formatObjectToString(input)}`);
+        await event.create();
+
         return await this.ctx.db.post.update({
             where: { id: input.id },
             data: newPost,
@@ -81,6 +92,11 @@ export class BlogPostService extends BaseService {
     }
 
     async deletePost(input: deletePostInputType) {
+        const event = new Event()
+            .setTitle("Deleted a post")
+            .setMessage(formatObjectToString(input));
+        await event.create();
+
         await this.ctx.db.post.delete({
             where: {
                 id: input.id,
