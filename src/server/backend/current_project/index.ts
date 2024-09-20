@@ -1,4 +1,4 @@
-import { BaseService } from "@khenzii-dev/server/backend";
+import { BaseService, Event } from "@khenzii-dev/server/backend";
 import { z } from "zod";
 
 export const setCurrentProjectInput = z.object({
@@ -47,6 +47,16 @@ export class CurrentProjectService extends BaseService {
     }
     
     async setCurrentProject(input: setCurrentProjectInputType) {
+        const newCurrentProject = await this.ctx.db.currentProject.findUnique({
+            where: { id: input.projectId },
+        });
+        if (!newCurrentProject) return;
+
+        const event = new Event()
+            .setTitle("Updated the current project")
+            .setJson(newCurrentProject);
+        await event.create();
+
         await this.ctx.db.currentProject.updateMany({
             where: {},
             data: {
@@ -64,6 +74,16 @@ export class CurrentProjectService extends BaseService {
     }
 
     async deleteProject(input: deleteProjectInputType) {
+        const deletedProject = await this.ctx.db.currentProject.findUnique({
+            where: { id: input.projectId },
+        });
+        if (!deletedProject) return;
+
+        const event = new Event()
+            .setTitle("Deleted a project")
+            .setJson(deletedProject);
+        await event.create();
+
         await this.ctx.db.currentProject.delete({
             where: {
                 id: input.projectId,
@@ -72,6 +92,11 @@ export class CurrentProjectService extends BaseService {
     }
 
     async addProject(input: addProjectInputType) {
+        const event = new Event()
+            .setTitle("Created a new project")
+            .setJson({ newProject: input });
+        await event.create();
+
         await this.ctx.db.currentProject.create({
             data: {
                 name: input.name,
