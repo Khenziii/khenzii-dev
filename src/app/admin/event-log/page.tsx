@@ -1,6 +1,13 @@
 "use client";
 
 import {
+    useState,
+    useEffect,
+    useCallback,
+    useRef,
+} from "react";
+import { type AdminEvent } from "@khenzii-dev/server/backend";
+import {
     Flex,
     Header,
     Loading,
@@ -12,10 +19,48 @@ import {
 import { api } from "@khenzii-dev/providers";
 
 const AdminEventLog = () => {
-    const {
-        data: eventsData,
-        isLoading: eventsAreLoading,
-    } = api.eventLog.getEvents.useQuery();
+    const loadingRef = useRef(null);
+    const [firstFetchFinished, setFirstFetchFinished] = useState(false);
+    const [eventsOffset, setEventsOffset] = useState(0);
+    const [events, setEvents] = useState<AdminEvent[]>([]);
+    const [fetchedAllEvents, setFetchedAllEvents] = useState(false);
+    const { data: eventsData } = api.eventLog.getEvents.useQuery({ offset: eventsOffset });
+
+    const fetchMoreEvents = useCallback(() => {
+        if (fetchedAllEvents) return;
+        if (!firstFetchFinished) return;
+
+        setEventsOffset((currentOffset) => currentOffset + 1);
+    }, [fetchedAllEvents, firstFetchFinished]);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (!entry) return;
+                if (!entry.isIntersecting) return;
+
+                fetchMoreEvents();
+            },
+            { threshold: 0.1 },
+        );
+
+        const ref = loadingRef.current;
+        if (!ref) return;
+
+        observer.observe(ref);
+        return () => {
+            observer.unobserve(ref);
+        };
+    }, [fetchMoreEvents]);
+
+    useEffect(() => {
+        if (!eventsData) return;
+        if (eventsData.length < 20) setFetchedAllEvents(true);
+
+        setFirstFetchFinished(true);
+
+        setEvents((currentEvents) => [...currentEvents, ...eventsData]);
+    }, [eventsData]);
 
     return (
         <Flex
@@ -26,29 +71,30 @@ const AdminEventLog = () => {
 
             <Paragraph fontSize={1.5}><i>TIP: Click the button next to entries to copy the full JSON to your clipboard.</i></Paragraph>
 
-            {( eventsAreLoading || eventsData === undefined)
-                ? (
-                    <Loading size={100} />
-                )
-                : eventsData.map((event, index) => (
-                    <Flex key={`event-${index}`} id={`event-${index}`}>
-                        <Paragraph fontSize={1.5}>
-                            <CodeBlock>
-                                title: {event.title} <br />
-                                created_at: {event.created_at.toString()} <br />
-                                json: {JSON.stringify(event.json).length < 50
-                                    ? JSON.stringify(event.json)
-                                    : `${JSON.stringify(event.json).slice(0, 50)} [...]`
-                                }
-                            </CodeBlock>
-                        </Paragraph>
+            {events.map((event, index) => (
+                <Flex key={`event-${index}`} id={`event-${index}`}>
+                    <Paragraph fontSize={1.5}>
+                        <CodeBlock>
+                            title: {event.title} <br />
+                            created_at: {event.created_at.toString()} <br />
+                            json: {JSON.stringify(event.json).length < 50
+                                ? JSON.stringify(event.json)
+                                : `${JSON.stringify(event.json).slice(0, 50)} [...]`
+                            }
+                        </CodeBlock>
+                    </Paragraph>
 
-                        <Button onClick={() => navigator.clipboard.writeText(JSON.stringify(event.json))}>
-                            <Icon iconName={"clipboard-fill"} size={1.5} />
-                        </Button>
-                    </Flex>
-                ))
-            }
+                    <Button onClick={() => navigator.clipboard.writeText(JSON.stringify(event.json))}>
+                        <Icon iconName={"clipboard-fill"} size={1.5} />
+                    </Button>
+                </Flex>
+            ))}
+            
+            {!fetchedAllEvents && (
+                <div ref={loadingRef}>
+                    <Loading size={100} />
+                </div>
+            )}
         </Flex>
     );
 };
