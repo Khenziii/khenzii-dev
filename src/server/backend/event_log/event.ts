@@ -2,7 +2,7 @@ import { db } from "@khenzii-dev/server/db";
 
 export class Event {
     private title: string | undefined;
-    private message: string | undefined;
+    private json: object | undefined;
     private createdAt: Date;
 
     constructor() {
@@ -14,23 +14,23 @@ export class Event {
         return this;
     }
 
-    setMessage(message: string) {
-        this.message = message;
+    setJson(json: object) {
+        this.json = json;
         return this;
     }
     
     async create() {
         if (this.title === undefined) {
-            throw new Error("`Event` factory is missing the `title` field.");
+            throw new Error("`Event` builder is missing the `title` field.");
         }
 
-        if (this.message === undefined) {
-            throw new Error("`Event` factory is missing the `message` field.");
+        if (this.json === undefined) {
+            throw new Error("`Event` builder is missing the `json` field.");
         }
 
         await db.event.create({ data: {
             title: this.title,
-            message: this.message,
+            json: this.json,
             created_at: this.createdAt,
         } });
     }

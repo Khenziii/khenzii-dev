@@ -1,5 +1,4 @@
 import { BaseService, Event } from "@khenzii-dev/server/backend";
-import { formatObjectToString } from "@khenzii-dev/utils";
 import { z } from "zod";
 
 export const getPostsInput = z.object({
@@ -56,7 +55,9 @@ export class BlogPostService extends BaseService {
     async createPost(input: createPostInputType): Promise<BlogPost> {
         const event = new Event()
             .setTitle("Created a new post")
-            .setMessage(formatObjectToString(input));
+            .setJson({
+                newPost: input, 
+            });
         await event.create();
 
         return await this.ctx.db.post.create({
@@ -82,7 +83,10 @@ export class BlogPostService extends BaseService {
 
         const event = new Event()
             .setTitle("Updated an post")
-            .setMessage(`${formatObjectToString(currentPost ?? {})} --> ${formatObjectToString(input)}`);
+            .setJson({
+                currentPost,
+                newPost,
+            });
         await event.create();
 
         return await this.ctx.db.post.update({
@@ -94,7 +98,7 @@ export class BlogPostService extends BaseService {
     async deletePost(input: deletePostInputType) {
         const event = new Event()
             .setTitle("Deleted a post")
-            .setMessage(formatObjectToString(input));
+            .setJson(input);
         await event.create();
 
         await this.ctx.db.post.delete({
