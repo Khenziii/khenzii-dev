@@ -81,6 +81,14 @@ export const authOptions: NextAuthOptions = {
             },
         }),
     ],
+    events: {
+        async signOut(message) {
+            const event = new Event()
+                .setTitle("An logout occurred")
+                .setJson(message.token);
+            await event.create();
+        },
+    },
 };
 
 export const getServerAuthSession = () => getServerSession(authOptions);
