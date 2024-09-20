@@ -96,9 +96,14 @@ export class BlogPostService extends BaseService {
     }
 
     async deletePost(input: deletePostInputType) {
+        const deletedPost = await this.ctx.db.post.findUnique({
+            where: { id: input.id },
+        });
+        if (!deletedPost) return;
+
         const event = new Event()
             .setTitle("Deleted a post")
-            .setJson(input);
+            .setJson(deletedPost);
         await event.create();
 
         await this.ctx.db.post.delete({
