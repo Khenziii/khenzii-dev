@@ -31,7 +31,7 @@ const AdminEventLog = () => {
                     <Loading size={100} />
                 )
                 : eventsData.map((event, index) => (
-                    <Flex key={`project-${index}`}>
+                    <Flex key={`event-${index}`} id={`event-${index}`}>
                         <Paragraph fontSize={1.5}>
                             <CodeBlock>
                                 title: {event.title} <br />

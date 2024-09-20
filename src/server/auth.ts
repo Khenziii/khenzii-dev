@@ -28,6 +28,15 @@ declare module "next-auth" {
     }
 }
 
+const authenticate = async (user: User): Promise<User> => {
+    const event = new Event()
+        .setTitle("Successful login occurred")
+        .setJson(user);
+    await event.create();
+    
+    return user;
+};
+
 export const authOptions: NextAuthOptions = {
     pages: {
         signIn: "/",
@@ -50,11 +59,11 @@ export const authOptions: NextAuthOptions = {
                 password: { type: "password" },
             },
             async authorize(credentials): Promise<User | null> {
-                if (env.ENV == "test") return {
+                if (env.ENV == "test") return authenticate({
                     id: "test-user",
                     email: "test.user@mail.com",
                     name: "Test User",
-                };
+                });
 
                 if (!credentials) return null;
 
@@ -68,11 +77,7 @@ export const authOptions: NextAuthOptions = {
                 const passwordValid = await compare(credentials.password, account.password);
                 if (!passwordValid) return null;
                 
-                const event = new Event()
-                    .setTitle("Successful login occurred")
-                    .setJson({ user: account });
-                await event.create();
-                return account;
+                return authenticate(account);
             },
         }),
     ],
