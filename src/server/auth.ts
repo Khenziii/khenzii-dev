@@ -10,6 +10,7 @@ import {
 import { type Adapter } from "next-auth/adapters";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { compare } from "bcrypt";
+import { Event } from "@khenzii-dev/server/backend";
 import { env } from "@khenzii-dev/env";
 import { db } from "@khenzii-dev/server/db";
 
@@ -62,13 +63,16 @@ export const authOptions: NextAuthOptions = {
                         email: credentials.email,
                     },
                 });
-
                 if (!account) return null;
 
                 const passwordValid = await compare(credentials.password, account.password);
-                if (passwordValid) return account;
-
-                return null;
+                if (!passwordValid) return null;
+                
+                const event = new Event()
+                    .setTitle("Successful login occurred")
+                    .setJson({ user: account });
+                await event.create();
+                return account;
             },
         }),
     ],
