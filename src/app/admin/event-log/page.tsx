@@ -58,7 +58,14 @@ const AdminEventLog = () => {
         if (!eventsData) return;
         if (eventsData.length < 20) setFetchedAllEvents(true);
 
-        setEvents((currentEvents) => [...currentEvents, ...eventsData]);
+        setEvents((currentEvents) => {
+            // Don't add events if they're already present.
+            // This can sometimes occur, if React remounts the element, for example after navigation.
+            const currentIDs = currentEvents.map((event) => event.id);
+            const newEvents = eventsData.filter((newEvent) => !currentIDs.includes(newEvent.id));
+
+            return [...currentEvents, ...newEvents];
+        });
     }, [eventsData]);
 
     return (
