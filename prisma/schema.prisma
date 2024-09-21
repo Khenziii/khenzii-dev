@@ -39,3 +39,10 @@ model Post {
     tags        Tag[] @relation(fields: [tagIDs], references: [id])
 }
 
+model Event {
+    id          String @id @default(auto()) @map("_id") @db.ObjectId
+    title       String
+    json        Json
+    created_at  DateTime
+}
+

@@ -1,4 +1,4 @@
-import { BaseService } from "@khenzii-dev/server/backend";
+import { BaseService, Event } from "@khenzii-dev/server/backend";
 import { z } from "zod";
 
 export const createTagInput = z.object({
@@ -31,6 +31,11 @@ export class BlogTagService extends BaseService {
     }
 
     async createTag(input: createTagInputType): Promise<BlogTag> {
+        const event = new Event()
+            .setTitle("Created a tag")
+            .setJson({ name: input.name });
+        await event.create();
+
         return await this.ctx.db.tag.create({
             data: {
                 name: input.name,
@@ -49,6 +54,14 @@ export class BlogTagService extends BaseService {
         // exclude the `id` field from `mergedTag`.
         const { id, ...newTag } = mergedTag;
 
+        const event = new Event()
+            .setTitle("Updated an tag")
+            .setJson({
+                currentTag,
+                newTag,
+            });
+        await event.create();
+
         return await this.ctx.db.tag.update({
             where: { id: input.id },
             data: newTag,
@@ -56,6 +69,16 @@ export class BlogTagService extends BaseService {
     }
 
     async deleteTag(input: deleteTagInputType) {
+        const deletedTag = await this.ctx.db.tag.findUnique({
+            where: { id: input.id },
+        });
+        if (!deletedTag) return;
+
+        const event = new Event()
+            .setTitle("Deleted a tag")
+            .setJson(deletedTag);
+        await event.create();
+
         await this.ctx.db.tag.delete({
             where: {
                 id: input.id,

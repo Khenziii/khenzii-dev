@@ -10,6 +10,7 @@ import {
 import { type Adapter } from "next-auth/adapters";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { compare } from "bcrypt";
+import { Event } from "@khenzii-dev/server/backend";
 import { env } from "@khenzii-dev/env";
 import { db } from "@khenzii-dev/server/db";
 
@@ -26,6 +27,15 @@ declare module "next-auth" {
         name: string;
     }
 }
+
+const authenticate = async (user: User): Promise<User> => {
+    const event = new Event()
+        .setTitle("Successful login occurred")
+        .setJson(user);
+    await event.create();
+    
+    return user;
+};
 
 export const authOptions: NextAuthOptions = {
     pages: {
@@ -49,11 +59,11 @@ export const authOptions: NextAuthOptions = {
                 password: { type: "password" },
             },
             async authorize(credentials): Promise<User | null> {
-                if (env.ENV == "test") return {
+                if (env.ENV == "test") return authenticate({
                     id: "test-user",
                     email: "test.user@mail.com",
                     name: "Test User",
-                };
+                });
 
                 if (!credentials) return null;
 
@@ -62,16 +72,23 @@ export const authOptions: NextAuthOptions = {
                         email: credentials.email,
                     },
                 });
-
                 if (!account) return null;
 
                 const passwordValid = await compare(credentials.password, account.password);
-                if (passwordValid) return account;
-
-                return null;
+                if (!passwordValid) return null;
+                
+                return authenticate(account);
             },
         }),
     ],
+    events: {
+        async signOut(message) {
+            const event = new Event()
+                .setTitle("An logout occurred")
+                .setJson(message.token);
+            await event.create();
+        },
+    },
 };
 
 export const getServerAuthSession = () => getServerSession(authOptions);
