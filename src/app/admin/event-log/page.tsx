@@ -20,18 +20,19 @@ import { api } from "@khenzii-dev/providers";
 
 const AdminEventLog = () => {
     const loadingRef = useRef(null);
-    const [firstFetchFinished, setFirstFetchFinished] = useState(false);
-    const [eventsOffset, setEventsOffset] = useState(0);
+    const [eventsOffset, setEventsOffset] = useState(-1);
     const [events, setEvents] = useState<AdminEvent[]>([]);
     const [fetchedAllEvents, setFetchedAllEvents] = useState(false);
-    const { data: eventsData } = api.eventLog.getEvents.useQuery({ offset: eventsOffset });
+    const { data: eventsData } = api.eventLog.getEvents.useQuery(
+        { offset: eventsOffset },
+        { enabled: eventsOffset >= 0 },
+    );
 
     const fetchMoreEvents = useCallback(() => {
         if (fetchedAllEvents) return;
-        if (!firstFetchFinished) return;
 
         setEventsOffset((currentOffset) => currentOffset + 1);
-    }, [fetchedAllEvents, firstFetchFinished]);
+    }, [fetchedAllEvents]);
 
     useEffect(() => {
         const observer = new IntersectionObserver(
@@ -56,8 +57,6 @@ const AdminEventLog = () => {
     useEffect(() => {
         if (!eventsData) return;
         if (eventsData.length < 20) setFetchedAllEvents(true);
-
-        setFirstFetchFinished(true);
 
         setEvents((currentEvents) => [...currentEvents, ...eventsData]);
     }, [eventsData]);
