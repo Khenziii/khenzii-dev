@@ -25,7 +25,10 @@ const AdminEventLog = () => {
     const [fetchedAllEvents, setFetchedAllEvents] = useState(false);
     const { data: eventsData } = api.eventLog.getEvents.useQuery(
         { offset: eventsOffset },
-        { enabled: eventsOffset >= 0 },
+        {
+            enabled: eventsOffset >= 0,
+            refetchOnWindowFocus: false,
+        },
     );
 
     const fetchMoreEvents = useCallback(() => {
@@ -58,14 +61,7 @@ const AdminEventLog = () => {
         if (!eventsData) return;
         if (eventsData.length < 20) setFetchedAllEvents(true);
 
-        setEvents((currentEvents) => {
-            // Don't add events if they're already present.
-            // This can sometimes occur, if React remounts the element, for example after navigation.
-            const currentIDs = currentEvents.map((event) => event.id);
-            const newEvents = eventsData.filter((newEvent) => !currentIDs.includes(newEvent.id));
-
-            return [...currentEvents, ...newEvents];
-        });
+        setEvents((currentEvents) => [...currentEvents, ...eventsData]);
     }, [eventsData]);
 
     return (
@@ -73,7 +69,7 @@ const AdminEventLog = () => {
             direction="column"
             align="center"
         >
-           <Header>Event Log</Header>
+            <Header>Event Log</Header>
 
             <Paragraph fontSize={1.5}><i>TIP: Click the button next to entries to copy the full JSON to your clipboard.</i></Paragraph>
 
