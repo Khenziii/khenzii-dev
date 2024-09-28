@@ -47,6 +47,7 @@ export type BlogPost = {
 export class BlogPostService extends BaseService {
     async getPosts(input: getPostsInputType): Promise<BlogPost[]> {
         return await this.ctx.db.post.findMany({
+            orderBy: { created_at: "desc" },
             skip: (input?.offset ?? 0) * 10,
             take: 10,
         });
