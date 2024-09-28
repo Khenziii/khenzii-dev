@@ -250,6 +250,7 @@ const AdminBlog = () => {
         <Flex
             direction="column"
             align="center"
+            styles={{ maxWidth: "95vw" }}
         >
             <Header>Blog</Header>
 
