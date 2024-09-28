@@ -27,7 +27,8 @@ const AdminEventLog = () => {
         { offset: eventsOffset },
         {
             enabled: eventsOffset >= 0,
-            refetchOnWindowFocus: false,
+            // avoids random refetches that cause issues.
+            staleTime: Infinity,
         },
     );
 
