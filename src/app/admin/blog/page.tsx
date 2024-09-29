@@ -21,6 +21,7 @@ import {
     CodeBlock,
 } from "@khenzii-dev/ui/atoms";
 import { Tags, type UITag } from "@khenzii-dev/ui/organisms";
+import { type BlogPost } from "@khenzii-dev/server/backend";
 import {
     filterTagsByIds,
     blogTagToUiTag,
@@ -46,15 +47,19 @@ const AdminBlog = () => {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [currentDatasId, setCurrentDatasId] = useState("");
     const [tags, setTags] = useState<UITag[]>([]);
+    const [posts, setPosts] = useState<BlogPost[]>([]);
+    const [postsOffset, setPostsOffset] = useState(0);
+    const [fetchedAllPosts, setFetchedAllPosts] = useState(false);
+
+    const loadingRef = useRef(null);
     const postTitleInput = useRef<HTMLInputElement>(null);
     const postContentInput = useRef<HTMLInputElement>(null);
     const tagNameInput = useRef<HTMLInputElement>(null);
 
-    const {
-        data: blogPostsData,
-        isLoading: blogPostsAreLoading,
-        refetch: blogPostsRefetch,
-    } = api.blog.blogPost.getPosts.useQuery();
+    const { refetch: blogPostsRefetch } = api.blog.blogPost.getPosts.useQuery(
+        { offset: postsOffset },
+        { enabled: false },
+    );
     const {
         data: blogTagsData,
         isLoading: blogTagsAreLoading,
@@ -67,13 +72,19 @@ const AdminBlog = () => {
     const { mutateAsync: createTagMutation } = api.blog.blogTag.createTag.useMutation();
     const { mutateAsync: updateTagMutation } = api.blog.blogTag.updateTag.useMutation();
 
+    const blogPostsManualRefetch = useCallback(async () => {
+        setPosts([]);
+        setPostsOffset(0);
+        setFetchedAllPosts(false);
+    }, []);
+
     const deletePost = useCallback(async ({ id }: {
         id: string;
     }) => {
         await deletePostMutation({ id });
 
-        await blogPostsRefetch();
-    }, [deletePostMutation, blogPostsRefetch]);
+        await blogPostsManualRefetch();
+    }, [deletePostMutation, blogPostsManualRefetch]);
 
     const createPost = useCallback(async ({ title, content, tagIDs }: {
         title: string;
@@ -87,8 +98,8 @@ const AdminBlog = () => {
             created_at: new Date().toString(),
         });
 
-        await blogPostsRefetch();
-    }, [createPostMutation, blogPostsRefetch]);
+        await blogPostsManualRefetch();
+    }, [createPostMutation, blogPostsManualRefetch]);
 
     const updatePost = useCallback(async ({ id, updatedPost }: {
         id: string;
@@ -103,8 +114,8 @@ const AdminBlog = () => {
             updatedPost,
         });
 
-        await blogPostsRefetch();
-    }, [updatePostMutation, blogPostsRefetch]);
+        await blogPostsManualRefetch();
+    }, [updatePostMutation, blogPostsManualRefetch]);
 
     const deleteTag = useCallback(async ({ id }: {
         id: string;
@@ -234,6 +245,38 @@ const AdminBlog = () => {
         if (event.key == "ArrowUp") postTitleInput.current.focus();
     }, []);
 
+    const fetchMorePosts = useCallback(async () => {
+        if (fetchedAllPosts) return;
+
+        const { data: newPosts } = await blogPostsRefetch();
+
+        if (!newPosts) return;
+        if (newPosts.length < 10) setFetchedAllPosts(true);
+       
+        setPosts((currentPosts) => [...currentPosts, ...newPosts]);
+        setPostsOffset((currentOffset) => currentOffset + 1);
+    }, [blogPostsRefetch, fetchedAllPosts]);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (!entry) return;
+                if (!entry.isIntersecting) return;
+    
+                void fetchMorePosts();
+            },
+            { threshold: 0.1 },
+        );
+    
+        const ref = loadingRef.current;
+        if (!ref) return;
+    
+        observer.observe(ref);
+        return () => {
+            observer.unobserve(ref);
+        };
+    }, [fetchMorePosts]);
+
     useEffect(() => {
         if (
             dialogTitle === dialogTitleEnum.UPDATE_POST
@@ -360,51 +403,52 @@ const AdminBlog = () => {
                 <Icon iconName={"plus-lg"} size={1.5} />
             </Button>
 
-            {(blogPostsAreLoading || blogPostsData === undefined)
-                ? (
+            {posts.map((post, index) => (
+                <Flex key={`post-${index}`} id={`post-${index}`}>
+                    <Paragraph fontSize={1.5}>
+                        <CodeBlock>
+                            title: {post.title} <br />
+                            content: {post.content} <br />
+                            created_at: {post.created_at.toString()} <br />
+                            tags: {
+                                filterTagsByIds(post.tagIDs, blogTagsData)
+                                    .map((tag) => tag.name)
+                                    .join(", ")
+                            } <br />
+                        </CodeBlock>
+                    </Paragraph>
+
+                    <Button id={`update-post-button-${index}`} onClick={() => {
+                        if (
+                            postTitleInput.current === null
+                            || postContentInput.current === null
+                        ) return;
+                        
+                        postTitleInput.current.value = post.title;
+                        postContentInput.current.value = post.content;
+                        setTags(blogTagToUiTag(post.tagIDs, blogTagsData));
+
+                        setCurrentDatasId(post.id);
+                        dialogOpen(dialogTitleEnum.UPDATE_POST);
+                    }}>
+                        <Icon iconName={"pencil-fill"} size={1.5} />
+                    </Button>
+
+                    <Button
+                        id={`delete-post-button-${index}`}
+                        onClick={() => deletePost({ id: post.id })}
+                        color={"destructive"}
+                    >
+                        <Icon iconName={"trash"} size={1.5} />
+                    </Button>
+                </Flex>
+            ))}
+
+            {!fetchedAllPosts && (
+                <div ref={loadingRef}>
                     <Loading size={100} />
-                )
-                : blogPostsData.map((post, index) => (
-                    <Flex key={`post-${index}`} id={`post-${index}`}>
-                        <Paragraph fontSize={1.5}>
-                            <CodeBlock>
-                                title: {post.title} <br />
-                                content: {post.content} <br />
-                                created_at: {post.created_at.toString()} <br />
-                                tags: {
-                                    filterTagsByIds(post.tagIDs, blogTagsData)
-                                        .map((tag) => tag.name)
-                                        .join(", ")
-                                } <br />
-                            </CodeBlock>
-                        </Paragraph>
-
-                        <Button id={`update-post-button-${index}`} onClick={() => {
-                            if (
-                                postTitleInput.current === null
-                                || postContentInput.current === null
-                            ) return;
-                            
-                            postTitleInput.current.value = post.title;
-                            postContentInput.current.value = post.content;
-                            setTags(blogTagToUiTag(post.tagIDs, blogTagsData));
-
-                            setCurrentDatasId(post.id);
-                            dialogOpen(dialogTitleEnum.UPDATE_POST);
-                        }}>
-                            <Icon iconName={"pencil-fill"} size={1.5} />
-                        </Button>
-
-                        <Button
-                            id={`delete-post-button-${index}`}
-                            onClick={() => deletePost({ id: post.id })}
-                            color={"destructive"}
-                        >
-                            <Icon iconName={"trash"} size={1.5} />
-                        </Button>
-                    </Flex>
-                ))
-            }
+                </div>
+            )}
         </Flex>
     );
 };
