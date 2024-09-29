@@ -7,3 +7,22 @@
   gap: 20px;
 }
 
+.selectParagraph {
+  &.active {
+    color: $textDarkened !important;
+  }
+
+  &:hover {
+    color: $textDarkened !important;
+    cursor: pointer;
+  }
+}
+
+.line {
+  color: $text;
+  background-color: $text;
+  margin: 0;
+  border: none;
+  width: 0.25rem;
+}
+

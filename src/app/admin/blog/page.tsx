@@ -8,6 +8,7 @@ import {
     type FormEventHandler,
     type KeyboardEventHandler,
 } from "react";
+import clsx from "clsx";
 import { api } from "@khenzii-dev/providers";
 import {
     Flex,
@@ -50,6 +51,7 @@ const AdminBlog = () => {
     const [posts, setPosts] = useState<BlogPost[]>([]);
     const [postsOffset, setPostsOffset] = useState(0);
     const [fetchedAllPosts, setFetchedAllPosts] = useState(false);
+    const [showMarkdown, setShowMarkdown] = useState(false);
 
     const loadingRef = useRef(null);
     const postTitleInput = useRef<HTMLInputElement>(null);
@@ -348,7 +350,38 @@ const AdminBlog = () => {
             >
                 <form onSubmit={handleDialogFormSubmit} className={style.form} id={"dialog"}>
                     <Flex direction={"column"} gap={10}>
-                        <div style={dialogVariant === dialogVariantEnum.TAG ? { display: "none" } : {}}>
+                        <Flex
+                            direction={"row"}
+                            gap={10}
+                            styles={dialogVariant === dialogVariantEnum.TAG ? { display: "none" } : {}}
+                            fullWidth
+                        >
+                            <div onClick={() => setShowMarkdown(false)}>
+                                <Paragraph
+                                    className={clsx([style.selectParagraph, {
+                                        [style.active as string]: !showMarkdown,
+                                    }])}
+                                    fontSize={1.5}
+                                >
+                                    Edit    
+                                </Paragraph>
+                            </div>
+
+                            <hr className={style.line} />
+
+                            <div onClick={() => setShowMarkdown(true)}>
+                                <Paragraph
+                                    className={clsx([style.selectParagraph, {
+                                        [style.active as string]: showMarkdown,
+                                    }])}
+                                    fontSize={1.5}
+                                >
+                                    Markdown
+                                </Paragraph>
+                            </div>
+                        </Flex>
+                        
+                        <div style={(dialogVariant === dialogVariantEnum.TAG || showMarkdown) ? { display: "none" } : {}}>
                             <Tags
                                 tags={tags}
                                 onClick={(updatedTags) => setTags(updatedTags)}
@@ -361,7 +394,7 @@ const AdminBlog = () => {
                             id={"post-input-title"}
                             onKeyDown={handleKeyDownPostTitleInput}
                             ref={postTitleInput}
-                            styles={dialogVariant === dialogVariantEnum.TAG ? { display: "none" } : {}}
+                            styles={(dialogVariant === dialogVariantEnum.TAG || showMarkdown) ? { display: "none" } : {}}
                         />
 
                         <Input
@@ -369,7 +402,7 @@ const AdminBlog = () => {
                             id={"post-input-content"}
                             onKeyDown={handleKeyDownPostContentInput}
                             ref={postContentInput}
-                            styles={dialogVariant === dialogVariantEnum.TAG ? { display: "none" } : {}}
+                            styles={(dialogVariant === dialogVariantEnum.TAG || showMarkdown) ? { display: "none" } : {}}
                         />
 
                         <Input  
@@ -397,6 +430,7 @@ const AdminBlog = () => {
                 postTitleInput.current.value = "";
                 postContentInput.current.value = "";
                 setTags(blogTagToUiTag([], blogTagsData));
+                setShowMarkdown(false);
 
                 dialogOpen(dialogTitleEnum.NEW_POST);
             }}>
@@ -427,6 +461,7 @@ const AdminBlog = () => {
                         postTitleInput.current.value = post.title;
                         postContentInput.current.value = post.content;
                         setTags(blogTagToUiTag(post.tagIDs, blogTagsData));
+                        setShowMarkdown(false);
 
                         setCurrentDatasId(post.id);
                         dialogOpen(dialogTitleEnum.UPDATE_POST);
