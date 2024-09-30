@@ -5,6 +5,9 @@
   flex-direction: column;
   justify-content: center;
   gap: 20px;
+  height: min(75vh, 50rem);
+  width: min(75vw, 30rem);
+  overflow: scroll;
 }
 
 .selectParagraph {
@@ -24,5 +27,11 @@
   margin: 0;
   border: none;
   width: 0.25rem;
+}
+
+.postContentInput {
+  resize: none;
+  overflow-y: scroll;
+  flex-grow: 1;
 }
 

@@ -352,7 +352,7 @@ const AdminBlog = () => {
                 onClose={() => onDialogClose(false)}
             >
                 <form onSubmit={handleDialogFormSubmit} className={style.form} id={"dialog"}>
-                    <Flex direction={"column"} gap={10}>
+                    <Flex direction={"column"} gap={10} styles={{ height: "100%" }}>
                         <Flex
                             direction={"row"}
                             gap={10}
@@ -421,6 +421,8 @@ const AdminBlog = () => {
                             onKeyDown={handleKeyDownPostContentInput}
                             ref={postContentInput}
                             styles={(dialogVariant === dialogVariantEnum.TAG || showMarkdown) ? { display: "none" } : {}}
+                            className={style.postContentInput}
+                            textarea
                         />
 
                         <Input  
