@@ -244,12 +244,6 @@ const AdminBlog = () => {
         }
     }, []);
 
-    const handleKeyDownPostContentInput: KeyboardEventHandler = useCallback((event) => {
-        if (!postTitleInput.current) return;
-
-        if (event.key == "ArrowUp") postTitleInput.current.focus();
-    }, []);
-
     const fetchMorePosts = useCallback(async () => {
         if (fetchedAllPosts) return;
 
@@ -430,7 +424,6 @@ const AdminBlog = () => {
                         <Input
                             placeholder={"Post's Content.."}
                             id={"post-input-content"}
-                            onKeyDown={handleKeyDownPostContentInput}
                             ref={postContentInput}
                             styles={(dialogVariant === dialogVariantEnum.TAG || showMarkdown) ? { display: "none" } : {}}
                             className={style.postContentInput}
