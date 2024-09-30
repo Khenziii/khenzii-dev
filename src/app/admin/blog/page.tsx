@@ -351,7 +351,13 @@ const AdminBlog = () => {
                 open={isDialogOpen}
                 onClose={() => onDialogClose(false)}
             >
-                <form onSubmit={handleDialogFormSubmit} className={style.form} id={"dialog"}>
+                <form
+                    onSubmit={handleDialogFormSubmit}
+                    className={clsx([style.form, {
+                        [style.post as string]: dialogVariant === dialogVariantEnum.POST,
+                    }])}
+                    id={"dialog"}
+                >
                     <Flex direction={"column"} gap={10} styles={{ height: "100%" }}>
                         <Flex
                             direction={"row"}
@@ -402,6 +408,12 @@ const AdminBlog = () => {
                         </div>
 
                         <div style={(dialogVariant === dialogVariantEnum.TAG || !showMarkdown) ? { display: "none" } : {}}>
+                            <Paragraph fontSize={2}>Tags: {tags
+                                .filter((tag) => tag.active)
+                                .map((tag) => tag.name)
+                                .join(", ")
+                            }</Paragraph>
+
                             <Paragraph fontSize={2}>{blogPostTitle}</Paragraph>
     
                             <MarkdownRenderer>{blogPostContent}</MarkdownRenderer>
