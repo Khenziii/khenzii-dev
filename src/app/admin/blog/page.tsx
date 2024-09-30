@@ -21,6 +21,7 @@ import {
     Loading,
     CodeBlock,
 } from "@khenzii-dev/ui/atoms";
+import { MarkdownRenderer } from "@khenzii-dev/ui/molecules";
 import { Tags, type UITag } from "@khenzii-dev/ui/organisms";
 import { type BlogPost } from "@khenzii-dev/server/backend";
 import {
@@ -52,6 +53,8 @@ const AdminBlog = () => {
     const [postsOffset, setPostsOffset] = useState(0);
     const [fetchedAllPosts, setFetchedAllPosts] = useState(false);
     const [showMarkdown, setShowMarkdown] = useState(false);
+    const [blogPostTitle, setBlogPostTitle] = useState("");
+    const [blogPostContent, setBlogPostContent] = useState("");
 
     const loadingRef = useRef(null);
     const postTitleInput = useRef<HTMLInputElement>(null);
@@ -369,7 +372,16 @@ const AdminBlog = () => {
 
                             <hr className={style.line} />
 
-                            <div onClick={() => setShowMarkdown(true)}>
+                            <div onClick={() => {
+                                if (!postTitleInput.current || !postContentInput.current) return;
+
+                                const title = postTitleInput.current.value;
+                                const content = postContentInput.current.value;
+                                
+                                setBlogPostTitle(title);
+                                setBlogPostContent(content);
+                                setShowMarkdown(true);
+                            }}>
                                 <Paragraph
                                     className={clsx([style.selectParagraph, {
                                         [style.active as string]: showMarkdown,
@@ -387,6 +399,12 @@ const AdminBlog = () => {
                                 onClick={(updatedTags) => setTags(updatedTags)}
                                 size={1.5}
                             />
+                        </div>
+
+                        <div style={(dialogVariant === dialogVariantEnum.TAG || !showMarkdown) ? { display: "none" } : {}}>
+                            <Paragraph fontSize={2}>{blogPostTitle}</Paragraph>
+    
+                            <MarkdownRenderer>{blogPostContent}</MarkdownRenderer>
                         </div>
 
                         <Input
