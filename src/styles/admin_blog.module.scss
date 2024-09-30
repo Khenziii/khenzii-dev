@@ -5,9 +5,12 @@
   flex-direction: column;
   justify-content: center;
   gap: 20px;
-  height: min(75vh, 50rem);
-  width: min(75vw, 30rem);
-  overflow: scroll;
+  
+  &.post {
+    height: min(75vh, 50rem);
+    width: min(75vw, 30rem);
+    overflow: scroll;
+  }
 }
 
 .selectParagraph {
