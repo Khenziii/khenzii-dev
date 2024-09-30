@@ -1,6 +1,10 @@
 import { BaseService, Event } from "@khenzii-dev/server/backend";
 import { z } from "zod";
 
+export const getPostInput = z.object({
+    id: z.string(),
+});
+
 export const getPostsInput = z.object({
     offset: z.number().optional(),
 }).optional();
@@ -31,6 +35,7 @@ export const deletePostInput = z.object({
     id: z.string(),
 });
 
+type getPostInputType = z.infer<typeof getPostInput>;
 type getPostsInputType = z.infer<typeof getPostsInput>;
 type createPostInputType = z.infer<typeof createPostInput>;
 type updatePostInputType = z.infer<typeof updatePostInput>;
@@ -45,6 +50,12 @@ export type BlogPost = {
 };
 
 export class BlogPostService extends BaseService {
+    async getPost(input: getPostInputType): Promise<BlogPost | null> {
+        return await this.ctx.db.post.findUnique({
+            where: { id: input.id },
+        });
+    }
+
     async getPosts(input: getPostsInputType): Promise<BlogPost[]> {
         return await this.ctx.db.post.findMany({
             orderBy: { created_at: "desc" },
