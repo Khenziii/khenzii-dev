@@ -8,6 +8,7 @@ import {
     type FormEventHandler,
     type KeyboardEventHandler,
 } from "react";
+import clsx from "clsx";
 import { api } from "@khenzii-dev/providers";
 import {
     Flex,
@@ -20,7 +21,9 @@ import {
     Loading,
     CodeBlock,
 } from "@khenzii-dev/ui/atoms";
+import { MarkdownRenderer } from "@khenzii-dev/ui/molecules";
 import { Tags, type UITag } from "@khenzii-dev/ui/organisms";
+import { type BlogPost } from "@khenzii-dev/server/backend";
 import {
     filterTagsByIds,
     blogTagToUiTag,
@@ -46,15 +49,22 @@ const AdminBlog = () => {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [currentDatasId, setCurrentDatasId] = useState("");
     const [tags, setTags] = useState<UITag[]>([]);
+    const [posts, setPosts] = useState<BlogPost[]>([]);
+    const [postsOffset, setPostsOffset] = useState(0);
+    const [fetchedAllPosts, setFetchedAllPosts] = useState(false);
+    const [showMarkdown, setShowMarkdown] = useState(false);
+    const [blogPostTitle, setBlogPostTitle] = useState("");
+    const [blogPostContent, setBlogPostContent] = useState("");
+
+    const loadingRef = useRef(null);
     const postTitleInput = useRef<HTMLInputElement>(null);
     const postContentInput = useRef<HTMLInputElement>(null);
     const tagNameInput = useRef<HTMLInputElement>(null);
 
-    const {
-        data: blogPostsData,
-        isLoading: blogPostsAreLoading,
-        refetch: blogPostsRefetch,
-    } = api.blog.blogPost.getPosts.useQuery();
+    const { refetch: blogPostsRefetch } = api.blog.blogPost.getPosts.useQuery(
+        { offset: postsOffset },
+        { enabled: false },
+    );
     const {
         data: blogTagsData,
         isLoading: blogTagsAreLoading,
@@ -67,13 +77,19 @@ const AdminBlog = () => {
     const { mutateAsync: createTagMutation } = api.blog.blogTag.createTag.useMutation();
     const { mutateAsync: updateTagMutation } = api.blog.blogTag.updateTag.useMutation();
 
+    const blogPostsManualRefetch = useCallback(async () => {
+        setPosts([]);
+        setPostsOffset(0);
+        setFetchedAllPosts(false);
+    }, []);
+
     const deletePost = useCallback(async ({ id }: {
         id: string;
     }) => {
         await deletePostMutation({ id });
 
-        await blogPostsRefetch();
-    }, [deletePostMutation, blogPostsRefetch]);
+        await blogPostsManualRefetch();
+    }, [deletePostMutation, blogPostsManualRefetch]);
 
     const createPost = useCallback(async ({ title, content, tagIDs }: {
         title: string;
@@ -87,8 +103,8 @@ const AdminBlog = () => {
             created_at: new Date().toString(),
         });
 
-        await blogPostsRefetch();
-    }, [createPostMutation, blogPostsRefetch]);
+        await blogPostsManualRefetch();
+    }, [createPostMutation, blogPostsManualRefetch]);
 
     const updatePost = useCallback(async ({ id, updatedPost }: {
         id: string;
@@ -103,8 +119,8 @@ const AdminBlog = () => {
             updatedPost,
         });
 
-        await blogPostsRefetch();
-    }, [updatePostMutation, blogPostsRefetch]);
+        await blogPostsManualRefetch();
+    }, [updatePostMutation, blogPostsManualRefetch]);
 
     const deleteTag = useCallback(async ({ id }: {
         id: string;
@@ -228,11 +244,37 @@ const AdminBlog = () => {
         }
     }, []);
 
-    const handleKeyDownPostContentInput: KeyboardEventHandler = useCallback((event) => {
-        if (!postTitleInput.current) return;
+    const fetchMorePosts = useCallback(async () => {
+        if (fetchedAllPosts) return;
 
-        if (event.key == "ArrowUp") postTitleInput.current.focus();
-    }, []);
+        const { data: newPosts } = await blogPostsRefetch();
+
+        if (!newPosts) return;
+        if (newPosts.length < 10) setFetchedAllPosts(true);
+       
+        setPosts((currentPosts) => [...currentPosts, ...newPosts]);
+        setPostsOffset((currentOffset) => currentOffset + 1);
+    }, [blogPostsRefetch, fetchedAllPosts]);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (!entry) return;
+                if (!entry.isIntersecting) return;
+    
+                void fetchMorePosts();
+            },
+            { threshold: 0.1 },
+        );
+    
+        const ref = loadingRef.current;
+        if (!ref) return;
+    
+        observer.observe(ref);
+        return () => {
+            observer.unobserve(ref);
+        };
+    }, [fetchMorePosts]);
 
     useEffect(() => {
         if (
@@ -250,6 +292,7 @@ const AdminBlog = () => {
         <Flex
             direction="column"
             align="center"
+            styles={{ maxWidth: "95vw" }}
         >
             <Header>Blog</Header>
 
@@ -302,9 +345,55 @@ const AdminBlog = () => {
                 open={isDialogOpen}
                 onClose={() => onDialogClose(false)}
             >
-                <form onSubmit={handleDialogFormSubmit} className={style.form} id={"dialog"}>
-                    <Flex direction={"column"} gap={10}>
-                        <div style={dialogVariant === dialogVariantEnum.TAG ? { display: "none" } : {}}>
+                <form
+                    onSubmit={handleDialogFormSubmit}
+                    className={clsx([style.form, {
+                        [style.post as string]: dialogVariant === dialogVariantEnum.POST,
+                    }])}
+                    id={"dialog"}
+                >
+                    <Flex direction={"column"} gap={10} styles={{ height: "100%" }}>
+                        <Flex
+                            direction={"row"}
+                            gap={10}
+                            styles={dialogVariant === dialogVariantEnum.TAG ? { display: "none" } : {}}
+                            fullWidth
+                        >
+                            <div onClick={() => setShowMarkdown(false)}>
+                                <Paragraph
+                                    className={clsx([style.selectParagraph, {
+                                        [style.active as string]: !showMarkdown,
+                                    }])}
+                                    fontSize={1.5}
+                                >
+                                    Edit    
+                                </Paragraph>
+                            </div>
+
+                            <hr className={style.line} />
+
+                            <div onClick={() => {
+                                if (!postTitleInput.current || !postContentInput.current) return;
+
+                                const title = postTitleInput.current.value;
+                                const content = postContentInput.current.value;
+                                
+                                setBlogPostTitle(title);
+                                setBlogPostContent(content);
+                                setShowMarkdown(true);
+                            }}>
+                                <Paragraph
+                                    className={clsx([style.selectParagraph, {
+                                        [style.active as string]: showMarkdown,
+                                    }])}
+                                    fontSize={1.5}
+                                >
+                                    Markdown
+                                </Paragraph>
+                            </div>
+                        </Flex>
+                        
+                        <div style={(dialogVariant === dialogVariantEnum.TAG || showMarkdown) ? { display: "none" } : {}}>
                             <Tags
                                 tags={tags}
                                 onClick={(updatedTags) => setTags(updatedTags)}
@@ -312,20 +401,33 @@ const AdminBlog = () => {
                             />
                         </div>
 
+                        <div style={(dialogVariant === dialogVariantEnum.TAG || !showMarkdown) ? { display: "none" } : {}}>
+                            <Paragraph fontSize={2}>Tags: {tags
+                                .filter((tag) => tag.active)
+                                .map((tag) => tag.name)
+                                .join(", ")
+                            }</Paragraph>
+
+                            <Paragraph fontSize={2}>{blogPostTitle}</Paragraph>
+    
+                            <MarkdownRenderer>{blogPostContent}</MarkdownRenderer>
+                        </div>
+
                         <Input
                             placeholder={"Post's Title.."}
                             id={"post-input-title"}
                             onKeyDown={handleKeyDownPostTitleInput}
                             ref={postTitleInput}
-                            styles={dialogVariant === dialogVariantEnum.TAG ? { display: "none" } : {}}
+                            styles={(dialogVariant === dialogVariantEnum.TAG || showMarkdown) ? { display: "none" } : {}}
                         />
 
                         <Input
                             placeholder={"Post's Content.."}
                             id={"post-input-content"}
-                            onKeyDown={handleKeyDownPostContentInput}
                             ref={postContentInput}
-                            styles={dialogVariant === dialogVariantEnum.TAG ? { display: "none" } : {}}
+                            styles={(dialogVariant === dialogVariantEnum.TAG || showMarkdown) ? { display: "none" } : {}}
+                            className={style.postContentInput}
+                            textarea
                         />
 
                         <Input  
@@ -353,57 +455,60 @@ const AdminBlog = () => {
                 postTitleInput.current.value = "";
                 postContentInput.current.value = "";
                 setTags(blogTagToUiTag([], blogTagsData));
+                setShowMarkdown(false);
 
                 dialogOpen(dialogTitleEnum.NEW_POST);
             }}>
                 <Icon iconName={"plus-lg"} size={1.5} />
             </Button>
 
-            {(blogPostsAreLoading || blogPostsData === undefined)
-                ? (
+            {posts.map((post, index) => (
+                <Flex key={`post-${index}`} id={`post-${index}`}>
+                    <Paragraph fontSize={1.5}>
+                        <CodeBlock>
+                            title: {post.title} <br />
+                            content: {post.content} <br />
+                            created_at: {post.created_at.toString()} <br />
+                            tags: {
+                                filterTagsByIds(post.tagIDs, blogTagsData)
+                                    .map((tag) => tag.name)
+                                    .join(", ")
+                            } <br />
+                        </CodeBlock>
+                    </Paragraph>
+
+                    <Button id={`update-post-button-${index}`} onClick={() => {
+                        if (
+                            postTitleInput.current === null
+                            || postContentInput.current === null
+                        ) return;
+                        
+                        postTitleInput.current.value = post.title;
+                        postContentInput.current.value = post.content;
+                        setTags(blogTagToUiTag(post.tagIDs, blogTagsData));
+                        setShowMarkdown(false);
+
+                        setCurrentDatasId(post.id);
+                        dialogOpen(dialogTitleEnum.UPDATE_POST);
+                    }}>
+                        <Icon iconName={"pencil-fill"} size={1.5} />
+                    </Button>
+
+                    <Button
+                        id={`delete-post-button-${index}`}
+                        onClick={() => deletePost({ id: post.id })}
+                        color={"destructive"}
+                    >
+                        <Icon iconName={"trash"} size={1.5} />
+                    </Button>
+                </Flex>
+            ))}
+
+            {!fetchedAllPosts && (
+                <div ref={loadingRef}>
                     <Loading size={100} />
-                )
-                : blogPostsData.map((post, index) => (
-                    <Flex key={`post-${index}`} id={`post-${index}`}>
-                        <Paragraph fontSize={1.5}>
-                            <CodeBlock>
-                                title: {post.title} <br />
-                                content: {post.content} <br />
-                                created_at: {post.created_at.toString()} <br />
-                                tags: {
-                                    filterTagsByIds(post.tagIDs, blogTagsData)
-                                        .map((tag) => tag.name)
-                                        .join(", ")
-                                } <br />
-                            </CodeBlock>
-                        </Paragraph>
-
-                        <Button id={`update-post-button-${index}`} onClick={() => {
-                            if (
-                                postTitleInput.current === null
-                                || postContentInput.current === null
-                            ) return;
-                            
-                            postTitleInput.current.value = post.title;
-                            postContentInput.current.value = post.content;
-                            setTags(blogTagToUiTag(post.tagIDs, blogTagsData));
-
-                            setCurrentDatasId(post.id);
-                            dialogOpen(dialogTitleEnum.UPDATE_POST);
-                        }}>
-                            <Icon iconName={"pencil-fill"} size={1.5} />
-                        </Button>
-
-                        <Button
-                            id={`delete-post-button-${index}`}
-                            onClick={() => deletePost({ id: post.id })}
-                            color={"destructive"}
-                        >
-                            <Icon iconName={"trash"} size={1.5} />
-                        </Button>
-                    </Flex>
-                ))
-            }
+                </div>
+            )}
         </Flex>
     );
 };

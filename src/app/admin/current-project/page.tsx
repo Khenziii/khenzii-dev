@@ -106,6 +106,7 @@ const AdminCurrentProject = () => {
         <Flex
             direction="column"
             align="center"
+            styles={{ maxWidth: "95vw" }}
         >
             <Header>Current Project</Header>
 

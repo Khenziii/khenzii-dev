@@ -27,7 +27,8 @@ const AdminEventLog = () => {
         { offset: eventsOffset },
         {
             enabled: eventsOffset >= 0,
-            refetchOnWindowFocus: false,
+            // avoids random refetches that cause issues.
+            staleTime: Infinity,
         },
     );
 
@@ -68,14 +69,20 @@ const AdminEventLog = () => {
         <Flex
             direction="column"
             align="center"
+            styles={{ maxWidth: "95vw" }}
         >
             <Header>Event Log</Header>
 
-            <Paragraph fontSize={1.5}><i>TIP: Click the button next to entries to copy the full JSON to your clipboard.</i></Paragraph>
+            <Paragraph
+                fontSize={1.5}
+                styles={{ textAlign: "center" }}
+            >
+                <i>TIP: Click the button next to entries to copy the full JSON to your clipboard.</i>
+            </Paragraph>
 
             {events.map((event, index) => (
                 <Flex key={`event-${index}`} id={`event-${index}`}>
-                    <Paragraph fontSize={1.5}>
+                    <Paragraph fontSize={1.5} styles={{ overflowWrap: "anywhere" }}>
                         <CodeBlock>
                             title: {event.title} <br />
                             created_at: {event.created_at.toString()} <br />

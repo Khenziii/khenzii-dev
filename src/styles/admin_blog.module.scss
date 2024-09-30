@@ -5,5 +5,36 @@
   flex-direction: column;
   justify-content: center;
   gap: 20px;
+  
+  &.post {
+    height: min(75vh, 50rem);
+    width: min(75vw, 30rem);
+    overflow: scroll;
+  }
+}
+
+.selectParagraph {
+  &.active {
+    color: $textDarkened !important;
+  }
+
+  &:hover {
+    color: $textDarkened !important;
+    cursor: pointer;
+  }
+}
+
+.line {
+  color: $text;
+  background-color: $text;
+  margin: 0;
+  border: none;
+  width: 0.25rem;
+}
+
+.postContentInput {
+  resize: none;
+  overflow-y: scroll;
+  flex-grow: 1;
 }
 
