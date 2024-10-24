@@ -51,9 +51,13 @@ export type BlogPost = {
 
 export class BlogPostService extends BaseService {
     async getPost(input: getPostInputType): Promise<BlogPost | null> {
-        return await this.ctx.db.post.findUnique({
-            where: { id: input.id },
-        });
+        try {
+            return await this.ctx.db.post.findUnique({
+                where: { id: input.id },
+            });
+        } catch {
+            return null;
+        }
     }
 
     async getPosts(input: getPostsInputType): Promise<BlogPost[]> {
