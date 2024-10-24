@@ -126,9 +126,10 @@ const BlogPost: FC<BlogPostProps> = ({ params }) => {
             <Tags
                 tags={blogTagToUiTag(postData.tagIDs, tagsData)}
                 size={mobile ? 1.5 : 2}
+                clickable={false}
             />
 
-            <MarkdownRenderer>{postData.content}</MarkdownRenderer>
+            <MarkdownRenderer sizeMultiplier={mobile ? 1 : 1.25}>{postData.content}</MarkdownRenderer>
         </Flex>
     );
 };

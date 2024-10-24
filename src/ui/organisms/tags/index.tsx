@@ -16,9 +16,10 @@ export type TagsProps = {
     tags: UITag[];
     onClick?: (tags: UITag[]) => void;
     size?: number;
+    clickable?: boolean;
 };
 
-export const Tags: FC<TagsProps> = ({ tags, onClick, size }) => {
+export const Tags: FC<TagsProps> = ({ tags, onClick, size, clickable }) => {
     const handleTagClick = useCallback((name: string) => {
         // Changes tag's active state by name.
         const updatedTags = tags.map((tag) => 
@@ -39,6 +40,7 @@ export const Tags: FC<TagsProps> = ({ tags, onClick, size }) => {
                     active={tag.active}
                     onClick={() => handleTagClick(tag.name)}
                     size={size}
+                    clickable={clickable}
                 />
             ))}
         </Flex>
