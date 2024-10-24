@@ -101,9 +101,9 @@ const BlogPost: FC<BlogPostProps> = ({ params }) => {
             direction={"column"}
             className={style.post_container}
         >
-            <Anchor href={"/blog"} prefetch>
+            <Anchor href={"/blog"} styles={{ width: "fit-content" }} prefetch>
                 <Button style={{ width: "fit-content", padding: "10px" }}>
-                    <Icon iconName={"arrow-left-short"} size={2.5} />
+                    <Icon iconName={"arrow-left-short"} size={mobile ? 1.75 : 2.5} />
                 </Button>
             </Anchor>
             
