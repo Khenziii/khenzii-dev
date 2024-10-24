@@ -120,6 +120,7 @@ export const Posts = () => {
                             tags={blogTagToUiTag(post.tagIDs, tagsData)}
                             clickable={false}
                             size={1.5}
+                            showOnlyActive
                         />
                     </Flex>
                 </Anchor>
