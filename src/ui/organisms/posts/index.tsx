@@ -6,21 +6,37 @@ import {
     useCallback,
     useRef,
 } from "react";
+import { blogTagToUiTag } from "@khenzii-dev/utils";
 import { type BlogPost } from "@khenzii-dev/server/backend";
 import {
     Flex,
-    Loading,
+    Anchor,
     Paragraph,
+    Loading,
+    Icon,
 } from "@khenzii-dev/ui/atoms";
+import { Tags } from "@khenzii-dev/ui/organisms";
 import { api } from "@khenzii-dev/providers";
+import { useMobile } from "@khenzii-dev/hooks";
+import style from "./index.module.scss";
+
+const formatDate = (date: Date): string => {
+    const day = date.getDate().toString().padStart(2, "0");
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const year = date.getFullYear();
+
+    return `${day}/${month}/${year}`;
+};
 
 // export type PostsProps = {};
 
 export const Posts = () => {
+    const mobile = useMobile();
     const loadingRef = useRef(null);
     const [postsOffset, setPostsOffset] = useState(-1);
     const [posts, setPosts] = useState<BlogPost[]>([]);
     const [fetchedAllPosts, setFetchedAllPosts] = useState(false);
+    const { data: tagsData } = api.blog.blogTag.getTags.useQuery();
     const { data: postsData } = api.blog.blogPost.getPosts.useQuery(
         { offset: postsOffset },
         {
@@ -67,9 +83,46 @@ export const Posts = () => {
         <Flex
             direction="column"
             align="center"
+            className={style.container}
         >
             {posts.map((post, index) => (
-                <Paragraph key={index}>{post.title}</Paragraph>
+                <Anchor
+                    href={`/blog/${post.id}`}
+                    key={`blog-post-${index}`}
+                    className={style.post_container}
+                    draggable={false}
+                >
+                    <Flex
+                        direction={mobile ? "column" : "row"}
+                        align={mobile ? undefined : "center"}
+                        justify={"center"}
+                    >
+                        <Paragraph
+                            fontSize={2}
+                            styles={mobile
+                                ? {}
+                                : {
+                                    whiteSpace: "nowrap",
+                                    textOverflow: "ellipsis",
+                                    overflow: "hidden",
+                                }
+                            }
+                        >
+                            {post.title}
+                        </Paragraph>
+                        
+                        <Flex styles={mobile ? {} : { marginLeft: "auto" }} align={"center"}>
+                            <Icon iconName={"clock"} size={1.5} />
+                            <Paragraph fontSize={1.5}>{formatDate(post.created_at)}</Paragraph>
+                        </Flex>
+
+                        <Tags
+                            tags={blogTagToUiTag(post.tagIDs, tagsData)}
+                            clickable={false}
+                            size={1.5}
+                        />
+                    </Flex>
+                </Anchor>
             ))}
                         
             {!fetchedAllPosts && (

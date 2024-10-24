@@ -1,0 +1,19 @@
+@import "../../../styles/constants.scss";
+
+.container {
+  margin-block: $defaultGap;
+  width: min($maxContentWidth, 90vw);
+}
+
+.post_container {
+  padding: $defaultGap;
+  box-sizing: border-box;
+  border: solid $primary 1px;
+  width: 100%;
+  text-decoration: none;
+  cursor: pointer;
+  
+  &:hover {
+    background-color: $background;
+  }
+}

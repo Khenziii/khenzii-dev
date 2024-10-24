@@ -32,7 +32,7 @@ export const Tags: FC<TagsProps> = ({ tags, onClick, size, clickable }) => {
     }, [tags, onClick]);
 
     return (
-        <Flex direction={"row"}>
+        <Flex direction={"row"} styles={{ flexWrap: "wrap" }}>
             {tags.map((tag, index) => (
                 <Tag
                     key={`tag-${index}`}
