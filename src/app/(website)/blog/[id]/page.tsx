@@ -6,7 +6,30 @@ import {
     type FC,
 } from "react";
 import { api, IsNotFoundContext } from "@khenzii-dev/providers";
-import { Loading, Paragraph, Button, Icon, Anchor, Header, Flex } from "@khenzii-dev/ui/atoms";
+import {
+    Loading,
+    Paragraph,
+    Button,
+    Icon,
+    Anchor,
+    Header,
+    Flex,
+} from "@khenzii-dev/ui/atoms";
+import { MarkdownRenderer } from "@khenzii-dev/ui/molecules";
+import { Tags } from "@khenzii-dev/ui/organisms";
+import { blogTagToUiTag } from "@khenzii-dev/utils";
+import { useMobile } from "@khenzii-dev/hooks";
+import style from "@khenzii-dev/styles/blog_post.module.scss";
+
+const formatDate = (date: Date): string => {
+    const day = date.getDate().toString().padStart(2, "0");
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const year = date.getFullYear();
+    const hour = date.getHours().toString().padStart(2, "0");
+    const minute = date.getMinutes().toString().padStart(2, "0");
+
+    return `${day}/${month}/${year} - ${hour}:${minute}`;
+};
 
 type BlogPostProps = {
     params: { id: string };
@@ -14,6 +37,7 @@ type BlogPostProps = {
 
 const BlogPost: FC<BlogPostProps> = ({ params }) => {
     const { setIsNotFound } = useContext(IsNotFoundContext);
+    const mobile = useMobile();
     
     const {
         data: postData,
@@ -22,6 +46,7 @@ const BlogPost: FC<BlogPostProps> = ({ params }) => {
     } = api.blog.blogPost.getPost.useQuery({
         id: params.id,
     });
+    const { data: tagsData } = api.blog.blogTag.getTags.useQuery();
 
     useEffect(() => {
         if (postIsLoading) return;
@@ -72,13 +97,39 @@ const BlogPost: FC<BlogPostProps> = ({ params }) => {
     );
 
     return (
-        <>
+        <Flex
+            direction={"column"}
+            className={style.post_container}
+        >
             <Anchor href={"/blog"} prefetch>
                 <Button style={{ width: "fit-content", padding: "10px" }}>
-                    <Icon iconName={"house"} size={2.5} />
+                    <Icon iconName={"arrow-left-short"} size={2.5} />
                 </Button>
             </Anchor>
-        </>
+            
+            <Flex direction={mobile ? "column" : "row"}>
+                <Paragraph
+                    fontSize={mobile ? 2 : 3}
+                    styles={{ lineBreak: "auto", hyphens: "auto" }}
+                >
+                    {postData.title}
+                </Paragraph>
+
+                <hr className={style.post_line} />
+
+                <Flex align={"center"}>
+                    <Icon iconName={"clock"} size={mobile ? 1.5 : 2} />
+                    <Paragraph fontSize={mobile ? 1.5 : 2}>{formatDate(postData.created_at)}</Paragraph>
+                </Flex>
+            </Flex>
+
+            <Tags
+                tags={blogTagToUiTag(postData.tagIDs, tagsData)}
+                size={mobile ? 1.5 : 2}
+            />
+
+            <MarkdownRenderer>{postData.content}</MarkdownRenderer>
+        </Flex>
     );
 };
 

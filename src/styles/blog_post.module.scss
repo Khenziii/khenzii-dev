@@ -1,0 +1,11 @@
+@import "./constants.scss";
+
+.post_container {
+  margin-top: $defaultGap;
+  width: min($maxContentWidth, 90vw);
+}
+
+.post_line {
+  margin: 0;
+  border: solid 2px $text;
+}
