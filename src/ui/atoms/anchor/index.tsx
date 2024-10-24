@@ -10,6 +10,7 @@ export type AnchorProps = {
     prefetch?: boolean;
     children?: ReactNode;
     darkenOnHover?: boolean;
+    draggable?: boolean;
 } & CustomStyles;
 
 export const Anchor: FC<AnchorProps> = ({ newTab, children, className, darkenOnHover, styles, ...props }) => (

@@ -27,3 +27,18 @@
     }
   }
 }
+
+.not_clickable {
+  cursor: unset !important;
+  border: solid 1px $primary !important;
+  background-color: $contentBackground !important;
+  
+  &.active {
+    background-color: $text !important;
+    border: solid 1px $text !important;
+
+    & > p {
+      color: $background !important;
+    }
+  }
+}

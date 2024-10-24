@@ -352,7 +352,7 @@ const AdminBlog = () => {
                     }])}
                     id={"dialog"}
                 >
-                    <Flex direction={"column"} gap={10} styles={{ height: "100%" }}>
+                    <Flex direction={"column"} gap={10} styles={{ height: "100%", overflowY: "scroll" }}>
                         <Flex
                             direction={"row"}
                             gap={10}
@@ -402,12 +402,14 @@ const AdminBlog = () => {
                         </div>
 
                         <div style={(dialogVariant === dialogVariantEnum.TAG || !showMarkdown) ? { display: "none" } : {}}>
-                            <Paragraph fontSize={2}>Tags: {tags
-                                .filter((tag) => tag.active)
-                                .map((tag) => tag.name)
-                                .join(", ")
-                            }</Paragraph>
-
+                            <Paragraph fontSize={2}>Tags:</Paragraph>
+                            <Tags
+                                size={1.5}
+                                tags={tags}
+                                clickable={false}
+                                showOnlyActive
+                            />
+                            
                             <Paragraph fontSize={2}>{blogPostTitle}</Paragraph>
     
                             <MarkdownRenderer>{blogPostContent}</MarkdownRenderer>

@@ -5,6 +5,7 @@ import clsx from "clsx";
 import {
     TRPCProvider,
     SessionProviderWrapper,
+    IsNotFoundProvider,
 } from "@khenzii-dev/providers";
 import style from "@khenzii-dev/styles/layout.module.scss";
 
@@ -26,11 +27,13 @@ export const metadata: Metadata = {
 const RootLayout: FC<{ children: ReactNode }> = ({ children }) => (
     <TRPCProvider>
         <SessionProviderWrapper>
-            <html lang="en">
-                <body className={clsx(style.layout, montserrat.className)}>
-                    {children}
-                </body>
-            </html>
+            <IsNotFoundProvider>
+                <html lang="en">
+                    <body className={clsx(style.layout, montserrat.className)}>
+                        {children}
+                    </body>
+                </html>
+            </IsNotFoundProvider>
         </SessionProviderWrapper>
     </TRPCProvider>
 );
