@@ -7,6 +7,9 @@ export const getPostInput = z.object({
 
 export const getPostsInput = z.object({
     offset: z.number().optional(),
+    tags: z.object({
+        id: z.string(),
+    }).array().optional(),
 }).optional();
 
 export const createPostInput = z.object({
@@ -65,6 +68,9 @@ export class BlogPostService extends BaseService {
             orderBy: { created_at: "desc" },
             skip: (input?.offset ?? 0) * 10,
             take: 10,
+            where: input?.tags === undefined
+                ? undefined
+                : { tagIDs: { hasSome: input.tags.map((tag) => tag.id) } },
         });
     }
 
