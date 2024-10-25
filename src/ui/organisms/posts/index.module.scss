@@ -12,8 +12,9 @@
   width: 100%;
   text-decoration: none;
   cursor: pointer;
+  transition: all .15s cubic-bezier(0.75, 0, 0.30, 1);
   
   &:hover {
-    background-color: $background;
+    background-color: $primary;
   }
 }

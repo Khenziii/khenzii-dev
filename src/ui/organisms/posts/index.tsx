@@ -6,7 +6,7 @@ import {
     useCallback,
     useRef,
 } from "react";
-import { blogTagToUiTag } from "@khenzii-dev/utils";
+import { blogTagToUiTag, uiTagToBlogTag } from "@khenzii-dev/utils";
 import { type BlogPost } from "@khenzii-dev/server/backend";
 import {
     Flex,
@@ -14,8 +14,9 @@ import {
     Paragraph,
     Loading,
     Icon,
+    Header,
 } from "@khenzii-dev/ui/atoms";
-import { Tags } from "@khenzii-dev/ui/organisms";
+import { Tags, type UITag } from "@khenzii-dev/ui/organisms";
 import { api } from "@khenzii-dev/providers";
 import { useMobile } from "@khenzii-dev/hooks";
 import style from "./index.module.scss";
@@ -35,10 +36,15 @@ export const Posts = () => {
     const loadingRef = useRef(null);
     const [postsOffset, setPostsOffset] = useState(-1);
     const [posts, setPosts] = useState<BlogPost[]>([]);
+    const [tags, setTags] = useState<UITag[]>([]);
     const [fetchedAllPosts, setFetchedAllPosts] = useState(false);
     const { data: tagsData } = api.blog.blogTag.getTags.useQuery();
     const { data: postsData } = api.blog.blogPost.getPosts.useQuery(
-        { offset: postsOffset },
+        {
+            offset: postsOffset,
+            tags: uiTagToBlogTag(tags, tagsData)
+                .map((tag) => ({ id: tag.id })),
+        },
         {
             enabled: postsOffset >= 0,
             // avoids random refetches that cause issues.
@@ -79,52 +85,76 @@ export const Posts = () => {
         setPosts((currentPosts) => [...currentPosts, ...postsData]);
     }, [postsData]);
 
+    useEffect(() => {
+        if (!tagsData) return;
+
+        setTags(blogTagToUiTag(tagsData.map((tag) => tag.id), tagsData));
+    }, [tagsData]);
+
     return (
         <Flex
             direction="column"
             align="center"
             className={style.container}
+            gap={20}
         >
-            {posts.map((post, index) => (
-                <Anchor
-                    href={`/blog/${post.id}`}
-                    key={`blog-post-${index}`}
-                    className={style.post_container}
-                    draggable={false}
-                >
-                    <Flex
-                        direction={mobile ? "column" : "row"}
-                        align={mobile ? undefined : "center"}
-                        justify={"center"}
-                    >
-                        <Paragraph
-                            fontSize={2}
-                            styles={mobile
-                                ? {}
-                                : {
-                                    whiteSpace: "nowrap",
-                                    textOverflow: "ellipsis",
-                                    overflow: "hidden",
-                                }
-                            }
-                        >
-                            {post.title}
-                        </Paragraph>
-                        
-                        <Flex styles={mobile ? {} : { marginLeft: "auto" }} align={"center"}>
-                            <Icon iconName={"clock"} size={1.5} />
-                            <Paragraph fontSize={1.5}>{formatDate(post.created_at)}</Paragraph>
-                        </Flex>
+            <Flex direction="column" align="flex-start" fullWidth>
+                <Header>Filter</Header>
+                <Paragraph fontSize={mobile ? 1.5 : 1.75}>Click the tags to filter posts!</Paragraph>
+                <Paragraph fontSize={mobile ? 1.25 : 1.5}><i>* Any post with at least one of the selected tags will show up.</i></Paragraph>
 
-                        <Tags
-                            tags={blogTagToUiTag(post.tagIDs, tagsData)}
-                            clickable={false}
-                            size={1.5}
-                            showOnlyActive
-                        />
-                    </Flex>
-                </Anchor>
-            ))}
+                <Tags
+                    tags={tags}
+                    size={mobile ? 1.25 : 1.5}
+                    onClick={(newTags) => {
+                        setPosts([]);
+                        setTags(newTags);
+                    }}
+                />
+            </Flex>
+
+            <Flex direction="column" fullWidth>
+                {posts.map((post, index) => (
+                    <Anchor
+                        href={`/blog/${post.id}`}
+                        key={`blog-post-${index}`}
+                        className={style.post_container}
+                        draggable={false}
+                    >
+                        <Flex
+                            direction={mobile ? "column" : "row"}
+                            align={mobile ? undefined : "center"}
+                            justify={"center"}
+                        >
+                            <Paragraph
+                                fontSize={2}
+                                styles={mobile
+                                    ? {}
+                                    : {
+                                        whiteSpace: "nowrap",
+                                        textOverflow: "ellipsis",
+                                        overflow: "hidden",
+                                    }
+                                }
+                            >
+                                {post.title}
+                            </Paragraph>
+                            
+                            <Flex styles={mobile ? {} : { marginLeft: "auto" }} align={"center"}>
+                                <Icon iconName={"clock"} size={1.5} />
+                                <Paragraph fontSize={1.5}>{formatDate(post.created_at)}</Paragraph>
+                            </Flex>
+    
+                            <Tags
+                                tags={blogTagToUiTag(post.tagIDs, tagsData)}
+                                clickable={false}
+                                size={mobile ? 1.25 : 1.5}
+                                showOnlyActive
+                            />
+                        </Flex>
+                    </Anchor>
+                ))}
+            </Flex>
                         
             {!fetchedAllPosts && (
                 <div ref={loadingRef}>
