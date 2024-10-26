@@ -1,10 +1,16 @@
-import { type FC, useState } from "react";
-import { type route, type social } from "..";
-import style from "./index.module.scss";
+import {
+    type FC,
+    useState,
+    useCallback,
+    useContext,
+} from "react";
+import { usePathname } from "next/navigation";
+import { IsNotFoundContext } from "@khenzii-dev/providers";
+import type { route, social } from "..";
 import { NavDesktopItem } from "./nav_desktop_item";
 import { Icon, Anchor, Flex } from "@khenzii-dev/ui/atoms";
-import { usePathname } from "next/navigation";
 import { Expandable } from "@khenzii-dev/ui/molecules";
+import style from "./index.module.scss";
 
 export type NavDesktopProps = {
     routes: route[];
@@ -14,6 +20,16 @@ export type NavDesktopProps = {
 export const NavDesktop: FC<NavDesktopProps> = ({ routes , socials }) => {
     const pathname = usePathname();
     const [areSocialsOpen, setAreSocialsOpen] = useState(false);
+    const { isNotFound } = useContext(IsNotFoundContext);
+    
+    const isRouteActive = useCallback((path?: string): boolean => {
+        if (isNotFound) return false;
+        if (!path) return false;
+
+        if (path === "/") return pathname === path;
+   
+        return pathname.startsWith(path);
+    }, [isNotFound, pathname]);
 
     return (
         <div className={style.container}>
@@ -51,7 +67,7 @@ export const NavDesktop: FC<NavDesktopProps> = ({ routes , socials }) => {
             </div>
 
             {routes.map((r, index) => (
-                <NavDesktopItem route={r} key={`nav-desktop-item-${index}`} active={pathname === r.path}/>
+                <NavDesktopItem route={r} key={`nav-desktop-item-${index}`} active={isRouteActive(r.path)}/>
             ))}
         </div>
     );

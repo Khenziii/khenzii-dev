@@ -56,7 +56,7 @@ const Home = () => {
                     </Paragraph>
 
                     <Flex direction={"column"} align={"flex-start"} gap={0}>
-                        <Header fontsize={mobile ? 1.75 : 2}>About Me</Header>
+                        <Header fontSize={mobile ? 1.75 : 2}>About Me</Header>
 
                         <ul className={style.aboutList}>
                             <li>
@@ -78,7 +78,7 @@ const Home = () => {
                     </Flex>
 
                     <Flex direction={"column"} align={"flex-start"}>
-                        <Header fontsize={mobile ? 1.75 : 2}>Current Project</Header>
+                        <Header fontSize={mobile ? 1.75 : 2}>Current Project</Header>
 
                         {(currentProjectIsLoading || currentProjectData === undefined)
                             ? (

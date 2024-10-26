@@ -1,18 +1,22 @@
 @import "../../../styles/constants";
 
-.container {
-    width: 100%;
-}
-
-.line {
-    flex: 1;
+@mixin line {
     border: none;
     margin: 0;
     color: $text;
     background-color: $text;
 }
 
-.text {
+.line_primary {
+    flex: 1;
+    @include line;
+}
+
+.text_primary {
     max-width: 80%;
     text-align: center;
+}
+
+.line_secondary {
+    @include line;
 }

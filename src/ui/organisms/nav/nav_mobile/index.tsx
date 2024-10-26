@@ -1,10 +1,16 @@
-import { type FC, useState } from "react";
-import { type route, type social } from "..";
-import style from "./index.module.scss";
-import { NavMobileItem } from "./nav_mobile_item";
+import {
+    type FC,
+    useState,
+    useCallback,
+    useContext,
+} from "react";
 import { usePathname } from "next/navigation";
+import { IsNotFoundContext } from "@khenzii-dev/providers";
+import type { route, social } from "..";
+import { NavMobileItem } from "./nav_mobile_item";
 import { Icon, Anchor, Flex } from "@khenzii-dev/ui/atoms";
 import { Expandable } from "@khenzii-dev/ui/molecules";
+import style from "./index.module.scss";
 
 export type NavMobileProps = {
     routes: route[];
@@ -14,6 +20,16 @@ export type NavMobileProps = {
 export const NavMobile: FC<NavMobileProps> = ({ routes, socials }) => {
     const pathname = usePathname();
     const [areSocialsOpen, setAreSocialsOpen] = useState(false);
+    const { isNotFound } = useContext(IsNotFoundContext);
+
+    const isRouteActive = useCallback((path?: string): boolean => {
+        if (isNotFound) return false;
+        if (!path) return false;
+
+        if (path === "/") return pathname === path;
+   
+        return pathname.startsWith(path);
+    }, [isNotFound, pathname]);
 
     return (
         <div className={style.container}>
@@ -51,7 +67,7 @@ export const NavMobile: FC<NavMobileProps> = ({ routes, socials }) => {
             </div>
 
             {routes.map((r, index) => (
-                <NavMobileItem route={r} key={`nav-mobile-item-${index}`} active={pathname === r.path}/>
+                <NavMobileItem route={r} key={`nav-mobile-item-${index}`} active={isRouteActive(r.path)}/>
             ))}
         </div>
     );
