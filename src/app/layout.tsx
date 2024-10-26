@@ -1,13 +1,9 @@
 import { Montserrat } from "next/font/google";
 import type { Metadata } from "next";
 import type { ReactNode, FC } from "react";
-import clsx from "clsx";
-import {
-    TRPCProvider,
-    SessionProviderWrapper,
-    IsNotFoundProvider,
-} from "@khenzii-dev/providers";
+import { Providers } from "@khenzii-dev/providers";
 import style from "@khenzii-dev/styles/layout.module.scss";
+import clsx from "clsx";
 
 const montserrat = Montserrat({
     weight: "600",
@@ -25,17 +21,13 @@ export const metadata: Metadata = {
 };
 
 const RootLayout: FC<{ children: ReactNode }> = ({ children }) => (
-    <TRPCProvider>
-        <SessionProviderWrapper>
-            <IsNotFoundProvider>
-                <html lang="en">
-                    <body className={clsx(style.layout, montserrat.className)}>
-                        {children}
-                    </body>
-                </html>
-            </IsNotFoundProvider>
-        </SessionProviderWrapper>
-    </TRPCProvider>
+    <Providers>
+        <html lang="en">
+            <body className={clsx(style.layout, montserrat.className)}>
+                {children}
+            </body>
+        </html>
+    </Providers>
 );
 
 export default RootLayout;

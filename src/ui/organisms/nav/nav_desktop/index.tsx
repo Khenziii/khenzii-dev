@@ -1,11 +1,10 @@
 import {
     type FC,
-    useState,
     useCallback,
     useContext,
 } from "react";
 import { usePathname } from "next/navigation";
-import { IsNotFoundContext } from "@khenzii-dev/providers";
+import { IsNotFoundContext, AreSocialsOpenContext } from "@khenzii-dev/providers";
 import type { route, social } from "..";
 import { NavDesktopItem } from "./nav_desktop_item";
 import { Icon, Anchor, Flex } from "@khenzii-dev/ui/atoms";
@@ -19,7 +18,7 @@ export type NavDesktopProps = {
 
 export const NavDesktop: FC<NavDesktopProps> = ({ routes , socials }) => {
     const pathname = usePathname();
-    const [areSocialsOpen, setAreSocialsOpen] = useState(false);
+    const { areSocialsOpen, setAreSocialsOpen } = useContext(AreSocialsOpenContext);
     const { isNotFound } = useContext(IsNotFoundContext);
     
     const isRouteActive = useCallback((path?: string): boolean => {

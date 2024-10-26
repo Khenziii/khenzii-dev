@@ -1,0 +1,10 @@
+@import "../../../styles/constants.scss";
+
+.span {
+  cursor: pointer;
+  text-decoration: underline;
+
+  &:hover {
+    color: $textDarkened;
+  }
+}
