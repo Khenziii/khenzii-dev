@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import {
     Logo,
     Paragraph,
@@ -10,14 +11,16 @@ import {
     Loading,
     CodeBlock,
     FadeIn,
+    Dialog,
 } from "@khenzii-dev/ui/atoms";
-import style from "@khenzii-dev/styles/home.module.scss";
+import { Contact, accounts } from "@khenzii-dev/ui/organisms";
 import { useMobile } from "@khenzii-dev/hooks";
 import { api } from "@khenzii-dev/providers";
-import { useEffect, useState } from "react";
+import style from "@khenzii-dev/styles/home.module.scss";
 
 const Home = () => {
     const [logoAnimationFinished, setLogoAnimationFinished] = useState(false);
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
     const mobile = useMobile();
     const {
         data: currentProjectData,
@@ -35,6 +38,24 @@ const Home = () => {
 
     return (
         <Flex direction={"column"} gap={20} className={style.container}>
+            <Dialog
+                title={"My other accounts"}
+                open={isDialogOpen}
+                onClose={() => setIsDialogOpen(false)}
+            >
+                <Flex className={style.dialog_container}>
+                    {accounts.map((account, index) => (
+                        <Paragraph
+                            key={`account-${index}`}
+                            fontSize={1.25}
+                            styles={{ lineBreak: "anywhere" }}
+                        >
+                            {account.siteName} - <Anchor href={account.href} darkenOnHover newTab>{account.hrefText}</Anchor>
+                        </Paragraph>
+                    ))}
+                </Flex>
+            </Dialog>
+
             <Flex direction={"column"} align={"center"} gap={0}>
                 <Logo animate={true} size={mobile ? 275 : 300} />
 
@@ -102,6 +123,8 @@ const Home = () => {
                             {" route."}
                         </Paragraph>
                     </Flex>
+                    
+                    <Contact openDialog={() => setIsDialogOpen(true)} />
                 </Flex>
             </FadeIn>
         </Flex>

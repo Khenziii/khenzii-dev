@@ -1,5 +1,11 @@
 @import "./constants.scss";
 
+.dialog_container {
+  height: min(50vh, 50rem);
+  width: min(75vw, 30rem);
+  overflow: scroll;
+}
+
 .container {
     margin-block: $defaultGap;
 }
