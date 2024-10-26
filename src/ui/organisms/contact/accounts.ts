@@ -46,6 +46,11 @@ export const accounts: account[] = [
         hrefText: "monkeytype.com/profile/khenzii",
     },
     {
+        siteName: "wakatime",
+        href: "https://wakatime.com/@khenzii",
+        hrefText: "wakatime.com/@khenzii",
+    },
+    {
         siteName: "lichess",
         href: "https://lichess.org/@/khenzii",
         hrefText: "lichess.org/@/khenzii",
