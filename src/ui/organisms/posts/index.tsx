@@ -99,7 +99,7 @@ export const Posts = () => {
             gap={20}
         >
             <Flex direction="column" align="flex-start" fullWidth>
-                <Header>Filter</Header>
+                <Header variant="secondary" fontSize={mobile ? 1.5 : 2}>Filter</Header>
                 <Paragraph fontSize={mobile ? 1.5 : 1.75}>Click the tags to filter posts!</Paragraph>
                 <Paragraph fontSize={mobile ? 1.25 : 1.5}><i>* Any post with at least one of the selected tags will show up.</i></Paragraph>
 
@@ -127,13 +127,13 @@ export const Posts = () => {
                             justify={"center"}
                         >
                             <Paragraph
-                                fontSize={2}
+                                fontSize={mobile ? 1.75 : 2}
                                 styles={mobile
                                     ? {}
                                     : {
                                         whiteSpace: "nowrap",
-                                        textOverflow: "ellipsis",
                                         overflow: "hidden",
+                                        textOverflow: "ellipsis",
                                     }
                                 }
                             >
