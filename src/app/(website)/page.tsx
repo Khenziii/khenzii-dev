@@ -43,7 +43,7 @@ const Home = () => {
                 open={isDialogOpen}
                 onClose={() => setIsDialogOpen(false)}
             >
-                <Flex className={style.dialog_container}>
+                <Flex className={style.dialog_container} direction="column">
                     {accounts.map((account, index) => (
                         <Paragraph
                             key={`account-${index}`}
