@@ -36,6 +36,16 @@ export const accounts: account[] = [
         hrefText: "letterboxd.com/khenzii",
     },
     {
+        siteName: "serializd",
+        href: "https://serializd.com/user/khenzii",
+        hrefText: "serializd.com/user/khenzii",
+    },
+    {
+        siteName: "the movie db",
+        href: "https://themoviedb.org/u/khenzii",
+        hrefText: "themoviedb.org/u/khenzii",
+    },
+    {
         siteName: "pinterest",
         href: "https://pinterest.com/khenziii",
         hrefText: "pinterest.com/khenziii",
