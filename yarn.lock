@@ -12547,6 +12547,7 @@ __metadata:
     jest-environment-jsdom: "npm:^29.7.0"
     next: "npm:^14.1.1"
     next-auth: "npm:^4.24.7"
+    next-plausible: "npm:^3.12.2"
     prisma: "npm:^5.6.0"
     react: "npm:18.2.0"
     react-dom: "npm:18.2.0"
@@ -13705,6 +13706,17 @@ __metadata:
     nodemailer:
       optional: true
   checksum: 10c0/40c5f51e02141615069d422431a4906c38f6050b29f654ecc99a92fd3c974958535eb7c5f7bbc3dfd2e5996825d7c4f20d8ca68f372e2f9aad2131701cb95b7d
+  languageName: node
+  linkType: hard
+
+"next-plausible@npm:^3.12.2":
+  version: 3.12.2
+  resolution: "next-plausible@npm:3.12.2"
+  peerDependencies:
+    next: ^11.1.0 || ^12.0.0 || ^13.0.0 || ^14.0.0
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+  checksum: 10c0/eba52d73ddd849c79e26c63920e40a5267f00f4373d76c06b232aa40499c20c190982fd6aed0587e36b712d28bd4343698af3bd094dd0705580471023388c8ff
   languageName: node
   linkType: hard
 

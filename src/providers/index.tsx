@@ -8,6 +8,7 @@ import { TRPCProvider } from "./trpc_provider";
 import { SessionProviderWrapper } from "./session_provider_wrapper";
 import { IsNotFoundProvider } from "./is_not_found_provider";
 import { AreSocialsOpenProvider } from "./are_socials_open_provider";
+import PlausibleProvider from "next-plausible";
 
 export type ProvidersProps = {
     children: ReactNode;
@@ -18,7 +19,15 @@ export const Providers: FC<ProvidersProps> = ({ children }) => (
         <SessionProviderWrapper>
             <IsNotFoundProvider>
                 <AreSocialsOpenProvider>
-                    {children}
+                    <PlausibleProvider
+                        domain={"khenzii.dev"}
+                        customDomain={"https://plausible.khenzii.dev"}
+                        selfHosted
+                        trackOutboundLinks
+                        trackFileDownloads
+                    >
+                        {children}
+                    </PlausibleProvider>
                 </AreSocialsOpenProvider>
             </IsNotFoundProvider>
         </SessionProviderWrapper>
