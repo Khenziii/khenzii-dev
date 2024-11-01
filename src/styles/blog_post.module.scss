@@ -1,7 +1,7 @@
 @import "./constants.scss";
 
 .post_container {
-  margin-top: $defaultGap;
+  margin-block: $defaultGap;
   width: min($maxContentWidth, 90vw);
 }
 
