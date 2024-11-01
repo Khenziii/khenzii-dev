@@ -116,6 +116,11 @@ export const accounts: account[] = [
         hrefText: "bsky.app/profile/khenzii.bsky.social",
     },
     {
+        siteName: "mastodon",
+        href: "https://mastodon.social/@khenzii",
+        hrefText: "mastodon.social/@khenzii",
+    },
+    {
         siteName: "nixos discourse",
         href: "https://discourse.nixos.org/u/khenzii",
         hrefText: "discourse.nixos.org/u/khenzii",
