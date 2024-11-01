@@ -111,6 +111,11 @@ export const accounts: account[] = [
         hrefText: "codeberg.org/khenzii",
     },
     {
+        siteName: "bluesky",
+        href: "https://bsky.app/profile/khenzii.bsky.social",
+        hrefText: "bsky.app/profile/khenzii.bsky.social",
+    },
+    {
         siteName: "nixos discourse",
         href: "https://discourse.nixos.org/u/khenzii",
         hrefText: "discourse.nixos.org/u/khenzii",
