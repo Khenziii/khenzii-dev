@@ -111,6 +111,11 @@ export const accounts: account[] = [
         hrefText: "codeberg.org/khenzii",
     },
     {
+        siteName: "matrix",
+        href: "https://matrix.to/#/@khenzii:matrix.org",
+        hrefText: "matrix.to/#/@khenzii:matrix.org",
+    },
+    {
         siteName: "bluesky",
         href: "https://bsky.app/profile/khenzii.bsky.social",
         hrefText: "bsky.app/profile/khenzii.bsky.social",
