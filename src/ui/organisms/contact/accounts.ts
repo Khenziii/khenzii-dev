@@ -1,10 +1,10 @@
-export type account = {
+export type Account = {
     siteName: string;
     href: string;
     hrefText: string;
 };
 
-export const accounts: account[] = [
+export const accounts: Account[] = [
     {
         siteName: "mail",
         href: "mailto:khenzii.was.taken@gmail.com",
@@ -156,14 +156,24 @@ export const accounts: account[] = [
         hrefText: "medal.tv/u/khenzii",
     },
     {
-        siteName: "opencollective",
-        href: "https://opencollective.com/khenzii",
-        hrefText: "opencollective.com/khenzii",
-    },
-    {
         siteName: "pastebin",
         href: "https://pastebin.com/u/khenziii",
         hrefText: "pastebin.com/u/khenziii",
+    },
+    {
+        siteName: "daily.dev",
+        href: "https://app.daily.dev/khenzii",
+        hrefText: "app.daily.dev/khenzii",
+    },
+    {
+        siteName: "goodreads",
+        href: "https://goodreads.com/khenzii",
+        hrefText: "goodreads.com/khenzii",
+    },
+    {
+        siteName: "opencollective",
+        href: "https://opencollective.com/khenzii",
+        hrefText: "opencollective.com/khenzii",
     },
     {
         siteName: "sketchfab",
