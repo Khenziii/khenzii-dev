@@ -126,6 +126,11 @@ export const accounts: Account[] = [
         hrefText: "mastodon.social/@khenzii",
     },
     {
+        siteName: "pcpartpicker",
+        href: "https://pcpartpicker.com/user/khenzii",
+        hrefText: "pcpartpicker.com/user/khenzii",
+    },
+    {
         siteName: "nixos discourse",
         href: "https://discourse.nixos.org/u/khenzii",
         hrefText: "discourse.nixos.org/u/khenzii",
