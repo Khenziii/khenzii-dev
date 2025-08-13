@@ -1,0 +1,10 @@
+@import "../../../styles/constants.scss";
+
+.list-item {
+    color: $text;
+    list-style-position: inside;
+
+    &::marker {
+        color: $primary;
+    }
+}

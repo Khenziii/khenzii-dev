@@ -46,7 +46,7 @@ export const AdminLogin: FC = () => {
     const handleKeyDownPassword: KeyboardEventHandler = useCallback((event) => {
         if (!emailInput.current) return;
 
-        if (event.key == "ArrowUp") emailInput.current.focus();
+        if (event.key === "ArrowUp") emailInput.current.focus();
     }, []);
 
     // eslint-disable-next-line
