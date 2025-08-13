@@ -1,26 +1,15 @@
-import type { ReactNode, FC } from "react";
-import { clsx } from "clsx";
-import { type CustomStyles } from "../../types";
-import styles from "./index.module.scss";
+import { PrimitiveListItem, type PrimitiveListItemProps } from "@khenzii-dev/ui/atoms";
+import type { StoriesType } from "@khenzii-dev/ui/types";
 
-export type PrimitiveListItemProps = CustomStyles & {
-    children: ReactNode;
-    level?: number;
+export default {
+    component: PrimitiveListItem,
+    title: 'PrimitiveListItem',
+    tags: ['autodocs'],
 };
 
-export const PrimitiveListItem: FC<PrimitiveListItemProps> = ({
-    children,
-    level = 1,
-    className,
-    style,
-}) => (
-    <li
-        className={clsx([
-            styles["list-item"],
-            { [className as string]: className !== undefined },
-        ])}
-        style={{ marginLeft: `${(level - 1) * 10}px`, ...style }}
-    >
-        {children}
-    </li>
-);
+export const Default: StoriesType<PrimitiveListItemProps> = {
+    args: {
+        level: 0,
+        children: "I'm a list item!",
+    },
+};
