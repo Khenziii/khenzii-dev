@@ -2,6 +2,10 @@
 
 .anchor {
     color: $text;
+
+    &:visited {
+        color: $text;
+    }
 }
 
 .darkenOnHover {

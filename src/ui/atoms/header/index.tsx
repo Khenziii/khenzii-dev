@@ -35,7 +35,7 @@ export const Header: FC<HeaderProps> = ({ children, fontSize = 2, variant = "pri
         >
             <hr
                 className={style.line_secondary}
-                style={{ height: `${fontSize}rem`, width: `${fontSize * 0.25}rem` }}
+                style={{ height: `${fontSize}rem`, minWidth: `${fontSize * 0.25}rem` }}
             />
             <Paragraph fontSize={fontSize}>{children}</Paragraph>
         </Flex>
