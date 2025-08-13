@@ -59,7 +59,7 @@ export const authOptions: NextAuthOptions = {
                 password: { type: "password" },
             },
             async authorize(credentials): Promise<User | null> {
-                if (env.ENV == "test") return authenticate({
+                if (env.ENV === "test") return authenticate({
                     id: "test-user",
                     email: "test.user@mail.com",
                     name: "Test User",

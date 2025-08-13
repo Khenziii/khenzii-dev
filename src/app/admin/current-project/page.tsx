@@ -73,7 +73,7 @@ const AdminCurrentProject = () => {
     const handleKeyDownProjectDescriptionInput: KeyboardEventHandler = useCallback((event) => {
         if (!projectNameInput.current) return;
 
-        if (event.key == "ArrowUp") projectNameInput.current.focus();
+        if (event.key === "ArrowUp") projectNameInput.current.focus();
     }, []);
 
     const onAddProjectDialogOpen = useCallback(() => {

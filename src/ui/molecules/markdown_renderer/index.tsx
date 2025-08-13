@@ -1,4 +1,4 @@
-import { type FC, type ReactNode } from "react";
+import type { ReactElement, FC, ReactNode, CSSProperties } from "react";
 import Markdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import {
@@ -10,20 +10,25 @@ import {
 } from "@khenzii-dev/ui/atoms";
 import styles from "./index.module.scss";
 
+const getCommonTextStyles = (sizeMultiplier: number): CSSProperties => ({
+    fontSize: `${1.25 * sizeMultiplier}rem`,
+    fontWeight: 500,
+});
+
 type MultimediaProps = {
     children: ReactNode;
     additionalText?: string;
     sizeMultiplier?: number;
 };
 
-export const Multimedia: FC<MultimediaProps> = ({ children, additionalText, sizeMultiplier = 1 }) => (
+const Multimedia: FC<MultimediaProps> = ({ children, additionalText, sizeMultiplier = 1 }) => (
     <Flex direction={"column"} align={"center"} className={styles["multimedia-container"]} gap={10}>
         {children}
 
         {additionalText && (
             <Paragraph
                 fontSize={1 * sizeMultiplier}
-                styles={{ fontWeight: 500, fontStyle: "italic", textAlign: "center" }}
+                styles={{ fontStyle: "italic", textAlign: "center", fontWeight: 500 }}
             >
                 {additionalText}
             </Paragraph>
@@ -44,7 +49,13 @@ export const MarkdownRenderer: FC<MarkdownRendererProps> = ({ children, sizeMult
             h1: ({ children }) => <Header fontSize={1.75 * sizeMultiplier}>{children}</Header>,
             h2: ({ children }) => <Header variant={"secondary"} fontSize={1.5 * sizeMultiplier}>{children}</Header>,
             h3: ({ children }) => <Header variant={"secondary"} fontSize={1.25 * sizeMultiplier}>{children}</Header>,
-            p: ({ children }) => <Paragraph fontSize={1.25 * sizeMultiplier} styles={{ fontWeight: 500 }}>{children}</Paragraph>,
+            p: ({ children }) => {
+                const isImage = typeof children !== "string" && typeof (children as unknown[])?.[0] !== "string";
+
+                return isImage
+                    ? children as unknown as ReactElement
+                    : <Paragraph styles={getCommonTextStyles(sizeMultiplier)}>{children}</Paragraph>;
+            },
             img: ({ src, alt }) => (
                 <Multimedia additionalText={alt} sizeMultiplier={sizeMultiplier}>
                     <img src={src} alt={alt} />
@@ -58,15 +69,40 @@ export const MarkdownRenderer: FC<MarkdownRendererProps> = ({ children, sizeMult
                     </video>
                 </Multimedia>
             ),
-            a: ({ children, href }) => <Anchor href={href ?? ""} darkenOnHover newTab>{children}</Anchor>,
+            a: ({ children, href }) => (
+                <Anchor
+                    href={href ?? ""}
+                    styles={getCommonTextStyles(sizeMultiplier)}
+                    darkenOnHover
+                    newTab
+                >
+                    {children}
+                </Anchor>
+            ),
             ul: ({ children }) => <ul style={{ paddingLeft: 0 }}>{children}</ul>,
             li: ({ children, node }) => (
                 <PrimitiveListItem
                     level={node?.position?.start.column}
-                    styles={{ fontSize: `${1.25 * sizeMultiplier}rem`, fontWeight: 500 }}
+                    styles={getCommonTextStyles(sizeMultiplier)}
                 >
                     {children}
                 </PrimitiveListItem>
+            ),
+            em: ({ children }) => (
+                <em
+                    style={getCommonTextStyles(sizeMultiplier)}
+                    className={styles["common-text"]}
+                >
+                    {children}
+                </em>
+            ),
+            strong: ({ children }) => (
+                <strong
+                    style={getCommonTextStyles(sizeMultiplier)}
+                    className={styles["common-text"]}
+                >
+                    {children}
+                </strong>
             ),
         }}
     >
