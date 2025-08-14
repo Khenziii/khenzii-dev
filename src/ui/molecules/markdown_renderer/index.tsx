@@ -12,7 +12,6 @@ import styles from "./index.module.scss";
 
 const getCommonTextStyles = (sizeMultiplier: number): CSSProperties => ({
     fontSize: `${1.25 * sizeMultiplier}rem`,
-    fontWeight: 500,
 });
 
 type MultimediaProps = {
@@ -54,7 +53,7 @@ export const MarkdownRenderer: FC<MarkdownRendererProps> = ({ children, sizeMult
 
                 return isImage
                     ? children as unknown as ReactElement
-                    : <Paragraph styles={getCommonTextStyles(sizeMultiplier)}>{children}</Paragraph>;
+                    : <Paragraph styles={{ ...getCommonTextStyles(sizeMultiplier), fontWeight: 500 }}>{children}</Paragraph>;
             },
             img: ({ src, alt }) => (
                 <Multimedia additionalText={alt} sizeMultiplier={sizeMultiplier}>
@@ -73,6 +72,7 @@ export const MarkdownRenderer: FC<MarkdownRendererProps> = ({ children, sizeMult
                 <Anchor
                     href={href ?? ""}
                     styles={getCommonTextStyles(sizeMultiplier)}
+                    className={styles["common-text"]}
                     darkenOnHover
                     newTab
                 >
@@ -84,6 +84,7 @@ export const MarkdownRenderer: FC<MarkdownRendererProps> = ({ children, sizeMult
                 <PrimitiveListItem
                     level={node?.position?.start.column}
                     styles={getCommonTextStyles(sizeMultiplier)}
+                    className={styles["common-text"]}
                 >
                     {children}
                 </PrimitiveListItem>
@@ -99,7 +100,7 @@ export const MarkdownRenderer: FC<MarkdownRendererProps> = ({ children, sizeMult
             strong: ({ children }) => (
                 <strong
                     style={getCommonTextStyles(sizeMultiplier)}
-                    className={styles["common-text"]}
+                    className={styles["common-text-strong"]}
                 >
                     {children}
                 </strong>

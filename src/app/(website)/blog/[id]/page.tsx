@@ -130,7 +130,7 @@ const BlogPost: FC<BlogPostProps> = ({ params }) => {
                 showOnlyActive
             />
 
-            <MarkdownRenderer>{postData.content}</MarkdownRenderer>
+            <MarkdownRenderer sizeMultiplier={mobile ? 0.85 : 1}>{postData.content}</MarkdownRenderer>
         </Flex>
     );
 };
