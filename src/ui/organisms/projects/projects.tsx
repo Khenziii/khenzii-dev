@@ -39,8 +39,8 @@ export const projects: project[] = [
         websiteUrl: "https://khenzii.dev/",
         dates: [
             [new Date(2023, 7), new Date(2023, 9)],
-            // TODO: ...
-            [new Date(2024, 1)],
+            [new Date(2024, 1), new Date(2024, 4)],
+            [new Date(2024, 7), new Date(2024, 8)],
         ],
         topLeftComponent: <Icon iconName={"globe2"} size={2} />,
         role: projectRole.FOUNDER,
@@ -69,9 +69,8 @@ export const projects: project[] = [
         // TODO: ...
         backgroundGradient: "linear-gradient(270deg, #000, #000)",
         githubRepoUrl: "https://github.com/Khenziii/snake-ai",
-        // TODO: ...
         dates: [
-            [new Date(1970), new Date(1970)],
+            [new Date(2024, 2, 17), new Date(2024, 2, 31)],
         ],
         topLeftComponent: <Image
             alt={"snake AI logo"}
@@ -88,9 +87,8 @@ export const projects: project[] = [
         // TODO: ...
         backgroundGradient: "linear-gradient(270deg, #000, #000)",
         githubRepoUrl: "https://github.com/khenziii/korwin-portable",
-        // TODO: ...
         dates: [
-            [new Date(1970), new Date(1970)],
+            [new Date(2024, 8, 20), new Date(2024, 8, 26)],
         ],
         topLeftComponent: <Image
             alt={"three arrows"}
@@ -107,7 +105,7 @@ export const projects: project[] = [
         backgroundGradient: "linear-gradient(270deg, #000, #000)",
         githubRepoUrl: "https://github.com/khenziii/space-pics",
         dates: [
-            [new Date(1970), new Date(1970)],
+            [new Date(2024, 2, 24), new Date(2024, 3, 14)],
         ],
         topLeftComponent: <Icon iconName={"stars"} size={2} />,
         role: projectRole.FOUNDER,
@@ -118,9 +116,8 @@ export const projects: project[] = [
         // TODO: ...
         backgroundGradient: "linear-gradient(270deg, #000, #000)",
         githubRepoUrl: "https://github.com/khenziii/guess-the-number-asm",
-        // TODO: ...
         dates: [
-            [new Date(1970), new Date(1970)],
+            [new Date(2024, 6, 30), new Date(2024, 7, 6)],
         ],
         topLeftComponent: <Icon iconName={"gear-fill"} size={2} />,
         role: projectRole.FOUNDER,
@@ -131,9 +128,8 @@ export const projects: project[] = [
         // TODO: ...
         backgroundGradient: "linear-gradient(270deg, #000, #000)",
         githubRepoUrl: "https://github.com/khenziii/mnta",
-        // TODO: ...
         dates: [
-            [new Date(1970), new Date(1970)],
+            [new Date(2025, 4), new Date(2025, 6)],
         ],
         topLeftComponent: <Icon iconName={"sticky-fill"} size={2} />,
         role: projectRole.FOUNDER,
@@ -144,9 +140,8 @@ export const projects: project[] = [
         // TODO: ...
         backgroundGradient: "linear-gradient(270deg, #000, #000)",
         githubRepoUrl: "https://github.com/khenziii/croissantdealer",
-        // TODO: ...
         dates: [
-            [new Date(1970), new Date(1970)],
+            [new Date(2023, 9, 15), new Date(2023, 9, 31)],
         ],
         topLeftComponent: <Icon iconName={"cpu-fill"} size={2} />,
         role: projectRole.FOUNDER,
@@ -157,9 +152,8 @@ export const projects: project[] = [
         // TODO: ...
         backgroundGradient: "linear-gradient(270deg, #000, #000)",
         githubRepoUrl: "https://github.com/khenziii/nixos-config",
-        // TODO: ...
         dates: [
-            [new Date(1970), new Date(1970)],
+            [new Date(2024, 2)],
         ],
         topLeftComponent: <Icon iconName={"snow"} size={2} />,
         role: projectRole.FOUNDER,
