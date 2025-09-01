@@ -73,8 +73,13 @@ export const projects: project[] = [
         dates: [
             [new Date(1970), new Date(1970)],
         ],
-        // TODO: ...
-        topLeftComponent: <></>,
+        topLeftComponent: <Image
+            alt={"snake AI logo"}
+            src={"/snake-ai-logo.svg"}
+            width={200}
+            height={200}
+            style={{ maxWidth: "2rem", maxHeight: "2rem" }}
+        />,
         role: projectRole.FOUNDER,
     },
     {
@@ -87,20 +92,24 @@ export const projects: project[] = [
         dates: [
             [new Date(1970), new Date(1970)],
         ],
-        topLeftComponent: <></>,
+        topLeftComponent: <Image
+            alt={"three arrows"}
+            src={"/three-arrows.svg"}
+            width={200}
+            height={200}
+            style={{ maxWidth: "2rem", maxHeight: "2rem" }}
+        />,
         role: projectRole.FOUNDER,
     },
     {
         name: "space-pics",
         description: <SpacePicsDescription />,
-        // TODO: ...
         backgroundGradient: "linear-gradient(270deg, #000, #000)",
         githubRepoUrl: "https://github.com/khenziii/space-pics",
-        // TODO: ...
         dates: [
             [new Date(1970), new Date(1970)],
         ],
-        topLeftComponent: <></>,
+        topLeftComponent: <Icon iconName={"stars"} size={2} />,
         role: projectRole.FOUNDER,
     },
     {
@@ -113,7 +122,7 @@ export const projects: project[] = [
         dates: [
             [new Date(1970), new Date(1970)],
         ],
-        topLeftComponent: <></>,
+        topLeftComponent: <Icon iconName={"gear-fill"} size={2} />,
         role: projectRole.FOUNDER,
     },
     {
@@ -126,7 +135,7 @@ export const projects: project[] = [
         dates: [
             [new Date(1970), new Date(1970)],
         ],
-        topLeftComponent: <></>,
+        topLeftComponent: <Icon iconName={"sticky-fill"} size={2} />,
         role: projectRole.FOUNDER,
     },
     {
@@ -139,7 +148,7 @@ export const projects: project[] = [
         dates: [
             [new Date(1970), new Date(1970)],
         ],
-        topLeftComponent: <></>,
+        topLeftComponent: <Icon iconName={"cpu-fill"} size={2} />,
         role: projectRole.FOUNDER,
     },
     {
@@ -152,7 +161,7 @@ export const projects: project[] = [
         dates: [
             [new Date(1970), new Date(1970)],
         ],
-        topLeftComponent: <></>,
+        topLeftComponent: <Icon iconName={"snow"} size={2} />,
         role: projectRole.FOUNDER,
     },
 ];
