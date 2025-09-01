@@ -3,6 +3,13 @@ import {
     KhenziiDevDescription,
     KhenzTiktokbotDescription,
     LolCupDescription,
+    CroissantdealerDescription,
+    GuessTheNumberAsmDescription,
+    KorwinPortableDescription,
+    MntaDescription,
+    NixosConfigDescription,
+    SnakeAiDescription,
+    SpacePicsDescription,
 } from "@khenzii-dev/ui/organisms/projects/descriptions";
 import { Icon } from "@khenzii-dev/ui/atoms";
 import { type project } from ".";
@@ -17,7 +24,7 @@ export const projects: project[] = [
         name: "khenz-tiktokbot",
         description: <KhenzTiktokbotDescription />,
         backgroundGradient: "linear-gradient(270deg, #FF0050, #00F2EA, #000000)",
-        githubRepoUrl: "https://github.com/Khenziii/khenz-tiktokbot",
+        githubRepoUrl: "https://github.com/khenziii/khenz-tiktokbot",
         dates: [
             [new Date(2023, 4), new Date(2023, 7)],
         ],
@@ -28,10 +35,11 @@ export const projects: project[] = [
         name: "khenzii.dev",
         description: <KhenziiDevDescription />,
         backgroundGradient: "linear-gradient(270deg, #FFFFFF, #20201f)",
-        githubRepoUrl: "https://github.com/Khenziii/khenzii-dev",
+        githubRepoUrl: "https://github.com/khenziii/khenzii-dev",
         websiteUrl: "https://khenzii.dev/",
         dates: [
             [new Date(2023, 7), new Date(2023, 9)],
+            // TODO: ...
             [new Date(2024, 1)],
         ],
         topLeftComponent: <Icon iconName={"globe2"} size={2} />,
@@ -43,7 +51,8 @@ export const projects: project[] = [
         backgroundGradient: "linear-gradient(270deg, #1AFFAF, #111112)",
         websiteUrl: "https://lolcup.zsl.gda.pl/",
         dates: [
-            [new Date(2023, 9), new Date(2024, 1)],
+            [new Date(2023, 8), new Date(2024, 1)],
+            [new Date(2024, 8), new Date(2025, 4)],
         ],
         topLeftComponent: <Image
             alt={"lol-cup 2024 Logo"}
@@ -53,5 +62,97 @@ export const projects: project[] = [
             style={{ maxWidth: "2rem", maxHeight: "2rem" }}
         />,
         role: projectRole.CONTRIBUTOR,
+    },
+    {
+        name: "snake-ai",
+        description: <SnakeAiDescription />,
+        // TODO: ...
+        backgroundGradient: "linear-gradient(270deg, #000, #000)",
+        githubRepoUrl: "https://github.com/Khenziii/snake-ai",
+        // TODO: ...
+        dates: [
+            [new Date(1970), new Date(1970)],
+        ],
+        // TODO: ...
+        topLeftComponent: <></>,
+        role: projectRole.FOUNDER,
+    },
+    {
+        name: "korwin-portable",
+        description: <KorwinPortableDescription />,
+        // TODO: ...
+        backgroundGradient: "linear-gradient(270deg, #000, #000)",
+        githubRepoUrl: "https://github.com/khenziii/korwin-portable",
+        // TODO: ...
+        dates: [
+            [new Date(1970), new Date(1970)],
+        ],
+        topLeftComponent: <></>,
+        role: projectRole.FOUNDER,
+    },
+    {
+        name: "space-pics",
+        description: <SpacePicsDescription />,
+        // TODO: ...
+        backgroundGradient: "linear-gradient(270deg, #000, #000)",
+        githubRepoUrl: "https://github.com/khenziii/space-pics",
+        // TODO: ...
+        dates: [
+            [new Date(1970), new Date(1970)],
+        ],
+        topLeftComponent: <></>,
+        role: projectRole.FOUNDER,
+    },
+    {
+        name: "guess-the-number-asm",
+        description: <GuessTheNumberAsmDescription />,
+        // TODO: ...
+        backgroundGradient: "linear-gradient(270deg, #000, #000)",
+        githubRepoUrl: "https://github.com/khenziii/guess-the-number-asm",
+        // TODO: ...
+        dates: [
+            [new Date(1970), new Date(1970)],
+        ],
+        topLeftComponent: <></>,
+        role: projectRole.FOUNDER,
+    },
+    {
+        name: "mnta",
+        description: <MntaDescription />,
+        // TODO: ...
+        backgroundGradient: "linear-gradient(270deg, #000, #000)",
+        githubRepoUrl: "https://github.com/khenziii/mnta",
+        // TODO: ...
+        dates: [
+            [new Date(1970), new Date(1970)],
+        ],
+        topLeftComponent: <></>,
+        role: projectRole.FOUNDER,
+    },
+    {
+        name: "croissantdealer",
+        description: <CroissantdealerDescription />,
+        // TODO: ...
+        backgroundGradient: "linear-gradient(270deg, #000, #000)",
+        githubRepoUrl: "https://github.com/khenziii/croissantdealer",
+        // TODO: ...
+        dates: [
+            [new Date(1970), new Date(1970)],
+        ],
+        topLeftComponent: <></>,
+        role: projectRole.FOUNDER,
+    },
+    {
+        name: "nixos-config",
+        description: <NixosConfigDescription />,
+        // TODO: ...
+        backgroundGradient: "linear-gradient(270deg, #000, #000)",
+        githubRepoUrl: "https://github.com/khenziii/nixos-config",
+        // TODO: ...
+        dates: [
+            [new Date(1970), new Date(1970)],
+        ],
+        topLeftComponent: <></>,
+        role: projectRole.FOUNDER,
     },
 ];

@@ -9,7 +9,9 @@ const WebsiteLayout: FC<{ children: ReactNode }> = ({ children }) => (
         </nav>
 
         <main className={style.content}>
-            {children}
+            <div className={style.content_container}>
+                {children}
+            </div>
         </main>
 
         <footer className={style.footer}>
