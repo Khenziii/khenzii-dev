@@ -66,8 +66,7 @@ export const projects: project[] = [
     {
         name: "snake-ai",
         description: <SnakeAiDescription />,
-        // TODO: ...
-        backgroundGradient: "linear-gradient(270deg, #000, #000)",
+        backgroundGradient: "linear-gradient(270deg, #FFFFFF, #CCCCCC, #FF0000)",
         githubRepoUrl: "https://github.com/Khenziii/snake-ai",
         dates: [
             [new Date(2024, 2, 17), new Date(2024, 2, 31)],
@@ -84,8 +83,7 @@ export const projects: project[] = [
     {
         name: "korwin-portable",
         description: <KorwinPortableDescription />,
-        // TODO: ...
-        backgroundGradient: "linear-gradient(270deg, #000, #000)",
+        backgroundGradient: "linear-gradient(270deg, #A97BFF)",
         githubRepoUrl: "https://github.com/khenziii/korwin-portable",
         dates: [
             [new Date(2024, 8, 20), new Date(2024, 8, 26)],
@@ -102,7 +100,7 @@ export const projects: project[] = [
     {
         name: "space-pics",
         description: <SpacePicsDescription />,
-        backgroundGradient: "linear-gradient(270deg, #000, #000)",
+        backgroundGradient: "linear-gradient(270deg, #3572A5)",
         githubRepoUrl: "https://github.com/khenziii/space-pics",
         dates: [
             [new Date(2024, 2, 24), new Date(2024, 3, 14)],
@@ -113,8 +111,7 @@ export const projects: project[] = [
     {
         name: "guess-the-number-asm",
         description: <GuessTheNumberAsmDescription />,
-        // TODO: ...
-        backgroundGradient: "linear-gradient(270deg, #000, #000)",
+        backgroundGradient: "linear-gradient(270deg, #6E4C13)",
         githubRepoUrl: "https://github.com/khenziii/guess-the-number-asm",
         dates: [
             [new Date(2024, 6, 30), new Date(2024, 7, 6)],
@@ -125,8 +122,7 @@ export const projects: project[] = [
     {
         name: "mnta",
         description: <MntaDescription />,
-        // TODO: ...
-        backgroundGradient: "linear-gradient(270deg, #000, #000)",
+        backgroundGradient: "linear-gradient(270deg, #555555)",
         githubRepoUrl: "https://github.com/khenziii/mnta",
         dates: [
             [new Date(2025, 4), new Date(2025, 6)],
@@ -137,8 +133,7 @@ export const projects: project[] = [
     {
         name: "croissantdealer",
         description: <CroissantdealerDescription />,
-        // TODO: ...
-        backgroundGradient: "linear-gradient(270deg, #000, #000)",
+        backgroundGradient: "linear-gradient(270deg, #FFFFFF)",
         githubRepoUrl: "https://github.com/khenziii/croissantdealer",
         dates: [
             [new Date(2023, 9, 15), new Date(2023, 9, 31)],
@@ -149,8 +144,7 @@ export const projects: project[] = [
     {
         name: "nixos-config",
         description: <NixosConfigDescription />,
-        // TODO: ...
-        backgroundGradient: "linear-gradient(270deg, #000, #000)",
+        backgroundGradient: "linear-gradient(270deg, #5073bd, #7eb7e2)",
         githubRepoUrl: "https://github.com/khenziii/nixos-config",
         dates: [
             [new Date(2024, 2)],
