@@ -5,9 +5,11 @@ import style from "./index.module.scss";
 
 type position = "flex-start" | "center" | "flex-end";
 
+export type FlexDirection = "column" | "column-reverse" | "row" | "row-reverse";
+
 export type FlexProps = {
     children?: ReactNode;
-    direction?: "column" | "column-reverse" | "row" | "row-reverse";
+    direction?: FlexDirection;
     align?: position;
     justify?: position | "space-between" | "space-around";
     gap?: number;

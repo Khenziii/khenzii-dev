@@ -117,7 +117,7 @@ export const Projects = () => {
     }, [currentSortOption, sort]);
 
     return (
-        <Flex direction={"column"} styles={{ marginTop: "10px" }}>
+        <>
             <Flex direction={"column"} align={"center"}>
                 <Paragraph fontSize={1.25}>Sort by:</Paragraph>
 
@@ -136,6 +136,6 @@ export const Projects = () => {
                     <Project canBeExpanded={canProjectsBeExpanded} {...project} key={`project-${project.name}`} />
                 ))}
             </div>
-        </Flex>
+        </>
     );
 };
