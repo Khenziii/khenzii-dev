@@ -56,7 +56,7 @@ export const projects: project[] = [
         ],
         topLeftComponent: <Image
             alt={"lol-cup 2024 Logo"}
-            src={"/lolcup-2024-logo.svg"}
+            src={"/projects/lolcup-2024-logo.svg"}
             width={200}
             height={200}
             style={{ maxWidth: "2rem", maxHeight: "2rem" }}
@@ -73,7 +73,7 @@ export const projects: project[] = [
         ],
         topLeftComponent: <Image
             alt={"snake AI logo"}
-            src={"/snake-ai-logo.svg"}
+            src={"/projects/snake-ai-logo.svg"}
             width={200}
             height={200}
             style={{ maxWidth: "2rem", maxHeight: "2rem" }}
@@ -90,7 +90,7 @@ export const projects: project[] = [
         ],
         topLeftComponent: <Image
             alt={"three arrows"}
-            src={"/three-arrows.svg"}
+            src={"/projects/three-arrows.svg"}
             width={200}
             height={200}
             style={{ maxWidth: "2rem", maxHeight: "2rem" }}

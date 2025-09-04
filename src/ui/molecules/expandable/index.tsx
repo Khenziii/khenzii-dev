@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { type FC, type ReactNode, useState, useEffect } from "react";
 import { AnimatePresence, motion, type Variants, type Transition } from "framer-motion";

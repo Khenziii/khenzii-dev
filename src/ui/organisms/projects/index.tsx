@@ -1,7 +1,16 @@
 "use client";
 
 import { type ReactNode, useEffect, useState, useCallback } from "react";
-import { Flex, type option, Paragraph, Select, SelectContext } from "@khenzii-dev/ui/atoms";
+import {
+    type option,
+    Anchor,
+    Flex,
+    Paragraph,
+    Select,
+    SelectContext,
+    Header,
+} from "@khenzii-dev/ui/atoms";
+import { useMobile } from "@khenzii-dev/hooks";
 import { Project } from "./project";
 import { type projectRole, projects as definedProjectsArray } from "./projects";
 
@@ -85,6 +94,7 @@ export const Projects = () => {
     const [projectsArray, setProjectsArray] = useState<project[]>(projects);
     const [hasChangedSortingOrder, setHasChangedSortingOrder] = useState(false);
     const [canProjectsBeExpanded, setCanProjectsBeExpanded] = useState(true);
+    const mobile = useMobile();
 
     const sort = useCallback(
         (currentSortOption: option): { waitTimeout: number; sortedProjects: project[] } => {
@@ -92,12 +102,12 @@ export const Projects = () => {
 
             if (hasChangedSortingOrder) {
                 setCanProjectsBeExpanded(false);
-    
+
                 setTimeout(() => {
                     setCanProjectsBeExpanded(true);
                 }, collapseTimeMs);
             }
-    
+
             const sorted = sortProjects(projects, currentSortOption);
             return {
                 waitTimeout: hasChangedSortingOrder ? collapseTimeMs : 0,
@@ -118,7 +128,15 @@ export const Projects = () => {
 
     return (
         <>
-            <Flex direction={"column"} align={"center"}>
+            <Header fontSize={mobile ? 1.75 : 2}>{"Projects"}</Header>
+
+            <Paragraph fontSize={1.25} styles={{ textAlign: mobile ? undefined : "center" }}>
+                {"Below are some of my projects. If you want to see the rest of my public ones, feel free to visit my "}
+                <Anchor href={"https://github.com/khenziii"} darkenOnHover newTab>{"GitHub"}</Anchor>
+                {" profile."}
+            </Paragraph>
+
+            <Flex direction={"column"} align={"center"} fullWidth>
                 <Paragraph fontSize={1.25}>Sort by:</Paragraph>
 
                 <SelectContext.Provider value={{ currentOption: currentSortOption, setCurrentOption: setCurrentSortOption }}>
@@ -131,11 +149,11 @@ export const Projects = () => {
                 </SelectContext.Provider>
             </Flex>
 
-            <div>
+            <Flex direction={"column"} align={"center"} gap={0} fullWidth>
                 {projectsArray.map((project) => (
                     <Project canBeExpanded={canProjectsBeExpanded} {...project} key={`project-${project.name}`} />
                 ))}
-            </div>
+            </Flex>
         </>
     );
 };

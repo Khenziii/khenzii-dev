@@ -76,7 +76,15 @@ export const Project: FC<ProjectProps> = ({
                         <Flex direction={"row"} justify={"flex-start"} align={"center"} fullWidth>
                             {topLeftComponent}
 
-                            <Paragraph fontSize={2} styles={{ width: "100%" }}>
+                            <Paragraph
+                                fontSize={2}
+                                styles={{
+                                    width: "100%",
+                                    textOverflow: "ellipsis",
+                                    overflow: "hidden",
+                                    textWrap: "nowrap",
+                                }}
+                            >
                                 {name}
                             </Paragraph>
                         </Flex>

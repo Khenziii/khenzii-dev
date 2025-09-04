@@ -9,7 +9,6 @@ export default {
 
 export const Default: StoriesType<IconsArrayProps> = {
     args: {
-        direction: "row",
         icons: ["github"],
     },
 };

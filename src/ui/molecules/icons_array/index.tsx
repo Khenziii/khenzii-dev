@@ -1,14 +1,14 @@
 import { type ElementType, type FC } from "react";
 import { type IconName } from "@khenzii-dev/ui/types";
-import { type FlexDirection, Icon, Flex } from "@khenzii-dev/ui/atoms";
+import { Icon } from "@khenzii-dev/ui/atoms";
+import style from "./index.module.scss";
 
 export type IconsArrayProps = {
     icons: (IconName | ElementType)[];
-    direction?: FlexDirection;
 };
 
-export const IconsArray: FC<IconsArrayProps> = ({ icons, direction = "row" }) => (
-    <Flex direction={direction}>
+export const IconsArray: FC<IconsArrayProps> = ({ icons }) => (
+    <div className={style.container}>
         {icons.map((PassedIcon, index) => {
             const key = `icon-${index}`;
 
@@ -18,5 +18,5 @@ export const IconsArray: FC<IconsArrayProps> = ({ icons, direction = "row" }) =>
 
             return <PassedIcon key={key} />;
         })}
-    </Flex>
+    </div>
 );
