@@ -1,8 +1,7 @@
 import { Paragraph } from "@khenzii-dev/ui/atoms";
 
-// TODO: ...
 export const MntaDescription = () => <>
     <Paragraph fontSize={1.25}>
-        TODO: finish writing this thing xD
+        {"A native Linux app for taking notes and organizing them."}
     </Paragraph>
 </>;
