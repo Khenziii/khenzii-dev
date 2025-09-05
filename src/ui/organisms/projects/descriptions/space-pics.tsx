@@ -1,8 +1,7 @@
 import { Paragraph } from "@khenzii-dev/ui/atoms";
 
-// TODO: ...
 export const SpacePicsDescription = () => <>
     <Paragraph fontSize={1.25}>
-        TODO: finish writing this thing xD
+        {"Have you ever looked at a photo of space and thought to yourself: \"damn, that looks cool!\"? Well, if so you can follow a Twitter bot I've made that posts them daily."}
     </Paragraph>
 </>;
