@@ -22,7 +22,7 @@ export type project = {
     dates?: [Date, Date?][];
     githubRepoUrl?: string;
     websiteUrl?: string;
-    role?: projectRole;
+    roles?: projectRole[];
 };
 
 export enum sortByEnum {

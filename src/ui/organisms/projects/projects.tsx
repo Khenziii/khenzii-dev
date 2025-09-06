@@ -17,6 +17,7 @@ import { type project } from ".";
 export enum projectRole {
     FOUNDER = "Founder",
     CONTRIBUTOR = "Contributor",
+    MAINTAINER = "Maintainer",
 }
 
 export const projects: project[] = [
@@ -29,7 +30,7 @@ export const projects: project[] = [
             [new Date(2023, 4), new Date(2023, 7)],
         ],
         topLeftComponent: <Icon iconName={"robot"} size={2} />,
-        role: projectRole.FOUNDER,
+        roles: [projectRole.FOUNDER],
     },
     {
         name: "khenzii.dev",
@@ -43,7 +44,7 @@ export const projects: project[] = [
             [new Date(2024, 7), new Date(2024, 8)],
         ],
         topLeftComponent: <Icon iconName={"globe2"} size={2} />,
-        role: projectRole.FOUNDER,
+        roles: [projectRole.FOUNDER],
     },
     {
         name: "lol-cup",
@@ -61,7 +62,7 @@ export const projects: project[] = [
             height={200}
             style={{ maxWidth: "2rem", maxHeight: "2rem" }}
         />,
-        role: projectRole.CONTRIBUTOR,
+        roles: [projectRole.CONTRIBUTOR, projectRole.MAINTAINER],
     },
     {
         name: "snake-ai",
@@ -78,7 +79,7 @@ export const projects: project[] = [
             height={200}
             style={{ maxWidth: "2rem", maxHeight: "2rem" }}
         />,
-        role: projectRole.FOUNDER,
+        roles: [projectRole.FOUNDER],
     },
     {
         name: "korwin-portable",
@@ -95,7 +96,7 @@ export const projects: project[] = [
             height={200}
             style={{ maxWidth: "2rem", maxHeight: "2rem" }}
         />,
-        role: projectRole.FOUNDER,
+        roles: [projectRole.FOUNDER],
     },
     {
         name: "space-pics",
@@ -106,7 +107,7 @@ export const projects: project[] = [
             [new Date(2024, 2, 24), new Date(2024, 3, 14)],
         ],
         topLeftComponent: <Icon iconName={"stars"} size={2} />,
-        role: projectRole.FOUNDER,
+        roles: [projectRole.FOUNDER],
     },
     {
         name: "guess-the-number-asm",
@@ -117,7 +118,7 @@ export const projects: project[] = [
             [new Date(2024, 6, 30), new Date(2024, 7, 6)],
         ],
         topLeftComponent: <Icon iconName={"gear-fill"} size={2} />,
-        role: projectRole.FOUNDER,
+        roles: [projectRole.FOUNDER],
     },
     {
         name: "mnta",
@@ -128,7 +129,7 @@ export const projects: project[] = [
             [new Date(2025, 4), new Date(2025, 6)],
         ],
         topLeftComponent: <Icon iconName={"sticky-fill"} size={2} />,
-        role: projectRole.FOUNDER,
+        roles: [projectRole.FOUNDER],
     },
     {
         name: "croissantdealer",
@@ -139,7 +140,7 @@ export const projects: project[] = [
             [new Date(2023, 9, 15), new Date(2023, 9, 31)],
         ],
         topLeftComponent: <Icon iconName={"cpu-fill"} size={2} />,
-        role: projectRole.FOUNDER,
+        roles: [projectRole.FOUNDER],
     },
     {
         name: "nixos-config",
@@ -150,6 +151,6 @@ export const projects: project[] = [
             [new Date(2024, 2)],
         ],
         topLeftComponent: <Icon iconName={"snow"} size={2} />,
-        role: projectRole.FOUNDER,
+        roles: [projectRole.FOUNDER],
     },
 ];

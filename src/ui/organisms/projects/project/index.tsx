@@ -39,7 +39,7 @@ export const Project: FC<ProjectProps> = ({
     dates,
     githubRepoUrl,
     websiteUrl,
-    role,
+    roles,
     canBeExpanded,
 }) => {
     const searchParams = useSearchParams();
@@ -139,9 +139,9 @@ export const Project: FC<ProjectProps> = ({
                             </Flex>
                         )}
 
-                        {role && (
+                        {(roles?.length ?? 0) >= 1 && (
                             <div className={style.darkenChild}>
-                                <Paragraph>Role: {role}</Paragraph>
+                                <Paragraph>{`${roles?.length === 1 ? "Role:" : "Roles:"} ${roles?.join(", ")}`}</Paragraph>
                             </div>
                         )}
 
