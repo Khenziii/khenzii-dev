@@ -16,6 +16,6 @@ export const KhenzTiktokbotDescription = () => <>
     <Paragraph fontSize={1.25}>
         {"They've been pretty popular around 2023. Upon seeing them, I've noticed that technically it's easy to mass generate content like this, and so I've created "}
         <CodeBlock>{"khenz-tiktokbot"}</CodeBlock>
-        {". I didn't use it too much, as that would bloat social media with auto-generated slop even more, and there are legitimate creators in such spaces that actually deserve viewership, but rather used it as a learning experience. I've experimented with Reddit's API, FFmpeg and web scraping."}
+        {". I didn't use it too much, as that would bloat social media with auto-generated slop even more, and there are legitimate creators in such spaces that actually deserve viewership, but rather used it as a learning experience. I've experimented with Reddit's API, FFmpeg, and web scraping."}
     </Paragraph>
 </>;

@@ -8,7 +8,7 @@ const linkProps = {
 
 export const KhenziiDevDescription = () => <>
     <Paragraph fontSize={1.25}>
-        {"This project is the website that you're browsing right now! If you want to visit the old version, checkout "}
+        {"This project is the website that you're browsing right now! If you want to visit the old version, check out "}
         <Anchor href={"https://old.khenzii.dev"} {...linkProps}>{"old.khenzii.dev"}</Anchor>
         {"."}
     </Paragraph>
