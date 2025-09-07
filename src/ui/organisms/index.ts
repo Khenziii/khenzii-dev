@@ -6,3 +6,5 @@ export * from "./protected_page";
 export * from "./tags";
 export * from "./posts";
 export * from "./contact";
+export * from "./technologies";
+export * from "./markdown_renderer";

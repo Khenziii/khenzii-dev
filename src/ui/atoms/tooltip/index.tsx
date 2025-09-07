@@ -12,7 +12,7 @@ export type TooltipProps = {
     borderColor?: string;
 };
 
-export const Tooltip: FC<TooltipProps> = ({ children, tooltip, transitionDelay = 0.5, backgroundColor = "#171617", borderColor = "#5b5e5e" }) => {
+export const Tooltip: FC<TooltipProps> = ({ children, tooltip, transitionDelay = 0.25, backgroundColor = "#171617", borderColor = "#5b5e5e" }) => {
     const [isVisible, setIsVisible] = useState(false);
     const tooltipStylesheet: CSSProperties = {};
     tooltipStylesheet.backgroundColor = backgroundColor;

@@ -21,8 +21,7 @@ import {
     Loading,
     CodeBlock,
 } from "@khenzii-dev/ui/atoms";
-import { MarkdownRenderer } from "@khenzii-dev/ui/molecules";
-import { Tags, type UITag } from "@khenzii-dev/ui/organisms";
+import { type UITag, Tags, MarkdownRenderer } from "@khenzii-dev/ui/organisms";
 import { type BlogPost } from "@khenzii-dev/server/backend";
 import {
     filterTagsByIds,

@@ -23,6 +23,10 @@
     align-items: center;
 }
 
+.content_container {
+    padding-bottom: $defaultGap;
+}
+
 @media (width <= $mobileWidth) {
     .nav {
         height: $navMobileHeight;

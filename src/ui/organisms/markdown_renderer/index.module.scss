@@ -1,0 +1,23 @@
+@import "../../../styles/constants";
+
+@mixin defaultTextStylesToParagraph {
+  font-weight: inherit !important;
+  font-size: inherit !important;
+}
+
+.common-text {
+  color: $text;
+  font-weight: 500;
+}
+
+p .common-text {
+  @include defaultTextStylesToParagraph;
+}
+
+.common-text-strong {
+  color: $text;
+}
+
+p .common-text-strng {
+  @include defaultTextStylesToParagraph;
+}

@@ -16,13 +16,14 @@ export type option = {
 
 export type SelectProps = {
     options: option[];
+    onSelect?: (option: option) => void;
     fontSize?: number;
     openedByDefault?: boolean;
     animationDuration?: number;
     width?: string;
 };
 
-export const Select: FC<SelectProps> = ({ options, fontSize = 2, openedByDefault = false, animationDuration = 0.5, width = "fit-content" }) => {
+export const Select: FC<SelectProps> = ({ options, onSelect, fontSize = 2, openedByDefault = false, animationDuration = 0.5, width = "fit-content" }) => {
     const [isFocused, setIsFocused] = useState(openedByDefault);
     const { currentOption, setCurrentOption } = useContext(SelectContext);
 
@@ -68,6 +69,7 @@ export const Select: FC<SelectProps> = ({ options, fontSize = 2, openedByDefault
                         onClick={() => {
                             setCurrentOption(item);
                             setIsFocused(false);
+                            if (onSelect) onSelect(item);
                         }}
                         key={`select-item-${index}`}
                     >
