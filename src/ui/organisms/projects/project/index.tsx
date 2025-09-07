@@ -56,6 +56,7 @@ export const Project: FC<ProjectProps> = ({
 
         const timeout = setTimeout(() => {
             elementRef.current!.scrollIntoView({
+                block: "start",
                 behavior: "smooth",
             });
         }, 1000);
@@ -68,7 +69,7 @@ export const Project: FC<ProjectProps> = ({
     }, [canBeExpanded]);
 
     return (
-        <div ref={elementRef}>
+        <div ref={elementRef} className={style.scrollContainer}>
             <Flex direction={"column"} justify={"center"} gap={0} className={style.container}>
                 <Flex direction={"column"} justify={"center"} gap={0} fullWidth className={style.title}>
                     <Flex
