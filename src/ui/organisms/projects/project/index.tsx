@@ -58,7 +58,7 @@ export const Project: FC<ProjectProps> = ({
             elementRef.current!.scrollIntoView({
                 behavior: "smooth",
             });
-        }, 1000)
+        }, 1000);
         return () => clearTimeout(timeout);
     }, [projectName, name, elementRef]);
 
