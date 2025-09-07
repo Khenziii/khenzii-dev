@@ -15,7 +15,7 @@ import {
     Header,
     Flex,
 } from "@khenzii-dev/ui/atoms";
-import { MarkdownRenderer } from "@khenzii-dev/ui/molecules";
+import { MarkdownRenderer } from "@khenzii-dev/ui/organisms";
 import { Tags } from "@khenzii-dev/ui/organisms";
 import { blogTagToUiTag } from "@khenzii-dev/utils";
 import { useMobile } from "@khenzii-dev/hooks";
