@@ -15,7 +15,7 @@ jobs:
   deployment:
     needs:
       - checks
-    name: 🚀 GCP Deploy
+    name: 🚀 Deploy
     runs-on: ubuntu-latest
 
     steps:
