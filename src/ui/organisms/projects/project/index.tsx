@@ -52,10 +52,14 @@ export const Project: FC<ProjectProps> = ({
         if (!elementRef.current) return;
         if (projectName !== name) return;
 
-        elementRef.current.scrollIntoView({
-            behavior: "smooth",
-        });
         setIsExpanded(true);
+
+        const timeout = setTimeout(() => {
+            elementRef.current!.scrollIntoView({
+                behavior: "smooth",
+            });
+        }, 1000)
+        return () => clearTimeout(timeout);
     }, [projectName, name, elementRef]);
 
     useEffect(() => {
