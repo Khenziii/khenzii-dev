@@ -6,9 +6,19 @@ export type Account = {
 
 export const accounts: Account[] = [
     {
-        siteName: "mail",
+        siteName: "mail (1)",
+        href: "mailto:khenzii@khenzii.dev",
+        hrefText: "khenzii@khenzii.dev",
+    },
+    {
+        siteName: "mail (2)",
         href: "mailto:khenzii.was.taken@gmail.com",
         hrefText: "khenzii.was.taken@gmail.com",
+    },
+    {
+        siteName: "mail (3)",
+        href: "mailto:jakub@palubiak.eu",
+        hrefText: "jakub@palubiak.eu",
     },
     {
         siteName: "twitch",
